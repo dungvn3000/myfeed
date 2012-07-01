@@ -14,9 +14,13 @@
         <module>linkerz_seachengine_core</module>
         <module>linkerz_database_core</module>
         <module>linkerz_webgui_core</module>
+        <module>linkerz_webgui_client</module>
+        <module>linkerz_webgui_server</module>
+        <module>linkerz_crawler_main</module>
     </modules>
 
     <properties>
+        <jsoup.version>1.6.3</jsoup.version>
         <junitVerion>4.8.1</junitVerion>
         <slf4jVersion>1.6.4</slf4jVersion>
         <log4jVersion>1.2.17</log4jVersion>

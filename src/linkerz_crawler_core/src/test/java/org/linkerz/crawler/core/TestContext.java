@@ -1,6 +1,5 @@
-package org.linker.crawler.core;
+package org.linkerz.crawler.core;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.BeansException;
