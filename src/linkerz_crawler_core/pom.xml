@@ -12,5 +12,20 @@
     <groupId>org.linkerz</groupId>
     <artifactId>linkerz_crawler_core</artifactId>
 
+    <dependencies>
+
+        <dependency>
+            <groupId>org.linkerz</groupId>
+            <artifactId>linkerz_core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junitVerion}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
 </project>
