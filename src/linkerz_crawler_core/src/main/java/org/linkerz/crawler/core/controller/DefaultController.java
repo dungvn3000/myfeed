@@ -10,9 +10,7 @@ import org.linkerz.crawler.core.queue.CrawlQueue;
  * @author Nguyen Duc Dung
  * @since 7/2/12, 12:57 AM
  */
-public class DefaultController extends AbstractController {
-
-    private CrawlQueue queue;
+public class DefaultController extends AbstractController<CrawlQueue> {
 
     @Override
     public void start(WebLink webLink) {
@@ -22,7 +20,4 @@ public class DefaultController extends AbstractController {
         queue.run();
     }
 
-    public void setQueue(CrawlQueue queue) {
-        this.queue = queue;
-    }
 }

@@ -3,6 +3,7 @@ package org.linkerz.crawler.core.controller;
 import org.linkerz.crawler.core.downloader.Downloader;
 import org.linkerz.crawler.core.model.WebLink;
 import org.linkerz.crawler.core.parser.Parser;
+import org.linkerz.crawler.core.queue.Queue;
 
 import java.util.Map;
 
@@ -12,28 +13,33 @@ import java.util.Map;
  * @author Nguyen Duc Dung
  * @since 7/2/12, 12:22 AM
  */
-public interface Controller {
+public interface Controller<Q extends Queue> {
 
     /**
      * Start crawl form this link.
      *
      * @param webLink the link of a web site.
      */
-    public void start(WebLink webLink);
-
+    void start(WebLink webLink);
 
     /**
      * Set map of downloaders for controller.
      *
      * @param downloaders for each download will be used for correct website.
      */
-    public void setDownloaders(Map<String, Downloader> downloaders);
-
+    void setDownloaders(Map<String, Downloader> downloaders);
 
     /**
      * Set map of parsers for controller.
      *
      * @param parsers for each parser will be used for correct website.
      */
-    public void setParsers(Map<String, Parser> parsers);
+    void setParsers(Map<String, Parser> parsers);
+
+    /**
+     * Set queue for controller.
+     *
+     * @param queue
+     */
+    void setQueue(Q queue);
 }
