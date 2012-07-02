@@ -12,5 +12,12 @@
     <groupId>org.linkerz</groupId>
     <artifactId>linkerz_database_core</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb</artifactId>
+            <version>${spring.data.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>

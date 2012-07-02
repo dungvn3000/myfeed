@@ -5,8 +5,7 @@ import org.linkerz.crawler.core.job.CrawlJob;
 import org.linkerz.crawler.core.job.Job;
 import org.linkerz.crawler.core.parser.Parser;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
 import java.util.Map;
 
 /**
@@ -19,7 +18,7 @@ public class CrawlQueue implements Queue<CrawlJob> {
 
     private Map<String, Downloader> downloaders;
     private Map<String, Parser> parsers;
-    private List<CrawlJob> jobs = new ArrayList<CrawlJob>();
+    private java.util.Queue<CrawlJob> jobs = new LinkedList<CrawlJob>();
 
     @Override
     public void add(CrawlJob job) {
@@ -30,9 +29,16 @@ public class CrawlQueue implements Queue<CrawlJob> {
 
     @Override
     public void run() {
-        for (Job job : jobs) {
-            job.execute();
-        }
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                while (true) {
+                    Job job  = jobs.remove();
+                    job.execute();
+                }
+            }
+        };
+        thread.run();
     }
 
     public void setDownloaders(Map<String, Downloader> downloaders) {

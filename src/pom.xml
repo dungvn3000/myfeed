@@ -20,6 +20,8 @@
     </modules>
 
     <properties>
+        <spring.data.version>1.0.1.RELEASE</spring.data.version>
+        <hazelcast.verion>2.1.2</hazelcast.verion>
         <guavaVerion>12.0</guavaVerion>
         <lambdaj.version>2.3.1</lambdaj.version>
         <jsoup.version>1.6.3</jsoup.version>
