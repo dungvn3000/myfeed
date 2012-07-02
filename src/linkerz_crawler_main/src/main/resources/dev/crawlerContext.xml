@@ -5,14 +5,18 @@
 
     <bean id="defaultController" class="org.linkerz.crawler.core.controller.DefaultController">
         <property name="downloaders">
-            <list>
-                <bean class="org.linkerz.crawler.core.downloader.DefaultDownloader"/>
-            </list>
+            <map>
+                <entry key="*">
+                    <bean class="org.linkerz.crawler.core.downloader.DefaultDownloader"/>
+                </entry>
+            </map>
         </property>
         <property name="parsers">
-            <list>
-                <bean class="org.linkerz.crawler.core.parser.DefaultParser"/>
-            </list>
+            <map>
+                <entry key="*">
+                    <bean class="org.linkerz.crawler.core.parser.DefaultParser"/>
+                </entry>
+            </map>
         </property>
     </bean>
 

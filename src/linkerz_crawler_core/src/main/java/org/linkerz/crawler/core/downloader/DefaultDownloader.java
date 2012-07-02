@@ -1,12 +1,7 @@
 package org.linkerz.crawler.core.downloader;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.linkerz.crawler.core.model.WebLink;
-
-import java.io.IOException;
+import org.linkerz.crawler.core.model.WebPage;
 
 /**
  * The Class DefaultDownloader.
@@ -16,16 +11,8 @@ import java.io.IOException;
  */
 public class DefaultDownloader extends AbstractDownloader implements Downloader {
     @Override
-    public void download(WebLink webLink) {
-        Document doc = null;
-        try {
-            doc = Jsoup.connect(webLink.getUrl()).get();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Elements links = doc.select("a[href]");
-        for (Element element : links) {
-            System.out.println(element.attr("abs:href"));
-        }
+    public WebPage download(WebLink webLink) {
+        System.out.println(webLink.getUrl());
+        return new WebPage();
     }
 }

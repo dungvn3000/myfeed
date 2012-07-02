@@ -4,7 +4,7 @@ import org.linkerz.crawler.core.downloader.Downloader;
 import org.linkerz.crawler.core.model.WebLink;
 import org.linkerz.crawler.core.parser.Parser;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * The Class AbstractController.
@@ -14,29 +14,23 @@ import java.util.List;
  */
 public abstract class AbstractController implements Controller {
 
-    private List<Downloader> downloaders;
-    private List<Parser> parsers;
+    protected Map<String, Downloader> downloaders;
+    protected Map<String, Parser> parsers;
 
     @Override
     public void start(WebLink webLink) {
-        for (Downloader downloader : downloaders) {
-            downloader.download(webLink);
+        for (String urlPattern : downloaders.keySet()) {
+            downloaders.get(urlPattern).download(webLink);
         }
     }
 
-    public List<Downloader> getDownloaders() {
-        return downloaders;
-    }
-
-    public void setDownloaders(List<Downloader> downloaders) {
+    @Override
+    public void setDownloaders(Map<String, Downloader> downloaders) {
         this.downloaders = downloaders;
     }
 
-    public List<Parser> getParsers() {
-        return parsers;
-    }
-
-    public void setParsers(List<Parser> parsers) {
+    @Override
+    public void setParsers(Map<String, Parser> parsers) {
         this.parsers = parsers;
     }
 }
