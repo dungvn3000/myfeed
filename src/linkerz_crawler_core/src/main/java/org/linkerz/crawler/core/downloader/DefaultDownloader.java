@@ -13,9 +13,9 @@ import java.io.IOException;
  * @author Nguyen Duc Dung
  * @since 7/2/12, 2:14 AM
  */
-public class DefaultDownloader extends AbstractDownloader implements Downloader {
+public class DefaultDownloader extends AbstractDownloader<DefaultDownloadResult> {
     @Override
-    public DownloadResult download(WebLink webLink) {
+    public DefaultDownloadResult download(WebLink webLink) {
         Document document = null;
         try {
             System.out.println(webLink.getUrl());

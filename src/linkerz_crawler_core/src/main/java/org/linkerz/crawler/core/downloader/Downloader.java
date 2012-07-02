@@ -8,6 +8,6 @@ import org.linkerz.crawler.core.model.WebLink;
  * @author Nguyen Duc Dung
  * @since 7/2/12, 12:25 AM
  */
-public interface Downloader {
+public interface Downloader<R extends DownloadResult> {
     public DownloadResult download(WebLink webLink);
 }

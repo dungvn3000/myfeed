@@ -6,5 +6,5 @@ package org.linkerz.crawler.core.downloader;
  * @author Nguyen Duc Dung
  * @since 7/2/12, 2:13 AM
  */
-public abstract class AbstractDownloader implements Downloader {
+public abstract class AbstractDownloader<R extends DownloadResult> implements Downloader<R> {
 }
