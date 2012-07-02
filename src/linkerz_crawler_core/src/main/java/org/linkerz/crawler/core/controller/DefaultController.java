@@ -34,7 +34,10 @@ public class DefaultController extends AbstractController<CrawlQueue> implements
     }
 
     @Override
-    public void onFailed(Exception e) {
-        e.printStackTrace();
+    public void onFailed(Exception e, Object... prams) {
+        if (prams[0] instanceof WebLink) {
+            WebLink webLink = (WebLink) prams[0];
+            System.err.println(webLink.getUrl());
+        }
     }
 }

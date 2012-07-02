@@ -9,5 +9,5 @@ import org.linkerz.crawler.core.model.WebLink;
  * @since 7/2/12, 12:25 AM
  */
 public interface Downloader<R extends DownloadResult> {
-    public DownloadResult download(WebLink webLink);
+    public DownloadResult download(WebLink webLink) throws Exception;
 }

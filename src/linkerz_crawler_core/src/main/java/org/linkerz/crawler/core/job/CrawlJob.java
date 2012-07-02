@@ -37,7 +37,7 @@ public class CrawlJob implements Job {
             parserResult = parsers.get("*").parse(downloadResult);
             jobCallBack.onSuccess(parserResult);
         } catch (Exception e) {
-            jobCallBack.onFailed(e);
+            jobCallBack.onFailed(e, webLink);
         }
     }
 

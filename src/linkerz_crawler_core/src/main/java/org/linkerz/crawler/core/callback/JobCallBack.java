@@ -11,8 +11,9 @@ public interface JobCallBack<R> {
     /**
      * Run when the job failed.
      * @param e
+     * @param prams
      */
-    void onFailed(Exception e);
+    void onFailed(Exception e, Object... prams);
 
     /**
      * Run when the job run success.
