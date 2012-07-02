@@ -85,6 +85,34 @@
         </dependency>
         <!--end-->
 
+        <!-- Lambdaj -->
+        <dependency>
+            <groupId>com.googlecode.lambdaj</groupId>
+            <artifactId>lambdaj</artifactId>
+            <version>${lambdaj.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!--end-->
+
+        <!--Google Collection-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guavaVerion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava-gwt</artifactId>
+            <version>${guavaVerion}</version>
+        </dependency>
+        <!--End-->
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

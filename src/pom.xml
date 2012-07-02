@@ -20,6 +20,8 @@
     </modules>
 
     <properties>
+        <lambdaj.version>2.3.1</lambdaj.version>
+        <guavaVerion>12.0</guavaVerion>
         <jsoup.version>1.6.3</jsoup.version>
         <junitVerion>4.8.1</junitVerion>
         <slf4jVersion>1.6.4</slf4jVersion>
@@ -74,14 +76,7 @@
     </profiles>
 
     <build>
-
-        <!--  Include SOURCE in output artifact for GWT (GWT libraries must include source) -->
         <resources>
-            <resource>
-                <directory>src/main/java</directory>
-                <filtering>true</filtering>
-            </resource>
-
             <resource>
                 <directory>src/main/resources/share</directory>
                 <includes>
@@ -95,7 +90,6 @@
                     <include>**/*</include>
                 </includes>
             </resource>
-
         </resources>
 
         <plugins>
@@ -162,9 +156,23 @@
                 <artifactId>maven-scala-plugin</artifactId>
                 <executions>
                     <execution>
+                        <id>compile</id>
                         <goals>
                             <goal>compile</goal>
+                        </goals>
+                        <phase>compile</phase>
+                    </execution>
+                    <execution>
+                        <id>test-compile</id>
+                        <goals>
                             <goal>testCompile</goal>
+                        </goals>
+                        <phase>test-compile</phase>
+                    </execution>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>compile</goal>
                         </goals>
                     </execution>
                 </executions>

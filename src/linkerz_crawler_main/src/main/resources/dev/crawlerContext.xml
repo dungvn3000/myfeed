@@ -3,18 +3,18 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="defaultController" class="org.linkerz.crawler.core.controller.DefaultController">
+    <bean id="baseController" class="org.linkerz.crawler.core.controller.BaseController">
         <property name="downloaders">
             <map>
                 <entry key="*">
-                    <bean class="org.linkerz.crawler.core.downloader.DefaultDownloader"/>
+                    <bean class="org.linkerz.crawler.core.download.BaseDownloader"/>
                 </entry>
             </map>
         </property>
         <property name="parsers">
             <map>
                 <entry key="*">
-                    <bean class="org.linkerz.crawler.core.parser.DefaultParser"/>
+                    <bean class="org.linkerz.crawler.core.parser.BaseParser"/>
                 </entry>
             </map>
         </property>

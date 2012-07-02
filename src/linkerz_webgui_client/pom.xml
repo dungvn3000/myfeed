@@ -12,5 +12,14 @@
     <groupId>org.linkerz</groupId>
     <artifactId>linkerz_webgui_client</artifactId>
 
+    <build>
+        <resources>
+            <!--  Include SOURCE in output artifact for GWT (GWT libraries must include source) -->
+            <resource>
+                <directory>src/main/java</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
 
 </project>

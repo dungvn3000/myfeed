@@ -1,8 +1,7 @@
 package org.linkerz.crawler.main;
 
+import org.linkerz.crawler.core.controller.BaseController;
 import org.linkerz.crawler.core.controller.Controller;
-import org.linkerz.crawler.core.controller.DefaultController;
-import org.linkerz.crawler.core.model.WebLink;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 
@@ -16,8 +15,8 @@ public class Main {
 
     public static void main(String[] args) {
         ApplicationContext context = new GenericXmlApplicationContext("crawlerContext.xml");
-        Controller controller = context.getBean("defaultController", DefaultController.class);
-        controller.start(new WebLink("http://java.dzone.com"));
+        Controller controller = context.getBean("baseController", BaseController.class);
+        controller.start("http://vnexpress.net/");
     }
 
 }
