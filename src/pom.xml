@@ -77,13 +77,7 @@
 
     <build>
 
-        <!--  Include SOURCE in output artifact for GWT (GWT libraries must include source) -->
         <resources>
-            <resource>
-                <directory>src/main/java</directory>
-                <filtering>true</filtering>
-            </resource>
-
             <resource>
                 <directory>src/main/resources/share</directory>
                 <includes>
