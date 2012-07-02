@@ -9,5 +9,5 @@ import org.linkerz.crawler.core.model.WebPage;
  * @since 7/2/12, 12:25 AM
  */
 public interface Parser {
-    void parse(WebPage page);
+    ParserResult parse(WebPage page);
 }

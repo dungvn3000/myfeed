@@ -17,7 +17,7 @@ public class Main {
     public static void main(String[] args) {
         ApplicationContext context = new GenericXmlApplicationContext("crawlerContext.xml");
         Controller controller = context.getBean("defaultController", DefaultController.class);
-        controller.start(new WebLink("http://vnexpress.net/"));
+        controller.start(new WebLink("http://java.dzone.com"));
     }
 
 }
