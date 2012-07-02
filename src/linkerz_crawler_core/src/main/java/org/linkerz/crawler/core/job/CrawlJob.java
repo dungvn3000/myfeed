@@ -32,9 +32,13 @@ public class CrawlJob implements Job {
 
     @Override
     public void execute() {
-        downloadResult = downloaders.get("*").download(webLink);
-        parserResult = parsers.get("*").parse(downloadResult);
-        jobCallBack.onSuccess(parserResult);
+        try {
+            downloadResult = downloaders.get("*").download(webLink);
+            parserResult = parsers.get("*").parse(downloadResult);
+            jobCallBack.onSuccess(parserResult);
+        } catch (Exception e) {
+            jobCallBack.onFailed(e);
+        }
     }
 
     public void setDownloaders(Map<String, Downloader> downloaders) {

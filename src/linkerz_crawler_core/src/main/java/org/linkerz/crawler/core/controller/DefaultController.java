@@ -32,4 +32,9 @@ public class DefaultController extends AbstractController<CrawlQueue> implements
             }
         }
     }
+
+    @Override
+    public void onFailed(Exception e) {
+        e.printStackTrace();
+    }
 }

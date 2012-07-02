@@ -8,6 +8,16 @@ package org.linkerz.crawler.core.callback;
  */
 public interface JobCallBack<R> {
 
+    /**
+     * Run when the job failed.
+     * @param e
+     */
+    void onFailed(Exception e);
+
+    /**
+     * Run when the job run success.
+     * @param r
+     */
     void onSuccess(R r);
 
 }
