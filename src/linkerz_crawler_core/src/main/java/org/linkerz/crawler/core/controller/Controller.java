@@ -12,6 +12,8 @@ import java.util.Map;
 /**
  * The Class Controller.
  *
+ * The controller will handel jobs in the queue.
+ *
  * @author Nguyen Duc Dung
  * @since 7/2/12, 12:22 AM
  */
