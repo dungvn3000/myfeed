@@ -5,6 +5,7 @@ import org.linkerz.crawler.core.model.WebLink;
 import org.linkerz.crawler.core.parser.Parser;
 import org.linkerz.crawler.core.queue.Queue;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Map;
  * @author Nguyen Duc Dung
  * @since 7/2/12, 12:22 AM
  */
-public interface Controller<Q extends Queue> {
+public interface Controller<Q extends Queue> extends Serializable {
 
     /**
      * Start crawl form this link.

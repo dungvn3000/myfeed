@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:hz="http://www.hazelcast.com/schema/spring"
+       xsi:schemaLocation=
+               "http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                http://www.hazelcast.com/schema/spring
+                http://www.hazelcast.com/schema/spring/hazelcast-spring-2.1.xsd">
 
-    <bean id="crawlQueue" class="org.linkerz.crawler.core.queue.CrawlQueue"/>
+    <bean id="crawlQueue" class="org.linkerz.crawler.core.queue.CrawlQueue">
+        <property name="instance" ref="instance"/>
+    </bean>
 
     <bean id="defaultController" class="org.linkerz.crawler.core.controller.DefaultController">
         <property name="downloaders">
@@ -23,5 +30,30 @@
         <property name="queue" ref="crawlQueue"/>
     </bean>
 
+    <hz:hazelcast id="instance">
+        <hz:config>
+            <hz:group name="dev" password="dev"/>
+
+            <!--<hz:management-center enabled="true" url="http://localhost:8080/mancenter/" update-interval="1"/>-->
+
+            <hz:properties>
+                <hz:property name="hazelcast.merge.first.run.delay.seconds">5</hz:property>
+                <hz:property name="hazelcast.merge.next.run.delay.seconds">5</hz:property>
+            </hz:properties>
+
+            <hz:network port="5701" port-auto-increment="true">
+                <hz:join>
+                    <hz:tcp-ip enabled="true">
+                        <hz:interface>127.0.0.1</hz:interface>
+                    </hz:tcp-ip>
+                </hz:join>
+            </hz:network>
+
+            <hz:queue name="jobQueue" max-size-per-jvm="10000"/>
+
+        </hz:config>
+    </hz:hazelcast>
+
+    <hz:queue instance-ref="instance" name="jobQueue" id="jobQueue"/>
 
 </beans>

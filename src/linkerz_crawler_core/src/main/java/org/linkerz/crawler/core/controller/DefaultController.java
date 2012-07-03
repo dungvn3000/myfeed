@@ -39,5 +39,6 @@ public class DefaultController extends AbstractController<CrawlQueue> implements
             WebLink webLink = (WebLink) prams[0];
             System.err.println(webLink.getUrl());
         }
+        e.printStackTrace();
     }
 }

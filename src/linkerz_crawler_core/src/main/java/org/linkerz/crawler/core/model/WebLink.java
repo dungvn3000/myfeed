@@ -1,5 +1,7 @@
 package org.linkerz.crawler.core.model;
 
+import java.io.Serializable;
+
 /**
  * The Class WebLink.
  *
@@ -8,7 +10,7 @@ package org.linkerz.crawler.core.model;
  * @author Nguyen Duc Dung
  * @since 7/2/12, 1:02 AM
  */
-public class WebLink {
+public class WebLink implements Serializable {
 
     private String url;
 
