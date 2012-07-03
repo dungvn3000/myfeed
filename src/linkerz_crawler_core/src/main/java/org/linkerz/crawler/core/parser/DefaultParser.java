@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2012 - 2013 LinkerZ
+ */
+
 package org.linkerz.crawler.core.parser;
 
 import org.jsoup.Jsoup;
@@ -5,8 +9,9 @@ import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.linkerz.crawler.core.downloader.DefaultDownloadResult;
+import org.linkerz.crawler.core.downloader.result.DefaultDownloadResult;
 import org.linkerz.crawler.core.model.WebLink;
+import org.linkerz.crawler.core.parser.result.DefaultParserResult;
 
 import java.util.ArrayList;
 import java.util.List;

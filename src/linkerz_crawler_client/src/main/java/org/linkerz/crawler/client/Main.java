@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2012 - 2013 LinkerZ
+ */
+
 package org.linkerz.crawler.client;
 
 import org.linkerz.crawler.core.job.CrawlJob;

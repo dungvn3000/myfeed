@@ -1,12 +1,16 @@
+/*
+ * Copyright (C) 2012 - 2013 LinkerZ
+ */
+
 package org.linkerz.crawler.core.controller;
 
 import com.hazelcast.core.ItemEvent;
 import com.hazelcast.core.ItemListener;
-import org.linkerz.crawler.core.downloader.DownloadResult;
+import org.linkerz.crawler.core.downloader.result.DownloadResult;
 import org.linkerz.crawler.core.job.CrawlJob;
 import org.linkerz.crawler.core.model.WebLink;
-import org.linkerz.crawler.core.parser.DefaultParserResult;
-import org.linkerz.crawler.core.parser.ParserResult;
+import org.linkerz.crawler.core.parser.result.DefaultParserResult;
+import org.linkerz.crawler.core.parser.result.ParserResult;
 
 import java.util.List;
 

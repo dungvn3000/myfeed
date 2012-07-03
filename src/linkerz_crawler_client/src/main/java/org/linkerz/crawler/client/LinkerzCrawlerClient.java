@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2012 - 2013 LinkerZ
+ */
+
 package org.linkerz.crawler.client;
 
 import com.hazelcast.client.ClientConfig;

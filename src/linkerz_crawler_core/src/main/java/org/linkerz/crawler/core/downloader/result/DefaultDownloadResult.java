@@ -1,4 +1,8 @@
-package org.linkerz.crawler.core.downloader;
+/*
+ * Copyright (C) 2012 - 2013 LinkerZ
+ */
+
+package org.linkerz.crawler.core.downloader.result;
 
 import org.linkerz.crawler.core.model.WebPage;
 
