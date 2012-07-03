@@ -8,11 +8,7 @@
                 http://www.hazelcast.com/schema/spring
                 http://www.hazelcast.com/schema/spring/hazelcast-spring-2.1.xsd">
 
-    <bean id="crawlQueue" class="org.linkerz.crawler.core.queue.CrawlQueue">
-        <property name="instance" ref="instance"/>
-    </bean>
-
-    <bean id="defaultController" class="org.linkerz.crawler.core.controller.DefaultController">
+    <bean id="defaultController" class="org.linkerz.crawler.core.controller.DefaultController" init-method="start">
         <property name="downloaders">
             <map>
                 <entry key="*">
@@ -27,7 +23,7 @@
                 </entry>
             </map>
         </property>
-        <property name="queue" ref="crawlQueue"/>
+        <property name="hazelcastInstance" ref="instance"/>
     </bean>
 
     <hz:hazelcast id="instance">
@@ -43,7 +39,7 @@
 
             <hz:network port="5701" port-auto-increment="true">
                 <hz:join>
-                    <hz:tcp-ip enabled="true">
+                    <hz:tcp-ip enabled="false">
                         <hz:interface>127.0.0.1</hz:interface>
                     </hz:tcp-ip>
                 </hz:join>

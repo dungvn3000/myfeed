@@ -9,5 +9,5 @@ import java.io.Serializable;
  * @since 7/3/12, 3:11 AM
  */
 public interface Job extends Serializable {
-    void execute();
+
 }

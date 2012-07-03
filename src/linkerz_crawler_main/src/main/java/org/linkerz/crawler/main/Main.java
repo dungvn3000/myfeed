@@ -1,10 +1,11 @@
 package org.linkerz.crawler.main;
 
-import org.linkerz.crawler.core.controller.Controller;
-import org.linkerz.crawler.core.controller.DefaultController;
+import com.hazelcast.client.ClientConfig;
+import com.hazelcast.client.HazelcastClient;
+import org.linkerz.crawler.core.job.CrawlJob;
 import org.linkerz.crawler.core.model.WebLink;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.GenericXmlApplicationContext;
+
+import java.util.Queue;
 
 /**
  * The Class Main.
@@ -13,11 +14,13 @@ import org.springframework.context.support.GenericXmlApplicationContext;
  * @since 7/2/12, 12:54 AM
  */
 public class Main {
-
     public static void main(String[] args) {
-        ApplicationContext context = new GenericXmlApplicationContext("crawlerContext.xml");
-        Controller controller = context.getBean("defaultController", DefaultController.class);
-        controller.start(new WebLink("http://vnexpress.net"));
+        ClientConfig clientConfig = new ClientConfig();
+        clientConfig.getGroupConfig().setName("dev").setPassword("dev");
+        clientConfig.addAddress("127.0.0.1");
+        HazelcastClient client = HazelcastClient.newHazelcastClient(clientConfig);
+        CrawlJob crawlJob = new CrawlJob(new WebLink("http://vnexpress.net"));
+        Queue jobQueue =  client.getQueue("jobQueue");
+        jobQueue.add(crawlJob);
     }
-
 }

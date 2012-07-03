@@ -1,9 +1,10 @@
 package org.linkerz.crawler.core.controller;
 
+import com.hazelcast.core.HazelcastInstanceAware;
+import com.hazelcast.core.IQueue;
 import org.linkerz.crawler.core.downloader.Downloader;
-import org.linkerz.crawler.core.model.WebLink;
+import org.linkerz.crawler.core.job.Job;
 import org.linkerz.crawler.core.parser.Parser;
-import org.linkerz.crawler.core.queue.Queue;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -14,14 +15,13 @@ import java.util.Map;
  * @author Nguyen Duc Dung
  * @since 7/2/12, 12:22 AM
  */
-public interface Controller<Q extends Queue> extends Serializable {
+public interface Controller<J extends Job> extends Serializable, HazelcastInstanceAware {
+
 
     /**
-     * Start crawl form this link.
-     *
-     * @param webLink the link of a web site.
+     * Start the controller to control crawling.
      */
-    void start(WebLink webLink);
+    void start();
 
     /**
      * Set map of downloaders for controller.
@@ -38,9 +38,8 @@ public interface Controller<Q extends Queue> extends Serializable {
     void setParsers(Map<String, Parser> parsers);
 
     /**
-     * Set queue for controller.
-     *
-     * @param queue
+     * Get the queue.
+     * @return
      */
-    void setQueue(Q queue);
+    IQueue<J> getQueue();
 }

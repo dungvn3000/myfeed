@@ -1,13 +1,6 @@
 package org.linkerz.crawler.core.job;
 
-import org.linkerz.crawler.core.callback.JobCallBack;
-import org.linkerz.crawler.core.downloader.DownloadResult;
-import org.linkerz.crawler.core.downloader.Downloader;
 import org.linkerz.crawler.core.model.WebLink;
-import org.linkerz.crawler.core.parser.Parser;
-import org.linkerz.crawler.core.parser.ParserResult;
-
-import java.util.Map;
 
 /**
  * The Class CrawlJob.
@@ -17,35 +10,24 @@ import java.util.Map;
  */
 public class CrawlJob implements Job {
 
-    private Map<String, Downloader> downloaders;
-    private Map<String, Parser> parsers;
     private WebLink webLink;
-    private JobCallBack<ParserResult> jobCallBack;
 
-    private DownloadResult downloadResult;
-    private ParserResult parserResult;
+    public CrawlJob() {
+    }
 
-    public CrawlJob(WebLink webLink, JobCallBack<ParserResult> jobCallBack) {
+    public CrawlJob(String url) {
+        this.webLink = new WebLink(url);
+    }
+
+    public CrawlJob(WebLink webLink) {
         this.webLink = webLink;
-        this.jobCallBack = jobCallBack;
     }
 
-    @Override
-    public void execute() {
-        try {
-            downloadResult = downloaders.get("*").download(webLink);
-            parserResult = parsers.get("*").parse(downloadResult);
-            jobCallBack.onSuccess(parserResult);
-        } catch (Exception e) {
-            jobCallBack.onFailed(e, webLink);
-        }
+    public WebLink getWebLink() {
+        return webLink;
     }
 
-    public void setDownloaders(Map<String, Downloader> downloaders) {
-        this.downloaders = downloaders;
-    }
-
-    public void setParsers(Map<String, Parser> parsers) {
-        this.parsers = parsers;
+    public void setWebLink(WebLink webLink) {
+        this.webLink = webLink;
     }
 }

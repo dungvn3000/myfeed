@@ -1,11 +1,14 @@
 package org.linkerz.crawler.core.controller;
 
-import org.linkerz.crawler.core.callback.JobCallBack;
+import com.hazelcast.core.ItemEvent;
+import com.hazelcast.core.ItemListener;
+import org.linkerz.crawler.core.downloader.DownloadResult;
 import org.linkerz.crawler.core.job.CrawlJob;
 import org.linkerz.crawler.core.model.WebLink;
 import org.linkerz.crawler.core.parser.DefaultParserResult;
 import org.linkerz.crawler.core.parser.ParserResult;
-import org.linkerz.crawler.core.queue.CrawlQueue;
+
+import java.util.List;
 
 /**
  * The Class DefaultController.
@@ -13,32 +16,45 @@ import org.linkerz.crawler.core.queue.CrawlQueue;
  * @author Nguyen Duc Dung
  * @since 7/2/12, 12:57 AM
  */
-public class DefaultController extends AbstractController<CrawlQueue> implements JobCallBack<ParserResult> {
+public class DefaultController extends AbstractController<CrawlJob> implements ItemListener<CrawlJob> {
+
+    private boolean done = false;
 
     @Override
-    public void start(WebLink webLink) {
-        queue.setDownloaders(downloaders);
-        queue.setParsers(parsers);
-        queue.add(new CrawlJob(webLink, this));
-        queue.run();
+    public void start() {
+        getQueue().addItemListener(this, true);
+        crawl();
     }
 
-    @Override
-    public void onSuccess(ParserResult parserResult) {
-        if(parserResult instanceof DefaultParserResult) {
-            for (WebLink webLink : ((DefaultParserResult) parserResult).getLinks()) {
-                CrawlJob job = new CrawlJob(webLink, this);
-                queue.add(job);
+    private void crawl() {
+        while (!getQueue().isEmpty()) {
+            CrawlJob job = getQueue().remove();
+            try {
+                DownloadResult downloadResult = downloaders.get("*").download(job.getWebLink());
+                ParserResult parserResult = parsers.get("*").parse(downloadResult);
+                if (parserResult instanceof DefaultParserResult) {
+                    List<WebLink> webLinks = ((DefaultParserResult) parserResult).getLinks();
+                    for (WebLink webLink : webLinks) {
+                        getQueue().add(new CrawlJob(webLink));
+                    }
+                }
+            } catch (Exception e) {
+//                e.printStackTrace();
+                System.err.println(job.getWebLink().getUrl());
             }
         }
+        done = true;
     }
 
     @Override
-    public void onFailed(Exception e, Object... prams) {
-        if (prams[0] instanceof WebLink) {
-            WebLink webLink = (WebLink) prams[0];
-            System.err.println(webLink.getUrl());
+    public void itemAdded(ItemEvent<CrawlJob> item) {
+        if (done) {
+            done = false;
+            crawl();
         }
-        e.printStackTrace();
+    }
+
+    @Override
+    public void itemRemoved(ItemEvent<CrawlJob> item) {
     }
 }

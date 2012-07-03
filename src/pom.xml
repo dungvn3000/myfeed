@@ -17,6 +17,7 @@
         <module>linkerz_webgui_client</module>
         <module>linkerz_webgui_server</module>
         <module>linkerz_crawler_main</module>
+        <module>linkerz_crawler_server</module>
     </modules>
 
     <properties>
