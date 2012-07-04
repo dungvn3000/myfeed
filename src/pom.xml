@@ -21,6 +21,7 @@
     </modules>
 
     <properties>
+        <crawler4j.verion>3.3.2-SNAPSHOT</crawler4j.verion>
         <httpclient.version>4.2</httpclient.version>
         <commons.io.version>1.4</commons.io.version>
         <commons.lang.version>2.6</commons.lang.version>
