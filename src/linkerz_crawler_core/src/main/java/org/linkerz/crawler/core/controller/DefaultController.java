@@ -22,10 +22,6 @@ import java.util.List;
 public class DefaultController extends AbstractController<CrawlJob> implements Handler<CrawlJob> {
 
     @Override
-    public void start() {
-    }
-
-    @Override
     public boolean isFor(Class<CrawlJob> clazz) {
         return clazz == CrawlJob.class;
     }

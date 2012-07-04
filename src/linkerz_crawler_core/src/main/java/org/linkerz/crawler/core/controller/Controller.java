@@ -23,12 +23,6 @@ import java.util.Map;
  */
 public interface Controller<J extends Job> extends Serializable, HazelcastInstanceAware {
 
-
-    /**
-     * Start the controller to control crawling.
-     */
-    void start();
-
     /**
      * Set map of downloaders for controller.
      *
