@@ -8,23 +8,8 @@
                 http://www.hazelcast.com/schema/spring
                 http://www.hazelcast.com/schema/spring/hazelcast-spring-2.1.xsd">
 
-    <bean id="defaultController" class="org.linkerz.crawler.core.controller.DefaultController" init-method="start">
-        <property name="downloaders">
-            <map>
-                <entry key="*">
-                    <bean class="org.linkerz.crawler.core.downloader.DefaultDownloader"/>
-                </entry>
-            </map>
-        </property>
-        <property name="parsers">
-            <map>
-                <entry key="*">
-                    <bean class="org.linkerz.crawler.core.parser.DefaultParser"/>
-                </entry>
-            </map>
-        </property>
-        <property name="hazelcastInstance" ref="instance"/>
-    </bean>
+    <import resource="jobController.xml"/>
+    <import resource="crawlModule.xml"/>
 
     <hz:hazelcast id="instance">
         <hz:config>
@@ -37,7 +22,13 @@
                 <hz:property name="hazelcast.merge.next.run.delay.seconds">5</hz:property>
             </hz:properties>
 
-            <hz:network port="5701" port-auto-increment="true"/>
+            <hz:network port="5701" port-auto-increment="true">
+                <hz:join>
+                    <hz:tcp-ip enabled="true">
+                        <hz:member>127.0.0.1</hz:member>
+                    </hz:tcp-ip>
+                </hz:join>
+            </hz:network>
 
             <hz:queue name="jobQueue" max-size-per-jvm="10000"/>
 

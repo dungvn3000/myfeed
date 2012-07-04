@@ -16,8 +16,9 @@ public class Main {
 
     public static void main(String[] args) {
         LinkerzCrawlerClient client = LinkerzCrawlerClient.connect("127.0.0.1", "dev", "dev");
-        client.addJob(new CrawlJob("http://vnexpress.net/"));
-        client.shutdown();
+        CrawlJob job = new CrawlJob("http://vnexpress.net/");
+        client.addJob(job);
+//        client.shutdown();
     }
 
 }

@@ -6,8 +6,8 @@ package org.linkerz.crawler.core.controller;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IQueue;
+import org.linkerz.core.job.Job;
 import org.linkerz.crawler.core.downloader.Downloader;
-import org.linkerz.crawler.core.job.Job;
 import org.linkerz.crawler.core.parser.Parser;
 
 import java.util.Map;
@@ -26,7 +26,7 @@ public abstract class AbstractController<J extends Job> implements Controller<J>
 
     @Override
     public IQueue<J> getQueue() {
-        return instance.getQueue("jobQueue");
+        return instance.getQueue(Job.JOB_QUEUE);
     }
 
     @Override

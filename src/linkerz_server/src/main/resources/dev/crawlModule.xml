@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation=
+               "http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean id="defaultController" class="org.linkerz.crawler.core.controller.DefaultController" init-method="start">
+        <property name="downloaders">
+            <map>
+                <entry key="*">
+                    <bean class="org.linkerz.crawler.core.downloader.DefaultDownloader"/>
+                </entry>
+            </map>
+        </property>
+        <property name="parsers">
+            <map>
+                <entry key="*">
+                    <bean class="org.linkerz.crawler.core.parser.DefaultParser"/>
+                </entry>
+            </map>
+        </property>
+        <property name="hazelcastInstance" ref="instance"/>
+    </bean>
+
+</beans>

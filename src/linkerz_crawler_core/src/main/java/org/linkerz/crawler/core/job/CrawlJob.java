@@ -4,6 +4,7 @@
 
 package org.linkerz.crawler.core.job;
 
+import org.linkerz.core.job.AbstractJob;
 import org.linkerz.crawler.core.model.WebLink;
 
 /**
@@ -12,7 +13,7 @@ import org.linkerz.crawler.core.model.WebLink;
  * @author Nguyen Duc Dung
  * @since 7/3/12, 3:12 AM
  */
-public class CrawlJob implements Job {
+public class CrawlJob extends AbstractJob<Void> {
 
     private WebLink webLink;
 

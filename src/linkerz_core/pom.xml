@@ -132,6 +132,21 @@
             <version>${commons.io.version}</version>
         </dependency>
         <!--end-->
+
+        <!--HazelCast-->
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast</artifactId>
+            <version>${hazelcast.verion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-spring</artifactId>
+            <version>${hazelcast.verion}</version>
+        </dependency>
+        <!--End-->
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

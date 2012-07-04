@@ -6,7 +6,7 @@ package org.linkerz.crawler.client;
 
 import com.hazelcast.client.ClientConfig;
 import com.hazelcast.client.HazelcastClient;
-import org.linkerz.crawler.core.job.Job;
+import org.linkerz.core.job.Job;
 
 /**
  * The Class LinkerzCrawlerClient.
@@ -32,7 +32,7 @@ public final class LinkerzCrawlerClient {
     }
 
     public void addJob(Job job) {
-        client.getQueue("jobQueue").add(job);
+        client.getQueue(Job.JOB_QUEUE).add(job);
     }
 
     public void shutdown() {

@@ -6,8 +6,8 @@ package org.linkerz.crawler.core.controller;
 
 import com.hazelcast.core.HazelcastInstanceAware;
 import com.hazelcast.core.IQueue;
+import org.linkerz.core.job.Job;
 import org.linkerz.crawler.core.downloader.Downloader;
-import org.linkerz.crawler.core.job.Job;
 import org.linkerz.crawler.core.parser.Parser;
 
 import java.io.Serializable;
