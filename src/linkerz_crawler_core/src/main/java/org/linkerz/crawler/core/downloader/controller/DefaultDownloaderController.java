@@ -14,7 +14,7 @@ import java.util.Map;
  * @author Nguyen Duc Dung
  * @since 7/5/12, 4:22 PM
  */
-public class DefaultDownloadController implements DownloadController {
+public class DefaultDownloaderController implements DownloaderController {
 
     protected Map<String, Downloader> downloaders;
 
@@ -25,6 +25,6 @@ public class DefaultDownloadController implements DownloadController {
 
     @Override
     public Downloader get(String url) {
-        return downloaders.get("*");
+        return downloaders.get(url);
     }
 }

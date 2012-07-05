@@ -14,7 +14,7 @@ import java.util.Map;
  * @author Nguyen Duc Dung
  * @since 7/5/12, 4:08 PM
  */
-public interface DownloadController {
+public interface DownloaderController {
 
     /**
      * Set map of downloaders for controller.

@@ -4,14 +4,16 @@
 
 package org.linkerz.crawler.core.controller;
 
+import ch.lambdaj.Lambda;
 import org.linkerz.core.handler.Handler;
-import org.linkerz.crawler.core.downloader.result.DownloadResult;
+import org.linkerz.crawler.core.crawler.Crawler;
+import org.linkerz.crawler.core.crawler.DefaultCrawler;
 import org.linkerz.crawler.core.job.CrawlJob;
-import org.linkerz.crawler.core.model.WebLink;
-import org.linkerz.crawler.core.parser.result.DefaultParserResult;
-import org.linkerz.crawler.core.parser.result.ParserResult;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * The Class DefaultController.
@@ -21,21 +23,43 @@ import java.util.List;
  */
 public class DefaultController extends AbstractController<CrawlJob> implements Handler<CrawlJob> {
 
+    private int preferLocalJobNumber;
+    private int numberOfCrawler;
+    private Queue<CrawlJob> localJobQueue = new LinkedList<CrawlJob>();
+    private List<Thread> threads = new ArrayList<Thread>();
+    private boolean started;
+
+    public void start() {
+        for (int i = 0; i < numberOfCrawler; i++) {
+            Thread thread = new Thread(createCrawler());
+            threads.add(thread);
+        }
+    }
+
     @Override
     public boolean isFor(Class<CrawlJob> clazz) {
-        return clazz == CrawlJob.class;
+        return clazz == CrawlJob.class && localJobQueue.size() < preferLocalJobNumber;
     }
 
     @Override
     public void handle(CrawlJob job) throws Exception {
-        DownloadResult downloadResult = downloadController.get("*").download(job.getWebLink());
-        ParserResult parserResult = parserController.get("*").parse(downloadResult);
-        if (parserResult instanceof DefaultParserResult) {
-            List<WebLink> webLinks = ((DefaultParserResult) parserResult).getLinks();
-            for (WebLink webLink : webLinks) {
-                getQueue().add(new CrawlJob(webLink));
-            }
+        if (!started) {
+            Lambda.forEach(threads).start();
+            started = true;
         }
+        localJobQueue.add(job);
     }
 
+    private Crawler createCrawler() {
+        return new DefaultCrawler(downloaderController, parserController, getQueue(),
+                localJobQueue, preferLocalJobNumber);
+    }
+
+    public void setNumberOfCrawler(int numberOfCrawler) {
+        this.numberOfCrawler = numberOfCrawler;
+    }
+
+    public void setPreferLocalJobNumber(int preferLocalJobNumber) {
+        this.preferLocalJobNumber = preferLocalJobNumber;
+    }
 }

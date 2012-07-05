@@ -30,7 +30,7 @@
                 </hz:join>
             </hz:network>
 
-            <hz:queue name="jobQueue" max-size-per-jvm="10000"/>
+            <hz:queue name="jobQueue" max-size-per-jvm="1000"/>
 
         </hz:config>
     </hz:hazelcast>

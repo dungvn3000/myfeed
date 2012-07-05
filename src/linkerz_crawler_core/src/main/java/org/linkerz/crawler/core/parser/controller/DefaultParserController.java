@@ -25,6 +25,6 @@ public class DefaultParserController implements ParserController {
 
     @Override
     public Parser get(String url) {
-        return parsers.get("*");
+        return parsers.get(url);
     }
 }

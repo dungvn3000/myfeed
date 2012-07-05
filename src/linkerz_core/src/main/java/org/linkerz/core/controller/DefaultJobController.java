@@ -45,11 +45,12 @@ public class DefaultJobController implements JobController {
         workerThread.start();
     }
 
-    @SuppressWarnings("ConstantConditions")
+    @SuppressWarnings({"ConstantConditions", "InfiniteLoopStatement"})
     private void doWorkLoop() {
         while (true) {
             synchronized (syncRoot) {
                 try {
+                    boolean done = false;
                     Job job = getJobQueue().poll();
                     if (job != null) {
                         for (Handler handler : handlers) {
@@ -69,7 +70,24 @@ public class DefaultJobController implements JobController {
                                         callBack.onFailed(e);
                                     }
                                     logger.error(e.getMessage(), e);
+                                } finally {
+                                    //Mark the job was done.
+                                    done = true;
                                 }
+                            }
+                        }
+
+                        //If the job hasn't done yet, re add it.
+                        if (!done) {
+                            logger.info("Sleep 10s because every handler is busy now");
+                            Thread.sleep(10000);
+                            boolean added = getJobQueue().offer(job);
+                            while (!added) {
+                                //may be all handler is busy
+                                // Sleep 10S
+                                logger.info("Sleep 10s because the job queue is full");
+                                Thread.sleep(10000);
+                                added = getJobQueue().offer(job);
                             }
                         }
                     }

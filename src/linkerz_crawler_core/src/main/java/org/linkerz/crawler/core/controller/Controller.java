@@ -7,7 +7,7 @@ package org.linkerz.crawler.core.controller;
 import com.hazelcast.core.HazelcastInstanceAware;
 import com.hazelcast.core.IQueue;
 import org.linkerz.core.job.Job;
-import org.linkerz.crawler.core.downloader.controller.DownloadController;
+import org.linkerz.crawler.core.downloader.controller.DownloaderController;
 import org.linkerz.crawler.core.parser.controller.ParserController;
 
 import java.io.Serializable;
@@ -24,9 +24,9 @@ public interface Controller<J extends Job> extends Serializable, HazelcastInstan
 
     /**
      * Set the download controller.
-     * @param downloadController
+     * @param downloaderController
      */
-    void setDownloadController(DownloadController downloadController);
+    void setDownloaderController(DownloaderController downloaderController);
 
 
     /**
