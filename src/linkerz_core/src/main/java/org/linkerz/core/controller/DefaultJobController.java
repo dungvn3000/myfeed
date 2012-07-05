@@ -6,11 +6,11 @@ package org.linkerz.core.controller;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IQueue;
-import com.hazelcast.core.ItemEvent;
-import com.hazelcast.core.ItemListener;
 import org.linkerz.core.callback.JobCallBack;
 import org.linkerz.core.handler.Handler;
 import org.linkerz.core.job.Job;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -20,56 +20,66 @@ import java.util.List;
  * @author Nguyen Duc Dung
  * @since 7/4/12, 2:18 PM
  */
-public class DefaultJobController implements JobController, ItemListener<Job> {
+public class DefaultJobController implements JobController {
 
+    private static final Logger logger = LoggerFactory.getLogger(DefaultJobController.class);
     private List<Handler> handlers;
     private HazelcastInstance instance;
-    private boolean done = false;
+
+    private final Thread workerThread;
+
+    private final Object syncRoot = new Object();
+
+    public DefaultJobController() {
+        workerThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                doWorkLoop();
+            }
+        });
+        workerThread.setDaemon(true);
+    }
 
     @Override
     public void start() {
-        getJobQueue().addItemListener(this, true);
-        run();
+        workerThread.start();
     }
 
-    private void run() {
-        while (!getJobQueue().isEmpty()) {
-            Job job = getJobQueue().remove();
-            for (Handler handler : handlers) {
-                if (handler.isFor(job.getClass())) {
-                    JobCallBack callBack = job.getCallBack();
-                    try {
-                        handler.handle(job);
+    @SuppressWarnings("ConstantConditions")
+    private void doWorkLoop() {
+        while (true) {
+            synchronized (syncRoot) {
+                try {
+                    Job job = getJobQueue().poll();
+                    if (job != null) {
+                        for (Handler handler : handlers) {
+                            if (handler.isFor(job.getClass())) {
+                                JobCallBack callBack = job.getCallBack();
+                                try {
+                                    handler.handle(job);
 
-                        if (callBack != null) {
-                            callBack.onSuccess(job.getResult());
+                                    if (callBack != null) {
+                                        callBack.onSuccess(job.getResult());
+                                    }
+                                    //Make sure only one handler handle for each kind of job at
+                                    //the same time.
+                                    break;
+                                } catch (Exception e) {
+                                    if (callBack != null) {
+                                        callBack.onFailed(e);
+                                    }
+                                    logger.error(e.getMessage(), e);
+                                }
+                            }
                         }
-
-                        //Make sure only one handler handle for each kind of job at
-                        //the same time.
-                        break;
-                    } catch (Exception e) {
-                        if (callBack != null) {
-                            callBack.onFailed(e);
-                        }
-                        e.printStackTrace();
                     }
+                    // Yielding context to another thread
+                    Thread.sleep(1);
+                } catch (Exception e) {
+                    logger.error(e.getMessage(), e);
                 }
             }
         }
-        done = true;
-    }
-
-    @Override
-    public void itemAdded(ItemEvent<Job> item) {
-        if (done) {
-            done = false;
-            run();
-        }
-    }
-
-    @Override
-    public void itemRemoved(ItemEvent<Job> item) {
     }
 
     @Override
