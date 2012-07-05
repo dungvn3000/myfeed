@@ -38,6 +38,18 @@
         </dependency>
 
         <dependency>
+            <groupId>com.googlecode.flaxcrawler</groupId>
+            <artifactId>flaxcrawler</artifactId>
+            <version>${flaxcrawler.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.xlightweb</groupId>
+            <artifactId>xlightweb</artifactId>
+            <version>${xlightweb.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junitVerion}</version>
