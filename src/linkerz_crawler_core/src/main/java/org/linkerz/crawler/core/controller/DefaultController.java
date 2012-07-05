@@ -5,10 +5,14 @@
 package org.linkerz.crawler.core.controller;
 
 import ch.lambdaj.Lambda;
+import org.linkerz.core.config.Configurable;
 import org.linkerz.core.handler.Handler;
+import org.linkerz.crawler.core.controller.config.CrawlControllerConfig;
 import org.linkerz.crawler.core.crawler.Crawler;
 import org.linkerz.crawler.core.crawler.DefaultCrawler;
 import org.linkerz.crawler.core.job.CrawlJob;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -21,16 +25,18 @@ import java.util.Queue;
  * @author Nguyen Duc Dung
  * @since 7/2/12, 12:57 AM
  */
-public class DefaultController extends AbstractController<CrawlJob> implements Handler<CrawlJob> {
+public class DefaultController extends AbstractController<CrawlJob> implements Handler<CrawlJob>,
+        Configurable<CrawlControllerConfig> {
 
-    private int preferLocalJobNumber;
-    private int numberOfCrawler;
+    private static final Logger logger = LoggerFactory.getLogger(DefaultController.class);
+
+    private CrawlControllerConfig config;
     private Queue<CrawlJob> localJobQueue = new LinkedList<CrawlJob>();
     private List<Thread> threads = new ArrayList<Thread>();
     private boolean started;
 
     public void start() {
-        for (int i = 0; i < numberOfCrawler; i++) {
+        for (int i = 0; i < config.getNumberOfCrawler(); i++) {
             Thread thread = new Thread(createCrawler());
             threads.add(thread);
         }
@@ -38,7 +44,10 @@ public class DefaultController extends AbstractController<CrawlJob> implements H
 
     @Override
     public boolean isFor(Class<CrawlJob> clazz) {
-        return clazz == CrawlJob.class && localJobQueue.size() < preferLocalJobNumber;
+        if (localJobQueue.size() > config.getPreferLocalJobNumber()) {
+            logger.info("Reject the job because the handler is too busy now " + localJobQueue.size());
+        }
+        return clazz == CrawlJob.class && localJobQueue.size() < config.getPreferLocalJobNumber();
     }
 
     @Override
@@ -52,14 +61,11 @@ public class DefaultController extends AbstractController<CrawlJob> implements H
 
     private Crawler createCrawler() {
         return new DefaultCrawler(downloaderController, parserController, getQueue(),
-                localJobQueue, preferLocalJobNumber);
+                localJobQueue, config);
     }
 
-    public void setNumberOfCrawler(int numberOfCrawler) {
-        this.numberOfCrawler = numberOfCrawler;
-    }
-
-    public void setPreferLocalJobNumber(int preferLocalJobNumber) {
-        this.preferLocalJobNumber = preferLocalJobNumber;
+    @Override
+    public void setConfig(CrawlControllerConfig config) {
+        this.config = config;
     }
 }

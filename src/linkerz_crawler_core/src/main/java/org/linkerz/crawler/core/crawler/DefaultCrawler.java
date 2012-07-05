@@ -5,6 +5,7 @@
 package org.linkerz.crawler.core.crawler;
 
 import com.hazelcast.core.IQueue;
+import org.linkerz.crawler.core.controller.config.CrawlControllerConfig;
 import org.linkerz.crawler.core.downloader.controller.DownloaderController;
 import org.linkerz.crawler.core.downloader.result.DownloadResult;
 import org.linkerz.crawler.core.job.CrawlJob;
@@ -34,15 +35,15 @@ public class DefaultCrawler implements Crawler {
     private ParserController parserController;
     private IQueue<CrawlJob> remoteJobQueue;
     private Queue<CrawlJob> localJobQueue;
-    private int preferLocalJobNumber;
+    private CrawlControllerConfig config;
 
     public DefaultCrawler(DownloaderController downloaderController, ParserController parserController,
-                          IQueue<CrawlJob> remoteJobQueue, Queue<CrawlJob> localJobQueue, int preferLocalJobNumber) {
+                          IQueue<CrawlJob> remoteJobQueue, Queue<CrawlJob> localJobQueue, CrawlControllerConfig config) {
         this.downloaderController = downloaderController;
         this.parserController = parserController;
         this.remoteJobQueue = remoteJobQueue;
         this.localJobQueue = localJobQueue;
-        this.preferLocalJobNumber = preferLocalJobNumber;
+        this.config = config;
     }
 
     @Override
@@ -65,7 +66,7 @@ public class DefaultCrawler implements Crawler {
                             List<WebLink> webLinks = ((DefaultParserResult) parserResult).getLinks();
                             logger.info(String.valueOf(webLinks.size()));
                             for (WebLink webLink : webLinks) {
-                                if (localJobQueue.size() > preferLocalJobNumber) {
+                                if (localJobQueue.size() > config.getPreferLocalJobNumber()) {
                                     localJobQueue.offer(new CrawlJob(webLink));
                                 } else {
                                     boolean added = remoteJobQueue.offer(new CrawlJob(webLink));

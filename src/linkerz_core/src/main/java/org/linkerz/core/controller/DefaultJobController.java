@@ -7,6 +7,8 @@ package org.linkerz.core.controller;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IQueue;
 import org.linkerz.core.callback.JobCallBack;
+import org.linkerz.core.config.Configurable;
+import org.linkerz.core.controller.config.JobControllerConfig;
 import org.linkerz.core.handler.Handler;
 import org.linkerz.core.job.Job;
 import org.slf4j.Logger;
@@ -20,11 +22,12 @@ import java.util.List;
  * @author Nguyen Duc Dung
  * @since 7/4/12, 2:18 PM
  */
-public class DefaultJobController implements JobController {
+public class DefaultJobController implements JobController, Configurable<JobControllerConfig> {
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultJobController.class);
     private List<Handler> handlers;
     private HazelcastInstance instance;
+    private JobControllerConfig config;
 
     private final Thread workerThread;
 
@@ -71,7 +74,7 @@ public class DefaultJobController implements JobController {
                                     }
                                     logger.error(e.getMessage(), e);
                                 } finally {
-                                    //Mark the job was done.
+                                    //Mark the job was done. Even there is a exception.
                                     done = true;
                                 }
                             }
@@ -79,14 +82,13 @@ public class DefaultJobController implements JobController {
 
                         //If the job hasn't done yet, re add it.
                         if (!done) {
-                            logger.info("Sleep 10s because every handler is busy now");
-                            Thread.sleep(10000);
-                            boolean added = getJobQueue().offer(job);
+                            boolean added = false;
                             while (!added) {
                                 //may be all handler is busy
                                 // Sleep 10S
-                                logger.info("Sleep 10s because the job queue is full");
-                                Thread.sleep(10000);
+                                logger.info("Sleep " + config.getIdeTimeWhenEveryHandlerBusy()
+                                        + " ms because every handler is busy now");
+                                Thread.sleep(config.getIdeTimeWhenEveryHandlerBusy());
                                 added = getJobQueue().offer(job);
                             }
                         }
@@ -108,6 +110,11 @@ public class DefaultJobController implements JobController {
     @Override
     public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {
         this.instance = hazelcastInstance;
+    }
+
+    @Override
+    public void setConfig(JobControllerConfig config) {
+        this.config = config;
     }
 
     private IQueue<Job> getJobQueue() {

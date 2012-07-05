@@ -4,6 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean class="org.linkerz.core.controller.DefaultJobController" init-method="start">
+        <property name="config" ref="jobControllerConfig"/>
         <property name="hazelcastInstance" ref="instance"/>
         <property name="handlers">
             <list>
@@ -12,4 +13,7 @@
         </property>
     </bean>
 
+    <bean id="jobControllerConfig" class="org.linkerz.core.controller.config.JobControllerConfig">
+        <property name="ideTimeWhenEveryHandlerBusy" value="10000"/>
+    </bean>
 </beans>
