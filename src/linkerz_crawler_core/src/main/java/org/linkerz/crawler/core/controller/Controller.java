@@ -7,11 +7,10 @@ package org.linkerz.crawler.core.controller;
 import com.hazelcast.core.HazelcastInstanceAware;
 import com.hazelcast.core.IQueue;
 import org.linkerz.core.job.Job;
-import org.linkerz.crawler.core.downloader.Downloader;
-import org.linkerz.crawler.core.parser.Parser;
+import org.linkerz.crawler.core.downloader.controller.DownloadController;
+import org.linkerz.crawler.core.parser.controller.ParserController;
 
 import java.io.Serializable;
-import java.util.Map;
 
 /**
  * The Class Controller.
@@ -24,18 +23,17 @@ import java.util.Map;
 public interface Controller<J extends Job> extends Serializable, HazelcastInstanceAware {
 
     /**
-     * Set map of downloaders for controller.
-     *
-     * @param downloaders for each download will be used for correct website.
+     * Set the download controller.
+     * @param downloadController
      */
-    void setDownloaders(Map<String, Downloader> downloaders);
+    void setDownloadController(DownloadController downloadController);
+
 
     /**
-     * Set map of parsers for controller.
-     *
-     * @param parsers for each parser will be used for correct website.
+     * Set the parser controller.
+     * @param parserController
      */
-    void setParsers(Map<String, Parser> parsers);
+    void setParserController(ParserController parserController);
 
     /**
      * Get the queue.

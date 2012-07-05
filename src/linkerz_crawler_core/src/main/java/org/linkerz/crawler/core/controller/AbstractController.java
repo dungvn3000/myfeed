@@ -7,10 +7,8 @@ package org.linkerz.crawler.core.controller;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IQueue;
 import org.linkerz.core.job.Job;
-import org.linkerz.crawler.core.downloader.Downloader;
-import org.linkerz.crawler.core.parser.Parser;
-
-import java.util.Map;
+import org.linkerz.crawler.core.downloader.controller.DownloadController;
+import org.linkerz.crawler.core.parser.controller.ParserController;
 
 /**
  * The Class AbstractController.
@@ -20,23 +18,23 @@ import java.util.Map;
  */
 public abstract class AbstractController<J extends Job> implements Controller<J> {
 
-    protected Map<String, Downloader> downloaders;
-    protected Map<String, Parser> parsers;
+    protected DownloadController downloadController;
+    protected ParserController parserController;
     protected HazelcastInstance instance;
+
+    @Override
+    public void setDownloadController(DownloadController downloadController) {
+        this.downloadController = downloadController;
+    }
+
+    @Override
+    public void setParserController(ParserController parserController) {
+        this.parserController = parserController;
+    }
 
     @Override
     public IQueue<J> getQueue() {
         return instance.getQueue(Job.JOB_QUEUE);
-    }
-
-    @Override
-    public void setDownloaders(Map<String, Downloader> downloaders) {
-        this.downloaders = downloaders;
-    }
-
-    @Override
-    public void setParsers(Map<String, Parser> parsers) {
-        this.parsers = parsers;
     }
 
     @Override

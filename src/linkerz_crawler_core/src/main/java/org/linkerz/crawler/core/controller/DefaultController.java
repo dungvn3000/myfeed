@@ -28,8 +28,8 @@ public class DefaultController extends AbstractController<CrawlJob> implements H
 
     @Override
     public void handle(CrawlJob job) throws Exception {
-        DownloadResult downloadResult = downloaders.get("*").download(job.getWebLink());
-        ParserResult parserResult = parsers.get("*").parse(downloadResult);
+        DownloadResult downloadResult = downloadController.get("*").download(job.getWebLink());
+        ParserResult parserResult = parserController.get("*").parse(downloadResult);
         if (parserResult instanceof DefaultParserResult) {
             List<WebLink> webLinks = ((DefaultParserResult) parserResult).getLinks();
             for (WebLink webLink : webLinks) {
