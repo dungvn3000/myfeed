@@ -33,7 +33,7 @@
     </bean>
 
     <bean id="crawlControllerConfig" class="org.linkerz.crawler.core.controller.config.CrawlControllerConfig">
-        <property name="numberOfCrawler" value="5"/>
+        <property name="numberOfCrawler" value="3"/>
         <property name="preferLocalJobNumber" value="100"/>
         <property name="maxJobNumber" value="10"/>
     </bean>

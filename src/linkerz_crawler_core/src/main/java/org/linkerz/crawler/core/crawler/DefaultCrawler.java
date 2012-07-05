@@ -101,6 +101,7 @@ public class DefaultCrawler implements Crawler {
             }
 
             if (localJobQueue.isFinished()) {
+                logger.info("Finished...");
                 return;
             }
         }

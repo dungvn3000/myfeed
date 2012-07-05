@@ -16,6 +16,7 @@ public class JobQueue<J extends Job> implements Queue<J> {
 
     private java.util.Queue<J> realQueue;
     private boolean finished = false;
+    private int maxSize = -1;
 
     public JobQueue(java.util.Queue<J> realQueue) {
         this.realQueue = realQueue;
@@ -23,11 +24,17 @@ public class JobQueue<J extends Job> implements Queue<J> {
 
     @Override
     public boolean add(J job) {
-        return realQueue.offer(job);
+        if (maxSize == -1 || realQueue.size() < maxSize) {
+            return realQueue.offer(job);
+        }
+        return false;
     }
 
     @Override
     public J getNext() {
+        if (realQueue.size() == 0) {
+            return null;
+        }
         return realQueue.poll();
     }
 
@@ -44,5 +51,10 @@ public class JobQueue<J extends Job> implements Queue<J> {
     @Override
     public int size() {
         return realQueue.size();
+    }
+
+    @Override
+    public void setMaxSize(int maxSize) {
+        this.maxSize = maxSize;
     }
 }

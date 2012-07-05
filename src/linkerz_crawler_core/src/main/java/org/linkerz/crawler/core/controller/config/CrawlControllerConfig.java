@@ -17,7 +17,7 @@ public class CrawlControllerConfig implements Config {
     private int preferLocalJobNumber = 1000;
     private int numberOfCrawler = 5;
     //Maximum job number for the crawler.
-    private int maxJobNumber = 100;
+    private int maxJobNumber = -1;
 
     public int getPreferLocalJobNumber() {
         return preferLocalJobNumber;

@@ -23,4 +23,6 @@ public interface Queue<J extends Job> {
     void setFinished(boolean finished);
 
     int size();
+
+    void setMaxSize(int maxSize);
 }
