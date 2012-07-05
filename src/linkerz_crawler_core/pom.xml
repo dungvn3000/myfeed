@@ -25,6 +25,7 @@
             <version>${jsoup.version}</version>
         </dependency>
 
+        <!--Http and Crawler-->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
@@ -48,6 +49,20 @@
             <artifactId>xlightweb</artifactId>
             <version>${xlightweb.version}</version>
         </dependency>
+        <!--End-->
+
+        <!--Tika Parses-->
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-core</artifactId>
+            <version>${tika.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-parsers</artifactId>
+            <version>${tika.version}</version>
+        </dependency>
+        <!--End-->
 
         <dependency>
             <groupId>junit</groupId>

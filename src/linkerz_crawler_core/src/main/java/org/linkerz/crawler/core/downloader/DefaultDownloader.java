@@ -4,9 +4,10 @@
 
 package org.linkerz.crawler.core.downloader;
 
-import edu.uci.ics.crawler4j.util.IO;
+import org.apache.http.HttpStatus;
 import org.linkerz.crawler.core.downloader.result.DefaultDownloadResult;
 import org.linkerz.crawler.core.model.WebLink;
+import org.linkerz.crawler.core.model.WebPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xlightweb.BodyDataSource;
@@ -15,7 +16,7 @@ import org.xlightweb.IHttpResponse;
 import org.xlightweb.client.HttpClient;
 import org.xsocket.connection.ConnectionUtils;
 
-import javax.net.ssl.SSLContext;
+import static org.xlightweb.client.HttpClient.FollowsRedirectMode;
 
 /**
  * The Class DefaultDownloader.
@@ -25,36 +26,35 @@ import javax.net.ssl.SSLContext;
  */
 public class DefaultDownloader extends AbstractDownloader<DefaultDownloadResult> {
 
-    private Logger logger = LoggerFactory.getLogger(DefaultDownloader.class);
-
+    private final static Logger logger = LoggerFactory.getLogger(DefaultDownloader.class);
 
     @Override
     public DefaultDownloadResult download(WebLink webLink) throws Exception {
-        logger.debug("Download :" + webLink.getUrl());
-
-        // pass over the SSL context (here the JSE 1.6 getDefault method will be used)
-        HttpClient httpClient = new HttpClient(SSLContext.getDefault());
-
+        logger.info("Download :" + webLink.getUrl());
+        HttpClient httpClient = new HttpClient();
         // make some configurations// make some configurations
         httpClient.setMaxIdle(3);                   // configure the pooling behaviour
-        httpClient.setFollowsRedirect(true);        // set follow redirects
+        httpClient.setFollowsRedirectMode(FollowsRedirectMode.ALL);        // set follow redirects
         ConnectionUtils.registerMBean(httpClient);  // register the http client's mbean
-        httpClient.setAutoHandleCookies(false);     // deactivates auto handling cookies
 
         // create a request
-        GetRequest request = new GetRequest("http://vnexpress.net/Files/Subject/3b/bd/90/f1/hg1.jpg");
+        GetRequest request = new GetRequest(webLink.getUrl());
+        request.setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:10.0.2) Gecko/20100101 Firefox/10.0.2");
 
         // call it (by following redirects)
         IHttpResponse response = httpClient.call(request);
 
-        System.out.println(response.getResponseHeader().getStatus());
-        // get the redirected response
-        BodyDataSource bodyDataSource = response.getBody();
-
-
-        IO.writeBytesToFile(bodyDataSource.readBytes(), "/Users/dungvn3000/Desktop/test/1.jpg");
-
-        return new DefaultDownloadResult();
+        DefaultDownloadResult result = new DefaultDownloadResult();
+        result.setHttpStatus(response.getStatus());
+        if (response.getStatus() == HttpStatus.SC_OK) {
+            // get the redirected response
+            BodyDataSource bodyDataSource = response.getBody();
+            WebPage webPage = new WebPage();
+            webPage.setWebLink(webLink);
+            webPage.setHtml(bodyDataSource.readString());
+            result.setWebPage(webPage);
+        }
+        return result;
     }
 
 

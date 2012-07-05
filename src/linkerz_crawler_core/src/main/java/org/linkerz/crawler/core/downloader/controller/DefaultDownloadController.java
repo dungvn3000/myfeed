@@ -25,6 +25,6 @@ public class DefaultDownloadController implements DownloadController {
 
     @Override
     public Downloader get(String url) {
-        return downloaders.get(url);
+        return downloaders.get("*");
     }
 }

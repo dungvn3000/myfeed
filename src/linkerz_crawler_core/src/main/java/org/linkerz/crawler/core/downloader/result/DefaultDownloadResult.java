@@ -14,6 +14,7 @@ import org.linkerz.crawler.core.model.WebPage;
  */
 public class DefaultDownloadResult implements DownloadResult {
 
+    private int httpStatus;
     private WebPage webPage;
 
     public DefaultDownloadResult() {
@@ -21,6 +22,14 @@ public class DefaultDownloadResult implements DownloadResult {
 
     public DefaultDownloadResult(WebPage webPage) {
         this.webPage = webPage;
+    }
+
+    public int getHttpStatus() {
+        return httpStatus;
+    }
+
+    public void setHttpStatus(int httpStatus) {
+        this.httpStatus = httpStatus;
     }
 
     public WebPage getWebPage() {
