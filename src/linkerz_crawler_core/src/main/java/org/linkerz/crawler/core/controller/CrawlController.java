@@ -20,7 +20,7 @@ import java.io.Serializable;
  * @author Nguyen Duc Dung
  * @since 7/2/12, 12:22 AM
  */
-public interface Controller<J extends Job> extends Serializable, HazelcastInstanceAware {
+public interface CrawlController<J extends Job> extends Serializable, HazelcastInstanceAware {
 
     /**
      * Set the download controller.

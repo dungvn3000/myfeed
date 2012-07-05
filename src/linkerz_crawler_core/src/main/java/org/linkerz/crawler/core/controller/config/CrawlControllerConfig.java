@@ -16,6 +16,8 @@ public class CrawlControllerConfig implements Config {
 
     private int preferLocalJobNumber = 1000;
     private int numberOfCrawler = 5;
+    //Maximum job number for the crawler.
+    private int maxJobNumber = 100;
 
     public int getPreferLocalJobNumber() {
         return preferLocalJobNumber;
@@ -31,5 +33,13 @@ public class CrawlControllerConfig implements Config {
 
     public void setNumberOfCrawler(int numberOfCrawler) {
         this.numberOfCrawler = numberOfCrawler;
+    }
+
+    public int getMaxJobNumber() {
+        return maxJobNumber;
+    }
+
+    public void setMaxJobNumber(int maxJobNumber) {
+        this.maxJobNumber = maxJobNumber;
     }
 }

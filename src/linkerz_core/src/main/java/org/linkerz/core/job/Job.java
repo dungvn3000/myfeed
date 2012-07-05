@@ -4,7 +4,7 @@
 
 package org.linkerz.core.job;
 
-import org.linkerz.core.callback.JobCallBack;
+import org.linkerz.core.callback.CallBack;
 
 import java.io.Serializable;
 
@@ -22,7 +22,7 @@ public interface Job<R> extends Serializable {
      * Get JobCallback.
      * @return
      */
-    JobCallBack<R> getCallBack();
+    CallBack<R> getCallBack();
 
     /**
      * Return result of this job.

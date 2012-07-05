@@ -5,16 +5,17 @@
 package org.linkerz.core.controller;
 
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IQueue;
-import org.linkerz.core.callback.JobCallBack;
+import org.linkerz.core.callback.CallBack;
 import org.linkerz.core.config.Configurable;
 import org.linkerz.core.controller.config.JobControllerConfig;
 import org.linkerz.core.handler.Handler;
 import org.linkerz.core.job.Job;
+import org.linkerz.core.queue.JobQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Queue;
 
 /**
  * The Class DefaultController.
@@ -28,6 +29,7 @@ public class DefaultJobController implements JobController, Configurable<JobCont
     private List<Handler> handlers;
     private HazelcastInstance instance;
     private JobControllerConfig config;
+    private JobQueue<Job> jobQueue;
 
     private final Thread workerThread;
 
@@ -45,6 +47,8 @@ public class DefaultJobController implements JobController, Configurable<JobCont
 
     @Override
     public void start() {
+        Queue<Job> realQueue = instance.getQueue(Job.JOB_QUEUE);
+        jobQueue = new JobQueue<Job>(realQueue);
         workerThread.start();
     }
 
@@ -54,11 +58,11 @@ public class DefaultJobController implements JobController, Configurable<JobCont
             synchronized (syncRoot) {
                 try {
                     boolean done = false;
-                    Job job = getJobQueue().poll();
+                    Job job = jobQueue.getNext();
                     if (job != null) {
                         for (Handler handler : handlers) {
                             if (handler.isFor(job.getClass())) {
-                                JobCallBack callBack = job.getCallBack();
+                                CallBack callBack = job.getCallBack();
                                 try {
                                     handler.handle(job);
 
@@ -89,7 +93,7 @@ public class DefaultJobController implements JobController, Configurable<JobCont
                                 logger.info("Sleep " + config.getIdeTimeWhenEveryHandlerBusy()
                                         + " ms because every handler is busy now");
                                 Thread.sleep(config.getIdeTimeWhenEveryHandlerBusy());
-                                added = getJobQueue().offer(job);
+                                added = jobQueue.add(job);
                             }
                         }
                     }
@@ -115,9 +119,5 @@ public class DefaultJobController implements JobController, Configurable<JobCont
     @Override
     public void setConfig(JobControllerConfig config) {
         this.config = config;
-    }
-
-    private IQueue<Job> getJobQueue() {
-        return instance.getQueue(Job.JOB_QUEUE);
     }
 }

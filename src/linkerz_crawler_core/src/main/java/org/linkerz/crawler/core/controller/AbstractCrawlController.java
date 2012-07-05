@@ -16,7 +16,7 @@ import org.linkerz.crawler.core.parser.controller.ParserController;
  * @author Nguyen Duc Dung
  * @since 7/2/12, 12:56 AM
  */
-public abstract class AbstractController<J extends Job> implements Controller<J> {
+public abstract class AbstractCrawlController<J extends Job> implements CrawlController<J> {
 
     protected DownloaderController downloaderController;
     protected ParserController parserController;

@@ -5,6 +5,8 @@
 package org.linkerz.crawler.core.crawler;
 
 import com.hazelcast.core.IQueue;
+import org.linkerz.core.callback.CallBack;
+import org.linkerz.core.queue.Queue;
 import org.linkerz.crawler.core.controller.config.CrawlControllerConfig;
 import org.linkerz.crawler.core.downloader.controller.DownloaderController;
 import org.linkerz.crawler.core.downloader.result.DownloadResult;
@@ -17,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.Queue;
+
 
 /**
  * The Class DefaultCrawler.
@@ -36,6 +38,7 @@ public class DefaultCrawler implements Crawler {
     private IQueue<CrawlJob> remoteJobQueue;
     private Queue<CrawlJob> localJobQueue;
     private CrawlControllerConfig config;
+    private CallBack<Void> callBack;
 
     public DefaultCrawler(DownloaderController downloaderController, ParserController parserController,
                           IQueue<CrawlJob> remoteJobQueue, Queue<CrawlJob> localJobQueue, CrawlControllerConfig config) {
@@ -55,8 +58,8 @@ public class DefaultCrawler implements Crawler {
     @Override
     public void run() {
         synchronized (syncRoot) {
-            while (true) {
-                CrawlJob job = localJobQueue.poll();
+            while (!localJobQueue.isFinished()) {
+                 CrawlJob job = localJobQueue.getNext();
                 if (job != null && shouldCrawl(job)) {
                     DownloadResult downloadResult = null;
                     try {
@@ -64,21 +67,28 @@ public class DefaultCrawler implements Crawler {
                         ParserResult parserResult = parserController.get("*").parse(downloadResult);
                         if (parserResult instanceof DefaultParserResult) {
                             List<WebLink> webLinks = ((DefaultParserResult) parserResult).getLinks();
-                            logger.info(String.valueOf(webLinks.size()));
+                            logger.info("Crawled " + String.valueOf(webLinks.size()) + " links in "
+                                    + job.getWebLink().getUrl());
                             for (WebLink webLink : webLinks) {
                                 if (localJobQueue.size() > config.getPreferLocalJobNumber()) {
-                                    localJobQueue.offer(new CrawlJob(webLink));
+                                    localJobQueue.add(new CrawlJob(webLink));
                                 } else {
                                     boolean added = remoteJobQueue.offer(new CrawlJob(webLink));
                                     if (!added) {
                                         //Remote job queue is full, add it to local queue
                                         logger.info("Remote Job Queue is Full: " + remoteJobQueue.size());
-                                        localJobQueue.offer(new CrawlJob(webLink));
+                                        localJobQueue.add(new CrawlJob(webLink));
                                     }
                                 }
                             }
                         }
+                        if (callBack != null) {
+                            callBack.onSuccess(null);
+                        }
                     } catch (Exception e) {
+                        if (callBack != null) {
+                            callBack.onFailed(e);
+                        }
                         logger.error("Error: " + job.getWebLink().getUrl(), e);
                     }
                 }
@@ -89,6 +99,14 @@ public class DefaultCrawler implements Crawler {
                     logger.error(e.getMessage(), e);
                 }
             }
+
+            if (localJobQueue.isFinished()) {
+                return;
+            }
         }
+    }
+
+    public void setCallBack(CallBack<Void> callBack) {
+        this.callBack = callBack;
     }
 }

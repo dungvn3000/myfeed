@@ -8,7 +8,7 @@
         <property name="hazelcastInstance" ref="instance"/>
         <property name="handlers">
             <list>
-                <ref bean="defaultController"/>
+                <ref bean="defaultCrawlController"/>
             </list>
         </property>
     </bean>

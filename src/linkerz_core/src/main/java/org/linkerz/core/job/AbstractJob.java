@@ -4,7 +4,7 @@
 
 package org.linkerz.core.job;
 
-import org.linkerz.core.callback.JobCallBack;
+import org.linkerz.core.callback.CallBack;
 
 /**
  * The Class AbstractJob.
@@ -14,7 +14,7 @@ import org.linkerz.core.callback.JobCallBack;
  */
 public abstract class AbstractJob<R> implements Job<R> {
 
-    protected JobCallBack<R> callBack;
+    protected CallBack<R> callBack;
     protected R result;
 
     @Override
@@ -26,12 +26,12 @@ public abstract class AbstractJob<R> implements Job<R> {
         this.result = result;
     }
 
-    public void setCallBack(JobCallBack<R> callBack) {
+    public void setCallBack(CallBack<R> callBack) {
         this.callBack = callBack;
     }
 
     @Override
-    public JobCallBack<R> getCallBack() {
+    public CallBack<R> getCallBack() {
         return callBack;
     }
 }

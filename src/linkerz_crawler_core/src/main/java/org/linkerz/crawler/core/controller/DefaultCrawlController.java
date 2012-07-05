@@ -5,8 +5,11 @@
 package org.linkerz.crawler.core.controller;
 
 import ch.lambdaj.Lambda;
+import org.linkerz.core.callback.CallBack;
 import org.linkerz.core.config.Configurable;
 import org.linkerz.core.handler.Handler;
+import org.linkerz.core.queue.JobQueue;
+import org.linkerz.core.queue.Queue;
 import org.linkerz.crawler.core.controller.config.CrawlControllerConfig;
 import org.linkerz.crawler.core.crawler.Crawler;
 import org.linkerz.crawler.core.crawler.DefaultCrawler;
@@ -15,9 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 /**
  * The Class DefaultController.
@@ -25,17 +26,19 @@ import java.util.Queue;
  * @author Nguyen Duc Dung
  * @since 7/2/12, 12:57 AM
  */
-public class DefaultController extends AbstractController<CrawlJob> implements Handler<CrawlJob>,
-        Configurable<CrawlControllerConfig> {
+public class DefaultCrawlController extends AbstractCrawlController<CrawlJob> implements Handler<CrawlJob>,
+        Configurable<CrawlControllerConfig>, CallBack<Void> {
 
-    private static final Logger logger = LoggerFactory.getLogger(DefaultController.class);
+    private static final Logger logger = LoggerFactory.getLogger(DefaultCrawlController.class);
 
     private CrawlControllerConfig config;
-    private Queue<CrawlJob> localJobQueue = new LinkedList<CrawlJob>();
+    private Queue<CrawlJob> localJobQueue;
     private List<Thread> threads = new ArrayList<Thread>();
-    private boolean started;
+    private boolean started = false;
+    private int jobDoneCount = 0;
 
     public void start() {
+        localJobQueue = new JobQueue<CrawlJob>(getQueue());
         for (int i = 0; i < config.getNumberOfCrawler(); i++) {
             Thread thread = new Thread(createCrawler());
             threads.add(thread);
@@ -60,8 +63,23 @@ public class DefaultController extends AbstractController<CrawlJob> implements H
     }
 
     private Crawler createCrawler() {
-        return new DefaultCrawler(downloaderController, parserController, getQueue(),
+        DefaultCrawler crawler = new DefaultCrawler(downloaderController, parserController, getQueue(),
                 localJobQueue, config);
+        crawler.setCallBack(this);
+        return crawler;
+    }
+
+    @Override
+    public void onSuccess(Void aVoid) {
+        jobDoneCount += 1;
+        if (jobDoneCount >= config.getMaxJobNumber()) {
+            logger.info("Finish " + jobDoneCount + " jobs");
+            localJobQueue.setFinished(true);
+        }
+    }
+
+    @Override
+    public void onFailed(Exception e) {
     }
 
     @Override

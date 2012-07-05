@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @author Nguyen Duc Dung
  * @since 7/4/12, 1:56 PM
  */
-public interface JobCallBack<E> extends Serializable {
+public interface CallBack<E> extends Serializable {
 
     void onSuccess(E e);
 

@@ -30,7 +30,6 @@ public class DefaultDownloader extends AbstractDownloader<DefaultDownloadResult>
 
     @Override
     public DefaultDownloadResult download(WebLink webLink) throws Exception {
-        logger.info("Download :" + webLink.getUrl());
         HttpClient httpClient = new HttpClient();
         // make some configurations// make some configurations
         httpClient.setMaxIdle(3);                   // configure the pooling behaviour
