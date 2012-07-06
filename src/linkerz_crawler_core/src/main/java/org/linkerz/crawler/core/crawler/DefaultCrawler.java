@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 
 /**
@@ -30,6 +31,9 @@ import java.util.List;
  * @since 7/5/12, 8:20 PM
  */
 public class DefaultCrawler implements Crawler, CallBackable<ParserResult> {
+
+    private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|bmp|gif|jpe?g|ico" + "|png|tiff?|mid|mp2|mp3|mp4"
+            + "|wav|avi|mov|mpeg|ram|m4v|pdf" + "|rm|smil|wmv|swf|wma|zip|rar|gz))$");
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultCrawler.class);
 
@@ -52,7 +56,8 @@ public class DefaultCrawler implements Crawler, CallBackable<ParserResult> {
 
     @Override
     public boolean shouldCrawl(CrawlJob crawlJob) {
-        return true;
+        String href = crawlJob.getWebLink().getUrl().toLowerCase();
+        return !FILTERS.matcher(href).matches();
     }
 
     @SuppressWarnings("InfiniteLoopStatement")

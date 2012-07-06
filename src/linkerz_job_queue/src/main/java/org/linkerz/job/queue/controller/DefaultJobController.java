@@ -7,7 +7,6 @@ package org.linkerz.job.queue.controller;
 import com.hazelcast.core.HazelcastInstance;
 import org.linkerz.core.callback.CallBack;
 import org.linkerz.core.config.Configurable;
-import org.linkerz.job.queue.config.JobConfig;
 import org.linkerz.job.queue.controller.config.JobControllerConfig;
 import org.linkerz.job.queue.handler.Handler;
 import org.linkerz.job.queue.job.Job;
@@ -66,7 +65,6 @@ public class DefaultJobController implements JobController, Configurable<JobCont
                         for (Handler handler : handlers) {
                             if (handler.isFor(job.getClass())) {
                                 CallBack callBack = job.getCallBack();
-                                JobConfig jobConfig = job.getConfig();
                                 try {
                                     Session session = null;
                                     RunInSession runInSession = handler.getClass().getAnnotation(RunInSession.class);

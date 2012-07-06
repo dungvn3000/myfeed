@@ -13,6 +13,8 @@ import org.apache.tika.parser.html.HtmlParser;
 import org.linkerz.crawler.core.downloader.result.DefaultDownloadResult;
 import org.linkerz.crawler.core.model.WebLink;
 import org.linkerz.crawler.core.parser.result.DefaultParserResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -27,6 +29,8 @@ import java.util.List;
  * @since 7/2/12, 2:15 AM
  */
 public class DefaultParser extends AbstractParser<DefaultDownloadResult, DefaultParserResult> {
+
+    private final static Logger logger = LoggerFactory.getLogger(DefaultParser.class);
 
     private HtmlParser htmlParser = new HtmlParser();
     private ParseContext parseContext = new ParseContext();
@@ -80,6 +84,7 @@ public class DefaultParser extends AbstractParser<DefaultDownloadResult, Default
                 }
             }
         }
+
         return new DefaultParserResult(webLinks);
     }
 }

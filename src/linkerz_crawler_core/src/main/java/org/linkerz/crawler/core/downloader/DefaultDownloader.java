@@ -33,7 +33,10 @@ public class DefaultDownloader extends AbstractDownloader<DefaultDownloadResult>
         HttpClient httpClient = new HttpClient();
         // make some configurations// make some configurations
         httpClient.setMaxIdle(3);                   // configure the pooling behaviour
-        httpClient.setFollowsRedirectMode(FollowsRedirectMode.ALL);        // set follow redirects
+        httpClient.setFollowsRedirectMode(FollowsRedirectMode.OFF);        // set follow redirects
+        httpClient.setConnectTimeoutMillis(1000);
+        httpClient.setResponseTimeoutMillis(5000);
+
         ConnectionUtils.registerMBean(httpClient);  // register the http client's mbean
 
         // create a request
