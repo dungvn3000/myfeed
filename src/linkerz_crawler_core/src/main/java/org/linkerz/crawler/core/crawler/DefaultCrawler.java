@@ -46,6 +46,11 @@ public class DefaultCrawler implements Crawler, CallBackable<ParserResult> {
     private CallBack<ParserResult> callBack;
     private Thread thread;
 
+    /**
+     * The flag show crawler status.
+     */
+    private boolean working = false;
+
     public DefaultCrawler(DownloaderController downloaderController, ParserController parserController,
                           CrawlSession session, CrawlControllerConfig config) {
         this.downloaderController = downloaderController;
@@ -57,7 +62,11 @@ public class DefaultCrawler implements Crawler, CallBackable<ParserResult> {
     @Override
     public boolean shouldCrawl(CrawlJob crawlJob) {
         String href = crawlJob.getWebLink().getUrl().toLowerCase();
-        return !FILTERS.matcher(href).matches();
+        boolean shouldCrawl = !FILTERS.matcher(href).matches();
+        if (!shouldCrawl) {
+            logger.info("Skip this url " + crawlJob.getWebLink().getUrl());
+        }
+        return shouldCrawl;
     }
 
     @SuppressWarnings("InfiniteLoopStatement")
@@ -65,10 +74,12 @@ public class DefaultCrawler implements Crawler, CallBackable<ParserResult> {
     public void run() {
         synchronized (syncRoot) {
             try {
-                while (!session.getLocalJobQueue().isFinished()) {
+                while (!session.isFinished()) {
+                    working = false;
                     CrawlJob job = session.getLocalJobQueue().next();
                     if (job != null && shouldCrawl(job)) {
-                        DownloadResult downloadResult = null;
+                        DownloadResult downloadResult;
+                        working = true;
                         try {
                             downloadResult = downloaderController.get("*").download(job.getWebLink());
                             ParserResult parserResult = parserController.get("*").parse(downloadResult);
@@ -88,13 +99,12 @@ public class DefaultCrawler implements Crawler, CallBackable<ParserResult> {
                         }
                     }
                     // Yielding context to another thread.
-                    Thread.sleep(1);
+                    Thread.yield();
                 }
 
-                if (session.getLocalJobQueue().isFinished()) {
-                    thread.join(1000);
-                    logger.info("Finished...");
-                }
+                thread.join(1000);
+                logger.info("Finished...");
+
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
             }
@@ -106,7 +116,18 @@ public class DefaultCrawler implements Crawler, CallBackable<ParserResult> {
         this.callBack = callBack;
     }
 
+    @Override
     public void setThread(Thread thread) {
         this.thread = thread;
+    }
+
+    @Override
+    public Thread getThread() {
+        return thread;
+    }
+
+    @Override
+    public boolean isWorking() {
+        return working;
     }
 }

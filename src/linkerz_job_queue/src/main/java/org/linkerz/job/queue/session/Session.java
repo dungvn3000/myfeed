@@ -31,4 +31,7 @@ public interface Session<J extends Job> {
      */
     void end();
 
+    boolean isFinished();
+
+    void setFinished(boolean finished);
 }

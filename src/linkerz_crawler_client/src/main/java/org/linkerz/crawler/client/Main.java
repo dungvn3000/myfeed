@@ -20,7 +20,7 @@ public class Main {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         LinkerzCrawlerClient client = LinkerzCrawlerClient.connect("127.0.0.1", "dev", "dev");
         CrawlJobConfig config = new CrawlJobConfig();
-        config.setMaxPageFetchForEachJob(10);
+        config.setMaxPageFetchForEachJob(100);
 //        CrawlJob crawlJob1 = new CrawlJob("http://vnexpress.net/", config);
         CrawlJob crawlJob2 = new CrawlJob("http://www.itgatevn.com.vn/", config);
 //        client.addJob(crawlJob1);

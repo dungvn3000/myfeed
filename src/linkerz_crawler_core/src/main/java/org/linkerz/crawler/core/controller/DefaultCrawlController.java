@@ -8,6 +8,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.linkerz.core.callback.CallBack;
 import org.linkerz.core.config.Configurable;
 import org.linkerz.crawler.core.controller.config.CrawlControllerConfig;
+import org.linkerz.crawler.core.crawler.Crawler;
 import org.linkerz.crawler.core.crawler.DefaultCrawler;
 import org.linkerz.crawler.core.job.CrawlJob;
 import org.linkerz.crawler.core.model.WebLink;
@@ -18,6 +19,10 @@ import org.linkerz.job.queue.handler.Handler;
 import org.linkerz.job.queue.session.RunInSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
+
+import static ch.lambdaj.Lambda.*;
 
 /**
  * The Class DefaultController.
@@ -53,8 +58,7 @@ public class DefaultCrawlController extends AbstractCrawlController<CrawlJob> im
             DefaultCrawler crawler = createCrawler();
             Thread thread = new Thread(crawler, "Crawler " + (i + 1));
             crawler.setThread(thread);
-            session.getThreads().add(thread);
-            thread.setDaemon(true);
+            session.getCrawlers().add(crawler);
             thread.start();
         }
 
@@ -66,9 +70,9 @@ public class DefaultCrawlController extends AbstractCrawlController<CrawlJob> im
 
     @Override
     public void onSuccess(ParserResult result) {
-        session.count();
-        if (session.getCount() > job.getConfig().getMaxPageFetchForEachJob()) {
-            session.getLocalJobQueue().setFinished(true);
+        session.countJob();
+        if (session.getJobCount() + config.getNumberOfCrawler() > job.getConfig().getMaxPageFetchForEachJob()) {
+            session.setFinished(true);
         } else {
             DefaultParserResult parserResult = (DefaultParserResult) result;
             if (CollectionUtils.isNotEmpty(parserResult.getLinks())) {
@@ -81,7 +85,12 @@ public class DefaultCrawlController extends AbstractCrawlController<CrawlJob> im
 
     @Override
     public void onFailed(Exception e) {
-
+        session.countError();
+        if (!session.isFinished()
+                && session.getErrorCount() > config.getMaxErrorNumber()) {
+            logger.info("Stop because error was reached limit " + config.getMaxErrorNumber());
+            session.setFinished(true);
+        }
     }
 
     private DefaultCrawler createCrawler() {
@@ -92,14 +101,26 @@ public class DefaultCrawlController extends AbstractCrawlController<CrawlJob> im
 
     private void waitUntilFinish() throws InterruptedException {
         boolean isAlive = true;
+
         while (isAlive) {
-            for (Thread thread : session.getThreads()) {
-                isAlive = thread.isAlive();
-                if (thread.isAlive()) {
+            List<Crawler> crawlerWorking = select(session.getCrawlers(),
+                    having(on(Crawler.class).isWorking()));
+
+            if (!session.isFinished() && CollectionUtils.isEmpty(crawlerWorking)) {
+                logger.info("No Crawler is working, finish the task...");
+                session.setFinished(true);
+                Thread.sleep(100);
+            }
+
+            for (Crawler crawler : session.getCrawlers()) {
+                isAlive = crawler.getThread().isAlive();
+                if (isAlive) {
                     break;
                 }
             }
+
             Thread.sleep(100);
+
         }
     }
 

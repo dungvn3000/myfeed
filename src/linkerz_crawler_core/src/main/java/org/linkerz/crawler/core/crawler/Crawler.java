@@ -21,4 +21,13 @@ public interface Crawler extends Runnable {
      */
     boolean shouldCrawl(CrawlJob crawlJob);
 
+    /**
+     * Thread for crawler.
+     * @param thread
+     */
+    void setThread(Thread thread);
+
+    Thread getThread();
+
+    boolean isWorking();
 }

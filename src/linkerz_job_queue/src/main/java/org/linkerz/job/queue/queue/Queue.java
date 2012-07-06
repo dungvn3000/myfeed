@@ -18,10 +18,6 @@ public interface Queue<J extends Job> {
 
     J next();
 
-    boolean isFinished();
-
-    void setFinished(boolean finished);
-
     int size();
 
     void setMaxSize(int maxSize);

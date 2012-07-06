@@ -4,6 +4,7 @@
 
 package org.linkerz.crawler.core.session;
 
+import org.linkerz.crawler.core.crawler.Crawler;
 import org.linkerz.crawler.core.job.CrawlJob;
 import org.linkerz.job.queue.queue.JobQueue;
 import org.linkerz.job.queue.queue.Queue;
@@ -22,43 +23,61 @@ import java.util.List;
 public class CrawlSession implements Session<CrawlJob> {
 
     private Queue<CrawlJob> localJobQueue;
-    private List<Thread> threads;
+    private List<Crawler> crawlers;
     private CrawlJob crawlJob;
-    private int count = 0;
+    private int jobCount = 0;
+    private int errorCount = 0;
+    private boolean finished = false;
 
     @Override
     public void start(CrawlJob job) {
         localJobQueue = new JobQueue<CrawlJob>(new LinkedList<CrawlJob>());
-        localJobQueue.setMaxSize(job.getConfig().getMaxPageFetchForEachJob());
-        threads = new ArrayList<Thread>();
-        count = 0;
+        crawlers = new ArrayList<Crawler>();
         this.crawlJob = job;
         localJobQueue.add(job);
     }
 
     @Override
     public void end() {
-        threads.clear();
+
     }
 
-    public void count() {
-        count += 1;
+    public void countJob() {
+        jobCount += 1;
+    }
+
+    public void countError() {
+        errorCount += 1;
     }
 
     public Queue<CrawlJob> getLocalJobQueue() {
         return localJobQueue;
     }
 
-    public List<Thread> getThreads() {
-        return threads;
+    public List<Crawler> getCrawlers() {
+        return crawlers;
     }
 
-    public int getCount() {
-        return count;
+    public int getJobCount() {
+        return jobCount;
+    }
+
+    public int getErrorCount() {
+        return errorCount;
     }
 
     @Override
     public CrawlJob getJob() {
         return crawlJob;
+    }
+
+    @Override
+    public boolean isFinished() {
+        return finished;
+    }
+
+    @Override
+    public void setFinished(boolean finished) {
+        this.finished = finished;
     }
 }

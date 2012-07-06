@@ -15,7 +15,6 @@ import org.linkerz.job.queue.job.Job;
 public class JobQueue<J extends Job> implements Queue<J> {
 
     private final java.util.Queue<J> realQueue;
-    private boolean finished = false;
     private int maxSize = -1;
 
     public JobQueue(java.util.Queue<J> realQueue) {
@@ -35,16 +34,6 @@ public class JobQueue<J extends Job> implements Queue<J> {
         synchronized (realQueue) {
             return realQueue.poll();
         }
-    }
-
-    @Override
-    public boolean isFinished() {
-        return finished;
-    }
-
-    @Override
-    public void setFinished(boolean finished) {
-        this.finished = finished;
     }
 
     @Override
