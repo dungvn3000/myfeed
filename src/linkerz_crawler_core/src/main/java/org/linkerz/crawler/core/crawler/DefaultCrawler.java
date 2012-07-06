@@ -61,7 +61,7 @@ public class DefaultCrawler implements Crawler, CallBackable<ParserResult> {
         synchronized (syncRoot) {
             try {
                 while (!localJobQueue.isFinished()) {
-                    CrawlJob job = localJobQueue.getNext();
+                    CrawlJob job = localJobQueue.next();
                     if (job != null && shouldCrawl(job)) {
                         DownloadResult downloadResult = null;
                         try {

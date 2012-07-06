@@ -61,7 +61,7 @@ public class DefaultJobController implements JobController, Configurable<JobCont
             synchronized (syncRoot) {
                 try {
                     boolean done = false;
-                    Job job = jobQueue.getNext();
+                    Job job = jobQueue.next();
                     if (job != null) {
                         for (Handler handler : handlers) {
                             if (handler.isFor(job.getClass())) {

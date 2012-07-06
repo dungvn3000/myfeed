@@ -16,7 +16,7 @@ public interface Queue<J extends Job> {
 
     boolean add(J job);
 
-    J getNext();
+    J next();
 
     boolean isFinished();
 

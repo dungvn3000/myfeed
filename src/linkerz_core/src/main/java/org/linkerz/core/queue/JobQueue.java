@@ -14,7 +14,7 @@ import org.linkerz.core.job.Job;
  */
 public class JobQueue<J extends Job> implements Queue<J> {
 
-    private java.util.Queue<J> realQueue;
+    private final java.util.Queue<J> realQueue;
     private boolean finished = false;
     private int maxSize = -1;
 
@@ -31,11 +31,10 @@ public class JobQueue<J extends Job> implements Queue<J> {
     }
 
     @Override
-    public J getNext() {
-        if (realQueue.size() == 0) {
-            return null;
+    public J next() {
+        synchronized (realQueue) {
+            return realQueue.poll();
         }
-        return realQueue.poll();
     }
 
     @Override
