@@ -4,7 +4,6 @@
 
 package org.linkerz.crawler.core.job;
 
-import org.linkerz.core.config.Configurable;
 import org.linkerz.core.job.AbstractJob;
 import org.linkerz.crawler.core.job.config.CrawlJobConfig;
 import org.linkerz.crawler.core.model.WebLink;
@@ -15,7 +14,7 @@ import org.linkerz.crawler.core.model.WebLink;
  * @author Nguyen Duc Dung
  * @since 7/3/12, 3:12 AM
  */
-public class CrawlJob extends AbstractJob<Void> implements Configurable<CrawlJobConfig> {
+public class CrawlJob extends AbstractJob<Void, CrawlJobConfig> {
 
     private WebLink webLink;
     private CrawlJobConfig config;
@@ -50,11 +49,13 @@ public class CrawlJob extends AbstractJob<Void> implements Configurable<CrawlJob
         this.webLink = webLink;
     }
 
+
     @Override
     public void setConfig(CrawlJobConfig config) {
         this.config = config;
     }
 
+    @Override
     public CrawlJobConfig getConfig() {
         return config;
     }

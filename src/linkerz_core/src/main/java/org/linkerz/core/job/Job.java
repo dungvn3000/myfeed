@@ -16,7 +16,7 @@ import java.io.Serializable;
  * @author Nguyen Duc Dung
  * @since 7/3/12, 3:11 AM
  */
-public interface Job<R> extends Serializable, Configurable<JobConfig> {
+public interface Job<R,C extends JobConfig> extends Serializable, Configurable<C> {
 
     public static final String JOB_QUEUE = "jobQueue";
 
@@ -33,8 +33,8 @@ public interface Job<R> extends Serializable, Configurable<JobConfig> {
     R getResult();
 
     @Override
-    JobConfig getConfig();
+    C getConfig();
 
     @Override
-    void setConfig(JobConfig config);
+    void setConfig(C config);
 }

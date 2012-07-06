@@ -109,4 +109,9 @@ public class DefaultCrawlController extends AbstractCrawlController<CrawlJob> im
     public void setConfig(CrawlControllerConfig config) {
         this.config = config;
     }
+
+    @Override
+    public CrawlControllerConfig getConfig() {
+        return config;
+    }
 }

@@ -19,8 +19,10 @@ public class Main {
         LinkerzCrawlerClient client = LinkerzCrawlerClient.connect("127.0.0.1", "dev", "dev");
         CrawlJobConfig config = new CrawlJobConfig();
         config.setMaxPageFetchForEachJob(10);
-        CrawlJob crawlJob = new CrawlJob("http://vnexpress.net/", config);
-        client.addJob(crawlJob);
+        CrawlJob crawlJob1 = new CrawlJob("http://vnexpress.net/", config);
+        CrawlJob crawlJob2 = new CrawlJob("http://www.itgatevn.com.vn/", config);
+        client.addJob(crawlJob1);
+        client.addJob(crawlJob2);
         client.shutdown();
     }
 
