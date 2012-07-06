@@ -10,6 +10,7 @@
     <version>0.0.1</version>
     <modules>
         <module>linkerz_core</module>
+        <module>linkerz_job_queue</module>
         <module>linkerz_crawler_core</module>
         <module>linkerz_seachengine_core</module>
         <module>linkerz_database_core</module>

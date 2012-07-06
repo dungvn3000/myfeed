@@ -5,6 +5,7 @@
 package org.linkerz.crawler.client;
 
 import org.linkerz.crawler.core.job.CrawlJob;
+import org.linkerz.crawler.core.job.config.CrawlJobConfig;
 
 /**
  * The Class Main.
@@ -16,7 +17,10 @@ public class Main {
 
     public static void main(String[] args) {
         LinkerzCrawlerClient client = LinkerzCrawlerClient.connect("127.0.0.1", "dev", "dev");
-        client.addJob(new CrawlJob("http://vnexpress.net/"));
+        CrawlJobConfig config = new CrawlJobConfig();
+        config.setMaxPageFetchForEachJob(10);
+        CrawlJob crawlJob = new CrawlJob("http://vnexpress.net/", config);
+        client.addJob(crawlJob);
         client.shutdown();
     }
 
