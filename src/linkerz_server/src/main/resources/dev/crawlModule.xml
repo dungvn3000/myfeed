@@ -34,8 +34,8 @@
 
     <bean id="crawlControllerConfig" class="org.linkerz.crawler.core.controller.config.CrawlControllerConfig">
         <property name="numberOfCrawler" value="5"/>
-        <property name="preferLocalJobNumber" value="100"/>
-        <property name="maxUrlNumberForEachJob" value="100"/>
+        <property name="preferLocalJobNumber" value="10"/>
+        <property name="maxPageFetchForEachJob" value="100"/>
     </bean>
 
 </beans>

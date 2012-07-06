@@ -46,7 +46,7 @@ public class DefaultCrawlController extends AbstractCrawlController<CrawlJob> im
         long time = System.currentTimeMillis();
 
         this.session = session;
-        session.getLocalJobQueue().setMaxSize(config.getMaxUrlNumberForEachJob());
+        session.getLocalJobQueue().setMaxSize(config.getMaxPageFetchForEachJob());
         session.getLocalJobQueue().add(job);
         for (int i = 0; i < config.getNumberOfCrawler(); i++) {
             DefaultCrawler crawler = createCrawler();
@@ -65,7 +65,7 @@ public class DefaultCrawlController extends AbstractCrawlController<CrawlJob> im
     @Override
     public void onSuccess(ParserResult result) {
         session.count();
-        if (session.getCount() > config.getMaxUrlNumberForEachJob()) {
+        if (session.getCount() > config.getMaxPageFetchForEachJob()) {
             session.getLocalJobQueue().setFinished(true);
         } else {
             DefaultParserResult parserResult = (DefaultParserResult) result;
