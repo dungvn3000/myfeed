@@ -13,7 +13,7 @@ import org.linkerz.core.session.Session;
  * @author Nguyen Duc Dung
  * @since 7/4/12, 2:01 PM
  */
-public interface Handler<J extends Job> {
+public interface Handler<J extends Job, S extends Session> {
 
     /**
      * Check whether this handler is for this class or not.
@@ -29,5 +29,5 @@ public interface Handler<J extends Job> {
      * @param job
      * @param session
      */
-    void handle(J job, Session session) throws Exception;
+    void handle(J job, S session) throws Exception;
 }

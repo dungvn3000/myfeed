@@ -11,7 +11,7 @@ import org.linkerz.core.controller.config.JobControllerConfig;
 import org.linkerz.core.handler.Handler;
 import org.linkerz.core.job.Job;
 import org.linkerz.core.queue.JobQueue;
-import org.linkerz.core.session.JobSession;
+import org.linkerz.core.session.RunInSession;
 import org.linkerz.core.session.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,10 +66,19 @@ public class DefaultJobController implements JobController, Configurable<JobCont
                             if (handler.isFor(job.getClass())) {
                                 CallBack callBack = job.getCallBack();
                                 try {
-                                    Session session = new JobSession();
-                                    session.start();
+                                    Session session = null;
+                                    RunInSession runInSession = handler.getClass().getAnnotation(RunInSession.class);
+                                    if (runInSession != null) {
+                                        Class<? extends Session> sessionClass = runInSession.sessionClass();
+                                        session = sessionClass.newInstance();
+                                        session.start();
+                                    }
+
                                     handler.handle(job, session);
-                                    session.end();
+
+                                    if (session != null) {
+                                        session.end();
+                                    }
 
                                     if (callBack != null) {
                                         callBack.onSuccess(job.getResult());

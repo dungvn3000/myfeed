@@ -82,7 +82,7 @@ public class DefaultCrawler implements Crawler, CallBackable<ParserResult> {
                             logger.error("Error: " + job.getWebLink().getUrl(), e);
                         }
                     }
-                    // Yielding context to another thread
+                    // Yielding context to another thread.
                     Thread.sleep(1);
                 }
 
