@@ -7,6 +7,7 @@ package org.linkerz.core.controller;
 import com.hazelcast.core.HazelcastInstance;
 import org.linkerz.core.callback.CallBack;
 import org.linkerz.core.config.Configurable;
+import org.linkerz.core.config.JobConfig;
 import org.linkerz.core.controller.config.JobControllerConfig;
 import org.linkerz.core.handler.Handler;
 import org.linkerz.core.job.Job;
@@ -65,6 +66,7 @@ public class DefaultJobController implements JobController, Configurable<JobCont
                         for (Handler handler : handlers) {
                             if (handler.isFor(job.getClass())) {
                                 CallBack callBack = job.getCallBack();
+                                JobConfig jobConfig = job.getConfig();
                                 try {
                                     Session session = null;
                                     RunInSession runInSession = handler.getClass().getAnnotation(RunInSession.class);
@@ -133,5 +135,10 @@ public class DefaultJobController implements JobController, Configurable<JobCont
     @Override
     public void setConfig(JobControllerConfig config) {
         this.config = config;
+    }
+
+    @Override
+    public JobControllerConfig getConfig() {
+        return config;
     }
 }

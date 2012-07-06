@@ -14,4 +14,5 @@ public interface Configurable<C extends Config> {
 
     void setConfig(C config);
 
+    C getConfig();
 }

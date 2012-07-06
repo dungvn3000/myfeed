@@ -5,6 +5,8 @@
 package org.linkerz.core.job;
 
 import org.linkerz.core.callback.CallBack;
+import org.linkerz.core.config.Configurable;
+import org.linkerz.core.config.JobConfig;
 
 import java.io.Serializable;
 
@@ -14,7 +16,7 @@ import java.io.Serializable;
  * @author Nguyen Duc Dung
  * @since 7/3/12, 3:11 AM
  */
-public interface Job<R> extends Serializable {
+public interface Job<R> extends Serializable, Configurable<JobConfig> {
 
     public static final String JOB_QUEUE = "jobQueue";
 
@@ -29,4 +31,10 @@ public interface Job<R> extends Serializable {
      * @return
      */
     R getResult();
+
+    @Override
+    JobConfig getConfig();
+
+    @Override
+    void setConfig(JobConfig config);
 }
