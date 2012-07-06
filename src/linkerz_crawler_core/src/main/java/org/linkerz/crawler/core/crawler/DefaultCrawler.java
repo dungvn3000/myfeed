@@ -6,7 +6,6 @@ package org.linkerz.crawler.core.crawler;
 
 import org.linkerz.core.callback.CallBack;
 import org.linkerz.core.callback.CallBackable;
-import org.linkerz.core.queue.Queue;
 import org.linkerz.crawler.core.controller.config.CrawlControllerConfig;
 import org.linkerz.crawler.core.downloader.controller.DownloaderController;
 import org.linkerz.crawler.core.downloader.result.DownloadResult;
@@ -15,6 +14,7 @@ import org.linkerz.crawler.core.model.WebLink;
 import org.linkerz.crawler.core.parser.controller.ParserController;
 import org.linkerz.crawler.core.parser.result.DefaultParserResult;
 import org.linkerz.crawler.core.parser.result.ParserResult;
+import org.linkerz.crawler.core.session.CrawlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,16 +37,16 @@ public class DefaultCrawler implements Crawler, CallBackable<ParserResult> {
 
     private DownloaderController downloaderController;
     private ParserController parserController;
-    private Queue<CrawlJob> localJobQueue;
+    private CrawlSession session;
     private CrawlControllerConfig config;
     private CallBack<ParserResult> callBack;
     private Thread thread;
 
     public DefaultCrawler(DownloaderController downloaderController, ParserController parserController,
-                          Queue<CrawlJob> localJobQueue, CrawlControllerConfig config) {
+                          CrawlSession session, CrawlControllerConfig config) {
         this.downloaderController = downloaderController;
         this.parserController = parserController;
-        this.localJobQueue = localJobQueue;
+        this.session = session;
         this.config = config;
     }
 
@@ -60,8 +60,8 @@ public class DefaultCrawler implements Crawler, CallBackable<ParserResult> {
     public void run() {
         synchronized (syncRoot) {
             try {
-                while (!localJobQueue.isFinished()) {
-                    CrawlJob job = localJobQueue.next();
+                while (!session.getLocalJobQueue().isFinished()) {
+                    CrawlJob job = session.getLocalJobQueue().next();
                     if (job != null && shouldCrawl(job)) {
                         DownloadResult downloadResult = null;
                         try {
@@ -86,7 +86,7 @@ public class DefaultCrawler implements Crawler, CallBackable<ParserResult> {
                     Thread.sleep(1);
                 }
 
-                if (localJobQueue.isFinished()) {
+                if (session.getLocalJobQueue().isFinished()) {
                     thread.join(1000);
                     logger.info("Finished...");
                 }

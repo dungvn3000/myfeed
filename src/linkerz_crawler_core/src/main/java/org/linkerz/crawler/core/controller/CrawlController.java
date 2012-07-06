@@ -4,11 +4,9 @@
 
 package org.linkerz.crawler.core.controller;
 
-import com.hazelcast.core.HazelcastInstanceAware;
-import com.hazelcast.core.IQueue;
-import org.linkerz.core.job.Job;
 import org.linkerz.crawler.core.downloader.controller.DownloaderController;
 import org.linkerz.crawler.core.parser.controller.ParserController;
+import org.linkerz.job.queue.job.Job;
 
 import java.io.Serializable;
 
@@ -20,7 +18,7 @@ import java.io.Serializable;
  * @author Nguyen Duc Dung
  * @since 7/2/12, 12:22 AM
  */
-public interface CrawlController<J extends Job> extends Serializable, HazelcastInstanceAware {
+public interface CrawlController<J extends Job> extends Serializable {
 
     /**
      * Set the download controller.
@@ -35,9 +33,4 @@ public interface CrawlController<J extends Job> extends Serializable, HazelcastI
      */
     void setParserController(ParserController parserController);
 
-    /**
-     * Get the queue.
-     * @return
-     */
-    IQueue<J> getQueue();
 }

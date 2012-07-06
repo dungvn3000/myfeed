@@ -2,10 +2,10 @@
  * Copyright (C) 2012 - 2013 LinkerZ
  */
 
-package org.linkerz.core.job;
+package org.linkerz.job.queue.job;
 
 import org.linkerz.core.callback.CallBack;
-import org.linkerz.core.config.JobConfig;
+import org.linkerz.job.queue.config.JobConfig;
 
 /**
  * The Class AbstractJob.

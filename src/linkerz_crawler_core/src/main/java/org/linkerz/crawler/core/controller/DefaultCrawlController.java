@@ -7,8 +7,6 @@ package org.linkerz.crawler.core.controller;
 import org.apache.commons.collections.CollectionUtils;
 import org.linkerz.core.callback.CallBack;
 import org.linkerz.core.config.Configurable;
-import org.linkerz.core.handler.Handler;
-import org.linkerz.core.session.RunInSession;
 import org.linkerz.crawler.core.controller.config.CrawlControllerConfig;
 import org.linkerz.crawler.core.crawler.DefaultCrawler;
 import org.linkerz.crawler.core.job.CrawlJob;
@@ -16,6 +14,8 @@ import org.linkerz.crawler.core.model.WebLink;
 import org.linkerz.crawler.core.parser.result.DefaultParserResult;
 import org.linkerz.crawler.core.parser.result.ParserResult;
 import org.linkerz.crawler.core.session.CrawlSession;
+import org.linkerz.job.queue.handler.Handler;
+import org.linkerz.job.queue.session.RunInSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,8 +49,6 @@ public class DefaultCrawlController extends AbstractCrawlController<CrawlJob> im
         this.session = session;
         this.job = job;
 
-        session.getLocalJobQueue().setMaxSize(job.getConfig().getMaxPageFetchForEachJob());
-        session.getLocalJobQueue().add(job);
         for (int i = 0; i < config.getNumberOfCrawler(); i++) {
             DefaultCrawler crawler = createCrawler();
             Thread thread = new Thread(crawler, "Crawler " + (i + 1));
@@ -86,8 +84,7 @@ public class DefaultCrawlController extends AbstractCrawlController<CrawlJob> im
     }
 
     private DefaultCrawler createCrawler() {
-        DefaultCrawler crawler = new DefaultCrawler(downloaderController, parserController,
-                session.getLocalJobQueue(), config);
+        DefaultCrawler crawler = new DefaultCrawler(downloaderController, parserController, session, config);
         crawler.setCallBack(this);
         return crawler;
     }

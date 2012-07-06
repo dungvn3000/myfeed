@@ -4,7 +4,7 @@
 
 package org.linkerz.crawler.core.job.config;
 
-import org.linkerz.core.config.JobConfig;
+import org.linkerz.job.queue.config.JobConfig;
 
 /**
  * The Class CrawlJobConfigurable.

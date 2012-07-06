@@ -2,10 +2,10 @@
  * Copyright (C) 2012 - 2013 LinkerZ
  */
 
-package org.linkerz.core.handler;
+package org.linkerz.job.queue.handler;
 
-import org.linkerz.core.job.Job;
-import org.linkerz.core.session.Session;
+import org.linkerz.job.queue.job.Job;
+import org.linkerz.job.queue.session.Session;
 
 /**
  * The Class Handler.

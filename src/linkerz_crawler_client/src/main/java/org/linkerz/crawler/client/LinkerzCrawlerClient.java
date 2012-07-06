@@ -6,7 +6,9 @@ package org.linkerz.crawler.client;
 
 import com.hazelcast.client.ClientConfig;
 import com.hazelcast.client.HazelcastClient;
-import org.linkerz.core.job.Job;
+import org.linkerz.job.queue.job.Job;
+
+import java.util.concurrent.ExecutorService;
 
 /**
  * The Class LinkerzCrawlerClient.
@@ -37,5 +39,9 @@ public final class LinkerzCrawlerClient {
 
     public void shutdown() {
         client.shutdown();
+    }
+
+    public ExecutorService getExecutorService() {
+        return client.getExecutorService();
     }
 }

@@ -2,7 +2,7 @@
  * Copyright (C) 2012 - 2013 LinkerZ
  */
 
-package org.linkerz.core.controller.config;
+package org.linkerz.job.queue.controller.config;
 
 import org.linkerz.core.config.Config;
 

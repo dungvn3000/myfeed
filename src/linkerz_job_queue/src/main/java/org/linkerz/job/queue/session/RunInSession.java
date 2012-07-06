@@ -2,7 +2,7 @@
  * Copyright (C) 2012 - 2013 LinkerZ
  */
 
-package org.linkerz.core.session;
+package org.linkerz.job.queue.session;
 
 import java.lang.annotation.*;
 

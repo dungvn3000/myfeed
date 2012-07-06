@@ -2,9 +2,9 @@
  * Copyright (C) 2012 - 2013 LinkerZ
  */
 
-package org.linkerz.core.queue;
+package org.linkerz.job.queue.queue;
 
-import org.linkerz.core.job.Job;
+import org.linkerz.job.queue.job.Job;
 
 /**
  * The Class JobQueue.

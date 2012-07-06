@@ -4,11 +4,9 @@
 
 package org.linkerz.crawler.core.controller;
 
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IQueue;
-import org.linkerz.core.job.Job;
 import org.linkerz.crawler.core.downloader.controller.DownloaderController;
 import org.linkerz.crawler.core.parser.controller.ParserController;
+import org.linkerz.job.queue.job.Job;
 
 /**
  * The Class AbstractController.
@@ -20,7 +18,6 @@ public abstract class AbstractCrawlController<J extends Job> implements CrawlCon
 
     protected DownloaderController downloaderController;
     protected ParserController parserController;
-    protected HazelcastInstance instance;
 
     @Override
     public void setDownloaderController(DownloaderController downloaderController) {
@@ -32,13 +29,4 @@ public abstract class AbstractCrawlController<J extends Job> implements CrawlCon
         this.parserController = parserController;
     }
 
-    @Override
-    public IQueue<J> getQueue() {
-        return instance.getQueue(Job.JOB_QUEUE);
-    }
-
-    @Override
-    public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {
-        this.instance = hazelcastInstance;
-    }
 }

@@ -28,7 +28,6 @@
     <bean id="defaultCrawlController" class="org.linkerz.crawler.core.controller.DefaultCrawlController">
         <property name="downloaderController" ref="downloaderController"/>
         <property name="parserController" ref="parserController"/>
-        <property name="hazelcastInstance" ref="instance"/>
         <property name="config" ref="crawlControllerConfig"/>
     </bean>
 

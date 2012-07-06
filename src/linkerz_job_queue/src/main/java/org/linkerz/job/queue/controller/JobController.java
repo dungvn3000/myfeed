@@ -2,10 +2,10 @@
  * Copyright (C) 2012 - 2013 LinkerZ
  */
 
-package org.linkerz.core.controller;
+package org.linkerz.job.queue.controller;
 
 import com.hazelcast.core.HazelcastInstance;
-import org.linkerz.core.handler.Handler;
+import org.linkerz.job.queue.handler.Handler;
 
 import java.util.List;
 

@@ -4,9 +4,9 @@
 
 package org.linkerz.crawler.core.job;
 
-import org.linkerz.core.job.AbstractJob;
 import org.linkerz.crawler.core.job.config.CrawlJobConfig;
 import org.linkerz.crawler.core.model.WebLink;
+import org.linkerz.job.queue.job.AbstractJob;
 
 /**
  * The Class CrawlJob.

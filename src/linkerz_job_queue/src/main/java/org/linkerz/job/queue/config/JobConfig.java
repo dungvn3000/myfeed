@@ -2,7 +2,9 @@
  * Copyright (C) 2012 - 2013 LinkerZ
  */
 
-package org.linkerz.core.config;
+package org.linkerz.job.queue.config;
+
+import org.linkerz.core.config.Config;
 
 /**
  * The Class JobConfig.

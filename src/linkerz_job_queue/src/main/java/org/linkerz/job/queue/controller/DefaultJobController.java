@@ -2,18 +2,18 @@
  * Copyright (C) 2012 - 2013 LinkerZ
  */
 
-package org.linkerz.core.controller;
+package org.linkerz.job.queue.controller;
 
 import com.hazelcast.core.HazelcastInstance;
 import org.linkerz.core.callback.CallBack;
 import org.linkerz.core.config.Configurable;
-import org.linkerz.core.config.JobConfig;
-import org.linkerz.core.controller.config.JobControllerConfig;
-import org.linkerz.core.handler.Handler;
-import org.linkerz.core.job.Job;
-import org.linkerz.core.queue.JobQueue;
-import org.linkerz.core.session.RunInSession;
-import org.linkerz.core.session.Session;
+import org.linkerz.job.queue.config.JobConfig;
+import org.linkerz.job.queue.controller.config.JobControllerConfig;
+import org.linkerz.job.queue.handler.Handler;
+import org.linkerz.job.queue.job.Job;
+import org.linkerz.job.queue.queue.JobQueue;
+import org.linkerz.job.queue.session.RunInSession;
+import org.linkerz.job.queue.session.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,7 +73,7 @@ public class DefaultJobController implements JobController, Configurable<JobCont
                                     if (runInSession != null) {
                                         Class<? extends Session> sessionClass = runInSession.sessionClass();
                                         session = sessionClass.newInstance();
-                                        session.start();
+                                        session.start(job);
                                     }
 
                                     handler.handle(job, session);
