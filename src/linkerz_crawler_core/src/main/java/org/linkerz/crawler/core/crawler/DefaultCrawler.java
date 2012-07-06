@@ -23,6 +23,8 @@ import java.util.List;
 
 /**
  * The Class DefaultCrawler.
+ * <p/>
+ * Basic crawler will task a job to crawl.
  *
  * @author Nguyen Duc Dung
  * @since 7/5/12, 8:20 PM
@@ -57,39 +59,39 @@ public class DefaultCrawler implements Crawler, CallBackable<ParserResult> {
     @Override
     public void run() {
         synchronized (syncRoot) {
-            while (!localJobQueue.isFinished()) {
-                CrawlJob job = localJobQueue.getNext();
-                if (job != null && shouldCrawl(job)) {
-                    DownloadResult downloadResult = null;
-                    try {
-                        downloadResult = downloaderController.get("*").download(job.getWebLink());
-                        ParserResult parserResult = parserController.get("*").parse(downloadResult);
-                        if (parserResult instanceof DefaultParserResult) {
-                            List<WebLink> webLinks = ((DefaultParserResult) parserResult).getLinks();
-                            logger.info("Crawled " + String.valueOf(webLinks.size()) + " links in "
-                                    + job.getWebLink().getUrl());
+            try {
+                while (!localJobQueue.isFinished()) {
+                    CrawlJob job = localJobQueue.getNext();
+                    if (job != null && shouldCrawl(job)) {
+                        DownloadResult downloadResult = null;
+                        try {
+                            downloadResult = downloaderController.get("*").download(job.getWebLink());
+                            ParserResult parserResult = parserController.get("*").parse(downloadResult);
+                            if (parserResult instanceof DefaultParserResult) {
+                                List<WebLink> webLinks = ((DefaultParserResult) parserResult).getLinks();
+                                logger.info("Crawled " + String.valueOf(webLinks.size()) + " links in "
+                                        + job.getWebLink().getUrl());
+                            }
+                            if (callBack != null) {
+                                callBack.onSuccess(parserResult);
+                            }
+                        } catch (Exception e) {
+                            if (callBack != null) {
+                                callBack.onFailed(e);
+                            }
+                            logger.error("Error: " + job.getWebLink().getUrl(), e);
                         }
-                        if (callBack != null) {
-                            callBack.onSuccess(parserResult);
-                        }
-                    } catch (Exception e) {
-                        if (callBack != null) {
-                            callBack.onFailed(e);
-                        }
-                        logger.error("Error: " + job.getWebLink().getUrl(), e);
                     }
-                }
-                // Yielding context to another thread
-                try {
+                    // Yielding context to another thread
                     Thread.sleep(1);
-                } catch (InterruptedException e) {
-                    logger.error(e.getMessage(), e);
                 }
-            }
 
-            if (localJobQueue.isFinished()) {
-                logger.info("Finished...");
-                thread.stop();
+                if (localJobQueue.isFinished()) {
+                    logger.info("Finished...");
+                    thread.join();
+                }
+            } catch (Exception e) {
+                logger.error(e.getMessage(), e);
             }
         }
     }

@@ -65,7 +65,6 @@ public class DefaultCrawlController extends AbstractCrawlController<CrawlJob> im
             Thread thread = new Thread(crawler);
             crawler.setThread(thread);
             thread.start();
-            thread.join();
             threads.add(thread);
         }
     }
