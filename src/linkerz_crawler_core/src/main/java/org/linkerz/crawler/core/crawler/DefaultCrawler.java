@@ -4,8 +4,8 @@
 
 package org.linkerz.crawler.core.crawler;
 
-import com.hazelcast.core.IQueue;
 import org.linkerz.core.callback.CallBack;
+import org.linkerz.core.callback.CallBackable;
 import org.linkerz.core.queue.Queue;
 import org.linkerz.crawler.core.controller.config.CrawlControllerConfig;
 import org.linkerz.crawler.core.downloader.controller.DownloaderController;
@@ -27,7 +27,7 @@ import java.util.List;
  * @author Nguyen Duc Dung
  * @since 7/5/12, 8:20 PM
  */
-public class DefaultCrawler implements Crawler {
+public class DefaultCrawler implements Crawler, CallBackable<ParserResult> {
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultCrawler.class);
 
@@ -35,16 +35,15 @@ public class DefaultCrawler implements Crawler {
 
     private DownloaderController downloaderController;
     private ParserController parserController;
-    private IQueue<CrawlJob> remoteJobQueue;
     private Queue<CrawlJob> localJobQueue;
     private CrawlControllerConfig config;
-    private CallBack<Void> callBack;
+    private CallBack<ParserResult> callBack;
+    private Thread thread;
 
     public DefaultCrawler(DownloaderController downloaderController, ParserController parserController,
-                          IQueue<CrawlJob> remoteJobQueue, Queue<CrawlJob> localJobQueue, CrawlControllerConfig config) {
+                          Queue<CrawlJob> localJobQueue, CrawlControllerConfig config) {
         this.downloaderController = downloaderController;
         this.parserController = parserController;
-        this.remoteJobQueue = remoteJobQueue;
         this.localJobQueue = localJobQueue;
         this.config = config;
     }
@@ -59,7 +58,7 @@ public class DefaultCrawler implements Crawler {
     public void run() {
         synchronized (syncRoot) {
             while (!localJobQueue.isFinished()) {
-                 CrawlJob job = localJobQueue.getNext();
+                CrawlJob job = localJobQueue.getNext();
                 if (job != null && shouldCrawl(job)) {
                     DownloadResult downloadResult = null;
                     try {
@@ -69,21 +68,9 @@ public class DefaultCrawler implements Crawler {
                             List<WebLink> webLinks = ((DefaultParserResult) parserResult).getLinks();
                             logger.info("Crawled " + String.valueOf(webLinks.size()) + " links in "
                                     + job.getWebLink().getUrl());
-                            for (WebLink webLink : webLinks) {
-                                if (localJobQueue.size() > config.getPreferLocalJobNumber()) {
-                                    localJobQueue.add(new CrawlJob(webLink));
-                                } else {
-                                    boolean added = remoteJobQueue.offer(new CrawlJob(webLink));
-                                    if (!added) {
-                                        //Remote job queue is full, add it to local queue
-                                        logger.info("Remote Job Queue is Full: " + remoteJobQueue.size());
-                                        localJobQueue.add(new CrawlJob(webLink));
-                                    }
-                                }
-                            }
                         }
                         if (callBack != null) {
-                            callBack.onSuccess(null);
+                            callBack.onSuccess(parserResult);
                         }
                     } catch (Exception e) {
                         if (callBack != null) {
@@ -102,12 +89,17 @@ public class DefaultCrawler implements Crawler {
 
             if (localJobQueue.isFinished()) {
                 logger.info("Finished...");
-                return;
+                thread.stop();
             }
         }
     }
 
-    public void setCallBack(CallBack<Void> callBack) {
+    @Override
+    public void setCallBack(CallBack<ParserResult> callBack) {
         this.callBack = callBack;
+    }
+
+    public void setThread(Thread thread) {
+        this.thread = thread;
     }
 }

@@ -5,6 +5,7 @@
 package org.linkerz.core.handler;
 
 import org.linkerz.core.job.Job;
+import org.linkerz.core.session.Session;
 
 /**
  * The Class Handler.
@@ -16,6 +17,7 @@ public interface Handler<J extends Job> {
 
     /**
      * Check whether this handler is for this class or not.
+     *
      * @param clazz
      * @return
      */
@@ -23,7 +25,9 @@ public interface Handler<J extends Job> {
 
     /**
      * Handle the job.
+     *
      * @param job
+     * @param session
      */
-    void handle(J job) throws Exception;
+    void handle(J job, Session session) throws Exception;
 }

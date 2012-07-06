@@ -25,7 +25,7 @@
         </property>
     </bean>
 
-    <bean id="defaultCrawlController" class="org.linkerz.crawler.core.controller.DefaultCrawlController" init-method="start">
+    <bean id="defaultCrawlController" class="org.linkerz.crawler.core.controller.DefaultCrawlController">
         <property name="downloaderController" ref="downloaderController"/>
         <property name="parserController" ref="parserController"/>
         <property name="hazelcastInstance" ref="instance"/>
@@ -35,7 +35,7 @@
     <bean id="crawlControllerConfig" class="org.linkerz.crawler.core.controller.config.CrawlControllerConfig">
         <property name="numberOfCrawler" value="3"/>
         <property name="preferLocalJobNumber" value="100"/>
-        <property name="maxJobNumber" value="10"/>
+        <property name="maxUrlNumberForEachJob" value="10"/>
     </bean>
 
 </beans>

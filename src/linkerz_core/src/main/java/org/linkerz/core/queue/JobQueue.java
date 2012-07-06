@@ -40,7 +40,7 @@ public class JobQueue<J extends Job> implements Queue<J> {
 
     @Override
     public boolean isFinished() {
-        return finished;
+        return finished || realQueue.size() == 0;
     }
 
     @Override
