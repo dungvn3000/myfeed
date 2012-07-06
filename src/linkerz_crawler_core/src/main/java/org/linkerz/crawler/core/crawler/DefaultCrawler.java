@@ -87,8 +87,8 @@ public class DefaultCrawler implements Crawler, CallBackable<ParserResult> {
                 }
 
                 if (localJobQueue.isFinished()) {
+                    thread.join(1000);
                     logger.info("Finished...");
-                    thread.join();
                 }
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);

@@ -43,17 +43,23 @@ public class DefaultCrawlController extends AbstractCrawlController<CrawlJob> im
     public void handle(CrawlJob job, CrawlSession session) throws Exception {
         //begin a new session
         logger.info("New session with " + job.getWebLink().getUrl());
+        long time = System.currentTimeMillis();
+
         this.session = session;
         session.getLocalJobQueue().setMaxSize(config.getMaxUrlNumberForEachJob());
         session.getLocalJobQueue().add(job);
         for (int i = 0; i < config.getNumberOfCrawler(); i++) {
             DefaultCrawler crawler = createCrawler();
-            Thread thread = new Thread(crawler);
+            Thread thread = new Thread(crawler, "Crawler " + (i + 1));
             crawler.setThread(thread);
-            thread.start();
             session.getThreads().add(thread);
+            thread.start();
         }
-        logger.info("End Session...");
+
+        waitUntilFinish();
+
+        time = System.currentTimeMillis() - time;
+        logger.info("End Session... " + time + " ms");
     }
 
     @Override
@@ -81,6 +87,19 @@ public class DefaultCrawlController extends AbstractCrawlController<CrawlJob> im
                 session.getLocalJobQueue(), config);
         crawler.setCallBack(this);
         return crawler;
+    }
+
+    private void waitUntilFinish() throws InterruptedException {
+        boolean isAlive = true;
+        while (isAlive) {
+            for (Thread thread : session.getThreads()) {
+                isAlive = thread.isAlive();
+                if (thread.isAlive()) {
+                    break;
+                }
+            }
+            Thread.sleep(100);
+        }
     }
 
     @Override
