@@ -3,17 +3,5 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean class="org.linkerz.job.queue.controller.DefaultJobController" init-method="start">
-        <property name="config" ref="jobControllerConfig"/>
-        <property name="hazelcastInstance" ref="instance"/>
-        <property name="handlers">
-            <list>
-                <ref bean="defaultCrawlController"/>
-            </list>
-        </property>
-    </bean>
 
-    <bean id="jobControllerConfig" class="org.linkerz.job.queue.controller.config.JobControllerConfig">
-        <property name="ideTimeWhenEveryHandlerBusy" value="10000"/>
-    </bean>
 </beans>

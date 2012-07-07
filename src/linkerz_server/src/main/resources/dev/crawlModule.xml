@@ -5,36 +5,5 @@
                "http://www.springframework.org/schema/beans
                 http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-    <bean id="downloaderController" class="org.linkerz.crawler.core.downloader.controller.DefaultDownloaderController">
-        <property name="downloaders">
-            <map>
-                <entry key="*">
-                    <bean class="org.linkerz.crawler.core.downloader.DefaultDownloader"/>
-                </entry>
-            </map>
-        </property>
-    </bean>
-
-    <bean id="parserController" class="org.linkerz.crawler.core.parser.controller.DefaultParserController">
-        <property name="parsers">
-            <map>
-                <entry key="*">
-                    <bean class="org.linkerz.crawler.core.parser.DefaultParser"/>
-                </entry>
-            </map>
-        </property>
-    </bean>
-
-    <bean id="defaultCrawlController" class="org.linkerz.crawler.core.controller.DefaultCrawlController">
-        <property name="downloaderController" ref="downloaderController"/>
-        <property name="parserController" ref="parserController"/>
-        <property name="config" ref="crawlControllerConfig"/>
-    </bean>
-
-    <bean id="crawlControllerConfig" class="org.linkerz.crawler.core.controller.config.CrawlControllerConfig">
-        <property name="numberOfCrawler" value="5"/>
-        <property name="preferLocalJobNumber" value="10"/>
-        <property name="maxErrorNumber" value="5"/>
-    </bean>
 
 </beans>
