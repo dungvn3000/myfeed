@@ -147,11 +147,37 @@
         </dependency>
         <!--End-->
 
+        <!--Scala library-->
+        <dependency>
+            <groupId>org.clapper</groupId>
+            <artifactId>grizzled-scala_${scala.version}</artifactId>
+            <version>${grizzled.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.scalaz</groupId>
+            <artifactId>scalaz-core_${scala.version}</artifactId>
+            <version>${scalaz.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.clapper</groupId>
+            <artifactId>grizzled-slf4j_${scala.version}</artifactId>
+            <version>${grizzled.slf4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.scalatest</groupId>
+            <artifactId>scalatest_${scala.version}</artifactId>
+            <version>${scala.test.version}</version>
+        </dependency>
+
+        <!--End-->
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
-            <scope>test</scope>
         </dependency>
 
     </dependencies>
