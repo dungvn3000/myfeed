@@ -35,10 +35,12 @@
         <guavaVerion>12.0</guavaVerion>
         <lambdaj.version>2.3.1</lambdaj.version>
         <jsoup.version>1.6.3</jsoup.version>
-        <junitVerion>4.8.1</junitVerion>
-        <slf4jVersion>1.6.4</slf4jVersion>
-        <log4jVersion>1.2.17</log4jVersion>
-        <springVerion>3.1.1.RELEASE</springVerion>
+        <junit.version>4.8.1</junit.version>
+        <slf4j.version>1.6.4</slf4j.version>
+        <log4j.version>1.2.17</log4j.version>
+        <spring.version>3.1.1.RELEASE</spring.version>
+        <scalaz.version>6.0.4</scalaz.version>
+        <scala.version>2.9.2</scala.version>
         <project.version>0.0.1</project.version>
         <appplicationMode>DEV</appplicationMode>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -170,8 +172,62 @@
                 <version>1.4</version>
             </plugin>
 
+            <!--Scala Compile plugin-->
+            <plugin>
+                <groupId>org.scala-tools</groupId>
+                <artifactId>maven-scala-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <phase>compile</phase>
+                    </execution>
+                    <execution>
+                        <id>test-compile</id>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                        <phase>test-compile</phase>
+                    </execution>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sourceDir>src/main/java</sourceDir>
+                    <sourceDir>src/main/scala</sourceDir>
+                    <jvmArgs>
+                        <jvmArg>-Xms64m</jvmArg>
+                        <jvmArg>-Xmx1024m</jvmArg>
+                    </jvmArgs>
+                </configuration>
+            </plugin>
+            <!--End-->
+
         </plugins>
     </build>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-compiler</artifactId>
+            <version>${scala.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.scalaz</groupId>
+            <artifactId>scalaz-core_${scala.version}</artifactId>
+            <version>${scalaz.version}</version>
+        </dependency>
+
+    </dependencies>
 
     <repositories>
         <repository>
