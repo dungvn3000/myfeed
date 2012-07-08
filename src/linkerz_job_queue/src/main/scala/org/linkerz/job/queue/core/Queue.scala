@@ -20,34 +20,18 @@ import collection.mutable
 trait Queue {
 
   /**
-   * Add a job to a queue
-   * @param job
-   * @return false if it was not added.
-   */
-  def add(job: Job): Boolean
-
-  /**
-   * Take and remove the next job from the queue
+   * The real queue in side the queue
    * @return
    */
-  def next(): Option[Job]
-}
-
-/**
- * The basic job queue.
- */
-class JobQueue extends Queue {
-
-  val realQueue = new mutable.Queue[Job]()
+  def realQueue: mutable.Queue[Job]
 
   /**
    * Add a job to a queue
    * @param job
    * @return false if it was not added.
    */
-  def add(job: Job) = {
-    (realQueue += job) != null
-  }
+  def +=(job: Job): Boolean = (realQueue += job) != null
+
 
   /**
    * Take and remove the next job from the queue
@@ -57,4 +41,10 @@ class JobQueue extends Queue {
     if (realQueue.size > 0) return Some(realQueue.dequeue())
     None
   }
+}
+
+trait ScalaQueue extends Queue {
+  val _realQueue = new mutable.Queue[Job]()
+
+  def realQueue: mutable.Queue[Job] = _realQueue
 }

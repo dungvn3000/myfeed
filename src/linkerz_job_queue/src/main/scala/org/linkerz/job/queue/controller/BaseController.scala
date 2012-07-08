@@ -12,22 +12,27 @@ import scala.Some
 
 /**
  * The Class BaseController.
+ * The controller will handle the job in sync.
+ * The controller will be never stop it will be wait for job for all his life
  *
  * @author Nguyen Duc Dung
  * @since 7/7/12, 10:40 PM
  *
  */
-
 class BaseController extends Controller with Logging {
 
-  val workers = new ListBuffer[Worker[_ <: Job]]
-  val jobQueue = new JobQueue
+  private val jobQueue = new Queue with ScalaQueue
 
-  //The handler actor to handle all the worker
+  val handlers = new ListBuffer[Handler[_ <: Job]]
+
+  //The handler actor to handle all the handler
   val handlerActor = new DaemonActor {
     def act() {
       loop {
-        doJobs()
+        react {
+          case NEXT => handleNextJob()
+          case STOP => info("Stoping..."); exit()
+        }
       }
     }
   }
@@ -39,12 +44,44 @@ class BaseController extends Controller with Logging {
     handlerActor.start()
   }
 
-  private def doJobs() {
+
+  /**
+   * Stop the controller.
+   */
+  def stop() {
+    handlerActor !? STOP
+    info("Stoped.")
+  }
+
+
+  /**
+   * Add a job to the queue
+   * @param job
+   */
+  def add(job: Job) {
+    jobQueue += job
+    handlerActor ! NEXT
+  }
+
+  /**
+   * Return false when no job.
+   * @return
+   */
+  private def handleNextJob(): Boolean = {
     jobQueue.next() match {
-      case Some(job) => {
-        workers.foreach(worker => if (worker.isFor(job)) worker.work(job, null))
-      }
-      case None => logger.info("Nothing to do")
+      case Some(job) => handleJob(job); true
+      case None => info("Nothing to do."); false
     }
   }
+
+  private def handleJob(job: Job) {
+    handlers.foreach(handler => if (handler accept job) handler.handle(job, null))
+  }
 }
+
+/**
+ * Object will be sent when the job was be done.
+ */
+case object DONE
+case object STOP
+case object NEXT

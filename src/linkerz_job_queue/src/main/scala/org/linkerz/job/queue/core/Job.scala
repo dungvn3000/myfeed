@@ -25,4 +25,17 @@ trait Job {
 
 }
 
-case class Exit
+/**
+ * Represent for a sub job.
+ * That mean when you do a job then you realize there are many sub jobs for it.
+ * And you create a new job. So that is what SubJob using for.
+ * <br>
+ * <b>Note:</b> The job and it's subJob will be done in same session.
+ */
+trait SubTob extends Job {
+
+  /**
+   * Job parent.
+   */
+  var parent: Job = _
+}

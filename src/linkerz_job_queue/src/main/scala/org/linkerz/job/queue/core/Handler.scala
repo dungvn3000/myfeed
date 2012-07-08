@@ -13,34 +13,32 @@ package org.linkerz.job.queue.core
  */
 
 /**
- * Worker of the job.
+ * Handle of the job.
  * @tparam J job
  */
-trait Worker[J <: Job] {
+trait Handler[J <: Job] {
 
   /**
    * Check is this worker is for the job or not.
    * @param job
    * @return false if it is not.
    */
-  def isFor(job: Job): Boolean = {
-    job.isInstanceOf[J]
-  }
+  def accept(job: Job): Boolean
 
   /**
-   * Work for the job in session.
+   * Handel for the job in session.
    * @param job
    * @param session
    */
-  def work(job: Job, session: Session) {
-    doWork(job.asInstanceOf[J], session)
+  def handle(job: Job, session: Session) {
+    doHandle(job.asInstanceOf[J], session)
   }
 
   /**
-   * Do the job
+   * Handel the job
    * @param job
    * @param session
    */
-  def doWork(job: J, session: Session)
+  def doHandle(job: J, session: Session)
 
 }

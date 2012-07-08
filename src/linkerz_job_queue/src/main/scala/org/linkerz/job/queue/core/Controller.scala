@@ -19,4 +19,14 @@ trait Controller {
    */
   def start()
 
+  /**
+   * Stop the controller.
+   */
+  def stop()
+
+  /**
+   * Add a job to the queue
+   * @param job
+   */
+  def add(job: Job)
 }

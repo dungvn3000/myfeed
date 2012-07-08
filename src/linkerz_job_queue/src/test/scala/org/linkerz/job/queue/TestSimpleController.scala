@@ -5,11 +5,10 @@
 package org.linkerz.job.queue
 
 import controller.BaseController
-import core.{Job, Session, Worker}
+import core.{Job, Session, Handler}
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.FunSuite
 import org.junit.runner.RunWith
-import actors.Actor
 
 /**
  * The Class TestSimpleController.
@@ -19,9 +18,38 @@ import actors.Actor
  *
  */
 
-case class EchoJob(var message: String) extends Job {
+case class EchoJob(message: String) extends Job {
   def get() = {
     Some(message)
+  }
+}
+
+class EchoHandler extends Handler[EchoJob] {
+
+  def accept(job: Job) = job.isInstanceOf[EchoJob]
+
+  def doHandle(job: EchoJob, session: Session) {
+    println(job.message)
+    //Delay
+    Thread.sleep(1000)
+  }
+}
+
+case class SumJob(x: Int, y: Int) extends Job {
+  var result: Int = _
+
+  def get() = {
+    Some(result)
+  }
+}
+
+class SumHandler extends Handler[SumJob] {
+
+  def accept(job: Job) = job.isInstanceOf[SumJob]
+
+  def doHandle(job: SumJob, session: Session) {
+    job.result = job.x + job.y
+    println(job.result)
   }
 }
 
@@ -33,29 +61,19 @@ class TestSimpleController extends FunSuite {
     val controller = new BaseController
 
     val echoJob = new EchoJob("Hello Frist Task")
+    val echoWorker = new EchoHandler
 
-    val worker = new Worker[EchoJob] {
-      def doWork(job: EchoJob, session: Session) {
-        job.get() match {
-          case Some(st) => {
-            println(st)
-            job.message = "I'm pro"
-          }
-        }
-      }
-    }
+    val sumJob = new SumJob(1, 2)
+    val sumWorker = new SumHandler
 
-    controller.workers += worker
+    controller.handlers += echoWorker
+    controller.handlers += sumWorker
+
+    controller.add(echoJob)
+    controller.add(sumJob)
 
     controller.start()
 
-    controller.jobQueue.add(echoJob)
-
-
-    val monitorActor = new Actor {
-      def act() {
-      }
-    }
-    monitorActor.start()
+    Thread.sleep(2000)
   }
 }
