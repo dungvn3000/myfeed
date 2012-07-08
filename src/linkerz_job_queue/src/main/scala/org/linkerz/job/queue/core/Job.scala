@@ -27,6 +27,5 @@ trait Job {
    * The parent job.
    * @return
    */
-  def parent: Option[_ <: Job] = None
-
+  def parent: Option[Job] = None
 }

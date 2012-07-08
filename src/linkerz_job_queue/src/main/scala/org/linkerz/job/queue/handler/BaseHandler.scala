@@ -7,6 +7,7 @@ package org.linkerz.job.queue.handler
 import org.linkerz.job.queue.core._
 import collection.mutable.ListBuffer
 import util.control.Breaks._
+import grizzled.slf4j.Logging
 
 /**
  * The Class BaseHandler.
@@ -17,36 +18,54 @@ import util.control.Breaks._
  *
  */
 
-abstract class BaseHandler[J <: Job] extends HandlerInSession[J, Session] {
+abstract class BaseHandler[J <: Job, S <: Session] extends HandlerInSession[J, S] with Logging {
 
-  val workers = new ListBuffer[Worker[J]]
+  val workers = new ListBuffer[Worker[J, S]]
 
   var subJobQueue = new Queue[J] with ScalaQueue[J]
 
-  protected def doHandle(job: J, session: Session) {
-    addSubJobs(workers.head.work(job, null))
-    doSubJobs()
+  var retryCount = 0
+  var maxRetry = 100
+
+  protected def doHandle(job: J, session: S) {
+    addSubJobs(workers.head.work(job, session))
+    doSubJobs(session)
   }
 
-  private def doSubJobs() {
+  private def doSubJobs(session: S) {
     breakable {
       while (true) {
         subJobQueue.next() match {
-          case Some(job) => doSubJob(job)
+          case Some(job) => doSubJob(job, session)
           case None => break()
         }
       }
     }
   }
 
-  private def doSubJob(job: J) {
+  private def doSubJob(job: J, session: S): Boolean = {
+    var isDone = false
     breakable {
       workers.foreach(worker => if (worker.isFree) {
-        addSubJobs(worker.work(job, null))
-      } else {
+        addSubJobs(worker.work(job, session))
+        isDone = true
         break()
       })
     }
+    if (!isDone) {
+      info("It seem all workers is busy now...")
+      //Re add the job.
+      subJobQueue += job
+      //Sleep 1s waiting for workers
+      Thread.sleep(1000)
+
+      //Count time to retry, if it is too much, stop the handler and report error to controller.
+      retryCount += 1
+      if (retryCount >= maxRetry) {
+        subJobQueue.clear()
+      }
+    }
+    isDone
   }
 
   private def addSubJobs(subJobs: List[J]) {

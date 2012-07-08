@@ -4,8 +4,6 @@
 
 package org.linkerz.job.queue.core
 
-import actors.Actor
-
 
 /**
  * The Class Worker.
@@ -15,7 +13,7 @@ import actors.Actor
  *
  */
 
-trait Worker[J <: Job] extends Actor {
+trait Worker[J <: Job, S <: Session] {
 
   /**
    * The handler will check the worker is free or not, if he free, he has to work
@@ -29,6 +27,6 @@ trait Worker[J <: Job] extends Actor {
    * @param session
    * @return list of sub job.
    */
-  def work(job: J, session: Session): List[J]
+  def work(job: J, session: S): List[J]
 
 }

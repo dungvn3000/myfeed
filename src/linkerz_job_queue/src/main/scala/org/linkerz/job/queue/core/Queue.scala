@@ -40,6 +40,11 @@ trait Queue[J <: Job] {
   def ++=(jobs: List[J]) = realQueue ++= jobs
 
   /**
+   * Clear all jobs.
+   */
+  def clear() {realQueue.clear()}
+
+  /**
    * Take and remove the next job from the queue
    * @return
    */
