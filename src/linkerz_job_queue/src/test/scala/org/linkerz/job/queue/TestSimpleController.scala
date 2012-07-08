@@ -33,7 +33,7 @@ class EchoHandler extends Handler[EchoJob] with Logging {
 
   def accept(job: Job) = job.isInstanceOf[EchoJob]
 
-  protected def doHandle(job: EchoJob, session: Session) {
+  protected def doHandle(job: EchoJob) {
     info(job.message)
     job.result = "DONE"
     //Delay
@@ -53,7 +53,7 @@ class SumHandler extends Handler[SumJob] with Logging {
 
   def accept(job: Job) = job.isInstanceOf[SumJob]
 
-  protected def doHandle(job: SumJob, session: Session) {
+  protected def doHandle(job: SumJob) {
     job.result = job.x + job.y
     info(job.result)
   }
@@ -81,13 +81,13 @@ class TestSession extends Session with Logging {
   }
 }
 
-class HandlerWithSession extends Handler[InSessionJob] with InSession with Logging {
+class HandlerWithSession extends HandlerInSession[InSessionJob, TestSession] with Logging {
 
   def sessionClass = classOf[TestSession]
 
   def accept(job: Job) = job.isInstanceOf[InSessionJob]
 
-  protected def doHandle(job: InSessionJob, session: Session) {
+  protected def doHandle(job: InSessionJob, session: TestSession) {
     job.result = session
     session match {
       case session : TestSession => info("Doing in session " + session.id)
@@ -97,7 +97,6 @@ class HandlerWithSession extends Handler[InSessionJob] with InSession with Loggi
 
 @RunWith(classOf[JUnitRunner])
 class TestSimpleController extends FunSuite {
-
 
   test("testSimpleController") {
     val controller = new BaseController

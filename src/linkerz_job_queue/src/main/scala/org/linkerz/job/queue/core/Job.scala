@@ -23,19 +23,10 @@ trait Job {
    */
   def get(): Option[Any]
 
-}
-
-/**
- * Represent for a sub job.
- * That mean when you do a job then you realize there are many sub jobs for it.
- * And you create a new job. So that is what SubJob using for.
- * <br>
- * <b>Note:</b> The job and it's SubJob will be done in same session and same handler.
- */
-trait SubJob extends Job {
-
   /**
-   * Job parent.
+   * The parent job.
+   * @return
    */
-  var parent: Job = _
+  def parent: Option[_ <: Job] = None
+
 }

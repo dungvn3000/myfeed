@@ -21,7 +21,7 @@ import scala.Some
  */
 class BaseController extends Controller with Logging {
 
-  private val jobQueue = new Queue with ScalaQueue
+  private val jobQueue = new Queue[Job] with ScalaQueue[Job]
 
   val handlers = new ListBuffer[Handler[_ <: Job]]
 
@@ -81,14 +81,14 @@ class BaseController extends Controller with Logging {
   private def handleJob(job: Job) {
     handlers.foreach(handler => if (handler accept job) {
       handler match {
-        case handler: Handler[Job] with InSession => {
+        case handler: HandlerInSession[Job, Session] => {
           //Start handling with session.
           val session = handler.sessionClass.newInstance()
           session.openSession()
           handler.handle(job, session)
           session.endSession()
         }
-        case _ => handler.handle(job, null)
+        case _ => handler.handle(job)
       }
     })
   }

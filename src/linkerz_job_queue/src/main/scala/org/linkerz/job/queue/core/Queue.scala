@@ -17,34 +17,40 @@ import collection.mutable
 /**
  * A queue contain list of the job need todo.
  */
-trait Queue {
+trait Queue[J <: Job] {
 
   /**
    * The real queue in side the queue
    * @return
    */
-  def realQueue: mutable.Queue[Job]
+  def realQueue: mutable.Queue[J]
 
   /**
    * Add a job to a queue
    * @param job
    * @return false if it was not added.
    */
-  def +=(job: Job): Boolean = (realQueue += job) != null
+  def +=(job: J): Boolean = (realQueue += job) != null
 
+  /**
+   * Add a job list
+   * @param jobs
+   * @return
+   */
+  def ++=(jobs: List[J]) = realQueue ++= jobs
 
   /**
    * Take and remove the next job from the queue
    * @return
    */
-  def next(): Option[Job] = {
+  def next(): Option[J] = {
     if (realQueue.size > 0) return Some(realQueue.dequeue())
     None
   }
 }
 
-trait ScalaQueue extends Queue {
-  val _realQueue = new mutable.Queue[Job]()
+trait ScalaQueue[J <: Job] extends Queue[J] {
+  val _realQueue = new mutable.Queue[J]()
 
-  def realQueue: mutable.Queue[Job] = _realQueue
+  def realQueue: mutable.Queue[J] = _realQueue
 }
