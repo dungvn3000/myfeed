@@ -19,8 +19,11 @@ import org.junit.runner.RunWith
  */
 
 case class EchoJob(message: String) extends Job {
-  def get() = {
-    Some(message)
+  var result: String = _
+
+  def get(): Option[String] = {
+    if (result != null && !result.isEmpty) return Some(result)
+    None
   }
 }
 
@@ -30,6 +33,7 @@ class EchoHandler extends Handler[EchoJob] {
 
   def doHandle(job: EchoJob, session: Session) {
     println(job.message)
+    job.result = "DONE"
     //Delay
     Thread.sleep(1000)
   }
@@ -77,5 +81,8 @@ class TestSimpleController extends FunSuite {
     Thread.sleep(2000)
 
     controller.stop()
+
+    assert(echoJob.get().get == "DONE")
+    assert(sumJob.get().get == 3)
   }
 }
