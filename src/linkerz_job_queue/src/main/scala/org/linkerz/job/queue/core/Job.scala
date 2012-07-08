@@ -30,9 +30,9 @@ trait Job {
  * That mean when you do a job then you realize there are many sub jobs for it.
  * And you create a new job. So that is what SubJob using for.
  * <br>
- * <b>Note:</b> The job and it's subJob will be done in same session.
+ * <b>Note:</b> The job and it's SubJob will be done in same session and same handler.
  */
-trait SubTob extends Job {
+trait SubJob extends Job {
 
   /**
    * Job parent.

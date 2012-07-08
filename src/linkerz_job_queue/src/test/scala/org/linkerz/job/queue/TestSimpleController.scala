@@ -9,6 +9,7 @@ import core.{Job, Session, Handler}
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.FunSuite
 import org.junit.runner.RunWith
+import grizzled.slf4j.Logging
 
 /**
  * The Class TestSimpleController.
@@ -27,12 +28,12 @@ case class EchoJob(message: String) extends Job {
   }
 }
 
-class EchoHandler extends Handler[EchoJob] {
+class EchoHandler extends Handler[EchoJob] with Logging {
 
   def accept(job: Job) = job.isInstanceOf[EchoJob]
 
-  def doHandle(job: EchoJob, session: Session) {
-    println(job.message)
+  protected def doHandle(job: EchoJob, session: Session) {
+    info(job.message)
     job.result = "DONE"
     //Delay
     Thread.sleep(1000)
@@ -47,13 +48,49 @@ case class SumJob(x: Int, y: Int) extends Job {
   }
 }
 
-class SumHandler extends Handler[SumJob] {
+class SumHandler extends Handler[SumJob] with Logging {
 
   def accept(job: Job) = job.isInstanceOf[SumJob]
 
-  def doHandle(job: SumJob, session: Session) {
+  protected def doHandle(job: SumJob, session: Session) {
     job.result = job.x + job.y
-    println(job.result)
+    info(job.result)
+  }
+}
+
+class InSessionJob extends Job {
+
+  var result: Session = _
+
+  def get() = {
+    Some(result)
+  }
+}
+
+class HandlerWithSession extends Handler[InSessionJob] with Session with Logging{
+
+  val session = new Session {
+    def endSession() {
+      info("endSession")
+    }
+
+    def openSession() = {
+      info("openSession")
+      this
+    }
+  }
+
+  def openSession() = session.openSession()
+
+  def endSession() {
+    session.endSession()
+  }
+
+  def accept(job: Job) = job.isInstanceOf[InSessionJob]
+
+  protected def doHandle(job: InSessionJob, session: Session) {
+    job.result = session
+    info("Doing in session " + job.result)
   }
 }
 
@@ -65,16 +102,21 @@ class TestSimpleController extends FunSuite {
     val controller = new BaseController
 
     val echoJob = new EchoJob("Hello Frist Task")
-    val echoWorker = new EchoHandler
+    val echoHandler = new EchoHandler
 
     val sumJob = new SumJob(1, 2)
-    val sumWorker = new SumHandler
+    val sumHandler = new SumHandler
 
-    controller.handlers += echoWorker
-    controller.handlers += sumWorker
+    val inSessionJob = new InSessionJob
+    val handlerWithSession = new HandlerWithSession
+
+    controller.handlers += echoHandler
+    controller.handlers += sumHandler
+    controller.handlers += handlerWithSession
 
     controller.add(echoJob)
     controller.add(sumJob)
+    controller.add(inSessionJob)
 
     controller.start()
 
@@ -84,5 +126,6 @@ class TestSimpleController extends FunSuite {
 
     assert(echoJob.get().get == "DONE")
     assert(sumJob.get().get == 3)
+    assert(inSessionJob.get().get != null)
   }
 }

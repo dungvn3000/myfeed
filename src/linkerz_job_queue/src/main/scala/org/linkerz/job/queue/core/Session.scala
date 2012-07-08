@@ -15,13 +15,13 @@ package org.linkerz.job.queue.core
 trait Session {
 
   /**
-   * Start the session.
+   * Open the session.
    */
-  def start()
+  def openSession(): Session
 
   /**
-   * Stop the session.
+   * End the session.
    */
-  def stop()
+  def endSession()
 
 }

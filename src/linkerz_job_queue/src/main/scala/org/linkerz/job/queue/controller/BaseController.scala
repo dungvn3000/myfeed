@@ -79,7 +79,16 @@ class BaseController extends Controller with Logging {
   }
 
   private def handleJob(job: Job) {
-    handlers.foreach(handler => if (handler accept job) handler.handle(job, null))
+    handlers.foreach(handler => if (handler accept job) {
+      handler match {
+        case handler: Handler[Job] with Session => {
+          //Start handling with session.
+          handler.handle(job, handler.openSession())
+          handler.endSession()
+        }
+        case _ => handler.handle(job, null)
+      }
+    })
   }
 }
 

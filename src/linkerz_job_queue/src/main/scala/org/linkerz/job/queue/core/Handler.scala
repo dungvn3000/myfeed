@@ -39,6 +39,6 @@ trait Handler[J <: Job] {
    * @param job
    * @param session
    */
-  def doHandle(job: J, session: Session)
+  protected def doHandle(job: J, session: Session)
 
 }
