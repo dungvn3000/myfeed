@@ -75,5 +75,7 @@ class TestSimpleController extends FunSuite {
     controller.start()
 
     Thread.sleep(2000)
+
+    controller.stop()
   }
 }
