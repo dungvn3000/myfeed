@@ -25,3 +25,17 @@ trait Session {
   def endSession()
 
 }
+
+
+/**
+ * For a class want to run in session.
+ */
+trait InSession {
+
+  /**
+   * Return the session class.
+   * @return
+   */
+  def sessionClass: Class[_ <: Session]
+
+}

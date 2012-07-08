@@ -5,11 +5,12 @@
 package org.linkerz.job.queue
 
 import controller.BaseController
-import core.{Job, Session, Handler}
+import core._
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.FunSuite
 import org.junit.runner.RunWith
 import grizzled.slf4j.Logging
+import scala.Some
 
 /**
  * The Class TestSimpleController.
@@ -67,30 +68,30 @@ class InSessionJob extends Job {
   }
 }
 
-class HandlerWithSession extends Handler[InSessionJob] with Session with Logging{
+class TestSession extends Session with Logging {
+  val id = "TestSession"
 
-  val session = new Session {
-    def endSession() {
-      info("endSession")
-    }
-
-    def openSession() = {
-      info("openSession")
-      this
-    }
+  def openSession() = {
+    info("openSession")
+    this
   }
-
-  def openSession() = session.openSession()
 
   def endSession() {
-    session.endSession()
+    info("endSession")
   }
+}
+
+class HandlerWithSession extends Handler[InSessionJob] with InSession with Logging {
+
+  def sessionClass = classOf[TestSession]
 
   def accept(job: Job) = job.isInstanceOf[InSessionJob]
 
   protected def doHandle(job: InSessionJob, session: Session) {
     job.result = session
-    info("Doing in session " + job.result)
+    session match {
+      case session : TestSession => info("Doing in session " + session.id)
+    }
   }
 }
 

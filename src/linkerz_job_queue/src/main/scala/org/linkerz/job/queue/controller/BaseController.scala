@@ -81,10 +81,12 @@ class BaseController extends Controller with Logging {
   private def handleJob(job: Job) {
     handlers.foreach(handler => if (handler accept job) {
       handler match {
-        case handler: Handler[Job] with Session => {
+        case handler: Handler[Job] with InSession => {
           //Start handling with session.
-          handler.handle(job, handler.openSession())
-          handler.endSession()
+          val session = handler.sessionClass.newInstance()
+          session.openSession()
+          handler.handle(job, session)
+          session.endSession()
         }
         case _ => handler.handle(job, null)
       }
