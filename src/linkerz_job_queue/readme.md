@@ -9,8 +9,13 @@ The structure of framework.
 	Controller
     + Queue
         + Job
-            + SubJob
+    + Session
     + Handler
+        + HandlerInSession
+        + AsyncHandler - Work with async
+            + Worker - Work for this Handler
+    + CallBack
+        + CallBackable
 </pre>
 
 
