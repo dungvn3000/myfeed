@@ -5,14 +5,15 @@
 package org.linkerz.job.queue
 
 import controller.BaseController
-import core.{Worker, Session, Job}
+import core._
 import handler.BaseHandler
-import org.scalatest.FunSuite
+import org.scalatest.{BeforeAndAfter, FunSuite}
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import grizzled.slf4j.Logging
 import collection.mutable.ListBuffer
 import util.Random
+import scala.Some
 
 /**
  * The Class TestWithBaseHandler.
@@ -27,10 +28,10 @@ class JobHasSubJob extends Job {
 
   def get() = {
     val subJobs = new ListBuffer[JobHasSubJob]
-    for (i <- 1 to 3) {
+    for (i <- 1 to 10) {
       val subJob = new JobHasSubJob {
         override def get() = {
-          Thread.sleep(Random.nextInt(1000))
+          Thread.sleep(Random.nextInt(10000))
           //Return empty list.
           Some(new ListBuffer[JobHasSubJob])
         }
@@ -44,26 +45,13 @@ class JobHasSubJob extends Job {
   override def parent = Some(_parent)
 }
 
-class TestSession extends Session {
-
-  def openSession() = null
-
-  def endSession() {}
-}
-
 class TestWorker(id: Int) extends Worker[JobHasSubJob, TestSession] with Logging {
 
-  var _isFree = true
-
-  def isFree = _isFree
-
-  def work(job: JobHasSubJob, session: TestSession) = {
-    _isFree = false
+  def analyze(job: JobHasSubJob, session: TestSession) = {
     info("Worker " + id + " is working...")
     val subJobs = job.get() match {
-      case Some(subJobs) => subJobs.toList
+      case Some(jobs) => jobs.toList
     }
-    _isFree = true
     subJobs
   }
 }
@@ -77,20 +65,26 @@ class TestHandler extends BaseHandler[JobHasSubJob, TestSession] {
 }
 
 @RunWith(classOf[JUnitRunner])
-class TestWithBaseHandler extends FunSuite with Logging {
+class TestWithBaseHandler extends FunSuite with BeforeAndAfter with Logging {
 
-  val job = new JobHasSubJob
-  val worker = new TestWorker(0)
-  val handler = new TestHandler
+  var job: JobHasSubJob = _
+  var worker: TestWorker = _
+  var handler: TestHandler = _
+
+  before {
+    job = new JobHasSubJob
+    worker = new TestWorker(0)
+    handler = new TestHandler
+  }
 
   test("testJobHasSubJob") {
-    assert(job.get().get.size == 3)
+    assert(job.get().get.size == 10)
     assert(job.get().get.head.parent.get == job)
   }
 
   test("testWorker") {
-    val subJobs = worker.work(job, null)
-    assert(subJobs.size == 3)
+    val subJobs = worker.analyze(job, null)
+    assert(subJobs.size == 10)
   }
 
   test("testHandlerWithBusyWorker") {
@@ -115,7 +109,7 @@ class TestWithBaseHandler extends FunSuite with Logging {
   test("testBaseHandler") {
 
     val controller = new BaseController
-    //Add worker to handler
+    //Add worker to the handler
     for (i <- 1 to 3) {
       handler.workers += new TestWorker(i)
     }
@@ -125,7 +119,7 @@ class TestWithBaseHandler extends FunSuite with Logging {
 
     controller.start()
 
-    Thread.sleep(3000)
+    Thread.sleep(30000)
 
     controller.stop()
   }

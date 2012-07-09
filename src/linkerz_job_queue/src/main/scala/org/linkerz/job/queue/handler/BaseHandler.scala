@@ -18,17 +18,20 @@ import grizzled.slf4j.Logging
  *
  */
 
-abstract class BaseHandler[J <: Job, S <: Session] extends HandlerInSession[J, S] with Logging {
+abstract class BaseHandler[J <: Job, S <: Session] extends HandlerInSession[J, S] with CallBack[List[J]] with Logging {
 
   val workers = new ListBuffer[Worker[J, S]]
 
   var subJobQueue = new Queue[J] with ScalaQueue[J]
 
   var retryCount = 0
+
   var maxRetry = 100
 
   protected def doHandle(job: J, session: S) {
-    addSubJobs(workers.head.work(job, session))
+    addSubJobs(workers.head.analyze(job, session))
+    //Hock to the worker
+    workers.foreach(worker => worker.callback = this)
     doSubJobs(session)
   }
 
@@ -37,7 +40,16 @@ abstract class BaseHandler[J <: Job, S <: Session] extends HandlerInSession[J, S
       while (true) {
         subJobQueue.next() match {
           case Some(job) => doSubJob(job, session)
-          case None => break()
+          case None => {
+            //There is no more job. Check all worker if they are free, finish the job.
+            if (workers.filter(worker => !worker.isFree).size == 0) {
+              logger.info("No more job and all workers is free. Finish....")
+              break()
+            } else {
+              //No more job, but some worker is still doing, sleep 1s waiting for them.
+              Thread.sleep(1000)
+            }
+          }
         }
       }
     }
@@ -47,7 +59,7 @@ abstract class BaseHandler[J <: Job, S <: Session] extends HandlerInSession[J, S
     var isDone = false
     breakable {
       workers.foreach(worker => if (worker.isFree) {
-        addSubJobs(worker.work(job, session))
+        worker.work(job, session)
         isDone = true
         break()
       })
@@ -63,9 +75,25 @@ abstract class BaseHandler[J <: Job, S <: Session] extends HandlerInSession[J, S
       retryCount += 1
       if (retryCount >= maxRetry) {
         subJobQueue.clear()
+        workers.foreach(worker => worker.stop())
+        workers.clear()
+        info("Stop because all workers can't finish it job.")
       }
     }
     isDone
+  }
+
+
+  def onFailed(source: Any, ex: Exception) {
+    error(ex.getMessage, ex)
+  }
+
+
+  def onSuccess(source: Any, result: Option[List[J]]) {
+    info("Callback form " + source)
+    result match {
+      case Some(jobs) => addSubJobs(jobs)
+    }
   }
 
   private def addSubJobs(subJobs: List[J]) {
