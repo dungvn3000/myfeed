@@ -30,7 +30,7 @@ abstract class AsyncHandler[J <: Job, S <: Session] extends HandlerInSession[J, 
 
   protected def doHandle(job: J, session: S) {
     addSubJobs(workers.head.analyze(job, session))
-    //Hock to the worker
+    //Hook to the worker
     workers.foreach(worker => worker.callback = this)
     doSubJobs(session)
   }
