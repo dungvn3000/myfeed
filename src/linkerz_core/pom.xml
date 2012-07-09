@@ -175,7 +175,16 @@
         <!--End-->
 
         <!--Twitter Finagle-->
-            <!--TODO: Add It-->
+        <dependency>
+            <groupId>com.twitter</groupId>
+            <artifactId>finagle-core</artifactId>
+            <version>${finagle.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.twitter</groupId>
+            <artifactId>finagle-http</artifactId>
+            <version>${finagle.version}</version>
+        </dependency>
         <!--End-->
 
         <dependency>
