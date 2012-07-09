@@ -65,7 +65,7 @@ abstract class AsyncHandler[J <: Job, S <: Session] extends HandlerInSession[J, 
       })
     }
     if (!isDone) {
-      info("It seem all workers is busy now...")
+      info("It seem all workers are busy now...")
       //Re add the job.
       subJobQueue += job
       //Sleep 1s waiting for workers
@@ -91,9 +91,7 @@ abstract class AsyncHandler[J <: Job, S <: Session] extends HandlerInSession[J, 
 
   def onSuccess(source: Any, result: Option[List[J]]) {
     info("Callback form " + source)
-    result match {
-      case Some(jobs) => addSubJobs(jobs)
-    }
+    if (!result.isEmpty) addSubJobs(result.get)
   }
 
   private def addSubJobs(subJobs: List[J]) {
