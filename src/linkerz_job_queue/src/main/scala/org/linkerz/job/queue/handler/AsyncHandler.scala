@@ -10,7 +10,7 @@ import util.control.Breaks._
 import grizzled.slf4j.Logging
 
 /**
- * The Class BaseHandler.
+ * The Class AsyncHandler.
  * The Handler with workers, the job will be do async in here.
  *
  * @author Nguyen Duc Dung
@@ -18,7 +18,7 @@ import grizzled.slf4j.Logging
  *
  */
 
-abstract class BaseHandler[J <: Job, S <: Session] extends HandlerInSession[J, S] with CallBack[List[J]] with Logging {
+abstract class AsyncHandler[J <: Job, S <: Session] extends HandlerInSession[J, S] with CallBack[List[J]] with Logging {
 
   val workers = new ListBuffer[Worker[J, S]]
 

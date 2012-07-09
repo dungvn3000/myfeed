@@ -6,7 +6,7 @@ package org.linkerz.job.queue
 
 import controller.BaseController
 import core._
-import handler.BaseHandler
+import handler.AsyncHandler
 import org.scalatest.{BeforeAndAfter, FunSuite}
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
@@ -56,7 +56,7 @@ class TestWorker(id: Int) extends Worker[JobHasSubJob, TestSession] with Logging
   }
 }
 
-class TestHandler extends BaseHandler[JobHasSubJob, TestSession] {
+class TestAsyncHandler extends AsyncHandler[JobHasSubJob, TestSession] {
 
   def accept(job: Job) = job.isInstanceOf[JobHasSubJob]
 
@@ -65,16 +65,16 @@ class TestHandler extends BaseHandler[JobHasSubJob, TestSession] {
 }
 
 @RunWith(classOf[JUnitRunner])
-class TestWithBaseHandler extends FunSuite with BeforeAndAfter with Logging {
+class TestWithAsyncHandler extends FunSuite with BeforeAndAfter with Logging {
 
   var job: JobHasSubJob = _
   var worker: TestWorker = _
-  var handler: TestHandler = _
+  var handler: TestAsyncHandler = _
 
   before {
     job = new JobHasSubJob
     worker = new TestWorker(0)
-    handler = new TestHandler
+    handler = new TestAsyncHandler
   }
 
   test("testJobHasSubJob") {
@@ -110,7 +110,7 @@ class TestWithBaseHandler extends FunSuite with BeforeAndAfter with Logging {
 
     val controller = new BaseController
     //Add worker to the handler
-    for (i <- 1 to 3) {
+    for (i <- 1 to 10) {
       handler.workers += new TestWorker(i)
     }
     controller.handlers += handler
@@ -119,7 +119,7 @@ class TestWithBaseHandler extends FunSuite with BeforeAndAfter with Logging {
 
     controller.start()
 
-    Thread.sleep(30000)
+    Thread.sleep(10000)
 
     controller.stop()
   }
