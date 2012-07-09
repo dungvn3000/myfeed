@@ -1,7 +1,7 @@
 <h1>The Job Queue Framework, it is desgined for LinkerZ</h1>
 <h3>08 Jul 2012</h3>
 <br>
-The base controller will do sync for each job. The job will be done in session.
+The job will be done in session and sync or async control by handler. But the controller will call handler in sync.
 
 The structure of framework.
 
@@ -122,3 +122,56 @@ The structure of framework.
         controller.stop()
       }
     }
+
+<b>Multi Handler</b> 
+
+<p>Using async and sync handler at the same time. No matter what there is asyc handler or not the controller will call handler in sync</p>
+
+    @RunWith(classOf[JUnitRunner])
+    class TestMultiHandler extends FunSuite {
+
+      test("testMultiHandler") {
+        val controller = new BaseController
+
+        val echoJob = new EchoJob("Hello Frist Task")
+        val echoHandler = new EchoHandler
+
+        val sumJob = new SumJob(1, 2)
+        val sumHandler = new SumHandler
+
+        val inSessionJob = new InSessionJob
+        val handlerWithSession = new HandlerWithSession
+
+        val jobHasSubJob = new JobHasSubJob
+        val asyncHandler = new TestAsyncHandler
+        for (i <- 1 to 10) {
+          //Add worker for handler. The worker is only for async handler.
+          asyncHandler.workers += new TestWorker(i)
+        }
+
+
+        controller.handlers += echoHandler
+        controller.handlers += sumHandler
+        controller.handlers += handlerWithSession
+        controller.handlers += asyncHandler
+
+        //Add async job first to test.
+        controller.add(jobHasSubJob)
+
+        controller.add(echoJob)
+        controller.add(sumJob)
+        controller.add(inSessionJob)
+
+        controller.start()
+
+        Thread.sleep(10000)
+
+        controller.stop()
+
+        assert(echoJob.get().get == "DONE")
+        assert(sumJob.get().get == 3)
+        assert(inSessionJob.get().get != null)
+      }
+
+    }
+
