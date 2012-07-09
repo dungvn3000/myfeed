@@ -22,7 +22,7 @@ The structure of framework.
 <h2>Example</h2>
 
 <b>Sync Handler</b> 
-<pre>
+
     case class SumJob(x: Int, y: Int) extends Job {
       var result: Int = _
       def get() = {
@@ -52,13 +52,14 @@ The structure of framework.
         assert(sumJob.get().get == 3)
       }
     }
-</pre>
+   
+
 
 <b>Async Handler</b>
-<pre>
+
     class JobHasSubJob extends Job {
       var _parent: JobHasSubJob = _
-      
+
       def get() = {
         val subJobs = new ListBuffer[JobHasSubJob]
         for (i <- 1 to 10) {
@@ -121,4 +122,3 @@ The structure of framework.
         controller.stop()
       }
     }
-</pre> 
