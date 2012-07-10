@@ -5,9 +5,6 @@
 package org.linkerz.job.queue.core
 
 import actors.Actor
-import org.linkerz.job.queue.controller.{STOP, NEXT}
-import scala.None
-
 
 /**
  * The Class Worker.
@@ -21,25 +18,25 @@ import scala.None
 
 trait Worker[J <: Job, S <: Session] extends CallBackable[List[J]] {
 
-  var _callback: CallBack[List[J]] = _
+  case object STOP
 
-  var currentJob: Option[J] = None
-  var currentSession: Option[S] = None
+  case class NEXT(job: J, session: S)
+
+  var _callback: CallBack[List[J]] = _
+  var _isFree = true
 
   var actor = new Actor {
     def act() {
       loop {
         react {
-          case NEXT => {
+          case NEXT(job, session) => {
             try {
-              val result = Some(analyze(currentJob.get, currentSession.get))
+              val result = Some(analyze(job, session))
               if (callback != null) callback.onSuccess(this, result)
             } catch {
               case e: Exception => if (callback != null) callback.onFailed(this, e)
             } finally {
-              //Clear job and session.
-              currentJob = None
-              currentSession = None
+              _isFree = true
             }
           }
           case STOP => {
@@ -57,7 +54,7 @@ trait Worker[J <: Job, S <: Session] extends CallBackable[List[J]] {
    * The handler will check the worker is free or not, if he free, he has to work
    * @return
    */
-  def isFree: Boolean = currentJob.isEmpty
+  def isFree: Boolean = _isFree
 
   /**
    * Analyze and do the job, if it has SubJobs then tell handler.
@@ -76,9 +73,8 @@ trait Worker[J <: Job, S <: Session] extends CallBackable[List[J]] {
    * @param session
    */
   def work(job: J, session: S) {
-    currentJob = Some(job)
-    currentSession = Some(session)
-    actor ! NEXT
+    _isFree = false
+    actor ! NEXT(job, session)
   }
 
   /**

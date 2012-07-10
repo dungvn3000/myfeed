@@ -21,6 +21,15 @@ import scala.Some
  */
 class BaseController extends Controller with Logging {
 
+  /**
+   * Object will be sent when the job was be done.
+   */
+  case object DONE
+
+  case object STOP
+
+  case object NEXT
+
   private val jobQueue = new Queue[Job] with ScalaQueue[Job]
 
   val handlers = new ListBuffer[Handler[_ <: Job]]
@@ -93,12 +102,3 @@ class BaseController extends Controller with Logging {
     })
   }
 }
-
-/**
- * Object will be sent when the job was be done.
- */
-case object DONE
-
-case object STOP
-
-case object NEXT
