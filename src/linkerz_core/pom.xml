@@ -174,16 +174,31 @@
 
         <!--End-->
 
-        <!--Twitter Finagle-->
+        <!--Twitter Util-->
         <dependency>
             <groupId>com.twitter</groupId>
-            <artifactId>finagle-core</artifactId>
-            <version>${finagle.version}</version>
+            <artifactId>util-codec</artifactId>
+            <version>${twitter.util.version}</version>
         </dependency>
         <dependency>
             <groupId>com.twitter</groupId>
-            <artifactId>finagle-http</artifactId>
-            <version>${finagle.version}</version>
+            <artifactId>util-collection</artifactId>
+            <version>${twitter.util.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.twitter</groupId>
+            <artifactId>util-core</artifactId>
+            <version>${twitter.util.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.twitter</groupId>
+            <artifactId>util-eval</artifactId>
+            <version>${twitter.util.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.twitter</groupId>
+            <artifactId>util-reflect</artifactId>
+            <version>${twitter.util.version}</version>
         </dependency>
         <!--End-->
 

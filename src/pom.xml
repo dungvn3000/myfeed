@@ -22,7 +22,8 @@
     </modules>
 
     <properties>
-        <finagle.version>5.3.0</finagle.version>
+        <dispatch.http.version>0.8.8</dispatch.http.version>
+        <twitter.util.version>5.3.0</twitter.util.version>
         <tika.version>1.1</tika.version>
         <xlightweb.version>2.13.2</xlightweb.version>
         <flaxcrawler.version>1.1</flaxcrawler.version>
