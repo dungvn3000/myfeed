@@ -8,7 +8,6 @@ import org.linkerz.job.queue.core._
 import grizzled.slf4j.Logging
 import actors.DaemonActor
 import collection.mutable.ListBuffer
-import scala.Some
 
 /**
  * The Class BaseController.
@@ -28,9 +27,7 @@ class BaseController extends Controller with Logging {
 
   case object STOP
 
-  case object NEXT
-
-  private val jobQueue = new Queue[Job] with ScalaQueue[Job]
+  case class NEXT(job: Job)
 
   val handlers = new ListBuffer[Handler[_ <: Job]]
 
@@ -39,7 +36,7 @@ class BaseController extends Controller with Logging {
     def act() {
       loop {
         react {
-          case NEXT => handleNextJob()
+          case NEXT(job) => handleJob(job)
           case STOP => {
             info("Stoping...")
             reply("Stoping...")
@@ -72,19 +69,7 @@ class BaseController extends Controller with Logging {
    * @param job
    */
   def add(job: Job) {
-    jobQueue += job
-    handlerActor ! NEXT
-  }
-
-  /**
-   * Return false when no job.
-   * @return
-   */
-  private def handleNextJob(): Boolean = {
-    jobQueue.next() match {
-      case Some(job) => handleJob(job); true
-      case None => info("Nothing to do."); false
-    }
+    handlerActor ! NEXT(job)
   }
 
   private def handleJob(job: Job) {
