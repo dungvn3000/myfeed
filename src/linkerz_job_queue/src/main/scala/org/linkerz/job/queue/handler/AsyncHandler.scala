@@ -12,6 +12,7 @@ import grizzled.slf4j.Logging
 /**
  * The Class AsyncHandler.
  * The Handler with workers, the job will be do async in here.
+ * Make sure the handler always has at least one worker.
  *
  * @author Nguyen Duc Dung
  * @since 7/9/12, 1:56 AM

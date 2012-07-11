@@ -156,7 +156,7 @@
 
         <dependency>
             <groupId>org.scalaz</groupId>
-            <artifactId>scalaz-core_${scala.version}</artifactId>
+            <artifactId>scalaz-full_${scala.version}</artifactId>
             <version>${scalaz.version}</version>
         </dependency>
 
