@@ -18,6 +18,10 @@ The structure of framework.
         + CallBackable
 </pre>
 
+The framework architecture
+<br><br>
+<img src="https://github.com/dungvn3000/linkerz/raw/master/src/linkerz_job_queue/design/linkerzqueue.png">
+
 
 <h2>Example</h2>
 
