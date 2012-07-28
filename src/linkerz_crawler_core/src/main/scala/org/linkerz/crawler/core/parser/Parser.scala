@@ -4,6 +4,8 @@
 
 package org.linkerz.crawler.core.parser
 
+import org.linkerz.crawler.core.downloader.DownloadResult
+
 /**
  * The Class Parser.
  *
@@ -13,5 +15,9 @@ package org.linkerz.crawler.core.parser
  */
 
 class Parser {
+
+  def parse(downloadResult: DownloadResult): ParserResult = {
+    null
+  }
 
 }

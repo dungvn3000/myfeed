@@ -5,6 +5,9 @@
 package org.linkerz.crawler.core.handler
 
 import org.linkerz.job.queue.handler.AsyncHandler
+import org.linkerz.crawler.core.job.CrawlJob
+import org.linkerz.crawler.core.session.CrawlSession
+import org.linkerz.job.queue.core.Job
 
 /**
  * The Class CrawlerHandler.
@@ -14,6 +17,10 @@ import org.linkerz.job.queue.handler.AsyncHandler
  *
  */
 
-class CrawlerHandler extends AsyncHandler {
+class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
 
+  def sessionClass = classOf[CrawlSession]
+
+
+  def accept(job: Job) = job.isInstanceOf[CrawlJob]
 }

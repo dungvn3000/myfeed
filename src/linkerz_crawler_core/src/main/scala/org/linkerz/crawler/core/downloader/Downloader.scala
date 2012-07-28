@@ -4,6 +4,8 @@
 
 package org.linkerz.crawler.core.downloader
 
+import org.linkerz.crawler.core.model.WebUrl
+
 /**
  * The Class Downloader.
  *
@@ -14,6 +16,8 @@ package org.linkerz.crawler.core.downloader
 
 class Downloader {
 
-
+  def download(webUrl: WebUrl): DownloadResult = {
+    null
+  }
 
 }

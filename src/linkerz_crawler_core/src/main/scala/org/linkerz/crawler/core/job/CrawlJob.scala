@@ -14,7 +14,7 @@ import org.linkerz.job.queue.core.Job
  *
  */
 
-class CrawlJob(url: String) extends Job {
+case class CrawlJob(url: String) extends Job {
 
   def get() = {
     None
