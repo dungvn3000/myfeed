@@ -29,10 +29,10 @@ class TestBasicCrawlJob extends FunSuite with Logging {
     controller.handlers += handler
 
     controller.start()
-    Thread.sleep(10000)
-
     val job = new CrawlJob("http://vnexpress.net/")
     controller.add(job)
+
+    Thread.sleep(5000)
 
     controller.stop()
   }

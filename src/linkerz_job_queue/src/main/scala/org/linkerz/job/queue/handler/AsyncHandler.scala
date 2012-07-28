@@ -96,7 +96,7 @@ abstract class AsyncHandler[J <: Job, S <: Session] extends HandlerInSession[J, 
   }
 
   private def addSubJobs(subJobs: List[J]) {
-    if (!subJobs.isEmpty) {
+    if (subJobs!= null && !subJobs.isEmpty) {
       subJobQueue ++= subJobs
     }
   }
