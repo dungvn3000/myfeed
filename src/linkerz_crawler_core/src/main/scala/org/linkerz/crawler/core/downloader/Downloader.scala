@@ -20,6 +20,7 @@ class Downloader extends Logging {
 
   val cf = new AsyncHttpClientConfig.Builder()
     .setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:10.0.2) Gecko/20100101 Firefox/10.0.2")
+    .setCompressionEnabled(true)
     .build()
   val asyncHttpClient = new AsyncHttpClient(cf)
 

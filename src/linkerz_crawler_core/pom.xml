@@ -70,6 +70,13 @@
         </dependency>
         <!--End-->
 
+        <!--Language Detect-->
+        <dependency>
+            <groupId>com.cybozu.labs</groupId>
+            <artifactId>langdetect</artifactId>
+            <version>1.1-20120112</version>
+        </dependency>
+        <!--End-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

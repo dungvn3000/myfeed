@@ -12,10 +12,12 @@ import collection.mutable.ListBuffer
 import org.linkerz.crawler.core.model.{WebPage, WebUrl}
 import org.apache.tika.metadata.Metadata
 import edu.uci.ics.crawler4j.parser.HtmlContentHandler
-import java.io.ByteArrayInputStream
+import java.io.{File, ByteArrayInputStream}
 
 import collection.JavaConversions._
 import edu.uci.ics.crawler4j.url.URLCanonicalizer
+import com.cybozu.labs.langdetect.DetectorFactory
+import com.google.common.io.Resources
 
 /**
  * The Class Parser.
@@ -29,6 +31,7 @@ class Parser extends Logging {
 
   val htmlParser = new HtmlParser
   val parseContext = new ParseContext
+  val htmlHandler = new HtmlContentHandler
 
   def parse(downloadResult: DownloadResult): ParserResult = {
     info("Parse: " + downloadResult.webUrl)
@@ -36,22 +39,26 @@ class Parser extends Logging {
 
     if (downloadResult.byteContent != null) {
       val metadata = new Metadata
-      val contentHandler = new HtmlContentHandler
       val inputStream = new ByteArrayInputStream(downloadResult.byteContent)
-      htmlParser.parse(inputStream, contentHandler, metadata, parseContext)
+      htmlParser.parse(inputStream, htmlHandler, metadata, parseContext)
+      val title = metadata.get(Metadata.TITLE)
+      val content = htmlHandler.getBodyText
+      DetectorFactory.loadProfile(new File(Resources.getResource("profiles").toURI))
+      val detector = DetectorFactory.create
+      detector.append(content)
+      val language = detector.detect
 
-      val title = metadata.get("title")
-      val content = metadata.get("content")
       val webPage = new WebPage(downloadResult.webUrl, title, content)
+      webPage.language = language
 
       //Extract links in side a website
-      val baseURL = contentHandler.getBaseUrl
+      val baseURL = htmlHandler.getBaseUrl
       var contextURL = downloadResult.webUrl.url
       if (baseURL != null) {
         contextURL = baseURL
       }
 
-      contentHandler.getOutgoingUrls.foreach(urlAnchorPair => {
+      htmlHandler.getOutgoingUrls.foreach(urlAnchorPair => {
         var href = urlAnchorPair.getHref
         href = href.trim()
         if (href.length() != 0) {
