@@ -14,4 +14,6 @@ package org.linkerz.crawler.core.model
 
 case class WebPage(webUrl: WebUrl, title: String, html: String) {
 
+  var language: String = _
+
 }
