@@ -27,7 +27,7 @@ abstract class AsyncHandler[J <: Job, S <: Session] extends HandlerInSession[J, 
 
   var maxRetry = 100
 
-  private var retryCount = 0
+  private var _retryCount = 0
 
   protected def doHandle(job: J, session: S) {
     addSubJobs(workers.head.analyze(job, session))
@@ -73,8 +73,8 @@ abstract class AsyncHandler[J <: Job, S <: Session] extends HandlerInSession[J, 
       Thread.sleep(1000)
 
       //Count time to retry, if it is too much, stop the handler and report error to controller.
-      retryCount += 1
-      if (retryCount >= maxRetry) {
+      _retryCount += 1
+      if (_retryCount >= maxRetry) {
         subJobQueue.clear()
         workers.foreach(worker => worker.stop())
         workers.clear()
@@ -101,4 +101,9 @@ abstract class AsyncHandler[J <: Job, S <: Session] extends HandlerInSession[J, 
     }
   }
 
+  /**
+   * Getter for _retryCount
+   * @return
+   */
+  def retryCount = _retryCount
 }

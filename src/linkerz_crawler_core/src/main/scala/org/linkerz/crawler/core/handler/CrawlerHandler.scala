@@ -19,8 +19,20 @@ import org.linkerz.job.queue.core.Job
 
 class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
 
+  private var countUrl = 0
+
   def sessionClass = classOf[CrawlSession]
-
-
   def accept(job: Job) = job.isInstanceOf[CrawlJob]
+
+  override protected def doHandle(job: CrawlJob, session: CrawlSession) {
+    super.doHandle(job, session)
+    println(countUrl + " links found")
+  }
+
+  override def onSuccess(source: Any, result: Option[List[CrawlJob]]) {
+    super.onSuccess(source, result)
+    if (!result.isEmpty && result.get != null) {
+      countUrl += result.get.size
+    }
+  }
 }
