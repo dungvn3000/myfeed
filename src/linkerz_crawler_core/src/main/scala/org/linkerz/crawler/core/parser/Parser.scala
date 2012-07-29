@@ -43,7 +43,10 @@ class Parser extends Logging {
       htmlParser.parse(inputStream, htmlHandler, metadata, parseContext)
       val title = metadata.get(Metadata.TITLE)
       val content = htmlHandler.getBodyText
-      DetectorFactory.loadProfile(new File(Resources.getResource("profiles").toURI))
+      if (DetectorFactory.getLangList.isEmpty) {
+        DetectorFactory.loadProfile(new File(Resources.getResource("profiles").toURI))
+      }
+
       val detector = DetectorFactory.create
       detector.append(content)
       val language = detector.detect

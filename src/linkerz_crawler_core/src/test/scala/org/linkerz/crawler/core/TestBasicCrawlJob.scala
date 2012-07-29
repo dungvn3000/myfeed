@@ -24,17 +24,19 @@ class TestBasicCrawlJob extends FunSuite with Logging {
 
   test("testBasicJob") {
     val controller = new CrawlerController
-    val worker = new CrawlWorker
     val handler = new CrawlerHandler
-    handler.workers += worker
+
+    //Setup five worker.
+    for(i <- 1 to 5) {
+      val worker = new CrawlWorker
+      handler.workers += worker
+    }
+
     controller.handlers += handler
 
     controller.start()
     val job = new CrawlJob(new WebUrl("http://vnexpress.net/"))
     controller.add(job)
-
-    Thread.sleep(5000)
-
     controller.stop()
   }
 
