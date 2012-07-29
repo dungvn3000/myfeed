@@ -4,6 +4,8 @@
 
 package org.linkerz.crawler.core.parser
 
+import org.linkerz.crawler.core.model.WebUrl
+
 /**
  * The Class ParserResult.
  *
@@ -12,6 +14,6 @@ package org.linkerz.crawler.core.parser
  *
  */
 
-class ParserResult {
+case class ParserResult(webUrls: List[WebUrl]) {
 
 }

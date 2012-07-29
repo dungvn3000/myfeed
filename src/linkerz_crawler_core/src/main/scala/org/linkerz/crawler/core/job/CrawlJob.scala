@@ -5,6 +5,7 @@
 package org.linkerz.crawler.core.job
 
 import org.linkerz.job.queue.core.Job
+import org.linkerz.crawler.core.model.WebUrl
 
 /**
  * The Class CrawlJob.
@@ -14,7 +15,7 @@ import org.linkerz.job.queue.core.Job
  *
  */
 
-case class CrawlJob(url: String) extends Job {
+case class CrawlJob(webUrl: WebUrl) extends Job {
 
   def get() = {
     None

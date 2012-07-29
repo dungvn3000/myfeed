@@ -4,6 +4,8 @@
 
 package org.linkerz.crawler.core.downloader
 
+import org.linkerz.crawler.core.model.WebUrl
+
 /**
  * The Class DownloadResult.
  *
@@ -12,6 +14,6 @@ package org.linkerz.crawler.core.downloader
  *
  */
 
-class DownloadResult {
+case class DownloadResult(webUrl: WebUrl, byteContent: Array[Byte]) {
 
 }

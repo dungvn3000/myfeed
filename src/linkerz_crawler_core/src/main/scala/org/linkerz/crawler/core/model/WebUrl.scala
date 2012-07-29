@@ -12,6 +12,6 @@ package org.linkerz.crawler.core.model
  *
  */
 
-class WebUrl(url: String) {
+case class WebUrl(url: String) {
 
 }

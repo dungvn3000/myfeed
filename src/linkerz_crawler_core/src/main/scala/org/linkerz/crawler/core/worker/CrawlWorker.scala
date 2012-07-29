@@ -7,6 +7,8 @@ package org.linkerz.crawler.core.worker
 import org.linkerz.job.queue.core.Worker
 import org.linkerz.crawler.core.job.CrawlJob
 import org.linkerz.crawler.core.session.CrawlSession
+import org.linkerz.crawler.core.downloader.Downloader
+import org.linkerz.crawler.core.parser.Parser
 
 /**
  * The Class CrawlWorker.
@@ -18,8 +20,12 @@ import org.linkerz.crawler.core.session.CrawlSession
 
 class CrawlWorker extends Worker[CrawlJob, CrawlSession] {
 
+  val downloader = new Downloader
+  val parser = new Parser
+
   def analyze(job: CrawlJob, session: CrawlSession) = {
-    println(job.url)
-    null
+    val downloadResult = downloader.download(job.webUrl)
+    val parserResult = parser.parse(downloadResult)
+    Nil
   }
 }

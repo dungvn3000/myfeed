@@ -7,6 +7,7 @@ package org.linkerz.crawler.core
 import controller.CrawlerController
 import handler.CrawlerHandler
 import job.CrawlJob
+import model.WebUrl
 import org.scalatest.FunSuite
 import grizzled.slf4j.Logging
 import worker.CrawlWorker
@@ -29,7 +30,7 @@ class TestBasicCrawlJob extends FunSuite with Logging {
     controller.handlers += handler
 
     controller.start()
-    val job = new CrawlJob("http://vnexpress.net/")
+    val job = new CrawlJob(new WebUrl("http://vnexpress.net/"))
     controller.add(job)
 
     Thread.sleep(5000)
