@@ -24,16 +24,14 @@ class TestHttpClient extends FunSuite {
   test("testAsyncHttpClient") {
     val cf = new AsyncHttpClientConfig.Builder()
       .setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:10.0.2) Gecko/20100101 Firefox/10.0.2")
+      .setCompressionEnabled(true)
       .build()
     val asyncHttpClient = new AsyncHttpClient(cf)
-    val f = asyncHttpClient.prepareGet("http://vnexpress.net").execute(new AsyncCompletionHandler[Response] {
-      def onCompleted(response: Response) = {
-        println(response.getStatusCode)
-        response
-      }
-    })
+    val f = asyncHttpClient.prepareGet("http://vnexpress.net/").execute()
     val time = Time.now
     val r = f.get()
     println(Time.now.inMilliseconds - time.inMilliseconds + "ms")
+    r.getHeaders.values().toArray.foreach(println)
   }
+
 }
