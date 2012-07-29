@@ -25,9 +25,9 @@ abstract class AsyncHandler[J <: Job, S <: Session] extends HandlerInSession[J, 
 
   var subJobQueue = new Queue[J] with ScalaQueue[J]
 
-  var retryCount = 0
-
   var maxRetry = 100
+
+  private var retryCount = 0
 
   protected def doHandle(job: J, session: S) {
     addSubJobs(workers.head.analyze(job, session))
