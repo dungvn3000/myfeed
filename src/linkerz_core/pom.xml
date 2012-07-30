@@ -142,6 +142,12 @@
 
         <dependency>
             <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-client</artifactId>
+            <version>${hazelcast.verion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-spring</artifactId>
             <version>${hazelcast.verion}</version>
         </dependency>
