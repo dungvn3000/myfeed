@@ -19,7 +19,7 @@ import grizzled.slf4j.Logging
  *
  */
 
-abstract class AsyncHandler[J <: Job, S <: Session] extends HandlerInSession[J, S] with CallBack[List[J]] with Logging {
+abstract class AsyncHandler[J <: Job, S <: Session] extends HandlerInSession[J, S] with CallBack[J] with Logging {
 
   val workers = new ListBuffer[Worker[J, S]]
 
@@ -30,7 +30,13 @@ abstract class AsyncHandler[J <: Job, S <: Session] extends HandlerInSession[J, 
   private var _retryCount = 0
 
   protected def doHandle(job: J, session: S) {
-    addSubJobs(workers.head.analyze(job, session))
+    //Step 1: Analyze the job fist,
+    //check the result then decide will continue or not.
+    workers.head.analyze(job, session)
+    createSubJobs(job)
+
+
+    //Step 2: Working on the sub job.
     //Hook to the worker
     workers.foreach(worker => worker.callback = this)
     doSubJobs(session)
@@ -90,16 +96,16 @@ abstract class AsyncHandler[J <: Job, S <: Session] extends HandlerInSession[J, 
   }
 
 
-  def onSuccess(source: Any, result: Option[List[J]]) {
+  def onSuccess(source: Any, result: Option[J]) {
     info("Callback form " + source)
-    if (!result.isEmpty) addSubJobs(result.get)
+    if (!result.isEmpty) createSubJobs(result.get)
   }
 
-  private def addSubJobs(subJobs: List[J]) {
-    if (subJobs!= null && !subJobs.isEmpty) {
-      subJobQueue ++= subJobs
-    }
-  }
+  /**
+   * Create a sub job base the result of a job.
+   * @param job
+   */
+  protected def createSubJobs(job: J)
 
   /**
    * Getter for _retryCount

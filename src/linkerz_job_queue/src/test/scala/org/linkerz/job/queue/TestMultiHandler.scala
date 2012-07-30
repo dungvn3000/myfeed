@@ -60,6 +60,8 @@ class TestMultiHandler extends FunSuite {
     assert(echoJob.get().get == "DONE")
     assert(sumJob.get().get == 3)
     assert(inSessionJob.get().get != null)
+    assert(!jobHasSubJob.get().isEmpty)
+    assert(jobHasSubJob.get().get.size == 10)
   }
 
 }

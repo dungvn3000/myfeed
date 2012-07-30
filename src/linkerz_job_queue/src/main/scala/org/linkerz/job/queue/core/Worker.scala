@@ -10,20 +10,18 @@ import actors.Actor
  * The Class Worker.
  *
  * Worker will do the job in async.
- * At the same time the worker hold only one job.
+ * At the same time the worker hold only one job. After finish that job it's gonna take another job.
  * @author Nguyen Duc Dung
  * @since 7/9/12, 1:53 AM
  *
  */
-
-trait Worker[J <: Job, S <: Session] extends CallBackable[List[J]] {
+trait Worker[J <: Job, S <: Session] extends CallBackable[J] {
 
   case object STOP
-
   case class NEXT(job: J, session: S)
 
-  var _callback: CallBack[List[J]] = _
-  var _isFree = true
+  private var _callback: CallBack[J] = _
+  private var _isFree = true
 
   var actor = new Actor {
     def act() {
@@ -31,8 +29,9 @@ trait Worker[J <: Job, S <: Session] extends CallBackable[List[J]] {
         react {
           case NEXT(job, session) => {
             try {
-              val result = Some(analyze(job, session))
-              if (callback != null) callback.onSuccess(this, result)
+              //Analyze the job
+              analyze(job, session)
+              if (callback != null) callback.onSuccess(this, new Some(job))
             } catch {
               case e: Exception => if (callback != null) callback.onFailed(this, e)
             } finally {
@@ -57,17 +56,16 @@ trait Worker[J <: Job, S <: Session] extends CallBackable[List[J]] {
   def isFree: Boolean = _isFree
 
   /**
-   * Analyze and do the job, if it has SubJobs then tell handler.
+   * Analyze and do the job and return the result.
    * This action will be done in sync.
    * @param job
    * @param session
-   * @return list of sub job.
    */
   @throws(classOf[Exception])
-  def analyze(job: J, session: S): List[J]
+  def analyze(job: J, session: S)
 
   /**
-   * Hard Work for the Job.
+   * Hard Working for the Job.
    * This action will be done in async.
    * @param job
    * @param session
@@ -86,7 +84,7 @@ trait Worker[J <: Job, S <: Session] extends CallBackable[List[J]] {
 
   def callback = _callback
 
-  def callback_=(callback: CallBack[List[J]]) {
+  def callback_=(callback: CallBack[J]) {
     _callback = callback
   }
 }

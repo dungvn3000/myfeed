@@ -24,9 +24,7 @@ class BaseController extends Controller with Logging {
    * Object will be sent when the job was be done.
    */
   case object DONE
-
   case object STOP
-
   case class NEXT(job: Job)
 
   val handlers = new ListBuffer[Handler[_ <: Job]]
