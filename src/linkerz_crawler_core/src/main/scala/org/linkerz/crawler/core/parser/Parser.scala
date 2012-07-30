@@ -12,12 +12,10 @@ import collection.mutable.ListBuffer
 import org.linkerz.crawler.core.model.{WebPage, WebUrl}
 import org.apache.tika.metadata.Metadata
 import edu.uci.ics.crawler4j.parser.HtmlContentHandler
-import java.io.{File, ByteArrayInputStream}
+import java.io.ByteArrayInputStream
 
 import collection.JavaConversions._
 import edu.uci.ics.crawler4j.url.URLCanonicalizer
-import com.cybozu.labs.langdetect.DetectorFactory
-import com.google.common.io.Resources
 
 /**
  * The Class Parser.
@@ -43,16 +41,7 @@ class Parser extends Logging {
       htmlParser.parse(inputStream, htmlHandler, metadata, parseContext)
       val title = metadata.get(Metadata.TITLE)
       val content = htmlHandler.getBodyText
-      if (DetectorFactory.getLangList.isEmpty) {
-        DetectorFactory.loadProfile(new File(Resources.getResource("profiles").toURI))
-      }
-
-      val detector = DetectorFactory.create
-      detector.append(content)
-      val language = detector.detect
-
       val webPage = new WebPage(downloadResult.webUrl, title, content)
-      webPage.language = language
 
       //Extract links in side a website
       val baseURL = htmlHandler.getBaseUrl
