@@ -29,14 +29,12 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
     println(countUrl + " links found")
   }
 
-
-
-//  override def onSuccess(source: Any, result: Option[List[CrawlJob]]) {
-//    super.onSuccess(source, result)
-//    if (!result.isEmpty && result.get != null) {
-//      countUrl += result.get.size
-//    }
-//  }
-
-  protected def createSubJobs(job: CrawlJob) {}
+  protected def createSubJobs(job: CrawlJob) {
+    if (!job.result.isEmpty) {
+      countUrl += job.result.get.size
+      job.result.get.foreach(webUrl => {
+        subJobQueue += new CrawlJob(webUrl)
+      })
+    }
+  }
 }

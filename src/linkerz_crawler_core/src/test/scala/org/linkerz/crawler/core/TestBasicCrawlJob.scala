@@ -25,6 +25,8 @@ class TestBasicCrawlJob extends FunSuite with Logging {
   test("testBasicJob") {
     val controller = new CrawlerController
     val handler = new CrawlerHandler
+    //Limit retry
+    handler.maxRetry = 10
 
     //Setup five workers.
     for(i <- 1 to 5) {

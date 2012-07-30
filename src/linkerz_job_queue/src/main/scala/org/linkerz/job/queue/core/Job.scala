@@ -21,7 +21,7 @@ trait Job {
    * Return the result of the job.
    * @return
    */
-  def get(): Option[Any]
+  def result: Option[Any]
 
   /**
    * The parent job.

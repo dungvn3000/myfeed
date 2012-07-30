@@ -21,16 +21,19 @@ import scala.Some
  */
 
 case class EchoJob(message: String) extends Job {
-  var result: String = _
+  private var _result: String = _
 
-  def get(): Option[String] = {
-    if (result != null && !result.isEmpty) return Some(result)
+  def result_=(result: String) {
+    _result = result
+  }
+
+  def result: Option[String] = {
+    if (_result != null && !_result.isEmpty) return Some(_result)
     None
   }
 }
 
 class EchoHandler extends Handler[EchoJob] with Logging {
-
   def accept(job: Job) = job.isInstanceOf[EchoJob]
 
   protected def doHandle(job: EchoJob) {
@@ -42,17 +45,19 @@ class EchoHandler extends Handler[EchoJob] with Logging {
 }
 
 case class SumJob(x: Int, y: Int) extends Job {
-  var result: Int = _
+  private var _result: Int = _
 
-  def get() = {
-    Some(result)
+  def result_=(result: Int) {
+    _result = result
+  }
+
+  def result = {
+    Some(_result)
   }
 }
 
 class SumHandler extends Handler[SumJob] with Logging {
-
   def accept(job: Job) = job.isInstanceOf[SumJob]
-
   protected def doHandle(job: SumJob) {
     job.result = job.x + job.y
     info(job.result)
@@ -60,11 +65,12 @@ class SumHandler extends Handler[SumJob] with Logging {
 }
 
 class InSessionJob extends Job {
-
-  var result: Session = _
-
-  def get() = {
-    Some(result)
+  private var _result: Session = _
+  def result_=(result: Session) {
+    _result = result
+  }
+  def result = {
+    Some(_result)
   }
 }
 
@@ -90,7 +96,7 @@ class HandlerWithSession extends HandlerInSession[InSessionJob, TestSession] wit
   protected def doHandle(job: InSessionJob, session: TestSession) {
     job.result = session
     session match {
-      case session : TestSession => info("Doing in session " + session.id)
+      case session: TestSession => info("Doing in session " + session.id)
     }
   }
 }
@@ -124,8 +130,8 @@ class TestSimpleController extends FunSuite {
 
     controller.stop()
 
-    assert(echoJob.get().get == "DONE")
-    assert(sumJob.get().get == 3)
-    assert(inSessionJob.get().get != null)
+    assert(echoJob.result.get == "DONE")
+    assert(sumJob.result.get == 3)
+    assert(inSessionJob.result.get != null)
   }
 }

@@ -17,8 +17,20 @@ import org.linkerz.crawler.core.model.WebUrl
 
 case class CrawlJob(webUrl: WebUrl) extends Job {
 
-  def get() = {
-    None
+  private var _parent: Option[CrawlJob] = None
+  private var _result: Option[List[WebUrl]] = None
+
+  def result = {
+    _result
   }
 
+  def result_=(result: Option[List[WebUrl]]) {
+    _result = result
+  }
+
+  override def parent = _parent
+
+  def parent_=(parent: Option[CrawlJob]) {
+    _parent = parent
+  }
 }

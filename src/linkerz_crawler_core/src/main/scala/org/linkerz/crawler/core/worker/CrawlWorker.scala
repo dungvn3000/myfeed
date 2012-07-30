@@ -9,7 +9,7 @@ import org.linkerz.crawler.core.job.CrawlJob
 import org.linkerz.crawler.core.session.CrawlSession
 import org.linkerz.crawler.core.downloader.Downloader
 import org.linkerz.crawler.core.parser.Parser
-import collection.mutable.ListBuffer
+import org.linkerz.crawler.core.model.WebUrl
 
 /**
  * The Class CrawlWorker.
@@ -20,19 +20,15 @@ import collection.mutable.ListBuffer
  */
 
 class CrawlWorker extends Worker[CrawlJob, CrawlSession] {
-
   val downloader = new Downloader
   val parser = new Parser
 
-  def analyze(job: CrawlJob, session: CrawlSession) = {
+  def analyze(job: CrawlJob, session: CrawlSession) {
     val downloadResult = downloader.download(job.webUrl)
     val parserResult = parser.parse(downloadResult)
 
-    var jobs = new ListBuffer[CrawlJob]
-    parserResult.webUrls.foreach(webUrl => {
-      jobs+= new CrawlJob(webUrl)
-    })
-
-    jobs.toList
+    if (!parserResult.webUrls.isEmpty) {
+      job.result = Some[List[WebUrl]](parserResult.webUrls)
+    }
   }
 }
