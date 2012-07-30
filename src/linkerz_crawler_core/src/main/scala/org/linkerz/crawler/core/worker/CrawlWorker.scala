@@ -9,6 +9,7 @@ import org.linkerz.crawler.core.job.{CrawlJobResult, CrawlJob}
 import org.linkerz.crawler.core.session.CrawlSession
 import org.linkerz.crawler.core.downloader.Downloader
 import org.linkerz.crawler.core.parser.Parser
+import java.util.regex.Pattern
 
 /**
  * The Class CrawlWorker.
@@ -19,12 +20,20 @@ import org.linkerz.crawler.core.parser.Parser
  */
 
 class CrawlWorker extends Worker[CrawlJob, CrawlSession] {
+
+  private val filters = Pattern.compile(".*(\\.(css|js|bmp|gif|jpe?g" + "|png|tiff?|mid|mp2|mp3|mp4"
+    + "|wav|avi|mov|mpeg|ram|m4v|pdf" + "|rm|smil|wmv|swf|wma|zip|rar|gz))$")
+
   val downloader = new Downloader
   val parser = new Parser
 
   def analyze(job: CrawlJob, session: CrawlSession) {
-    val downloadResult = downloader.download(job.webUrl)
-    val parserResult = parser.parse(downloadResult)
-    job.result = new Some(CrawlJobResult(parserResult))
+    if (!filters.matcher(job.webUrl.url.toLowerCase).matches()) {
+      val downloadResult = downloader.download(job.webUrl)
+      val parserResult = parser.parse(downloadResult)
+      job.result = new Some(CrawlJobResult(parserResult))
+    } else {
+      job.result = None
+    }
   }
 }
