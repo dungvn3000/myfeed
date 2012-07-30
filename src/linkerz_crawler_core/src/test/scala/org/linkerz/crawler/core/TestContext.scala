@@ -9,6 +9,7 @@ import org.scalatest.FunSuite
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 import org.springframework.context.{ApplicationContext, ApplicationContextAware}
+import org.junit.Ignore
 
 /**
  * The Class TestContext.
@@ -20,6 +21,7 @@ import org.springframework.context.{ApplicationContext, ApplicationContextAware}
 
 @ContextConfiguration(locations = Array("/context.xml"))
 @RunWith(classOf[SpringJUnit4ClassRunner])
+@Ignore
 class TestContext extends FunSuite with ApplicationContextAware {
 
   var context: ApplicationContext = _

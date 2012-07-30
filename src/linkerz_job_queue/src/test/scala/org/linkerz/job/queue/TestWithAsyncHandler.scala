@@ -26,7 +26,7 @@ class JobHasSubJob extends Job {
   var subJobs: List[JobHasSubJob] = Nil
   private var _parent: JobHasSubJob = _
 
-  def result(): Option[List[JobHasSubJob]] = {
+  def result: Option[List[JobHasSubJob]] = {
     if (!subJobs.isEmpty) return Some(subJobs)
     None
   }
@@ -63,7 +63,7 @@ class TestAsyncHandler extends AsyncHandler[JobHasSubJob, TestSession] {
   def accept(job: Job) = job.isInstanceOf[JobHasSubJob]
   def sessionClass = classOf[TestSession]
   protected def createSubJobs(job: JobHasSubJob) {
-    job.result() match {
+    job.result match {
       case Some(subJob) => subJobQueue ++= subJob
       case None =>
     }
@@ -84,8 +84,8 @@ class TestWithAsyncHandler extends FunSuite with BeforeAndAfter with Logging {
 
   test("testWorker") {
     worker.analyze(job, null)
-    assert(!job.result().isEmpty)
-    assert(job.result().get.size == 10)
+    assert(!job.result.isEmpty)
+    assert(job.result.get.size == 10)
   }
 
   test("testHandlerWithBusyWorker") {
@@ -118,8 +118,8 @@ class TestWithAsyncHandler extends FunSuite with BeforeAndAfter with Logging {
     controller.start()
     Thread.sleep(10000)
     controller.stop()
-    assert(!job.result().isEmpty)
-    assert(job.result().get.size == 10)
+    assert(!job.result.isEmpty)
+    assert(job.result.get.size == 10)
   }
 
 }

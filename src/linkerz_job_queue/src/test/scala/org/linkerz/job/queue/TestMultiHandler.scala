@@ -57,11 +57,11 @@ class TestMultiHandler extends FunSuite {
 
     controller.stop()
 
-    assert(echoJob.result().get == "DONE")
-    assert(sumJob.result().get == 3)
-    assert(inSessionJob.result().get != null)
-    assert(!jobHasSubJob.result().isEmpty)
-    assert(jobHasSubJob.result().get.size == 10)
+    assert(echoJob.result.get == "DONE")
+    assert(sumJob.result.get == 3)
+    assert(inSessionJob.result.get != null)
+    assert(!jobHasSubJob.result.isEmpty)
+    assert(jobHasSubJob.result.get.size == 10)
   }
 
 }
