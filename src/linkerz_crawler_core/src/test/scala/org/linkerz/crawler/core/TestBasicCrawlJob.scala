@@ -29,7 +29,7 @@ class TestBasicCrawlJob extends FunSuite with Logging {
     //Ide time
     handler.ideTime = 5000
 
-    controller.handlers += handler
+    controller.handlers = List(handler)
 
     controller.start()
     val job = new CrawlJob(new WebUrl("http://vnexpress.net/"))

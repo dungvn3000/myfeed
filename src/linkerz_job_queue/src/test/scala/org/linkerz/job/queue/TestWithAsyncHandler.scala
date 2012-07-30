@@ -113,7 +113,7 @@ class TestWithAsyncHandler extends FunSuite with BeforeAndAfter with Logging {
     for (i <- 1 to 10) {
       handler.workers += new TestWorker(i)
     }
-    controller.handlers += handler
+    controller.handlers = List(handler)
     controller.add(job)
     controller.start()
     Thread.sleep(10000)

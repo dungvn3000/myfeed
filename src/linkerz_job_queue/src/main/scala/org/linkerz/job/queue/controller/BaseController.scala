@@ -7,7 +7,7 @@ package org.linkerz.job.queue.controller
 import org.linkerz.job.queue.core._
 import grizzled.slf4j.Logging
 import actors.DaemonActor
-import collection.mutable.ListBuffer
+import reflect.BeanProperty
 
 /**
  * The Class BaseController.
@@ -24,10 +24,12 @@ class BaseController extends Controller with Logging {
    * Object will be sent when the job was be done.
    */
   case object DONE
+
   case object STOP
+
   case class NEXT(job: Job)
 
-  val handlers = new ListBuffer[Handler[_ <: Job]]
+  @BeanProperty var handlers: List[Handler[_ <: Job]] = Nil
 
   //The handler actor to handle all the handler
   val handlerActor = new DaemonActor {

@@ -38,11 +38,7 @@ class TestMultiHandler extends FunSuite {
       asyncHandler.workers += new TestWorker(i)
     }
 
-
-    controller.handlers += echoHandler
-    controller.handlers += sumHandler
-    controller.handlers += handlerWithSession
-    controller.handlers += asyncHandler
+    controller.handlers = List(echoHandler, sumHandler, handlerWithSession, asyncHandler)
 
     //Add async job first to test.
     controller.add(jobHasSubJob)

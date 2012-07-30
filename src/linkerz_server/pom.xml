@@ -24,6 +24,14 @@
             <artifactId>linkerz_crawler_core</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <!--Scala and Spring-->
+        <dependency>
+            <groupId>de.adesso</groupId>
+            <artifactId>scala-spring</artifactId>
+            <version>${scala.spring.version}</version>
+        </dependency>
+        <!--End-->
     </dependencies>
 
     <build>

@@ -116,9 +116,7 @@ class TestSimpleController extends FunSuite {
     val inSessionJob = new InSessionJob
     val handlerWithSession = new HandlerWithSession
 
-    controller.handlers += echoHandler
-    controller.handlers += sumHandler
-    controller.handlers += handlerWithSession
+    controller.handlers = List(echoHandler, sumHandler, handlerWithSession)
 
     controller.add(echoJob)
     controller.add(sumJob)
