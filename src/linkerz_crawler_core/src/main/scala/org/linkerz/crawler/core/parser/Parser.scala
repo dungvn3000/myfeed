@@ -34,14 +34,18 @@ class Parser extends Logging {
   def parse(downloadResult: DownloadResult): ParserResult = {
     info("Parse: " + downloadResult.webUrl)
     var webUrls = new ListBuffer[WebUrl]
+    val webPage = new WebPage
 
     if (downloadResult.byteContent != null) {
       val metadata = new Metadata
       val inputStream = new ByteArrayInputStream(downloadResult.byteContent)
       htmlParser.parse(inputStream, htmlHandler, metadata, parseContext)
+
+      //Get web page content
       val title = metadata.get(Metadata.TITLE)
-      val content = htmlHandler.getBodyText
-      val webPage = new WebPage(downloadResult.webUrl, title, content)
+      val html = htmlHandler.getBodyText
+      webPage.title = title
+      webPage.html = html
 
       //Extract links in side a website
       val baseURL = htmlHandler.getBaseUrl
@@ -67,7 +71,7 @@ class Parser extends Logging {
         }
       })
     }
-    new ParserResult(webUrls.toList)
+    new ParserResult(webPage, webUrls.toList)
   }
 
 }

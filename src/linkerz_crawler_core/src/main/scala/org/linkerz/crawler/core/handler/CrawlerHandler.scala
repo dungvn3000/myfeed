@@ -20,6 +20,7 @@ import org.linkerz.job.queue.core.Job
 class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
 
   private var countUrl = 0
+  private var countWeb = 0
 
   def sessionClass = classOf[CrawlSession]
   def accept(job: Job) = job.isInstanceOf[CrawlJob]
@@ -27,12 +28,14 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
   override protected def doHandle(job: CrawlJob, session: CrawlSession) {
     super.doHandle(job, session)
     println(countUrl + " links found")
+    println(countWeb + " web pages downloaded")
   }
 
   protected def createSubJobs(job: CrawlJob) {
     if (!job.result.isEmpty) {
-      countUrl += job.result.get.size
-      job.result.get.foreach(webUrl => {
+      countUrl += job.result.get.parserResult.webUrls.size
+      countWeb += 1
+      job.result.get.parserResult.webUrls.foreach(webUrl => {
         subJobQueue += new CrawlJob(webUrl)
       })
     }

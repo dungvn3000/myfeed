@@ -12,8 +12,9 @@ package org.linkerz.crawler.core.model
  *
  */
 
-case class WebPage(webUrl: WebUrl, title: String, html: String) {
-
+class WebPage {
+  var webUrl: WebUrl = _
+  var title: String = _
+  var html: String = _
   var language: String = _
-
 }

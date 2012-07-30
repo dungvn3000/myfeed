@@ -6,6 +6,7 @@ package org.linkerz.crawler.core.job
 
 import org.linkerz.job.queue.core.Job
 import org.linkerz.crawler.core.model.WebUrl
+import org.linkerz.crawler.core.parser.ParserResult
 
 /**
  * The Class CrawlJob.
@@ -18,13 +19,13 @@ import org.linkerz.crawler.core.model.WebUrl
 case class CrawlJob(webUrl: WebUrl) extends Job {
 
   private var _parent: Option[CrawlJob] = None
-  private var _result: Option[List[WebUrl]] = None
+  private var _result: Option[CrawlJobResult] = None
 
   def result = {
     _result
   }
 
-  def result_=(result: Option[List[WebUrl]]) {
+  def result_=(result: Option[CrawlJobResult]) {
     _result = result
   }
 
@@ -34,3 +35,5 @@ case class CrawlJob(webUrl: WebUrl) extends Job {
     _parent = parent
   }
 }
+
+case class CrawlJobResult(parserResult: ParserResult)
