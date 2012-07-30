@@ -10,7 +10,6 @@ import job.CrawlJob
 import model.WebUrl
 import org.scalatest.FunSuite
 import grizzled.slf4j.Logging
-import worker.CrawlWorker
 
 /**
  * The Class TestBasicCrawlJob.
@@ -24,15 +23,11 @@ class TestBasicCrawlJob extends FunSuite with Logging {
 
   test("testBasicJob") {
     val controller = new CrawlerController
-    val handler = new CrawlerHandler
+    val handler = new CrawlerHandler(5)
     //Limit retry
     handler.maxRetry = 10
-
-    //Setup five workers.
-    for(i <- 1 to 5) {
-      val worker = new CrawlWorker
-      handler.workers += worker
-    }
+    //Ide time
+    handler.ideTime = 5000
 
     controller.handlers += handler
 

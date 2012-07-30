@@ -22,10 +22,11 @@ import grizzled.slf4j.Logging
 abstract class AsyncHandler[J <: Job, S <: Session] extends HandlerInSession[J, S] with CallBack[J] with Logging {
 
   val workers = new ListBuffer[Worker[J, S]]
-
   var subJobQueue = new Queue[J] with ScalaQueue[J]
 
   var maxRetry = 100
+  //Time for waiting when all worker are busy. Time unit is ms.
+  var ideTime = 1000
 
   private var _retryCount = 0
 
@@ -76,7 +77,7 @@ abstract class AsyncHandler[J <: Job, S <: Session] extends HandlerInSession[J, 
       //Re add the job.
       subJobQueue += job
       //Sleep 1s waiting for workers
-      Thread.sleep(1000)
+      Thread.sleep(ideTime)
 
       //Count time to retry, if it is too much, stop the handler and report error to controller.
       _retryCount += 1

@@ -19,7 +19,7 @@ import java.util.regex.Pattern
  *
  */
 
-class CrawlWorker extends Worker[CrawlJob, CrawlSession] {
+class CrawlWorker(_id: Int) extends Worker[CrawlJob, CrawlSession] {
 
   private val filters = Pattern.compile(".*(\\.(css|js|bmp|gif|jpe?g" + "|png|tiff?|mid|mp2|mp3|mp4"
     + "|wav|avi|mov|mpeg|ram|m4v|pdf" + "|rm|smil|wmv|swf|wma|zip|rar|gz))$")
@@ -36,4 +36,6 @@ class CrawlWorker extends Worker[CrawlJob, CrawlSession] {
       job.result = None
     }
   }
+
+  def id = _id
 }
