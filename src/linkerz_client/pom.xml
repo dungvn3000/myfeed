@@ -10,7 +10,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.linkerz</groupId>
-    <artifactId>linkerz_crawler_client</artifactId>
+    <artifactId>linkerz_client</artifactId>
+
 
     <dependencies>
         <dependency>
