@@ -11,7 +11,7 @@ import reflect.BeanProperty
 
 /**
  * The Class BaseController.
- * The controller will handle the job in sync.
+ * The controller will handle the job in sync or async depend on the handler.
  * The controller will be never stop it will be wait for job for all his life
  *
  * @author Nguyen Duc Dung
@@ -72,7 +72,7 @@ class BaseController extends Controller with Logging {
     handlerActor ! NEXT(job)
   }
 
-  private def handleJob(job: Job) {
+  protected def handleJob(job: Job) {
     handlers.foreach(handler => if (handler accept job) {
       handler match {
         case handler: HandlerInSession[Job, Session] => {

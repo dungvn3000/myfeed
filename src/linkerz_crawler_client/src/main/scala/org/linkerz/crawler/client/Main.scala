@@ -21,36 +21,7 @@ object Main extends App {
   clientCfg.getGroupConfig.setName("dev").setPassword("dev")
   clientCfg.addAddress("localhost")
   val client = HazelcastClient.newHazelcastClient(clientCfg)
-
-//  client.getTopic("event").publish(new CrawlEvent("http://vnexpress.net/"))
-
-//  val task = new DistributedTask[String](new CrawlTask)
-//  task.setExecutionCallback(new ExecutionCallback[String] {
-//    def done(future: Future[String]) {
-//      println("call back")
-//    }
-//  })
-
-//  client.getExecutorService.execute(task)
-//
-//  var time = System.currentTimeMillis()
-//
-//  val result1 = client.getExecutorService.submit(new CrawlTask("1"))
-//  val result2 = client.getExecutorService.submit(new CrawlTask("2"))
-//  val result3= client.getExecutorService.submit(new CrawlTask("3"))
-//
-//  result1.get()
-//  println("finish 1")
-//  result2.get()
-//  println("finish 2")
-//  result3.get()
-//  println("finish 3")
-//
-//  time = System.currentTimeMillis() - time
-//
-//  println(time)
-
   client.getQueue("jobQueue").put(new DistributedCrawlJob("http://vnexpress.net/"))
-
+  client.getQueue("jobQueue").put(new DistributedCrawlJob("http://vnexpress.net/"))
   client.shutdown()
 }

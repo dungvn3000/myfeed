@@ -5,7 +5,6 @@
 package org.linkerz.crawler.core.controller
 
 import org.linkerz.job.queue.controller.BaseController
-import com.hazelcast.core.{ItemEvent, ItemListener}
 
 /**
  * The Class CrawlerController.
@@ -15,10 +14,6 @@ import com.hazelcast.core.{ItemEvent, ItemListener}
  *
  */
 
-class CrawlerController extends BaseController with ItemListener[Any] {
-  def itemAdded(item: ItemEvent[Any]) {
-    println(item.getItem)
-  }
+class CrawlerController extends BaseController {
 
-  def itemRemoved(item: ItemEvent[Any]) {}
 }
