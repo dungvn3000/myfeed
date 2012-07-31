@@ -14,6 +14,10 @@ public class DistributedCrawlJob implements DistributedJob {
 
     private String url;
 
+    //For Serializable only
+    public DistributedCrawlJob() {
+    }
+
     public DistributedCrawlJob(String url) {
         this.url = url;
     }
