@@ -5,10 +5,12 @@
 
     <inherits name='com.smvp4g.mvp.Mvp'/>
 
+    <inherits name="org.spiffyui.spiffyui" />
+
     <inherits name="com.google.common.base.Base"/>
 
     <!-- Specify the app entry point class.                         -->
-    <entry-point class='org.linkerz.webgui.client.client.Main'/>
+    <entry-point class='org.linkerz.webgui.client.client.LinkerZEntryPoint'/>
 
     <!-- Specify the paths for translatable code                    -->
     <source path='client'/>

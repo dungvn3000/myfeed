@@ -7,32 +7,29 @@ package org.linkerz.webgui.client.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.RootPanel;
+import org.spiffyui.client.widgets.button.SimpleButton;
 
 /**
- * The Class Main.
+ * The Class LinkerZEntryPoint.
  *
  * @author Nguyen Duc Dung
  * @since 7/31/12, 7:37 PM
  */
-public class Main implements EntryPoint {
+public class LinkerZEntryPoint implements EntryPoint {
 
     @Override
     public void onModuleLoad() {
 
-        Button btn = new Button("Hello");
+        final SimpleButton btn = new SimpleButton("Hello");
         btn.addClickHandler(new ClickHandler() {
             @Override
-            public void onClick(ClickEvent clickEvent) {
-                Window.alert("Hello");
+            public void onClick(ClickEvent event) {
+                btn.setInProgress(true);
             }
         });
 
         RootPanel.get("loading_panel").setVisible(false);
-
         RootPanel.get().add(btn);
-
     }
 }
