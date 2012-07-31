@@ -12,5 +12,70 @@
     <groupId>org.linkerz</groupId>
     <artifactId>linkerz_webgui_core</artifactId>
 
+    <dependencies>
+
+        <!--GWT dependencies-->
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <version>${gwt.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>1.0.0.GA</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <classifier>sources</classifier>
+            <version>1.0.0.GA</version>
+        </dependency>
+
+        <!--add i18n support for server side-->
+        <dependency>
+            <groupId>com.mattbertolini</groupId>
+            <artifactId>hermes</artifactId>
+            <version>1.2.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.gwt</groupId>
+                    <artifactId>gwt-servlet</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- smvp4g framework-->
+        <dependency>
+            <groupId>com.smvp4g</groupId>
+            <artifactId>mvp</artifactId>
+            <version>${smvp4g.verion}</version>
+        </dependency>
+
+        <!--Ext js -->
+        <dependency>
+            <groupId>com.extjs</groupId>
+            <artifactId>gxt</artifactId>
+            <version>${gxt.version}</version>
+        </dependency>
+
+
+        <!--Google Collection-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava-gwt</artifactId>
+            <version>${guava.verion}</version>
+        </dependency>
+        <!--End-->
+
+        <dependency>
+            <groupId>net.customware.gwt.dispatch</groupId>
+            <artifactId>gwt-dispatch</artifactId>
+            <version>${gwt.dispatch.Version}</version>
+        </dependency>
+    </dependencies>
 
 </project>

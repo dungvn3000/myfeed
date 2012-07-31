@@ -103,13 +103,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>${guavaVerion}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava-gwt</artifactId>
-            <version>${guavaVerion}</version>
+            <version>${guava.verion}</version>
         </dependency>
         <!--End-->
 
