@@ -56,6 +56,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.spiffyui</groupId>
+            <artifactId>spiffyui</artifactId>
+            <version>${spiffyui.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-dev</artifactId>
             <version>${gwt.version}</version>

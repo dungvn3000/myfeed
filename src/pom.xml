@@ -23,6 +23,7 @@
     </modules>
 
     <properties>
+        <spiffyui.version>1.1</spiffyui.version>
         <smvp4g.verion>0.1</smvp4g.verion>
         <gwt.dispatch.Version>1.2.0</gwt.dispatch.Version>
         <gxt.version>2.2.5</gxt.version>

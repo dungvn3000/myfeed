@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='linkerz'>
+
+    <inherits name='net.customware.gwt.dispatch.Dispatch'/>
+
+    <inherits name='com.smvp4g.mvp.Mvp'/>
+
+    <inherits name="com.google.common.base.Base"/>
+
+    <!-- Specify the app entry point class.                         -->
+    <entry-point class='org.linkerz.webgui.client.client.Main'/>
+
+    <!-- Specify the paths for translatable code                    -->
+    <source path='client'/>
+</module>
