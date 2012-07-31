@@ -11,6 +11,101 @@
 
     <groupId>org.linkerz</groupId>
     <artifactId>linkerz_webgui_server</artifactId>
+    <packaging>war</packaging>
 
+    <profiles>
+        <profile>
+            <id>PRODUCTION</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>add-source</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>add-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>../linkerz_webgui_client/src/main/java</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>gwt-maven-plugin</artifactId>
+                        <version>${gwt.version}</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>compile</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>war</goal>
+                                </goals>
+                                <configuration>
+                                    <!--Megre module client to server to production-->
+                                    <warSourceDirectory>../linkerz_webgui_client/src/main/webapp</warSourceDirectory>
+                                    <webXml>./src/main/webapp/WEB-INF/web.xml</webXml>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                </plugins>
+            </build>
+
+            <dependencies>
+                <dependency>
+                    <groupId>org.linkerz</groupId>
+                    <artifactId>linkerz_webgui_client</artifactId>
+                    <version>${project.version}</version>
+                    <!-- Because it has two package war and jar, We just using Jar -->
+                    <classifier>classes</classifier>
+                    <!--we don't need it in production-->
+                    <scope>provided</scope>
+                </dependency>
+            </dependencies>
+
+        </profile>
+    </profiles>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.linkerz</groupId>
+            <artifactId>linkerz_webgui_client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.linkerz</groupId>
+            <artifactId>linkerz_webgui_client</artifactId>
+            <version>${project.version}</version>
+            <classifier>classes</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-servlet</artifactId>
+            <version>${gwt.version}</version>
+        </dependency>
+
+    </dependencies>
 
 </project>
