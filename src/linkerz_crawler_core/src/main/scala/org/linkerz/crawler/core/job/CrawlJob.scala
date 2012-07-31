@@ -16,10 +16,14 @@ import org.linkerz.crawler.core.parser.ParserResult
  *
  */
 
-case class CrawlJob(webUrl: WebUrl) extends Job {
+case class CrawlJob(var webUrl: WebUrl) extends Job {
 
   private var _parent: Option[CrawlJob] = None
   private var _result: Option[CrawlJobResult] = None
+
+  def this(url: String) {
+    this(new WebUrl(url))
+  }
 
   def result = {
     _result

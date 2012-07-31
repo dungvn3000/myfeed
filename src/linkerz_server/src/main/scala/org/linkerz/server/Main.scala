@@ -5,6 +5,7 @@
 package org.linkerz.server
 
 import org.springframework.context.support.GenericXmlApplicationContext
+import com.hazelcast.core.HazelcastInstance
 
 /**
  * The Class Main.
@@ -17,5 +18,6 @@ import org.springframework.context.support.GenericXmlApplicationContext
 object Main extends App {
 
   val context = new GenericXmlApplicationContext("application.xml")
+  val hazelcast = context.getBean("instance", classOf[HazelcastInstance])
 
 }

@@ -31,7 +31,11 @@
                 </hz:join>
             </hz:network>
 
-            <hz:queue name="jobQueue" max-size-per-jvm="1000"/>
+            <hz:queue name="jobQueue" max-size-per-jvm="1000">
+                <hz:item-listeners>
+                    <hz:item-listener implementation="crawlerController"/>
+                </hz:item-listeners>
+            </hz:queue>
 
         </hz:config>
     </hz:hazelcast>
