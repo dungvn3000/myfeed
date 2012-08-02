@@ -4,7 +4,7 @@
 
 package org.linkerz.web.components
 
-import org.apache.tapestry5.annotations.Property
+import org.apache.tapestry5.annotations.{Import, Property}
 
 /**
  * The Class Layout.
@@ -13,7 +13,7 @@ import org.apache.tapestry5.annotations.Property
  * @since 8/2/12, 9:24 PM
  *
  */
-
+@Import(stylesheet = Array("context:assets/css/bootstrap.css", "context:assets/css/main.css"))
 class Layout {
 
   @Property

@@ -7,6 +7,30 @@
     <title>${title}</title>
 </head>
     <body>
-        <t:body/>
+        
+        <div class="topbar">
+            <div class="fill">
+                <div class="container">
+                    <a class="brand" href="">Hello</a>
+                        <form action="@routes.Application.chatRoom()" class="pull-right">
+                            <input id="username" name="username" class="input-small" type="text" placeholder="Username"/>
+                            <button class="btn" type="submit">Sign in</button>
+                        </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+        	<div class="content">
+        		<t:body/>
+        	</div>
+
+        	<footer>
+        	    <p>
+        	        <a href="http://www.linkerz.org">LinkerZ.org</a>
+        	    </p>
+        	</footer>
+        </div>	
+
     </body>
 </html>
