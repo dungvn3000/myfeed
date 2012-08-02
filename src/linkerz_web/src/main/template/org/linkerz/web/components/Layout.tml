@@ -9,14 +9,13 @@
         <meta name="description" content="Search and Sharing"/>
         <meta name="author" content="Nguyen Duc Dung (dungvn3000@gmail.com)"/>
 
+        <!--Main style-->
+        <link href="assets/css/main.css" rel="stylesheet"/>
+
         <!-- Le styles -->
         <link href="assets/bootstrap/css/bootstrap.css" rel="stylesheet"/>
-        <style>
-          body {
-            padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-          }
-        </style>
-        <link href="assets/bootstrap/css/bootstrap-responsive.css" rel="stylesheet"/>
+        <!--Media queries for various devices and resolutions-->
+        <!--<link href="assets/bootstrap/css/bootstrap-responsive.css" rel="stylesheet"/>-->
         <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
         <!--[if lt IE 9]>
           <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -31,16 +30,29 @@
     </head>
     <body>
 
-        <div class="topbar">
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
             <t:header/>
+        </div>
+    </div>
+
+        <div class="container">
+            <t:search.box/>
         </div>
 
         <div class="container">
-        	<div class="content">
-        		<t:body/>
+        	<div class="row-fluid">
+                <div class="span9">
+        		    <t:body/>
+                </div>
+                <div class="span3">
+                    <t:rightsidebar/>
+                </div>
         	</div>
 
-        	<footer>
+            <hr/>
+
+            <footer>
                 <t:footer/>
         	</footer>
         </div>

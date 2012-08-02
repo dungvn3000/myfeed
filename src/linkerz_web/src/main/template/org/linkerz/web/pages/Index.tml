@@ -2,25 +2,9 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-    <div class="page-header">
-        <h1>Welcome to the chat room <small>You are chatting as @username</small></h1>
-    </div>
-
-    <div id="onChat" class="row">
-        <div class="span10" id="main">
-            <div id="messages">
-            </div>
-            <textarea id="talk"></textarea>
-        </div>
-        <div class="span4">
-            <h2>Members</h2>
-            <ul id="members">
-                <li>dung</li>
-                <li>trang</li>
-                <li>huy</li>
-                <li>thao</li>
-            </ul>
-        </div>
+    <div class="hero-unit">
+        <h1>LinkerZ</h1>
+        <p>Searching and Sharing</p>
     </div>
 
 </html>

@@ -2,15 +2,21 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-    <div class="fill">
-        <div class="container">
-            <a class="brand" href="">LinkerZ</a>
-                <form action="" class="pull-right">
-                    <input id="username" name="username" class="input-mini" type="text" placeholder="Username"/>
-                    <input id="password" name="username" class="input-mini" type="text" placeholder="Password"/>
-                    <button class="btn" type="submit">Sign in</button>
-                </form>
-        </div>
-    </div>
+    <div class="container">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </a>
+        <a class="brand" href="#">LinkerZ</a>
 
+        <div class="nav-collapse">
+            <ul class="nav">
+                <li class="active"><a href="#">Home</a></li>
+                <li><a href="#about">News</a></li>
+                <li><a href="#contact">About</a></li>
+            </ul>
+        </div>
+        <!--/.nav-collapse -->
+    </div>
 </html>
