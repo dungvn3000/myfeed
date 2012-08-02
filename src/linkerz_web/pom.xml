@@ -107,11 +107,11 @@
     </dependencies>
 
     <build>
-        <finalName>LinkerZ</finalName>
+        <finalName>linkerz</finalName>
 
         <resources>
             <resource>
-                <directory>src/main/resources/org</directory>
+                <directory>src/main/template</directory>
                 <includes>
                     <include>**/*</include>
                 </includes>
