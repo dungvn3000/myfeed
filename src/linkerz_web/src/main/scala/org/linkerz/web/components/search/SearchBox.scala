@@ -8,6 +8,8 @@ import org.apache.tapestry5.annotations.{Persist, Component, Property}
 import org.apache.tapestry5.corelib.components.{Form, TextField}
 import org.linkerz.crawler.core.model.WebUrl
 import org.linkerz.crawler.core.fetcher.Fetcher
+import org.linkerz.web.services.db.WebStore
+import org.apache.tapestry5.ioc.annotations.Inject
 
 /**
  * The Class SearchBox.
@@ -19,7 +21,6 @@ import org.linkerz.crawler.core.fetcher.Fetcher
 
 class SearchBox {
 
-  @Persist
   @Property
   private var keyWord: String = _
 
@@ -33,11 +34,13 @@ class SearchBox {
   @Component
   private var search: Form = _
 
+  @Inject
+  private var webStore: WebStore = _
+
   def onSubmit() {
     println(keyWord)
     val fetch = new Fetcher
     val result = fetch.fetch(new WebUrl(keyWord))
-    println(result.webPage.title)
-    webTitle = result.webPage.title
+    webStore.save(result.webPage)
   }
 }

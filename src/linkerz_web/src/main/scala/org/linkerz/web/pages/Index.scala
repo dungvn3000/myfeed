@@ -4,8 +4,10 @@
 
 package org.linkerz.web.pages
 
-import org.linkerz.web.components.search.SearchBox
-import org.apache.tapestry5.annotations.{Property, Component}
+import org.apache.tapestry5.annotations._
+import org.linkerz.web.services.db.WebStore
+import org.apache.tapestry5.ioc.annotations.Inject
+import org.linkerz.crawler.core.model.WebPage
 
 /**
  * The Class Index.
@@ -18,6 +20,18 @@ import org.apache.tapestry5.annotations.{Property, Component}
 class Index {
 
   @Property
-  private var test: String = "dung ne"
+  private var result: java.util.List[WebPage] = _
+
+  @Property
+  private var webPage: WebPage = _
+
+  @Inject
+  private var webStore: WebStore = _
+
+
+  @SetupRender
+  def initializeValue() {
+    result = webStore.loadAll()
+  }
 
 }

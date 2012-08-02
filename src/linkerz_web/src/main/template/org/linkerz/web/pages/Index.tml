@@ -2,6 +2,10 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-    <p>${test}</p>
+    <ul class="nav">
+        <t:loop source="result" value="webPage">
+            <li><a href="#">${webPage.title}</a></li>
+        </t:loop>
+    </ul>
 
 </html>

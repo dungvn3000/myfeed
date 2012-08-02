@@ -8,6 +8,9 @@
                 http://www.hazelcast.com/schema/spring
                 http://www.hazelcast.com/schema/spring/hazelcast-spring-2.1.xsd">
 
+    <import resource="db.xml"/>
+    <import resource="service.xml"/>
+
     <hz:hazelcast id="instance">
         <hz:config>
             <hz:group name="dev" password="dev"/>
