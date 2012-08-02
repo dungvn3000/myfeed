@@ -1,6 +1,6 @@
 <html t:type="layout" title="LinkerZ Index"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
-        >
+      xmlns:p="tapestry:parameter">
 
     <div class="page-header">
         <h1>Welcome to the chat room <small>You are chatting as @username</small></h1>
