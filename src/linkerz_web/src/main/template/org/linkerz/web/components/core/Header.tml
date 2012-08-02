@@ -1,0 +1,16 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+
+    <div class="fill">
+        <div class="container">
+            <a class="brand" href="">LinkerZ</a>
+                <form action="" class="pull-right">
+                    <input id="username" name="username" class="input-mini" type="text" placeholder="Username"/>
+                    <input id="password" name="username" class="input-mini" type="text" placeholder="Password"/>
+                    <button class="btn" type="submit">Sign in</button>
+                </form>
+        </div>
+    </div>
+
+</html>

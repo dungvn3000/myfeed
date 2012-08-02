@@ -13,7 +13,6 @@ import org.apache.tapestry5.annotations.{Import, Property}
  * @since 8/2/12, 9:24 PM
  *
  */
-@Import(stylesheet = Array("context:assets/css/bootstrap.css", "context:assets/css/main.css"))
 class Layout {
 
   @Property
