@@ -15,7 +15,7 @@ import org.linkerz.crawler.core.job.DistributedCrawlJob
  *
  */
 
-class Main {
+object Main extends App {
   val clientCfg = new ClientConfig
   clientCfg.getGroupConfig.setName("dev").setPassword("dev")
   clientCfg.addAddress("localhost")

@@ -16,6 +16,6 @@ import org.apache.tapestry5.annotations.{Import, Property}
 class Layout {
 
   @Property
-  val title = "LinkerZ Search and Sharing"
+  val title = "LinkerZ"
 
 }

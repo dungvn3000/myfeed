@@ -37,8 +37,10 @@
             </div>
         </div>
 
-        <div class="container">
-            <t:search.box/>
+        <div class="subnav subnav-fixed">
+            <div class="container">
+                <t:search.box/>
+            </div>
         </div>
 
         <div class="container">
@@ -61,7 +63,7 @@
         <!-- Le javascript
         ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
-        <script src="assets/bootstrap/js/jquery.js"></script>
+        <!--<script src="assets/bootstrap/js/jquery.js"></script>-->
         <script src="assets/bootstrap/js/bootstrap-transition.js"></script>
         <script src="assets/bootstrap/js/bootstrap-alert.js"></script>
         <script src="assets/bootstrap/js/bootstrap-modal.js"></script>

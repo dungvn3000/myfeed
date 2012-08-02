@@ -8,6 +8,7 @@ import org.apache.tapestry5.ioc.{MappedConfiguration, ServiceBinder}
 import org.apache.tapestry5.SymbolConstants
 import org.slf4j.Logger
 import org.apache.tapestry5.services.{RequestHandler, Response, Request, RequestFilter}
+import org.got5.tapestry5.jquery.JQuerySymbolConstants
 
 
 /**
@@ -50,6 +51,9 @@ object AppModule {
     // you can extend this list of locales (it's a comma separated series of locale names;
     // the first locale name is the default when there's no reasonable match).
     configuration.add(SymbolConstants.SUPPORTED_LOCALES, "en")
+
+    //Disable PrototypeJS using JQuery instead
+    configuration.add(JQuerySymbolConstants.SUPPRESS_PROTOTYPE, "true")
   }
 
   /**

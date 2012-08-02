@@ -2,16 +2,12 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-    <div class="subnav subnav-fixed">
-        <div class="container">
-            <div class="nav-collapse">
-                <form class="form-search pull-left">
-                    <input type="text" class="span5 search-query" placeholder="Search"/>
-                    <button type="submit" class="btn">Search</button>
-                </form>
-            </div>
-        </div>
+    <div class="nav-collapse">
+        <t:form t:id="search" class="form-search pull-left">
+            <t:errors/>
+            <t:textfield t:id="txtSearch" value="keyWord" class="span5 search-query" placeholder="Search"/>
+            <button type="submit" class="btn">Search</button>
+        </t:form>
     </div>
-
 
 </html>
