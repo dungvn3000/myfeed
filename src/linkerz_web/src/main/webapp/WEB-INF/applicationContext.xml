@@ -8,12 +8,6 @@
                 http://www.hazelcast.com/schema/spring
                 http://www.hazelcast.com/schema/spring/hazelcast-spring-2.1.xsd">
 
-    <bean class="dung.test.bean.Dung">
-        <property name="name" value="dung ne"/>
-    </bean>
-
-    <bean class="dung.test.services.DungServiceImpl"/>
-
     <hz:hazelcast id="instance">
         <hz:config>
             <hz:group name="dev" password="dev"/>

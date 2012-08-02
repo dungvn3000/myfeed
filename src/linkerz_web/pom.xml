@@ -17,7 +17,7 @@
 
         <dependency>
             <groupId>org.linkerz</groupId>
-            <artifactId>linkerz_server</artifactId>
+            <artifactId>linkerz_core</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -107,7 +107,17 @@
     </dependencies>
 
     <build>
-        <finalName>tapestry</finalName>
+        <finalName>LinkerZ</finalName>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources/org</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
