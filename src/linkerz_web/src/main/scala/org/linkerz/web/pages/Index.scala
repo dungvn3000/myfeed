@@ -4,6 +4,9 @@
 
 package org.linkerz.web.pages
 
+import org.linkerz.web.components.search.SearchBox
+import org.apache.tapestry5.annotations.{Property, Component}
+
 /**
  * The Class Index.
  *
@@ -13,5 +16,8 @@ package org.linkerz.web.pages
  */
 
 class Index {
+
+  @Property
+  private var test: String = "dung ne"
 
 }
