@@ -2,9 +2,6 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-    <div class="hero-unit">
-        <h1>LinkerZ</h1>
-        <p>Searching and Sharing</p>
-    </div>
+    <p>hello</p>
 
 </html>

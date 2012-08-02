@@ -2,8 +2,15 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-    <div class="page-header">
-        <h1>Welcome to the chat room <small>You are chatting as @username</small></h1>
+    <div class="subnav subnav-fixed">
+        <div class="container">
+            <div class="nav-collapse">
+                <form class="form-search pull-left">
+                    <input type="text" class="span5 search-query" placeholder="Search"/>
+                    <button type="submit" class="btn">Search</button>
+                </form>
+            </div>
+        </div>
     </div>
 
 

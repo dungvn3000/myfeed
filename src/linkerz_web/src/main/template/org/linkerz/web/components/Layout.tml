@@ -11,6 +11,7 @@
 
         <!--Main style-->
         <link href="assets/css/main.css" rel="stylesheet"/>
+        <link href="assets/css/subnav.css" rel="stylesheet"/>
 
         <!-- Le styles -->
         <link href="assets/bootstrap/css/bootstrap.css" rel="stylesheet"/>
@@ -30,11 +31,11 @@
     </head>
     <body>
 
-    <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-            <t:header/>
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <t:header/>
+            </div>
         </div>
-    </div>
 
         <div class="container">
             <t:search.box/>
