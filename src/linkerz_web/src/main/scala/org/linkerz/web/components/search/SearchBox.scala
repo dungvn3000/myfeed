@@ -4,12 +4,14 @@
 
 package org.linkerz.web.components.search
 
-import org.apache.tapestry5.annotations.{Persist, Component, Property}
+import org.apache.tapestry5.annotations.{Component, Property}
 import org.apache.tapestry5.corelib.components.{Form, TextField}
-import org.linkerz.crawler.core.model.WebUrl
 import org.linkerz.crawler.core.fetcher.Fetcher
-import org.linkerz.web.services.db.WebStore
+import org.linkerz.web.services.db.DBStore
 import org.apache.tapestry5.ioc.annotations.Inject
+import org.linkerz.mongodb.model.{Link, User}
+import org.linkerz.crawler.core.model.WebUrl
+import org.linkerz.web.services.user.UserService
 
 /**
  * The Class SearchBox.
@@ -24,10 +26,6 @@ class SearchBox {
   @Property
   private var keyWord: String = _
 
-  @Persist
-  @Property
-  private var webTitle: String = _
-
   @Component
   private var txtSearch: TextField = _
 
@@ -35,12 +33,31 @@ class SearchBox {
   private var search: Form = _
 
   @Inject
-  private var webStore: WebStore = _
+  private var dbStore: DBStore = _
+
+  @Inject
+  private var userService: UserService = _
 
   def onSubmit() {
     println(keyWord)
     val fetch = new Fetcher
     val result = fetch.fetch(new WebUrl(keyWord))
-    webStore.save(result.webPage)
+
+    var user = userService.getUser("dung")
+    if (user == null) {
+      user = new User
+      user.userName = "dung"
+      user.passWord = "dung"
+      dbStore.save(user)
+    }
+
+    val link = new Link
+    link.userId = user.id
+    link.url = keyWord
+    link.title = result.webPage.title
+    link.language = result.webPage.language
+    link.html = result.webPage.html
+
+    dbStore.save(link)
   }
 }

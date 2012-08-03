@@ -14,10 +14,8 @@ import org.linkerz.crawler.core.model.WebPage
  *
  */
 
-trait WebStore {
+trait DBStore {
 
-  def save(webPage: WebPage): WebPage
-
-  def loadAll(): java.util.List[WebPage]
+  def save(entity: AnyRef): AnyRef
 
 }

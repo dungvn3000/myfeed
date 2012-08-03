@@ -16,17 +16,13 @@ import reflect.BeanProperty
  *
  */
 
-class WebStoreImpl extends WebStore {
+class DBStoreImpl extends DBStore {
 
   @BeanProperty
   var mongoOperations: MongoOperations = _
 
-  def save(webPage: WebPage) = {
-    mongoOperations.save(webPage)
-    webPage
-  }
-
-  def loadAll() = {
-    mongoOperations.findAll(classOf[WebPage])
+  def save(entity: AnyRef) = {
+    mongoOperations.save(entity)
+    entity
   }
 }

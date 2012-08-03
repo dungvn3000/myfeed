@@ -5,9 +5,9 @@
 package org.linkerz.web.pages
 
 import org.apache.tapestry5.annotations._
-import org.linkerz.web.services.db.WebStore
 import org.apache.tapestry5.ioc.annotations.Inject
-import org.linkerz.crawler.core.model.WebPage
+import org.linkerz.web.services.user.UserService
+import org.linkerz.mongodb.model.Link
 
 /**
  * The Class Index.
@@ -20,18 +20,18 @@ import org.linkerz.crawler.core.model.WebPage
 class Index {
 
   @Property
-  private var result: java.util.List[WebPage] = _
+  private var result: java.util.List[Link] = _
 
   @Property
-  private var webPage: WebPage = _
+  private var link: Link = _
 
   @Inject
-  private var webStore: WebStore = _
+  private var userService: UserService = _
 
 
   @SetupRender
   def initializeValue() {
-    result = webStore.loadAll()
+    result = userService.getUserWebPages("dung")
   }
 
 }

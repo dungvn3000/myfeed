@@ -3,8 +3,13 @@
       xmlns:p="tapestry:parameter">
 
     <ul class="nav">
-        <t:loop source="result" value="webPage">
-            <li><a href="#">${webPage.title}</a></li>
+        <t:loop source="result" value="link">
+            <li>
+                <a href="${link.url}">${link.title}</a>
+                <p>
+                    ${link.html.subString(0, 200)}
+                </p>
+            </li>
         </t:loop>
     </ul>
 
