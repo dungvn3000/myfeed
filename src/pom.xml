@@ -22,6 +22,7 @@
     </modules>
 
     <properties>
+        <lucene.core.version>4.0.0-ALPHA</lucene.core.version>
         <tapestry.jquery.version>3.3.0</tapestry.jquery.version>
         <tapestry.version>5.3.4</tapestry.version>
         <servlet.api.version>2.5</servlet.api.version>

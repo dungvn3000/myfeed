@@ -12,5 +12,20 @@
     <groupId>org.linkerz</groupId>
     <artifactId>linkerz_seachengine_core</artifactId>
 
+    <dependencies>
+
+        <dependency>
+        	<groupId>org.apache.lucene</groupId>
+        	<artifactId>lucene-core</artifactId>
+        	<version>${lucene.core.version}</version>
+        </dependency>
+
+        <dependency>
+        	<groupId>org.apache.lucene</groupId>
+        	<artifactId>lucene-demo</artifactId>
+        	<version>${lucene.core.version}</version>
+        </dependency>
+
+    </dependencies>
 
 </project>
