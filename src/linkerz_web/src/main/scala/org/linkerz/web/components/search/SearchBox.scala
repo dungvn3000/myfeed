@@ -56,6 +56,7 @@ class SearchBox {
     link.url = keyWord
     link.title = result.webPage.title
     link.language = result.webPage.language
+    link.subTitle = result.webPage.subtitle
     link.html = result.webPage.html
 
     dbStore.save(link)

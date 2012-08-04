@@ -17,4 +17,5 @@ class WebPage {
   var title: String = _
   var html: String = _
   var language: String = _
+  var subtitle: String = _
 }

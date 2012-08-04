@@ -16,8 +16,11 @@ class Link extends LinkerZEntity {
 
   var userId: String = _
   var url: String = _
-  var title: String = _
   var html: String = _
+
+  //Metadata
+  var title: String = _
+  var subTitle: String = _
   var language: String = _
 
 }

@@ -20,8 +20,15 @@ class TestFetcher extends FunSuite with Logging {
 
   test("testFetchVnExpress") {
     val fetcher = new Fetcher
+
+    var time = System.currentTimeMillis()
     val result = fetcher.fetch(new WebUrl("http://localhost/vnexpress/vnexpress.net/"))
 
+    time = System.currentTimeMillis() - time
+
+    println(time + " ms")
+
+    println(result.webPage.subtitle)
     assert(result.webPage.language == "vi")
   }
 

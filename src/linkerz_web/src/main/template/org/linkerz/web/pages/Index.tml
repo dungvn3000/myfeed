@@ -1,14 +1,23 @@
 <html t:type="layout" title="LinkerZ Index"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
-      xmlns:p="tapestry:parameter">
+        >
 
     <ul class="nav">
         <t:loop source="result" value="link">
             <li>
-                <a href="${link.url}">${link.title}</a>
-                <p>
-                    ${link.html.subString(0, 200)}
-                </p>
+                <table class="table">
+                    <tr>
+                        <td style="width:64px">
+                            <img src="http://localhost/vnexpress/vnexpress.net/Files/Subject/3b/a0/7b/44/tantho250.jpg" width="64" height="64"/>
+                        </td>
+                        <td>
+                            <a href="${link.url}">${link.title}</a>
+                            <p>
+                                ${link.subTitle}
+                            </p>
+                        </td>
+                    </tr>
+                </table>
             </li>
         </t:loop>
     </ul>

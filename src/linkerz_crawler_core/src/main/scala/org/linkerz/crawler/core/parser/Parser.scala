@@ -45,24 +45,26 @@ class Parser extends Logging {
 
       //Get web page content
       val title = metadata.get(Metadata.TITLE)
+      val subTitle = metadata.get(Metadata.DESCRIPTION)
       val html = htmlHandler.getBodyText
       webPage.title = title
       webPage.html = html
+      webPage.subtitle = subTitle
 
-      if (DetectorFactory.getLangList.isEmpty) {
-        DetectorFactory.loadProfile(new File(Resources.getResource("profiles").toURI))
-      }
-
-      val detector = DetectorFactory.create
-      detector.setMaxTextLength(1000)
-      detector.append(html)
-
-      try {
-        val language = detector.detect
-        webPage.language = language
-      } catch {
-        case ex: Exception => error(ex.getMessage, ex)
-      }
+//      if (DetectorFactory.getLangList.isEmpty) {
+//        DetectorFactory.loadProfile(new File(Resources.getResource("profiles").toURI))
+//      }
+//
+//      val detector = DetectorFactory.create
+//      detector.setMaxTextLength(1000)
+//      detector.append(html)
+//
+//      try {
+//        val language = detector.detect
+//        webPage.language = language
+//      } catch {
+//        case ex: Exception => error(ex.getMessage, ex)
+//      }
 
       //Extract links in side a website
       val baseURL = htmlHandler.getBaseUrl
