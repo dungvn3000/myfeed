@@ -26,6 +26,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.linkerz</groupId>
+            <artifactId>linkerz_mongodb</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
             <version>${jsoup.version}</version>
@@ -77,6 +83,13 @@
             <version>${langdetect.version}</version>
         </dependency>
         <!--End-->
+
+        <dependency>
+            <groupId>de.l3s.boilerpipe</groupId>
+            <artifactId>boilerpipe-core</artifactId>
+            <version>${boilerpipe.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
