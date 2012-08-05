@@ -19,9 +19,12 @@
         <module>linkerz_example</module>
         <module>linkerz_client</module>
         <module>linkerz_web</module>
+        <module>linkerz_ai</module>
     </modules>
 
     <properties>
+        <opennlp.maxent.version>3.0.2-incubating</opennlp.maxent.version>
+        <opennlp.version>1.5.2-incubating</opennlp.version>
         <boilerpipe.version>0.0.1</boilerpipe.version>
         <lucene.core.version>4.0.0-ALPHA</lucene.core.version>
         <tapestry.jquery.version>3.3.0</tapestry.jquery.version>
