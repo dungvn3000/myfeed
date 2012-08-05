@@ -4,6 +4,8 @@
 
 package org.linkerz.crawler.core.model
 
+import com.googlecode.flaxcrawler.utils.UrlUtils
+
 /**
  * The Class WebUrl.
  *
@@ -12,6 +14,10 @@ package org.linkerz.crawler.core.model
  *
  */
 
-case class WebUrl(url: String) {
+case class WebUrl(_url: String) {
+
+  def domainName = UrlUtils.getDomainName(url)
+
+  def url = _url.trim.toLowerCase
 
 }

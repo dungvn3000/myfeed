@@ -28,8 +28,6 @@ class TestFetcher extends FunSuite with Logging {
 
     println(time + " ms")
 
-    println(result.webPage.subtitle)
-    assert(result.webPage.language == "vi")
   }
 
 }

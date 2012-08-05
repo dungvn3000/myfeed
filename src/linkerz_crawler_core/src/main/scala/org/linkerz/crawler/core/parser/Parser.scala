@@ -43,13 +43,13 @@ class Parser extends Logging {
       val inputStream = new ByteArrayInputStream(downloadResult.byteContent)
       htmlParser.parse(inputStream, htmlHandler, metadata, parseContext)
 
+      webPage.webUrl = downloadResult.webUrl
+      webPage.content = downloadResult.byteContent
+
       //Get web page content
-      val title = metadata.get(Metadata.TITLE)
-      val subTitle = metadata.get(Metadata.DESCRIPTION)
-      val html = htmlHandler.getBodyText
-      webPage.title = title
-      webPage.html = html
-      webPage.subtitle = subTitle
+//      val title = metadata.get(Metadata.TITLE)
+//      val subTitle = metadata.get(Metadata.DESCRIPTION)
+//      val html = htmlHandler.getBodyText
 
 //      if (DetectorFactory.getLangList.isEmpty) {
 //        DetectorFactory.loadProfile(new File(Resources.getResource("profiles").toURI))

@@ -26,7 +26,12 @@ class CrawlWorker(_id: Int) extends Worker[CrawlJob, CrawlSession] {
   val fetcher = new Fetcher
 
   def analyze(job: CrawlJob, session: CrawlSession) {
-    if (!filters.matcher(job.webUrl.url.toLowerCase).matches()) {
+    val url = job.webUrl.url
+    var parentDomainName = job.webUrl.domainName
+    if (!job.parent.isEmpty) {
+      parentDomainName = job.parent.get.webUrl.domainName
+    }
+    if (!filters.matcher(url).matches() && url.contains(parentDomainName)) {
       job.result = new Some(new CrawlJobResult(fetcher.fetch(job.webUrl)))
     } else {
       job.result = None

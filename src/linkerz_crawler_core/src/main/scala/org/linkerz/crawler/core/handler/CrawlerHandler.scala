@@ -22,6 +22,7 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
 
   private var countUrl = 0
   private var countWeb = 0
+  private var maxDepth = 0
 
   /**
    * Construct a handler with number of worker.
@@ -44,6 +45,7 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
     super.doHandle(job, session)
     println(countUrl + " links found")
     println(countWeb + " web pages downloaded")
+    println(maxDepth + " level")
   }
 
   protected def createSubJobs(job: CrawlJob) {
@@ -51,7 +53,8 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
       countUrl += job.result.get.parserResult.webUrls.size
       countWeb += 1
       job.result.get.parserResult.webUrls.foreach(webUrl => {
-        subJobQueue += new CrawlJob(webUrl)
+        maxDepth = job.depth + 1
+        subJobQueue += new CrawlJob(webUrl, job)
       })
     }
   }

@@ -14,13 +14,18 @@ package org.linkerz.mongodb.model
 
 class Link extends LinkerZEntity {
 
-  var userId: String = _
   var url: String = _
-  var html: String = _
+  var content: Array[Byte] = _
+
+  //Link to user
+  var userId: String = _
 
   //Metadata
+  var html: String = _
+  var text: String = _
   var title: String = _
   var subTitle: String = _
+  var featureImageUrl: String = _
   var language: String = _
 
 }

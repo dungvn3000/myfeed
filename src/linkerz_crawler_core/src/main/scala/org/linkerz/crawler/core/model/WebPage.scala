@@ -13,9 +13,8 @@ package org.linkerz.crawler.core.model
  */
 
 class WebPage {
+
   var webUrl: WebUrl = _
-  var title: String = _
-  var html: String = _
-  var language: String = _
-  var subtitle: String = _
+  var content: Array[Byte] = _
+
 }
