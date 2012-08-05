@@ -28,7 +28,7 @@ class DBServiceImpl extends DBService {
     if (!webPages.isEmpty) {
       val links = new util.ArrayList[Link](webPages.size)
       webPages.foreach(webPage => links.add(webPage.asLink()))
-      mongoOperations.save(links)
+      mongoOperations.insertAll(links)
     }
   }
 }
