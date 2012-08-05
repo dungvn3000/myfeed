@@ -8,6 +8,7 @@ import org.linkerz.job.queue.core._
 import collection.mutable.ListBuffer
 import util.control.Breaks._
 import grizzled.slf4j.Logging
+import reflect.BeanProperty
 
 /**
  * The Class AsyncHandler.
@@ -24,8 +25,11 @@ abstract class AsyncHandler[J <: Job, S <: Session] extends HandlerInSession[J, 
   val workers = new ListBuffer[Worker[J, S]]
   var subJobQueue = new Queue[J] with ScalaQueue[J]
 
+  @BeanProperty
   var maxRetry = 100
+
   //Time for waiting when all worker are busy. Time unit is ms.
+  @BeanProperty
   var ideTime = 1000
 
   private var _retryCount = 0

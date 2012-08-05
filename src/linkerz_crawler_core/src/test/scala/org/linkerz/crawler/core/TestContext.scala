@@ -10,6 +10,8 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 import org.springframework.context.{ApplicationContext, ApplicationContextAware}
 import org.junit.Ignore
+import org.springframework.context.support.GenericXmlApplicationContext
+import spring.SpringContext
 
 /**
  * The Class TestContext.
@@ -18,19 +20,10 @@ import org.junit.Ignore
  * @since 7/10/12, 1:04 AM
  *
  */
-
-@ContextConfiguration(locations = Array("/context.xml"))
-@RunWith(classOf[SpringJUnit4ClassRunner])
-@Ignore
-class TestContext extends FunSuite with ApplicationContextAware {
-
-  var context: ApplicationContext = _
+class TestContext extends FunSuite with SpringContext {
 
   test("testContext") {
     assert(context != null)
   }
 
-  def setApplicationContext(applicationContext: ApplicationContext) {
-    context = applicationContext
-  }
 }

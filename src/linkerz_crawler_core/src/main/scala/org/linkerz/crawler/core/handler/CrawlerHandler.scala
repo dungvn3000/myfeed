@@ -9,8 +9,11 @@ import org.linkerz.crawler.core.job.CrawlJob
 import org.linkerz.crawler.core.session.CrawlSession
 import org.linkerz.job.queue.core.Job
 import org.linkerz.crawler.core.worker.CrawlWorker
-import org.linkerz.crawler.core.model.WebUrl
+import org.linkerz.crawler.core.model.{WebPage, WebUrl}
 import collection.mutable
+import collection.mutable.ListBuffer
+import org.linkerz.crawler.db.DBService
+import reflect.BeanProperty
 
 /**
  * The Class CrawlerHandler.
@@ -29,6 +32,14 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
    * Store fetched urls list
    */
   private var fetchedUrls = mutable.HashSet.empty[WebUrl]
+
+  /**
+   * Store fetched web page list
+   */
+  private var fetchedWeb = new ListBuffer[WebPage]
+
+  @BeanProperty
+  var dbService: DBService = _
 
   /**
    * Construct a handler with number of worker.
@@ -52,12 +63,19 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
     println(countUrl + " links found")
     println(fetchedUrls.size + " links downloaded")
     println(maxDepth + " level")
+
+    if (dbService != null) {
+      //Store fetched website the the database.
+      dbService.save(fetchedWeb.toList)
+    }
   }
 
   protected def createSubJobs(job: CrawlJob) {
     if (!job.result.isEmpty) {
       countUrl += job.result.get.parserResult.webUrls.size
       fetchedUrls += job.webUrl
+      fetchedWeb += job.result.get.parserResult.webPage
+
       val depth = job.depth + 1
       if (depth > maxDepth) maxDepth = depth
       job.result.get.parserResult.webUrls.foreach(webUrl => {
