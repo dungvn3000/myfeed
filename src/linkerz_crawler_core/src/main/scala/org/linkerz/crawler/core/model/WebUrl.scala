@@ -20,4 +20,9 @@ case class WebUrl(_url: String) {
 
   def url = _url.trim.toLowerCase
 
+  override def equals(obj: Any) = {
+    obj.isInstanceOf[WebUrl] && obj.asInstanceOf[WebUrl].url == url
+  }
+
+  override def hashCode() = url.hashCode
 }

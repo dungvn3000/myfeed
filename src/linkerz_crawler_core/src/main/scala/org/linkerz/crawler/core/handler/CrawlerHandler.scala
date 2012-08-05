@@ -9,6 +9,8 @@ import org.linkerz.crawler.core.job.CrawlJob
 import org.linkerz.crawler.core.session.CrawlSession
 import org.linkerz.job.queue.core.Job
 import org.linkerz.crawler.core.worker.CrawlWorker
+import org.linkerz.crawler.core.model.WebUrl
+import collection.mutable
 
 /**
  * The Class CrawlerHandler.
@@ -21,8 +23,12 @@ import org.linkerz.crawler.core.worker.CrawlWorker
 class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
 
   private var countUrl = 0
-  private var countWeb = 0
   private var maxDepth = 0
+
+  /**
+   * Store fetched urls list
+   */
+  private var fetchedUrls = mutable.HashSet.empty[WebUrl]
 
   /**
    * Construct a handler with number of worker.
@@ -44,17 +50,21 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
   override protected def doHandle(job: CrawlJob, session: CrawlSession) {
     super.doHandle(job, session)
     println(countUrl + " links found")
-    println(countWeb + " web pages downloaded")
+    println(fetchedUrls.size + " links downloaded")
     println(maxDepth + " level")
   }
 
   protected def createSubJobs(job: CrawlJob) {
     if (!job.result.isEmpty) {
       countUrl += job.result.get.parserResult.webUrls.size
-      countWeb += 1
+      fetchedUrls += job.webUrl
+      val depth = job.depth + 1
+      if (depth > maxDepth) maxDepth = depth
       job.result.get.parserResult.webUrls.foreach(webUrl => {
-        maxDepth = job.depth + 1
-        subJobQueue += new CrawlJob(webUrl, job)
+        //Make sure we not fectch a link we did already.
+        if (fetchedUrls.findEntry(webUrl).isEmpty) {
+          subJobQueue += new CrawlJob(webUrl, job)
+        }
       })
     }
   }
