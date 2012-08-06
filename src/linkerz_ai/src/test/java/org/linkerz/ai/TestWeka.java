@@ -129,7 +129,7 @@ public class TestWeka extends Assert {
 
         Instances train = new Instances("weather", attInfo, 10);
 
-        Instance instance = new Instance(6);
+        Instance instance = new Instance(5);
         instance.setValue(outlook, "sunny");
         instance.setValue(temperature, 85);
         instance.setValue(humidity, 85);
@@ -143,7 +143,7 @@ public class TestWeka extends Assert {
         cls.buildClassifier(train);
 
         Instances test = new Instances("test", attInfo, 10);
-        Instance testInstance = new Instance(6);
+        Instance testInstance = new Instance(5);
         instance.setValue(outlook, "sunny");
         instance.setValue(temperature, 85);
         instance.setValue(humidity, 85);
