@@ -23,6 +23,7 @@
     </modules>
 
     <properties>
+        <weka.version>3.6.7</weka.version>
         <opennlp.maxent.version>3.0.2-incubating</opennlp.maxent.version>
         <opennlp.version>1.5.2-incubating</opennlp.version>
         <boilerpipe.version>0.0.1</boilerpipe.version>

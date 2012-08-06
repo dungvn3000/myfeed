@@ -38,6 +38,20 @@
             <version>${opennlp.maxent.version}</version>
         </dependency>
 
+        <dependency>
+        	<groupId>nz.ac.waikato.cms.weka</groupId>
+        	<artifactId>weka-stable</artifactId>
+        	<version>${weka.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+
     </dependencies>
 
 </project>
