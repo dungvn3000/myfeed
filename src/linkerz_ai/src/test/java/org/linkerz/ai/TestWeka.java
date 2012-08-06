@@ -10,9 +10,10 @@ import org.springframework.util.Assert;
 import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayesUpdateable;
 import weka.classifiers.trees.J48;
+import weka.core.Attribute;
+import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
-import weka.core.Utils;
 import weka.core.converters.ArffLoader;
 
 import java.io.File;
@@ -50,23 +51,9 @@ public class TestWeka extends Assert {
         cls.buildClassifier(train);
 
         // output predictions
-        System.out.println("# - actual - predicted - error - distribution");
         for (int i = 0; i < test.numInstances(); i++) {
             double pred = cls.classifyInstance(test.instance(i));
-            double[] dist = cls.distributionForInstance(test.instance(i));
-            System.out.print((i + 1));
-            System.out.print(" - ");
-            System.out.print(test.instance(i).toString(test.classIndex()));
-            System.out.print(" - ");
-            System.out.print(test.classAttribute().value((int) pred));
-            System.out.print(" - ");
-            if (pred != test.instance(i).classValue())
-                System.out.print("yes");
-            else
-                System.out.print("no");
-            System.out.print(" - ");
-            System.out.print(Utils.arrayToString(dist));
-            System.out.println();
+            System.out.print("predict " + test.classAttribute().value((int) pred));
         }
 
         Evaluation eval = new Evaluation(train);
@@ -109,6 +96,70 @@ public class TestWeka extends Assert {
         Evaluation eval = new Evaluation(train);
         eval.evaluateModel(nb, test);
         System.out.println(eval.toSummaryString("\nResults\n======\n", false));
+    }
+
+    @Test
+    public void testCreateNewInstance() throws Exception {
+        FastVector outlookValue = new FastVector(3);
+        outlookValue.addElement("sunny");
+        outlookValue.addElement("overcast");
+        outlookValue.addElement("rainy");
+        Attribute outlook = new Attribute("outlook", outlookValue);
+
+        Attribute temperature = new Attribute("temperature");
+
+        Attribute humidity = new Attribute("humidity");
+
+        FastVector windyValue = new FastVector(2);
+        windyValue.addElement("true");
+        windyValue.addElement("false");
+        Attribute windy = new Attribute("windy", windyValue);
+
+        FastVector playValue = new FastVector(2);
+        playValue.addElement("yes");
+        playValue.addElement("no");
+        Attribute play = new Attribute("play", playValue);
+
+        FastVector attInfo = new FastVector(6);
+        attInfo.addElement(outlook);
+        attInfo.addElement(temperature);
+        attInfo.addElement(humidity);
+        attInfo.addElement(windy);
+        attInfo.addElement(play);
+
+        Instances train = new Instances("weather", attInfo, 10);
+
+        Instance instance = new Instance(6);
+        instance.setValue(outlook, "sunny");
+        instance.setValue(temperature, 85);
+        instance.setValue(humidity, 85);
+        instance.setValue(windy, "false");
+        instance.setValue(play, "no");
+
+        train.add(instance);
+        train.setClassIndex(train.numAttributes() - 1);
+        // train classifier
+        J48 cls = new J48();
+        cls.buildClassifier(train);
+
+        Instances test = new Instances("test", attInfo, 10);
+        Instance testInstance = new Instance(6);
+        instance.setValue(outlook, "sunny");
+        instance.setValue(temperature, 85);
+        instance.setValue(humidity, 85);
+        instance.setValue(windy, "false");
+//        Predict value
+//        instance.setValue(play, "no");
+        test.add(testInstance);
+        test.setClassIndex(test.numAttributes() - 1);
+
+
+        for (int i = 0; i < test.numInstances(); i++) {
+            double pred = cls.classifyInstance(test.instance(i));
+            System.out.println(pred);
+            System.out.print("predict " + test.classAttribute().value((int) pred));
+        }
+
     }
 
 }

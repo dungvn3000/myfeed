@@ -7,4 +7,4 @@
 @attribute play {yes, no}
 
 @data
-rainy,71,91,TRUE,yes
+rainy,71,91,TRUE,?
