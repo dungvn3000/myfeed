@@ -7,8 +7,10 @@ package org.linkerz.crawler.db
 import org.linkerz.crawler.core.model.WebPage
 import reflect.BeanProperty
 import org.springframework.data.mongodb.core.MongoOperations
+import org.linkerz.mongodb.model.{LinkConnection, Link}
+import org.springframework.data.mongodb.core.query.Criteria._
+import org.springframework.data.mongodb.core.query.Query._
 import java.util
-import org.linkerz.mongodb.model.Link
 
 /**
  * The Class DBServiceImpl.
@@ -23,12 +25,33 @@ class DBServiceImpl extends DBService {
   @BeanProperty
   var mongoOperations: MongoOperations = _
 
-  def save(webPages: List[WebPage]) {
-    assert(webPages != null)
-    if (!webPages.isEmpty) {
-      val links = new util.ArrayList[Link](webPages.size)
-      webPages.foreach(webPage => links.add(webPage.asLink()))
-      mongoOperations.insertAll(links)
+  def save(webPage: WebPage) {
+    //Check the page is exist on the database or not.
+    val result = find(webPage.webUrl.url)
+
+    if (result == null) {
+      val link = webPage.asLink()
+      mongoOperations.save(link)
+
+      if (webPage.parent != null) {
+        //find the parent id in the database
+
+        val parent = find(webPage.parent.webUrl.url)
+        assert(parent != null, "Can not find the website " + webPage.parent.webUrl.url)
+
+        val connection = new LinkConnection(parent.id, link.id)
+        mongoOperations.save(connection)
+      }
+    } else {
+      //If the web page already exist in the database, then update the content
+
+      result.content = webPage.content
+      result.indexDate = new util.Date
+      mongoOperations.save(result)
     }
+  }
+
+  def find(url: String) = {
+    mongoOperations.findOne(query(where("url").is(url)), classOf[Link])
   }
 }

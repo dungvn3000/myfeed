@@ -4,6 +4,8 @@
 
 package org.linkerz.mongodb.model
 
+import java.util
+
 /**
  * The Class Linker.
  *
@@ -28,4 +30,5 @@ class Link extends LinkerZEntity {
   var featureImageUrl: String = _
   var language: String = _
 
+  var indexDate: util.Date = _
 }

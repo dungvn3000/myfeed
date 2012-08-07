@@ -9,9 +9,8 @@ import org.linkerz.crawler.core.job.CrawlJob
 import org.linkerz.crawler.core.session.CrawlSession
 import org.linkerz.job.queue.core.Job
 import org.linkerz.crawler.core.worker.CrawlWorker
-import org.linkerz.crawler.core.model.{WebPage, WebUrl}
+import org.linkerz.crawler.core.model.WebUrl
 import collection.mutable
-import collection.mutable.ListBuffer
 import org.linkerz.crawler.db.DBService
 import reflect.BeanProperty
 
@@ -25,6 +24,8 @@ import reflect.BeanProperty
 
 class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
 
+  private var crawlTime: Long = 0
+
   private var countUrl = 0
   private var maxDepth = 0
 
@@ -32,11 +33,6 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
    * Store fetched urls list
    */
   private var fetchedUrls = mutable.HashSet.empty[WebUrl]
-
-  /**
-   * Store fetched web page list
-   */
-  private var fetchedWeb = new ListBuffer[WebPage]
 
   @BeanProperty
   var dbService: DBService = _
@@ -59,22 +55,31 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
   def accept(job: Job) = job.isInstanceOf[CrawlJob]
 
   override protected def doHandle(job: CrawlJob, session: CrawlSession) {
+    crawlTime = System.currentTimeMillis
     super.doHandle(job, session)
+    crawlTime = System.currentTimeMillis - crawlTime
     println(countUrl + " links found")
     println(fetchedUrls.size + " links downloaded")
     println(maxDepth + " level")
-
-    if (dbService != null) {
-      //Store fetched website the the database.
-      dbService.save(fetchedWeb.toList)
-    }
+    println(crawlTime + " ms")
   }
 
   protected def createSubJobs(job: CrawlJob) {
     if (!job.result.isEmpty) {
       countUrl += job.result.get.parserResult.webUrls.size
       fetchedUrls += job.webUrl
-      fetchedWeb += job.result.get.parserResult.webPage
+
+      //Set the parent for the website.
+      if (!job.parent.isEmpty) {
+        val parent = job.parent.get.result.get
+        val parentWebPage = parent.parserResult.webPage
+        job.result.get.parserResult.webPage.parent = parentWebPage
+      }
+
+      if (dbService != null) {
+        //Store the website into the database
+        dbService.save(job.result.get.parserResult.webPage)
+      }
 
       val depth = job.depth + 1
       if (depth > maxDepth) maxDepth = depth

@@ -5,7 +5,7 @@
 package org.linkerz.crawler.db
 
 import org.linkerz.mongodb.model.Link
-import org.linkerz.crawler.core.model.WebPage
+import org.linkerz.crawler.core.model.{WebUrl, WebPage}
 
 /**
  * The Class DBService.
@@ -17,11 +17,11 @@ import org.linkerz.crawler.core.model.WebPage
 
 trait DBService {
 
+
   /**
-   * Save a list web pages to database
-   * @param webPages
-   * @return
+   * Saving a web page and make a connection to his parent.
+   * @param webPage
    */
-  def save(webPages: List[WebPage])
+  def save(webPage: WebPage)
 
 }
