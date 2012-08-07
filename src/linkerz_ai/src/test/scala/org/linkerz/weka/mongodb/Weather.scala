@@ -5,6 +5,7 @@
 package org.linkerz.weka.mongodb
 
 import org.linkerz.weka.mongodb.annotation.Attribute
+import org.linkerz.weka.mongodb.annotation.Attribute.TYPE._
 
 /**
  * The Class Weather.
@@ -16,7 +17,7 @@ import org.linkerz.weka.mongodb.annotation.Attribute
 
 class Weather {
 
-  @Attribute(name = "outlook", values = Array("sunny", "overcast", "rainy"))
+  @Attribute(name = "outlook", attType = NOMINAL, values = Array("sunny", "overcast", "rainy"))
   var outlook: String = _
 
   @Attribute(name = "temperature")
@@ -25,10 +26,10 @@ class Weather {
   @Attribute(name = "humidity")
   var humidity: Double = _
 
-  @Attribute(name = "windy", values = Array("true", "false"))
+  @Attribute(name = "windy", attType = NOMINAL, values = Array("true", "false"))
   var windy: String = _
 
-  @Attribute(name = "play", values = Array("yes", "no"))
+  @Attribute(name = "play", attType = NOMINAL, values = Array("yes", "no"))
   var play: String = _
 
 }

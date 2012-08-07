@@ -6,6 +6,7 @@ package org.linkerz.weka.mongodb
 
 import weka.core.{Attribute => WAttribute, Instance, FastVector, Instances}
 import org.linkerz.weka.mongodb.annotation.Attribute
+import org.linkerz.weka.mongodb.annotation.Attribute.TYPE._
 
 /**
  * The Class MongoDbBuilder.
@@ -29,13 +30,19 @@ object MongoDbBuilder {
     entityClass.getDeclaredFields.foreach(field => {
       val att = field.getAnnotation[Attribute](classOf[Attribute])
       if (att != null) {
-        if (att.values.isEmpty) {
-          val attribute = new WAttribute(att.name())
-          attInfo.addElement(attribute)
-        } else {
+        var attribute: WAttribute = null
+        if (att.attType == NUMBER) {
+          attribute = new WAttribute(att.name())
+        } else if (att.attType == NOMINAL) {
           val values = new FastVector
           att.values.foreach(value => values.addElement(value))
-          val attribute = new WAttribute(att.name(), values)
+          attribute = new WAttribute(att.name(), values)
+        } else if (att.attType == STRING) {
+          //add string type ref from :http://weka.wikispaces.com/Creating+an+ARFF+file
+          attribute = new WAttribute(att.name(), null.asInstanceOf[FastVector])
+        }
+
+        if (attribute != null) {
           attInfo.addElement(attribute)
         }
       }

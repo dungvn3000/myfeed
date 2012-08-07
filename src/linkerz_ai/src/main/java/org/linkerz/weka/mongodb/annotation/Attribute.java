@@ -21,6 +21,11 @@ public @interface Attribute {
 
     public String name();
 
+    public TYPE attType() default TYPE.NUMBER;
+
     public String[] values() default {};
 
+    public enum TYPE {
+        NUMBER, STRING, NOMINAL
+    }
 }
