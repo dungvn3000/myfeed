@@ -6,6 +6,9 @@ package org.linkerz.weka.mongodb
 
 import org.scalatest.FunSuite
 import weka.core.Instance
+import collection.mutable.ListBuffer
+import weka.classifiers.trees.J48
+import weka.classifiers.Evaluation
 
 /**
  * The Class TestMongoDbBuilder.
@@ -18,14 +21,38 @@ import weka.core.Instance
 class TestMongoDbBuilder extends FunSuite {
 
   test("testBuilder") {
-    val train = MongoDbBuilder.build(classOf[Weather])
-    val instance = new Instance(5)
-    instance.setValue(train.attribute(0), "sunny")
-    instance.setValue(train.attribute(1), 85)
-    instance.setValue(train.attribute(2), 85)
-    instance.setValue(train.attribute(3), "false")
-    instance.setValue(train.attribute(4), "yes")
-    train.add(instance)
+    val weathers = new ListBuffer[Weather]
+    for (i <- 1 to 10) {
+      val weather = new Weather
+      weather.outlook = "sunny"
+      weather.temperature = 85
+      weather.humidity = 85
+      weather.windy = "false"
+      weather.play = "yes"
+
+      weathers += weather
+    }
+
+    val train = MongoDbBuilder.build(classOf[Weather], weathers.toList)
+    train.setClassIndex(train.numAttributes() - 1)
+    val cls = new J48
+    cls.buildClassifier(train)
+
+    val weather = new Weather
+    weather.outlook = "sunny"
+    weather.temperature = 85
+    weather.humidity = 85
+    weather.windy = "false"
+    weather.play = "no"
+
+    val weatherTest = List[Weather](weather)
+
+    val test = MongoDbBuilder.build(classOf[Weather], weatherTest)
+
+    val evaluation = new Evaluation(train)
+    evaluation.evaluateModel(cls, test)
+
+    println(evaluation.toSummaryString)
   }
 
 }
