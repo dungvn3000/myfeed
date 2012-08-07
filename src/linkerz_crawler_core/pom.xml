@@ -90,12 +90,22 @@
             <version>${boilerpipe.version}</version>
         </dependency>
 
+        <!--Test-->
+        <dependency>
+            <groupId>org.linkerz</groupId>
+            <artifactId>linkerz_test</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <!--End-->
+
     </dependencies>
 
 </project>

@@ -4,14 +4,8 @@
 
 package org.linkerz.crawler.core
 
-import org.junit.runner.RunWith
 import org.scalatest.FunSuite
-import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
-import org.springframework.context.{ApplicationContext, ApplicationContextAware}
-import org.junit.Ignore
-import org.springframework.context.support.GenericXmlApplicationContext
-import spring.SpringContext
+import org.linkerz.test.spring.SpringContext
 
 /**
  * The Class TestContext.

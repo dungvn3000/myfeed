@@ -21,6 +21,7 @@
         <module>linkerz_example</module>
         <module>linkerz_client</module>
         <module>linkerz_web</module>
+        <module>linkerz_test</module>
     </modules>
 
     <properties>
