@@ -73,6 +73,12 @@
             <groupId>org.apache.tika</groupId>
             <artifactId>tika-parsers</artifactId>
             <version>${tika.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>de.l3s.boilerpipe</groupId>
+                    <artifactId>boilerpipe</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!--End-->
 

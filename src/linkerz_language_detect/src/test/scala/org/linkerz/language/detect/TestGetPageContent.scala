@@ -4,7 +4,15 @@
 
 package org.linkerz.language.detect
 
-import org.scalatest.FunSpec
+import org.scalatest.FunSuite
+import org.linkerz.test.spring.SpringContext
+import org.springframework.data.mongodb.core.MongoOperations
+import org.linkerz.mongodb.model.Link
+import de.l3s.boilerpipe.sax.BoilerpipeSAXInput
+import org.xml.sax.InputSource
+import java.io.ByteArrayInputStream
+
+import collection.JavaConversions._
 
 /**
  * The Class TestGetPageContent.
@@ -14,6 +22,19 @@ import org.scalatest.FunSpec
  *
  */
 
-class TestGetPageContent extends FunSpec {
+class TestGetPageContent extends FunSuite with SpringContext {
+
+  test("testGetPageContentInDB") {
+    val mongoOperations = context.getBean("mongoTemplate", classOf[MongoOperations])
+    val links = mongoOperations.findAll(classOf[Link])
+    assert(links.size > 0)
+    val inputStream = new ByteArrayInputStream(links.last.content)
+    val doc = new BoilerpipeSAXInput(new InputSource(inputStream)).getTextDocument
+
+    doc.getTextBlocks.foreach(block => {
+      println(block.getText)
+    })
+
+  }
 
 }
