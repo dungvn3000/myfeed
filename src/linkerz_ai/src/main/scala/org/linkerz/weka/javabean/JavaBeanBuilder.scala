@@ -9,18 +9,19 @@ import org.linkerz.weka.mongodb.annotation.Attribute
 import org.linkerz.weka.mongodb.annotation.Attribute.TYPE._
 
 /**
- * The Class MongoDbBuilder.
+ * The Class JavaBeanBuilder.
  *
  * @author Nguyen Duc Dung
  * @since 8/7/12, 3:43 AM
  *
  */
 
-object MongoDbBuilder {
+object JavaBeanBuilder {
 
   /**
    * Build an empty instances base on entity class.
    * @param entityClass
+   * @param datas
    * @return
    */
   def build[T](entityClass: Class[T], datas: List[AnyRef]): Instances = {

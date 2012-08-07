@@ -11,14 +11,14 @@ import weka.classifiers.trees.J48
 import weka.classifiers.Evaluation
 
 /**
- * The Class TestMongoDbBuilder.
+ * The Class TestJavaBeanBuilder.
  *
  * @author Nguyen Duc Dung
  * @since 8/7/12, 3:47 AM
  *
  */
 
-class TestMongoDbBuilder extends FunSuite {
+class TestJavaBeanBuilder extends FunSuite {
 
   test("testBuilder") {
     val weathers = new ListBuffer[Weather]
@@ -33,7 +33,7 @@ class TestMongoDbBuilder extends FunSuite {
       weathers += weather
     }
 
-    val train = MongoDbBuilder.build(classOf[Weather], weathers.toList)
+    val train = JavaBeanBuilder.build(classOf[Weather], weathers.toList)
     train.setClassIndex(train.numAttributes() - 1)
     val cls = new J48
     cls.buildClassifier(train)
@@ -47,7 +47,7 @@ class TestMongoDbBuilder extends FunSuite {
 
     val weatherTest = List[Weather](weather)
 
-    val test = MongoDbBuilder.build(classOf[Weather], weatherTest)
+    val test = JavaBeanBuilder.build(classOf[Weather], weatherTest)
     test.setClassIndex(test.numAttributes() - 1)
 
     val evaluation = new Evaluation(train)
