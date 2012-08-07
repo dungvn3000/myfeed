@@ -12,14 +12,15 @@
         <module>linkerz_core</module>
         <module>linkerz_job_queue</module>
         <module>linkerz_mongodb</module>
+        <module>linkerz_ai</module>
         <module>linkerz_crawler_core</module>
+        <module>linkerz_language_detect</module>
         <module>linkerz_seachengine_core</module>
         <module>linkerz_database_core</module>
         <module>linkerz_server</module>
         <module>linkerz_example</module>
         <module>linkerz_client</module>
         <module>linkerz_web</module>
-        <module>linkerz_ai</module>
     </modules>
 
     <properties>
