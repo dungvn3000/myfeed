@@ -64,6 +64,7 @@ object MongoDbBuilder {
         }
       }
     })
+    dataSet.add(instance)
     instance
   }
 

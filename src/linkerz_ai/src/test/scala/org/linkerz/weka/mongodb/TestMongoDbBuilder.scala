@@ -48,6 +48,7 @@ class TestMongoDbBuilder extends FunSuite {
     val weatherTest = List[Weather](weather)
 
     val test = MongoDbBuilder.build(classOf[Weather], weatherTest)
+    test.setClassIndex(test.numAttributes() - 1)
 
     val evaluation = new Evaluation(train)
     evaluation.evaluateModel(cls, test)
