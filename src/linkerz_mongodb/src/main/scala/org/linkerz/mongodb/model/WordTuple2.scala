@@ -16,6 +16,7 @@ class WordTuple2 extends LinkerZEntity {
 
   var word1: String = _
   var word2: String = _
+  var count: Long = 0
 
   def this(word1: String, word2: String) {
     this()
@@ -23,4 +24,11 @@ class WordTuple2 extends LinkerZEntity {
     this.word2 = word2
   }
 
+  override def equals(obj: Any) = {
+    obj.isInstanceOf[WordTuple2] &&
+      obj.asInstanceOf[WordTuple2].word1 == word1 &&
+      obj.asInstanceOf[WordTuple2].word2 == word2
+  }
+
+  override def hashCode() = word1.hashCode & word2.hashCode
 }

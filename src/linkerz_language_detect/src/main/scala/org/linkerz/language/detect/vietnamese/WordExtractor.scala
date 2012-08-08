@@ -10,6 +10,8 @@ import collection.mutable.ListBuffer
 import collection.JavaConversions._
 import de.l3s.boilerpipe.util.UnicodeTokenizer
 import org.apache.commons.lang.math.NumberUtils
+import collection.mutable
+import collection.immutable.HashMap
 
 /**
  * The Class WordExtractor.
@@ -31,7 +33,9 @@ object WordExtractor {
         word ++= result
       }
     })
-    word.toList
+
+    //Remove the duplicate in the same page. @Todo: testing this.
+    removeDuplicate(word.toList)
   }
 
   def extract(string: String): List[(String, String)] = {
@@ -59,6 +63,14 @@ object WordExtractor {
     }
 
     word.toList
+  }
+
+  def removeDuplicate(word: List[(String, String)]): List[(String, String)] = {
+    var set = new mutable.HashSet[(String, String)]
+    word.foreach(tuple2 => {
+      set += tuple2
+    })
+    set.toList
   }
 
 }

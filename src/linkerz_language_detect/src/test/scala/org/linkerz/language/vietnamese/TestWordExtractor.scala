@@ -48,7 +48,7 @@ class TestWordExtractor extends FunSuite with SpringContext {
     links.foreach(link => {
       val inputStream = new ByteArrayInputStream(link.content)
       val doc = new BoilerpipeSAXInput(new InputSource(inputStream)).getTextDocument
-      result = WordExtractor.extract(doc)
+      result ++= WordExtractor.extract(doc)
     })
 
     time = System.currentTimeMillis - time
@@ -69,8 +69,9 @@ class TestWordExtractor extends FunSuite with SpringContext {
           classOf[WordTuple2])
         if (wordTuple2 == null) {
           wordTuple2 = new WordTuple2(word1, word2)
-          mongoOperations.save(wordTuple2)
         }
+        wordTuple2.count += 1
+        mongoOperations.save(wordTuple2)
       } else {
         var word = ""
         if (word1 == null) word = word2
@@ -79,8 +80,9 @@ class TestWordExtractor extends FunSuite with SpringContext {
           classOf[WordTuple])
         if (wordTuple == null) {
           wordTuple = new WordTuple(word)
-          mongoOperations.save(wordTuple)
         }
+        wordTuple.count += 1
+        mongoOperations.save(wordTuple)
       }
     })
 
@@ -88,5 +90,11 @@ class TestWordExtractor extends FunSuite with SpringContext {
 
     println("Stored time:")
     println(time + " ms")
+  }
+
+  test("testRemoveDuplicate") {
+    var word = List(("dung", "dung"), ("dung", "dung"), ("dung", "ne"))
+    word = WordExtractor.removeDuplicate(word)
+    assert(word.size == 2)
   }
 }

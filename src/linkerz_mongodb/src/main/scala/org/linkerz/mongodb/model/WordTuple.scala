@@ -15,6 +15,7 @@ package org.linkerz.mongodb.model
 class WordTuple extends LinkerZEntity {
 
   var word: String = _
+  var count: Long = 0
 
   def this(word: String) {
     this()
