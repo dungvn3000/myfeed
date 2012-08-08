@@ -29,6 +29,12 @@ class TestWordClean extends FunSuite {
 
     val st4 = WordClean.clean("    Xem thêm           Xem theo môn thi đấu    ")
     assert(st4 == "Xem thêm Xem theo môn thi đấu")
+
+    val st5 = WordClean.clean("dungvn3000@gmail.com")
+    assert(st5 == "dungvn3000gmail")
+
+    val st6 = WordClean.clean("http://vnexpress.net/")
+    assert(st6 == "vnexpress")
   }
 
 }

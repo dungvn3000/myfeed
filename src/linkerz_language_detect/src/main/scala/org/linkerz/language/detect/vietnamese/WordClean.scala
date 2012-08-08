@@ -17,15 +17,26 @@ import org.springframework.util.StringUtils
 
 object WordClean {
 
-  val notWord = Array(":", "/", "'", ".", ",", "(", ")", "|",
-    "&", "-", "\"", "“", "©", "®", "+", "*", "/", "-", "=", "{", "}",
-    "%", "$", "#", "!", ";", "»", "¥", "»¹", "»•", "»±")
+  def blackWord = Array("www.", "http:" , "https:" , ".net", ".com", ".org", ".info", ".vn")
 
   def clean(string: String) = {
     assert(string != null, "The string must be not null")
-    var clean = string
-    notWord.foreach(remove => clean = clean.replace(remove, ""))
-    cleanWhiteSpace(clean)
+
+    //Step1: clean not mean word
+    var cleanBlackWord = string
+    blackWord.foreach(remove => cleanBlackWord = cleanBlackWord.replace(remove, ""))
+
+    //Step2: Remove non-letter and non-number.
+    val clean = new StringBuilder(cleanBlackWord)
+    var index = 0
+    while (clean.length > index) {
+      if (!Character.isLetterOrDigit(clean(index)) && !isWhitespace(clean(index))) {
+        clean.deleteCharAt(index)
+      } else {
+        index += 1
+      }
+    }
+    cleanWhiteSpace(clean.toString())
   }
 
   def cleanWhiteSpace(string: String): String = {
