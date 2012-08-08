@@ -23,7 +23,7 @@ object WordClean {
     assert(string != null, "The string must be not null")
 
     //Step1: clean not mean word
-    var cleanBlackWord = string
+    var cleanBlackWord = string.trim.toLowerCase
     blackWord.foreach(remove => cleanBlackWord = cleanBlackWord.replace(remove, ""))
 
     //Step2: Remove non-letter and non-number.

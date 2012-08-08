@@ -11,7 +11,6 @@ import collection.JavaConversions._
 import de.l3s.boilerpipe.util.UnicodeTokenizer
 import org.apache.commons.lang.math.NumberUtils
 import collection.mutable
-import collection.immutable.HashMap
 
 /**
  * The Class WordExtractor.
@@ -26,7 +25,7 @@ object WordExtractor {
   val maximumLength = 9
 
   def extract(doc: TextDocument): List[(String, String)] = {
-    val word = new ListBuffer[(String, String)]
+    var word: List[(String, String)] = Nil
     doc.getTextBlocks.foreach(block => {
       val result = extract(block.getText)
       if (!result.isEmpty) {
@@ -35,7 +34,8 @@ object WordExtractor {
     })
 
     //Remove the duplicate in the same page. @Todo: testing this.
-    removeDuplicate(word.toList)
+    //    removeDuplicate(word.toList)
+    word
   }
 
   def extract(string: String): List[(String, String)] = {
