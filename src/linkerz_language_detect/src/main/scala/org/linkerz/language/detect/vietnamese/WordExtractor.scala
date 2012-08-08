@@ -1,0 +1,55 @@
+/*
+ * Copyright (C) 2012 - 2013 LinkerZ
+ */
+
+package org.linkerz.language.detect.vietnamese
+
+import de.l3s.boilerpipe.document.{TextBlock, TextDocument}
+import collection.mutable.ListBuffer
+
+import collection.JavaConversions._
+import de.l3s.boilerpipe.util.UnicodeTokenizer
+import org.apache.commons.lang.math.NumberUtils
+
+/**
+ * The Class WordExtractor.
+ *
+ * @author Nguyen Duc Dung
+ * @since 8/8/12, 2:12 PM
+ *
+ */
+
+object WordExtractor {
+
+  def extract(doc: TextDocument): List[(String, String)] = {
+    val word = new ListBuffer[(String, String)]
+    doc.getTextBlocks.foreach(block => {
+      word ++= extract(block.getText)
+    })
+    word.toList
+  }
+
+  def extract(string: String): List[(String, String)] = {
+    val content = UnicodeTokenizer.tokenize(WordClean.clean(string).toLowerCase)
+
+    //If the content is only one word return the word.
+    if (content.size == 1 && content(0).length > 1) return List((content(0), null))
+
+    val word = new ListBuffer[(String, String)]
+    var index = 0
+    while (content.length > index + 1) {
+      val st1 = content(index)
+      val st2 = content(index + 1)
+      if (!NumberUtils.isNumber(st1) || !NumberUtils.isNumber(st2)) {
+        if (!StopWordFilter.isStopWord(st1) || !StopWordFilter.isStopWord(st2)) {
+          //The pair of word, both of them are not number and stop word.
+          word += new Tuple2[String, String](st1, st2)
+        }
+      }
+      index += 1
+    }
+
+    word.toList
+  }
+
+}

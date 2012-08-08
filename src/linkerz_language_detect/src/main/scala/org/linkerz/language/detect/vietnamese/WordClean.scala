@@ -18,7 +18,8 @@ import org.springframework.util.StringUtils
 object WordClean {
 
   val notWord = Array(":", "/", "'", ".", ",", "(", ")", "|",
-    "&", "-", "\"", "“", "©", "®", "+", "*", "/", "-", "=", "{", "}", "%", "$", "#", "!", ";")
+    "&", "-", "\"", "“", "©", "®", "+", "*", "/", "-", "=", "{", "}",
+    "%", "$", "#", "!", ";", "»", "¥", "»¹", "»•", "»±")
 
   def clean(string: String) = {
     assert(string != null, "The string must be not null")
@@ -27,8 +28,9 @@ object WordClean {
     cleanWhiteSpace(clean)
   }
 
-  def cleanWhiteSpace(string: String) = {
+  def cleanWhiteSpace(string: String): String = {
     assert(string != null, "The string must be not null")
+    if (string.length < 1) return string
     val clean = new StringBuilder(string)
     var last: Char = clean.charAt(0)
     var index = 0
@@ -40,7 +42,7 @@ object WordClean {
         index += 1
       }
     }
-    StringUtils.trimWhitespace(clean.toString)
+    StringUtils.trimWhitespace(clean.toString())
   }
 
   def isWhitespace(char: Char) = {
