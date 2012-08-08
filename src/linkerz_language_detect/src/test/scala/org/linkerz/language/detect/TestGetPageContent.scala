@@ -13,6 +13,7 @@ import org.xml.sax.InputSource
 import java.io.ByteArrayInputStream
 
 import collection.JavaConversions._
+import vietnamese.WordClean
 
 /**
  * The Class TestGetPageContent.
@@ -32,7 +33,7 @@ class TestGetPageContent extends FunSuite with SpringContext {
     val doc = new BoilerpipeSAXInput(new InputSource(inputStream)).getTextDocument
 
     doc.getTextBlocks.foreach(block => {
-      println(block.getText)
+      println(WordClean.clean(block.getText))
     })
 
   }

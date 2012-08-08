@@ -14,6 +14,6 @@ package org.linkerz.language.detect.vietnamese
 
 object StopWordFilter {
 
-  val world = Array("tôi", "bạn", "mày", "tao")
+  val world = Array("tôi", "bạn", "mày", "tao", "thì" , "là" , "cho")
 
 }
