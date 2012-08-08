@@ -26,7 +26,10 @@ object WordExtractor {
   def extract(doc: TextDocument): List[(String, String)] = {
     val word = new ListBuffer[(String, String)]
     doc.getTextBlocks.foreach(block => {
-      word ++= extract(block.getText)
+      val result = extract(block.getText)
+      if (!result.isEmpty) {
+        word ++= result
+      }
     })
     word.toList
   }

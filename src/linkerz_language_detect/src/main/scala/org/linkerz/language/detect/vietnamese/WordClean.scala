@@ -17,7 +17,7 @@ import org.springframework.util.StringUtils
 
 object WordClean {
 
-  def blackWord = Array("www.", "http:" , "https:" , ".net", ".com", ".org", ".info", ".vn")
+  def blackWord = Array("www.", "http:", "https:", ".net", ".com", ".org", ".info", ".vn", ".com.vn", "rss")
 
   def clean(string: String) = {
     assert(string != null, "The string must be not null")
