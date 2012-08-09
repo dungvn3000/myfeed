@@ -22,6 +22,7 @@
         <module>linkerz_client</module>
         <module>linkerz_web</module>
         <module>linkerz_test</module>
+        <module>linkerz_crawler_bot</module>
     </modules>
 
     <properties>
