@@ -43,6 +43,7 @@ class Parser extends Logging {
       val inputStream = new ByteArrayInputStream(downloadResult.byteContent)
       htmlParser.parse(inputStream, htmlHandler, metadata, parseContext)
 
+      webPage.contentEncoding = metadata.get("Content-Encoding")
       webPage.webUrl = downloadResult.webUrl
       webPage.content = downloadResult.byteContent
 

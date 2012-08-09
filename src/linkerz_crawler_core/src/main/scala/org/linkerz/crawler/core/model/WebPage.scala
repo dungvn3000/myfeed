@@ -20,6 +20,8 @@ class WebPage {
   var webUrl: WebUrl = _
   var content: Array[Byte] = _
 
+  var contentEncoding: String = _
+
   var parent: WebPage = _
 
   /**
@@ -31,6 +33,7 @@ class WebPage {
     link.url = webUrl.url
     link.content = content
     link.indexDate = new util.Date
+    link.contentEncoding = contentEncoding
     link
   }
 }

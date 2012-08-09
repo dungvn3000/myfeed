@@ -48,7 +48,7 @@ class TestParser extends FunSuite with Logging {
 
   test("testHtmlParser") {
 
-    val downloadResult = downloader.download(new WebUrl("http://mac.appstorm.net/reviews/productivity-review/click-to-fast-access-to-all-of-your-apps/"))
+    val downloadResult = downloader.download(new WebUrl("http://localhost/vnexpress/vnexpress.net/"))
     val inputStream = new ByteArrayInputStream(downloadResult.byteContent)
 
     val linkCollector = new LinkContentHandler
@@ -63,6 +63,9 @@ class TestParser extends FunSuite with Logging {
     println(metadata.toString)
     println(metadata.get(Metadata.DESCRIPTION))
     println(metadata.get(Metadata.SUBJECT))
+    println(metadata.get(Metadata.FORMAT))
+    println(metadata.get(Metadata.TYPE))
+    println(metadata.get("Content-Encoding"))
   }
 
 }

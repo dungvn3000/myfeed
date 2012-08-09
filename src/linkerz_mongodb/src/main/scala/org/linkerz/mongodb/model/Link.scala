@@ -23,6 +23,7 @@ class Link extends LinkerZEntity {
   var userId: String = _
 
   //Metadata
+  var contentEncoding: String = _
   var html: String = _
   var text: String = _
   var title: String = _
@@ -31,4 +32,5 @@ class Link extends LinkerZEntity {
   var language: String = _
 
   var indexDate: util.Date = _
+
 }
