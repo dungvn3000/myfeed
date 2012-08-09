@@ -9,12 +9,14 @@ import org.linkerz.test.spring.SpringContext
 
 import org.linkerz.language.detect.vietnamese.WordExtractor
 import org.springframework.data.mongodb.core.MongoOperations
-import org.linkerz.mongodb.model.{WordTuple, WordTuple2, Link}
+import org.linkerz.mongodb.model.{WordTuple2, Link}
 import java.io.ByteArrayInputStream
 import de.l3s.boilerpipe.sax.BoilerpipeSAXInput
 import org.xml.sax.InputSource
 import collection.JavaConversions._
+import collection.JavaConverters._
 import org.springframework.data.mongodb.core.query.{Criteria, Query}
+import collection.mutable.ListBuffer
 
 
 /**
@@ -44,11 +46,11 @@ class TestWordExtractor extends FunSuite with SpringContext {
     assert(links.size > 0)
 
     var time = System.currentTimeMillis()
-    var result: List[(String, String)] = Nil
+    var result: List[WordTuple2] = Nil
     links.foreach(link => {
       val inputStream = new ByteArrayInputStream(link.content)
       val doc = new BoilerpipeSAXInput(new InputSource(inputStream)).getTextDocument
-      result ++= WordExtractor.extract(doc)
+      result ++= WordExtractor.extract(doc, link.url)
     })
 
     time = System.currentTimeMillis - time
@@ -60,8 +62,8 @@ class TestWordExtractor extends FunSuite with SpringContext {
 
     time = System.currentTimeMillis
     result.foreach(tuple2 => {
-      val word1 = tuple2._1
-      val word2 = tuple2._2
+      val word1 = tuple2.word1
+      val word2 = tuple2.word2
 
       if (word1 != null && word2 != null) {
         var wordTuple2 = mongoOperations.findOne(
@@ -71,20 +73,28 @@ class TestWordExtractor extends FunSuite with SpringContext {
           wordTuple2 = new WordTuple2(word1, word2)
         }
         wordTuple2.count += 1
-        mongoOperations.save(wordTuple2)
-      } else {
-        var word = ""
-        if (word1 == null) word = word2
-        if (word2 == null) word = word1
-        var wordTuple = mongoOperations.findOne(Query.query(Criteria.where("word").is(word)),
-          classOf[WordTuple])
-        if (wordTuple == null) {
-          wordTuple = new WordTuple(word)
+        if (!wordTuple2.urls.contains(tuple2.urls.head)) {
+          wordTuple2.urls ++= tuple2.urls
+          wordTuple2.page += 1
         }
-        wordTuple.count += 1
-        mongoOperations.save(wordTuple)
+        mongoOperations.save(wordTuple2)
       }
     })
+
+    //Remove the low quality word
+    val wordTuple2s = mongoOperations.findAll(classOf[WordTuple2])
+    val deleteWord = new ListBuffer[WordTuple2]
+
+    wordTuple2s.foreach(wordTuple2 => {
+      if (wordTuple2.page == wordTuple2.count || wordTuple2.page == 1) {
+        deleteWord += wordTuple2
+      }
+    })
+
+    deleteWord.foreach(tuple => {
+      mongoOperations.remove(tuple)
+    })
+
 
     time = System.currentTimeMillis - time
 
@@ -93,8 +103,8 @@ class TestWordExtractor extends FunSuite with SpringContext {
   }
 
   test("testRemoveDuplicate") {
-    var word = List(("dung", "dung"), ("dung", "dung"), ("dung", "ne"))
-    word = WordExtractor.removeDuplicate(word)
-    assert(word.size == 2)
+//    var word = List(("dung", "dung"), ("dung", "dung"), ("dung", "ne"))
+//    word = WordExtractor.removeDuplicate(word)
+//    assert(word.size == 2)
   }
 }

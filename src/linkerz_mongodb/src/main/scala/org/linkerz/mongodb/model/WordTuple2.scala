@@ -4,6 +4,8 @@
 
 package org.linkerz.mongodb.model
 
+import java.util
+
 /**
  * The Class WordTuple2.
  *
@@ -17,6 +19,9 @@ class WordTuple2 extends LinkerZEntity {
   var word1: String = _
   var word2: String = _
   var count: Long = 0
+  var page: Long = 0
+  var urls: util.List[String] = new util.ArrayList[String]
+
 
   def this(word1: String, word2: String) {
     this()
