@@ -43,7 +43,7 @@
         		    <t:body/>
                 </div>
                 <div class="span3">
-                    <t:rightsidebar/>
+                    <!--<t:rightsidebar/>-->
                 </div>
         	</div>
 

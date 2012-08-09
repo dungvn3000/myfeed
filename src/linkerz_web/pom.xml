@@ -34,6 +34,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.linkerz</groupId>
+            <artifactId>linkerz_crawler_bot</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.got5</groupId>
             <artifactId>tapestry5-jquery</artifactId>
             <version>${tapestry.jquery.version}</version>

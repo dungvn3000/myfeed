@@ -4,7 +4,7 @@
 
 package org.linkerz.crawler.bot.matcher
 
-import org.apache.commons.digester.SimpleRegexMatcher
+import org.apache.commons.digester.{SimpleRegexMatcher => SMatcher}
 
 /**
  * The Class SimpleRegexMatcher.
@@ -14,9 +14,9 @@ import org.apache.commons.digester.SimpleRegexMatcher
  *
  */
 
-object SimpleRegexMatcher extends SimpleRegexMatcher {
+object SimpleRegexMatcher {
 
-  val simpleMatcher = new SimpleRegexMatcher
+  val simpleMatcher = new SMatcher
 
   def matcher(string: String, patten: String): Boolean = {
     simpleMatcher.`match`(string, patten)

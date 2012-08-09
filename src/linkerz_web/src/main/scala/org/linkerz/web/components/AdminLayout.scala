@@ -4,13 +4,13 @@
 
 package org.linkerz.web.components
 
-import org.apache.tapestry5.annotations.{Import, Property}
+import org.apache.tapestry5.annotations.{Property, Import}
 
 /**
- * The Class Layout.
+ * The Class AdminLayout.
  *
  * @author Nguyen Duc Dung
- * @since 8/2/12, 9:24 PM
+ * @since 8/10/12, 3:42 AM
  *
  */
 
@@ -32,9 +32,9 @@ import org.apache.tapestry5.annotations.{Import, Property}
   "context:assets/bootstrap/js/bootstrap-carousel.js",
   "context:assets/bootstrap/js/bootstrap-typeahead.js"
 ))
-class Layout {
+class AdminLayout {
 
   @Property
-  val title = "LinkerZ"
+  val title = "LinkerZ - Admin"
 
 }
