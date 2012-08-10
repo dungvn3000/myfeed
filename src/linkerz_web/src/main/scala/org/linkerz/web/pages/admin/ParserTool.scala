@@ -4,9 +4,10 @@
 
 package org.linkerz.web.pages.admin
 
-import org.apache.tapestry5.annotations.{Persist, Property}
+import org.apache.tapestry5.annotations.{InjectComponent, Persist, Property}
 import org.linkerz.crawler.bot.parser.LinkerZParser
 import org.linkerz.mongodb.model.LinkParseData
+import org.apache.tapestry5.corelib.components.Zone
 
 
 /**
@@ -67,8 +68,22 @@ class ParserTool {
   @Property
   var urlTest: String = _
 
+  @Persist
+  @Property
+  var title: String = _
 
-  def onSubmit() {
+  @Persist
+  @Property
+  var description: String = _
+
+  @Persist
+  @Property
+  var img: String = _
+
+  @InjectComponent
+  var updateZone: Zone = _
+
+  def onSubmit() = {
 
     val linkParseData = new LinkParseData
     linkParseData.urlRegex = urlRegex
@@ -81,15 +96,15 @@ class ParserTool {
     linkParseData.descriptionMaxLength = descriptionMaxLength
     linkParseData.descriptionSelection = descriptionSelection
 
-    linkParseData.contentAttName = contentAttName
-    linkParseData.contentMaxLength = contentMaxLength
-    linkParseData.contentSelection = contentSelection
-
     linkParseData.imgSelection = imgSelection
 
     val parser = new LinkerZParser
-    parser.parse(urlTest, linkParseData)
+    val result = parser.parse(urlTest, linkParseData)
+    title = result.title
+    img = result.imgSrc
+    description = result.description
 
+    updateZone
   }
 
 

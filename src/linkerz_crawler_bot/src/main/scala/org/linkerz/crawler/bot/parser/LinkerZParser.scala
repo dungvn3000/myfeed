@@ -11,6 +11,8 @@ import com.googlecode.flaxcrawler.utils.UrlUtils
 import org.linkerz.crawler.bot.matcher.SimpleRegexMatcher
 import grizzled.slf4j.Logging
 import org.jsoup.nodes.Document
+import org.linkerz.crawler.core.fetcher.Fetcher
+import org.linkerz.crawler.core.model.WebUrl
 
 /**
  * The Class LinkerZParser.
@@ -22,39 +24,36 @@ import org.jsoup.nodes.Document
 
 class LinkerZParser extends Logging {
 
-  def parse(url: String, linkParseData: LinkParseData) {
+  def parse(url: String, linkParseData: LinkParseData): LinkerZParserResult = {
     assert(url != null)
     assert(linkParseData != null)
     if (SimpleRegexMatcher.matcher(url, linkParseData.urlRegex)) {
-      val doc = Jsoup.connect(url).get()
-      parse(doc, linkParseData)
+      val fetcher = new Fetcher
+      val result = fetcher.fetch(new WebUrl(url))
+      return parse(result.webPage.asLink(), linkParseData)
     } else {
       info("Url is not match: " + url + " - " + linkParseData.urlRegex)
     }
+    return null
   }
 
-  def parse(link: Link, linkParseData: LinkParseData) {
+  def parse(link: Link, linkParseData: LinkParseData): LinkerZParserResult = {
     assert(link != null)
     assert(linkParseData != null)
     if (SimpleRegexMatcher.matcher(link.url, linkParseData.urlRegex)) {
       val inputStream = new ByteArrayInputStream(link.content)
       val doc = Jsoup.parse(inputStream, link.contentEncoding, UrlUtils.getDomainName(link.url))
-      parse(doc, linkParseData)
+      return parse(doc, linkParseData)
     } else {
       info("Url is not match: " + link.url + " - " + linkParseData.urlRegex)
     }
+    return null
   }
 
-  private def parse(doc: Document, linkParseData: LinkParseData) {
+  private def parse(doc: Document, linkParseData: LinkParseData): LinkerZParserResult = {
     val title = doc.select(linkParseData.titleSelection)
     val description = doc.select(linkParseData.descriptionSelection)
-    val content = doc.select(linkParseData.contentSelection)
     val img = doc.select(linkParseData.imgSelection)
-
-    info(title.toString)
-    info(description.toString)
-    info(content.toString)
-    info(img.toString)
 
     var titleText = title.text()
     if (linkParseData.titleAttName != null
@@ -78,21 +77,8 @@ class LinkerZParser extends Logging {
       descriptionText = descriptionText.substring(0, linkParseData.descriptionMaxLength)
     }
 
-    var contentText = content.text()
-    if (linkParseData.contentAttName != null
-      && linkParseData.contentAttName.trim.length > 0) {
-      contentText = content.attr(linkParseData.contentAttName)
-    }
-
-    if (contentText.length > linkParseData.contentMaxLength
-      && linkParseData.contentMaxLength > 0) {
-      contentText = contentText.substring(0, linkParseData.contentMaxLength)
-    }
-
-    println(titleText)
-    println(descriptionText)
-    println(contentText)
-    println(img.attr("src"))
+    new LinkerZParserResult(titleText, descriptionText, img.attr("src"))
   }
-
 }
+
+case class LinkerZParserResult(title: String, description: String, imgSrc: String)

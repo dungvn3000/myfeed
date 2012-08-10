@@ -2,128 +2,85 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
         >
 
+    <section class="span6">
+        <t:form t:id="parserForm" class="well form-inline" zone="updateZone">
+            <t:errors/>
+            <fieldset>
 
-    <t:form t:id="parserForm" class="well form-horizontal">
-        <t:errors/>
-        <fieldset>
+                <div class="control-group">
+                    <lable class="control-label">
+                        UrlRegex:
+                    </lable>
+                    <div class="controls">
+                        <t:textfield value="urlRegex" t:id="urlRegexTxt"/>
+                    </div>
+                </div>
 
-            <div class="control-group">
-                <lable class="control-label">
-                    UrlRegex:
-                </lable>
-                <div class="controls">
-                    <t:textfield value="urlRegex" t:id="urlRegexTxt"/>
+                <div class="control-group">
+                    <lable class="control-label">
+                        Title:
+                    </lable>
+                    <div class="controls">
+                        <t:textfield value="titleSelection" t:id="titleSelectionTxt" class="input-medium" placeholder="titleSelection"/>
+                        <t:textfield value="titleAttName" t:id="titleAttNameTxt" class="input-small" placeholder="titleAttName"/>
+                        <t:textfield value="titleMaxLength" t:id="titleMaxLengthTxt" class="input-small" placeholder="maxlength"/>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">
+                        description:
+                    </label>
+
+                    <div class="controls">
+                        <t:textfield value="descriptionSelection" t:id="descriptionSelectionTxt" class="input-medium" placeholder="descriptionSelection"/>
+                        <t:textfield value="descriptionAttName" t:id="descriptionAttNameTxt" class="input-small" placeholder="descriptionAttName"/>
+                        <t:textfield value="descriptionMaxLength" t:id="descriptionMaxLengthTxt" class="input-small" placeholder="descriptionMaxLength"/>
+                    </div>
+                </div>
+
+
+                <div class="control-group">
+                    <label class="control-label">
+                        imgSelection:
+                    </label>
+
+                    <div class="controls">
+                        <t:textfield value="imgSelection" t:id="imgSelectionTxt"/>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">
+                        urlTest:
+                    </label>
+
+                    <div class="controls">
+                        <t:textfield value="urlTest" t:id="urlTestTxt"/>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-primary" type="submit">Test</button>
+                </div>
+
+            </fieldset>
+        </t:form>
+    </section>
+
+
+    <t:zone t:id="updateZone">
+        <section class="span6">
+            <div class="row">
+                <div class="span2">
+                    <img src="http://vnexpress.net/${img}" alt="" width="80" height="80" style="padding-left:60px;"/>
+                </div>
+                <div class="span4">
+                    <h5>${title}</h5>
+                    <p>${description}</p>
                 </div>
             </div>
-
-
-            <div class="control-group">
-                <label class="control-label">
-                    titleSelection:
-                </label>
-
-                <div class="controls">
-                    <t:textfield value="titleSelection" t:id="titleSelectionTxt"/>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label class="control-label">
-                    titleAttName:
-                </label>
-
-                <div class="controls">
-                    <t:textfield value="titleAttName" t:id="titleAttNameTxt"/>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label class="control-label">
-                    titleMaxLength:
-                </label>
-
-                <div class="controls">
-                    <t:textfield value="titleMaxLength" t:id="titleMaxLengthTxt"/>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label class="control-label">
-                    descriptionSelection:
-                </label>
-
-                <div class="controls">
-                    <t:textfield value="descriptionSelection" t:id="descriptionSelectionTxt"/>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label class="control-label">
-                    descriptionAttName:
-                </label>
-
-                <div class="controls">
-                    <t:textfield value="descriptionAttName" t:id="descriptionAttNameTxt"/>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label class="control-label">
-                    descriptionMaxLength:
-                </label>
-
-                <div class="controls">
-                    <t:textfield value="descriptionMaxLength" t:id="descriptionMaxLengthTxt"/>
-                </div>
-            </div>
-
-
-            <div class="control-group">
-                <label class="control-label">
-                    contentSelection:
-                </label>
-
-                <div class="controls">
-                    <t:textfield value="contentSelection" t:id="contentSelectionTxt"/>
-                </div>
-            </div>
-
-
-            <div class="control-group">
-                <label class="control-label">
-                    contentMaxLength:
-                </label>
-
-                <div class="controls">
-                    <t:textfield value="contentMaxLength" t:id="contentMaxLengthTxt"/>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label class="control-label">
-                    imgSelection:
-                </label>
-
-                <div class="controls">
-                    <t:textfield value="imgSelection" t:id="imgSelectionTxt"/>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label class="control-label">
-                    urlTest:
-                </label>
-
-                <div class="controls">
-                    <t:textfield value="urlTest" t:id="urlTestTxt"/>
-                </div>
-            </div>
-
-            <div class="form-actions">
-                <button class="btn btn-primary" type="submit">Test</button>
-            </div>
-
-        </fieldset>
-    </t:form>
+        </section>
+    </t:zone>
 
 </html>

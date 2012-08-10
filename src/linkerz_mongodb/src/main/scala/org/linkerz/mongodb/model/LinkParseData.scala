@@ -30,10 +30,6 @@ class LinkParseData extends LinkerZEntity {
   var descriptionAttName: String = _
   var descriptionMaxLength: Int = _
 
-  var contentSelection: String = _
-  var contentAttName: String = _
-  var contentMaxLength: Int = _
-
   var imgSelection: String = _
 
 }

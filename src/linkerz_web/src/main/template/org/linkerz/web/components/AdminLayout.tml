@@ -33,18 +33,13 @@
 
         <div class="subnav subnav-fixed">
             <div class="container">
-                <t:search.box/>
+                <t:menu.admin/>
             </div>
         </div>
 
         <div class="container">
-        	<div class="row-fluid">
-                <div class="span9">
-        		    <t:body/>
-                </div>
-                <div class="span3">
-                    <!--<t:rightsidebar/>-->
-                </div>
+        	<div class="row">
+                <t:body/>
         	</div>
 
             <hr/>

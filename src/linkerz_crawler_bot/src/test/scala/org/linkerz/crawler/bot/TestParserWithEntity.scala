@@ -31,8 +31,6 @@ class TestParserWithEntity extends FunSuite with SpringContext {
     linkParseData.titleSelection = "title"
     linkParseData.descriptionSelection = "head meta[name=description]"
     linkParseData.descriptionAttName = "content"
-    linkParseData.contentSelection = "head meta[name=description]"
-    linkParseData.contentAttName = "content"
     linkParseData.imgSelection = "img.img-logo"
 
     val parser = new LinkerZParser
