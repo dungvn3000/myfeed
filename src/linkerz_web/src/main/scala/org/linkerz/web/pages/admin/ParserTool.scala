@@ -5,9 +5,16 @@
 package org.linkerz.web.pages.admin
 
 import org.apache.tapestry5.annotations.{InjectComponent, Persist, Property}
-import org.linkerz.crawler.bot.parser.LinkerZParser
+import org.linkerz.crawler.bot.parser.{LinkerZParserResult, LinkerZParser}
 import org.linkerz.mongodb.model.LinkParseData
 import org.apache.tapestry5.corelib.components.Zone
+import java.util
+import grizzled.slf4j.Logging
+import org.linkerz.crawler.core.fetcher.Fetcher
+import org.linkerz.crawler.core.model.WebUrl
+import collection.mutable.ListBuffer
+import org.linkerz.crawler.core.parser.ParserResult
+import org.linkerz.crawler.bot.matcher.SimpleRegexMatcher
 
 
 /**
@@ -18,7 +25,7 @@ import org.apache.tapestry5.corelib.components.Zone
  *
  */
 
-class ParserTool {
+class ParserTool extends Logging {
 
   @Persist
   @Property
@@ -70,6 +77,10 @@ class ParserTool {
 
   @Persist
   @Property
+  var numberOfUrl: Int = _
+
+  @Persist
+  @Property
   var title: String = _
 
   @Persist
@@ -79,6 +90,12 @@ class ParserTool {
   @Persist
   @Property
   var img: String = _
+
+  @Property
+  var links = new util.ArrayList[LinkerZParserResult]()
+
+  @Property
+  var link: LinkerZParserResult = _
 
   @InjectComponent
   var updateZone: Zone = _
@@ -98,11 +115,31 @@ class ParserTool {
 
     linkParseData.imgSelection = imgSelection
 
+    val fetchResults = new ListBuffer[ParserResult]
+    val fetcher = new Fetcher
+    val fetchResult = fetcher.fetch(new WebUrl(urlTest))
+
+    fetchResults += fetchResult
+
+    var count = 0
+    var index = 0
+    while (count != numberOfUrl && fetchResult.webUrls.size > index) {
+      if (SimpleRegexMatcher.matcher(fetchResult.webUrls(index).url, urlRegex)) {
+        fetchResults += fetcher.fetch(fetchResult.webUrls(index))
+        count += 1
+      }
+      index += 1
+    }
+
     val parser = new LinkerZParser
-    val result = parser.parse(urlTest, linkParseData)
-    title = result.title
-    img = result.imgSrc
-    description = result.description
+    fetchResults.foreach(web => {
+      val result = parser.parse(web.webPage.asLink(), linkParseData)
+      if (result != null && result.imgSrc != null) {
+        links.add(result)
+      } else {
+        info("can not get image " + web.webPage.webUrl.url)
+      }
+    })
 
     updateZone
   }

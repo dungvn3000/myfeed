@@ -1,6 +1,21 @@
 <html t:type="adminLayout" title="LinkerZ Parser Tool"
-      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
-        >
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+
+    <section class="span6">
+            <t:zone t:id="updateZone">
+                <t:loop source="links" value="link">
+                    <div class="row-fluid">
+                        <div class="span4">
+                            <img src="http://vnexpress.net/${link.imgSrc}" alt="" width="80" height="80" style="padding-left:60px;"/>
+                        </div>
+                        <div class="span8">
+                            <h5>${link.title}</h5>
+                            <p>${link.description}</p>
+                        </div>
+                        </div>
+                </t:loop>
+            </t:zone>
+    </section>
 
     <section class="span6">
         <t:form t:id="parserForm" class="well form-inline" zone="updateZone">
@@ -57,6 +72,7 @@
 
                     <div class="controls">
                         <t:textfield value="urlTest" t:id="urlTestTxt"/>
+                        <t:textfield value="numberOfUrl" t:id="numberOfUrl" class="input-small" placeholder="numberOfUrl"/>
                     </div>
                 </div>
 
@@ -67,20 +83,5 @@
             </fieldset>
         </t:form>
     </section>
-
-
-    <t:zone t:id="updateZone">
-        <section class="span6">
-            <div class="row">
-                <div class="span2">
-                    <img src="http://vnexpress.net/${img}" alt="" width="80" height="80" style="padding-left:60px;"/>
-                </div>
-                <div class="span4">
-                    <h5>${title}</h5>
-                    <p>${description}</p>
-                </div>
-            </div>
-        </section>
-    </t:zone>
 
 </html>

@@ -14,7 +14,7 @@ import com.googlecode.flaxcrawler.utils.UrlUtils
  *
  */
 
-case class WebUrl(_url: String) {
+case class WebUrl(private val _url: String) {
 
   def domainName = UrlUtils.getDomainName(url)
 
