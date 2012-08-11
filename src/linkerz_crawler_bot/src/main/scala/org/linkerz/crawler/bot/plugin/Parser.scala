@@ -11,6 +11,7 @@ import com.googlecode.flaxcrawler.utils.UrlUtils
 import grizzled.slf4j.Logging
 import org.jsoup.nodes.Document
 import org.linkerz.crawler.bot.matcher.SimpleRegexMatcher
+import collection.mutable.ListBuffer
 
 /**
  * The Class ParserPlugin.
@@ -21,6 +22,8 @@ import org.linkerz.crawler.bot.matcher.SimpleRegexMatcher
  */
 
 trait Parser extends Logging {
+
+  var _pluginData: ParserPlugin = _
 
   /**
    * Check the url is suitable with the plugin or not
@@ -37,7 +40,7 @@ trait Parser extends Logging {
    * @param link
    * @return false if some thing go wrong.
    */
-  def parse(link: Link): Boolean = {
+  def parse(link: Link): ParserStatus = {
     assert(link != null)
     parse(link, pluginData)
   }
@@ -48,27 +51,29 @@ trait Parser extends Logging {
    * @param doc
    * @return false then the parser will skip parse it.
    */
-  def beforeParse(link: Link, doc: Document): Boolean = true
+  def beforeParse(link: Link, doc: Document, parserResult: ParserStatus): Boolean = true
 
   /**
    * After parse a link.
    * @param link
    * @param doc
    */
-  def afterParse(link: Link, doc: Document) {}
+  def afterParse(link: Link, doc: Document, parserResult: ParserStatus) {}
 
   /**
    * Default parse method.
    * @param link
    * @param parseData
    */
-  protected def parse(link: Link, parseData: ParserPlugin): Boolean = {
-    var someThingWrong = false
+  protected def parse(link: Link, parseData: ParserPlugin): ParserStatus = {
+    val parserResult = new ParserStatus
 
     val inputStream = new ByteArrayInputStream(link.content)
     val doc = Jsoup.parse(inputStream, link.contentEncoding, UrlUtils.getDomainName(link.url))
 
-    if (!beforeParse(link, doc)) return false
+    if (!beforeParse(link, doc, parserResult)) {
+      return parserResult
+    }
 
     val title = doc.select(parseData.titleSelection)
     val description = doc.select(parseData.descriptionSelection)
@@ -114,34 +119,36 @@ trait Parser extends Logging {
 
     //Log error
     if (titleText == null || titleText.trim.isEmpty) {
-      info("Can not parse the title for " + link.url)
-      someThingWrong = true
+      parserResult.error("Can not parse the title for " + link.url)
     }
 
     if (descriptionText == null || descriptionText.trim.isEmpty) {
-      info("Can not parse the description for " + link.url)
-      someThingWrong = true
+      parserResult.error("Can not parse the description for " + link.url)
     }
 
     if (imgSrc == null || imgSrc.trim.isEmpty) {
-      info("Can not parse the image for " + link.url)
-      someThingWrong = true
+      parserResult.error("Can not parse the image for " + link.url)
     }
 
     link.title = titleText
     link.description = descriptionText
     link.featureImageUrl = img.attr("src")
 
-    afterParse(link, doc)
+    afterParse(link, doc, parserResult)
 
-    !someThingWrong
+    parserResult
   }
 
   /**
    * Data for the plugin
    * @return
    */
-  def pluginData: ParserPlugin
+  def pluginData: ParserPlugin = {
+    if (_pluginData == null) {
+      return defaultData
+    }
+    _pluginData
+  }
 
   /**
    * Setter for the data
@@ -149,4 +156,25 @@ trait Parser extends Logging {
    */
   def pluginData_=(pluginData: ParserPlugin) {}
 
+  /**
+   * Default data.
+   * @return
+   */
+  def defaultData: ParserPlugin
+}
+
+object Parser extends Enumeration {
+  type Status = Value
+  val DONE, SKIP, ERROR = Value
+}
+
+class ParserStatus {
+  var code: Parser.Status = Parser.DONE
+  var _error = new ListBuffer[String]
+
+  def error = _error
+
+  def error(msg: String) {
+    _error += msg
+  }
 }

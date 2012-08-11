@@ -17,6 +17,7 @@ import org.linkerz.crawler.bot.matcher.SimpleRegexMatcher
 import org.linkerz.web.services.plugin.PluginService
 import org.apache.tapestry5.ioc.annotations.Inject
 import org.linkerz.web.services.parser.ParserService
+import org.linkerz.crawler.bot.plugin.Parser
 
 
 /**
@@ -29,9 +30,8 @@ import org.linkerz.web.services.parser.ParserService
 
 class ParserTool extends Logging {
 
-  @Persist
   @Property
-  var numberOfUrl: Int = _
+  var numberOfUrl: Int = 10
 
   @Property
   var links = new util.ArrayList[Link]()
@@ -57,7 +57,7 @@ class ParserTool extends Logging {
   @Inject
   var parserService: ParserService = _
 
-  def onActivate (id: String) {
+  def onActivate(id: String) {
     parseData = pluginService.findParserPlugin(id)
   }
 
@@ -100,10 +100,14 @@ class ParserTool extends Logging {
     fetchResults.foreach(web => {
       val link = web.webPage.asLink()
       if (parser.isMatch(link)) {
-        if (parser.parse(link)) {
-          links.add(link)
-        } else {
-          info("Some thing worng " + link.url)
+        val status = parser.parse(link)
+        status.code match {
+          case Parser.DONE => links.add(link)
+          case Parser.SKIP => info("Skip this link " + link.url)
+          case Parser.ERROR => {
+            info("Some thing worng " + link.url)
+            println(status.error.mkString)
+          }
         }
       } else {
         info("The link is not match " + link.url)

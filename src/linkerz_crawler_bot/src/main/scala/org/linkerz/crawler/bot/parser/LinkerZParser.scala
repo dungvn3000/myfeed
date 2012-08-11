@@ -4,7 +4,7 @@
 
 package org.linkerz.crawler.bot.parser
 
-import org.linkerz.crawler.bot.plugin.Parser
+import org.linkerz.crawler.bot.plugin.{ParserStatus, Parser}
 import org.linkerz.mongodb.model.{ParserPlugin, Link}
 import org.springframework.data.mongodb.core.MongoOperations
 import reflect.BeanProperty
@@ -50,11 +50,14 @@ class LinkerZParser {
    * @param link
    * @return
    */
-  def parse(link: Link): Boolean = {
+  def parse(link: Link): ParserStatus = {
     plugins.foreach(plugin => {
       if (plugin.isMatch(link)) return plugin.parse(link)
     })
-    false
+    val parserStatus = new ParserStatus
+    parserStatus.error("Can not find any plugin for this link")
+    parserStatus.code = Parser.SKIP
+    parserStatus
   }
 
 

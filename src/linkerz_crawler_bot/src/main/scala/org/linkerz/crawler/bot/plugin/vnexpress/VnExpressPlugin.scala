@@ -7,7 +7,7 @@ package org.linkerz.crawler.bot.plugin.vnexpress
 import grizzled.slf4j.Logging
 import org.linkerz.mongodb.model.{ParserPlugin, Link}
 import org.jsoup.nodes.Document
-import org.linkerz.crawler.bot.plugin.Parser
+import org.linkerz.crawler.bot.plugin.{ParserStatus, Parser}
 
 /**
  * The Class VnExpress.net Plugin.
@@ -19,42 +19,33 @@ import org.linkerz.crawler.bot.plugin.Parser
 
 class VnExpressPlugin extends Parser with Logging {
 
-  var _pluginData: ParserPlugin = _
-
-  override def pluginData_=(pluginData: ParserPlugin) {
-    _pluginData = pluginData
+  def defaultData = {
+    val pluginData = new ParserPlugin
+    pluginData.pluginName = "VnExpress"
+    pluginData.pluginVersion = "0.0.1"
+    pluginData.pluginGroup = "vnexpress.net"
+    pluginData.pluginClass = this.getClass.getName
+    pluginData.enable = true
+    pluginData.urlRegex = "*/vnexpress.net/*/*/2012/*"
+    pluginData.titleSelection = ".content h1.Title"
+    pluginData.descriptionSelection = ".content .Lead"
+    pluginData.imgSelection = ".content img"
+    pluginData.urlTest = "http://vnexpress.net/"
+    pluginData
   }
 
-  def pluginData = {
-    if (_pluginData == null) {
-      /**
-       * Default data
-       */
-      _pluginData = new ParserPlugin
-      _pluginData.pluginName = "VnExpress"
-      _pluginData.pluginVersion = "0.0.1"
-      _pluginData.pluginGroup = "vnexpress.net"
-      _pluginData.pluginClass = this.getClass.getName
-      _pluginData.enable = true
-      _pluginData.urlRegex = "*/vnexpress.net/*/*/2012/*"
-      _pluginData.titleSelection = ".content h1.Title"
-      _pluginData.descriptionSelection = ".content .Lead"
-      _pluginData.imgSelection = ".content img"
-      _pluginData.urlTest = "http://vnexpress.net/"
-    }
-    _pluginData
-  }
-
-
-  override def beforeParse(link: Link, doc: Document): Boolean = {
+  override def beforeParse(link: Link, doc: Document, parserResult: ParserStatus): Boolean = {
     //Skip it, because the url is no longer exist
     if (doc.text().contains("Không tìm thấy đường dẫn này")) {
+      parserResult.code = Parser.SKIP
+      parserResult.error("The link is not exist " + link.url)
       return false
     }
     true
   }
 
-  override def afterParse(link: Link, doc: Document) {
+
+  override def afterParse(link: Link, doc: Document, parserResult: ParserStatus) {
     //Remove another link inside vnexpress description
     if (link.description.contains(". >")) {
       link.description = link.description.split(". >")(0)
