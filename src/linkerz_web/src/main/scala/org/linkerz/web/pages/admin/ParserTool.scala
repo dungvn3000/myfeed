@@ -5,7 +5,6 @@
 package org.linkerz.web.pages.admin
 
 import org.apache.tapestry5.annotations.{InjectComponent, Persist, Property}
-import org.linkerz.crawler.bot.plugin.VnExpressPlugin
 import org.linkerz.mongodb.model.{ParserPlugin, Link}
 import org.apache.tapestry5.corelib.components.{Form, Zone}
 import java.util
@@ -17,6 +16,7 @@ import org.linkerz.crawler.core.parser.ParserResult
 import org.linkerz.crawler.bot.matcher.SimpleRegexMatcher
 import org.linkerz.web.services.plugin.PluginService
 import org.apache.tapestry5.ioc.annotations.Inject
+import org.linkerz.web.services.parser.ParserService
 
 
 /**
@@ -28,10 +28,6 @@ import org.apache.tapestry5.ioc.annotations.Inject
  */
 
 class ParserTool extends Logging {
-
-  @Persist
-  @Property
-  var urlTest: String = _
 
   @Persist
   @Property
@@ -58,6 +54,9 @@ class ParserTool extends Logging {
   @Inject
   var pluginService: PluginService = _
 
+  @Inject
+  var parserService: ParserService = _
+
   def onActivate (id: String) {
     parseData = pluginService.findParserPlugin(id)
   }
@@ -77,7 +76,7 @@ class ParserTool extends Logging {
     val fetchResults = new ListBuffer[ParserResult]
     val urlList = new ListBuffer[WebUrl]
     val fetcher = new Fetcher
-    val beginUrl = new WebUrl(urlTest)
+    val beginUrl = new WebUrl(parseData.urlTest)
     val fetchResult = fetcher.fetch(beginUrl)
 
     urlList += beginUrl
@@ -95,7 +94,7 @@ class ParserTool extends Logging {
       index += 1
     }
 
-    val parser = new VnExpressPlugin
+    val parser = parserService.getParser(parseData.pluginClass)
     parser.pluginData = parseData
 
     fetchResults.foreach(web => {

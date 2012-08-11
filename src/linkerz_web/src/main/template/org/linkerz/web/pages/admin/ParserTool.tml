@@ -35,7 +35,16 @@
                         UrlRegex:
                     </lable>
                     <div class="controls">
-                        <t:textfield value="parseData.urlRegex" t:id="urlRegexTxt"/>
+                        <t:textfield class="input-xlarge" value="parseData.urlRegex" t:id="urlRegexTxt"/>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <lable class="control-label">
+                        ExcludeRegex:
+                    </lable>
+                    <div class="controls">
+                        <t:textfield class="input-xlarge" value="parseData.excludeUrl" t:id="excludeUrlTxt"/>
                     </div>
                 </div>
 
@@ -73,7 +82,7 @@
                 </div>
 
                 <div class="form-actions">
-                    <button class="btn btn-primary" type="submit">Test</button>
+                    <button class="btn btn-primary" type="submit">Save</button>
                     <t:actionlink t:id="cancelBtn" class="btn">Cancel</t:actionlink>
                 </div>
             </fieldset>
@@ -82,7 +91,7 @@
         <t:form t:id="testForm" class="well form-search" zone="linksZone">
             <t:errors/>
             <lable class="control-label">Url Test:</lable>
-            <t:textfield value="urlTest" t:id="urlTestTxt"/>
+            <t:textfield value="parseData.urlTest" t:id="urlTestTxt"/>
             <t:textfield value="numberOfUrl" t:id="numberOfUrl" class="input-mini" placeholder="numberOfUrl"/>
             <div class="form-actions">
                 <button class="btn btn-primary" type="submit">

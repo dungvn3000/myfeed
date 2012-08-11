@@ -10,6 +10,7 @@ import org.linkerz.mongodb.model.{ParserPlugin, Link}
 import org.linkerz.test.spring.SpringContext
 
 import collection.JavaConversions._
+import vnexpress.VnExpressPlugin
 
 /**
  * The Class TestVnExpressPlugin.

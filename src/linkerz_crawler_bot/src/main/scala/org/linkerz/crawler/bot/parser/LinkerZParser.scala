@@ -84,4 +84,17 @@ class LinkerZParser {
     mongoOperations.remove(Query.query(Criteria.where("pluginClass").is(pluginClass)), classOf[ParserPlugin])
   }
 
+  /**
+   * Return the parser.
+   * @param pluginClass
+   * @return
+   */
+  def get(pluginClass: String): Parser = {
+    val plugin = plugins.find(plugin => plugin.getClass.getName == pluginClass)
+    if (!plugin.isEmpty) {
+      return plugin.get
+    }
+    null
+  }
+
 }

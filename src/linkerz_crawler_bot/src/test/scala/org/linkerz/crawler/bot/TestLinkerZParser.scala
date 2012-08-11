@@ -7,10 +7,7 @@ package org.linkerz.crawler.bot
 import org.scalatest.FunSuite
 import org.linkerz.test.spring.SpringContext
 import parser.LinkerZParser
-import plugin.VnExpressPlugin
-import org.springframework.data.mongodb.core.MongoOperations
-import org.linkerz.mongodb.model.Link
-import collection.JavaConversions._
+import plugin.vnexpress.VnExpressPlugin
 import org.linkerz.crawler.core.fetcher.Fetcher
 import org.linkerz.crawler.core.model.WebUrl
 
@@ -53,4 +50,8 @@ class TestLinkerZParser extends FunSuite with SpringContext {
     linkerZParser.delete(classOf[VnExpressPlugin].getName)
   }
 
+  test("testGetParser") {
+    val linkerZParser = context.getBean("linkerZParser", classOf[LinkerZParser])
+    assert(linkerZParser.get(classOf[VnExpressPlugin].getName) != null)
+  }
 }

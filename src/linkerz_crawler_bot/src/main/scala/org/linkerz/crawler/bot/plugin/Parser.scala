@@ -46,8 +46,9 @@ trait Parser extends Logging {
    * Before parse a link.
    * @param link
    * @param doc
+   * @return false then the parser will skip parse it.
    */
-  def beforeParse(link: Link, doc: Document) {}
+  def beforeParse(link: Link, doc: Document): Boolean = true
 
   /**
    * After parse a link.
@@ -61,13 +62,13 @@ trait Parser extends Logging {
    * @param link
    * @param parseData
    */
-  protected def parse(link: Link, parseData: ParserPlugin) = {
+  protected def parse(link: Link, parseData: ParserPlugin): Boolean = {
     var someThingWrong = false
 
     val inputStream = new ByteArrayInputStream(link.content)
     val doc = Jsoup.parse(inputStream, link.contentEncoding, UrlUtils.getDomainName(link.url))
 
-    beforeParse(link, doc)
+    if (!beforeParse(link, doc)) return false
 
     val title = doc.select(parseData.titleSelection)
     val description = doc.select(parseData.descriptionSelection)

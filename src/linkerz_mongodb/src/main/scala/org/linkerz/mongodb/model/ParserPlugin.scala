@@ -40,4 +40,6 @@ class ParserPlugin extends LinkerZEntity {
 
   var imgSelection: String = _
 
+  var urlTest: String = _
+
 }

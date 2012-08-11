@@ -2,11 +2,12 @@
  * Copyright (C) 2012 - 2013 LinkerZ
  */
 
-package org.linkerz.crawler.bot.plugin
+package org.linkerz.crawler.bot.plugin.vnexpress
 
 import grizzled.slf4j.Logging
 import org.linkerz.mongodb.model.{ParserPlugin, Link}
 import org.jsoup.nodes.Document
+import org.linkerz.crawler.bot.plugin.Parser
 
 /**
  * The Class VnExpress.net Plugin.
@@ -39,8 +40,18 @@ class VnExpressPlugin extends Parser with Logging {
       _pluginData.titleSelection = ".content h1.Title"
       _pluginData.descriptionSelection = ".content .Lead"
       _pluginData.imgSelection = ".content img"
+      _pluginData.urlTest = "http://vnexpress.net/"
     }
     _pluginData
+  }
+
+
+  override def beforeParse(link: Link, doc: Document): Boolean = {
+    //Skip it, because the url is no longer exist
+    if (doc.text().contains("Không tìm thấy đường dẫn này")) {
+      return false
+    }
+    true
   }
 
   override def afterParse(link: Link, doc: Document) {

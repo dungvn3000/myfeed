@@ -4,8 +4,8 @@
 
     <div class="nav-collapse">
         <ul class="nav nav-pills">
-            <li class="active">
-                <a>Parser Tool</a>
+            <li t:type="loop" source="pages" value="page" class="${activeClass}">
+                <t:pagelink page="${page.path}">${page.name}</t:pagelink>
             </li>
         </ul>
     </div>
