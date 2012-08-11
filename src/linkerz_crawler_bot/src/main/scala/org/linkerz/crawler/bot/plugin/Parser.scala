@@ -4,11 +4,13 @@
 
 package org.linkerz.crawler.bot.plugin
 
-import org.linkerz.mongodb.model.{ParseData, Link}
+import org.linkerz.mongodb.model.{ParserPlugin, Link}
 import java.io.ByteArrayInputStream
 import org.jsoup.Jsoup
 import com.googlecode.flaxcrawler.utils.UrlUtils
 import grizzled.slf4j.Logging
+import org.jsoup.nodes.Document
+import org.linkerz.crawler.bot.matcher.SimpleRegexMatcher
 
 /**
  * The Class ParserPlugin.
@@ -18,34 +20,54 @@ import grizzled.slf4j.Logging
  *
  */
 
-trait ParserPlugin extends Logging {
+trait Parser extends Logging {
 
   /**
    * Check the url is suitable with the plugin or not
    * @param link
    * @return
    */
-  def isMatch(link: Link): Boolean
-
+  def isMatch(link: Link): Boolean = {
+    assert(link != null)
+    SimpleRegexMatcher.matcher(link.url, pluginData.urlRegex)
+  }
 
   /**
    * Parse the link. The meta data will be add to the link after parsed it.
    * @param link
    * @return false if some thing go wrong.
    */
-  def parse(link: Link): Boolean
+  def parse(link: Link): Boolean = {
+    assert(link != null)
+    parse(link, pluginData)
+  }
 
+  /**
+   * Before parse a link.
+   * @param link
+   * @param doc
+   */
+  def beforeParse(link: Link, doc: Document) {}
+
+  /**
+   * After parse a link.
+   * @param link
+   * @param doc
+   */
+  def afterParse(link: Link, doc: Document) {}
 
   /**
    * Default parse method.
    * @param link
    * @param parseData
    */
-  protected def parse(link: Link, parseData: ParseData) = {
+  protected def parse(link: Link, parseData: ParserPlugin) = {
     var someThingWrong = false
 
     val inputStream = new ByteArrayInputStream(link.content)
     val doc = Jsoup.parse(inputStream, link.contentEncoding, UrlUtils.getDomainName(link.url))
+
+    beforeParse(link, doc)
 
     val title = doc.select(parseData.titleSelection)
     val description = doc.select(parseData.descriptionSelection)
@@ -109,6 +131,21 @@ trait ParserPlugin extends Logging {
     link.description = descriptionText
     link.featureImageUrl = img.attr("src")
 
+    afterParse(link, doc)
+
     !someThingWrong
   }
+
+  /**
+   * Data for the plugin
+   * @return
+   */
+  def pluginData: ParserPlugin
+
+  /**
+   * Setter for the data
+   * @param pluginData
+   */
+  def pluginData_=(pluginData: ParserPlugin) {}
+
 }

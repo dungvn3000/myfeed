@@ -6,7 +6,7 @@ package org.linkerz.web.pages.admin
 
 import org.apache.tapestry5.annotations.{InjectComponent, Persist, Property}
 import org.linkerz.crawler.bot.plugin.VnExpressPlugin
-import org.linkerz.mongodb.model.{Link, ParseData}
+import org.linkerz.mongodb.model.{ParserPlugin, Link}
 import org.apache.tapestry5.corelib.components.{Form, Zone}
 import java.util
 import grizzled.slf4j.Logging
@@ -95,12 +95,12 @@ class ParserTool extends Logging {
   var testForm: Form = _
 
   @Persist
-  var parseData: ParseData = _
+  var parseData: ParserPlugin = _
 
   def onSubmitFromParserForm() {
 
     if (parseData == null) {
-      parseData = new ParseData
+      parseData = new ParserPlugin
     }
 
     parseData.urlRegex = urlRegex
@@ -144,7 +144,7 @@ class ParserTool extends Logging {
     }
 
     val parser = new VnExpressPlugin
-    parser.parseData = parseData
+    parser.pluginData = parseData
 
     fetchResults.foreach(web => {
       val link = web.webPage.asLink()

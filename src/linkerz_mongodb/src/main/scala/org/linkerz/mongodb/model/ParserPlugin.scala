@@ -5,17 +5,18 @@
 package org.linkerz.mongodb.model
 
 /**
- * The Class LinkParser.
+ * The Class ParserPlugin.
  *
  * @author Nguyen Duc Dung
- * @since 8/9/12, 11:59 PM
+ * @since 8/11/12, 4:49 PM
  *
  */
 
-class ParseData extends LinkerZEntity {
+class ParserPlugin extends LinkerZEntity {
 
-  //Only using for correct plugin
   var pluginClass: String = _
+
+  var enable: Boolean = _
 
   /**
    * Using simple regex.
@@ -34,6 +35,5 @@ class ParseData extends LinkerZEntity {
   var descriptionMaxLength: Int = _
 
   var imgSelection: String = _
-
 
 }

@@ -5,8 +5,8 @@
 package org.linkerz.crawler.bot.plugin
 
 import grizzled.slf4j.Logging
-import org.linkerz.mongodb.model.{ParseData, Link}
-import org.linkerz.crawler.bot.matcher.SimpleRegexMatcher
+import org.linkerz.mongodb.model.{ParserPlugin, Link}
+import org.jsoup.nodes.Document
 
 /**
  * The Class VnExpress.net Plugin.
@@ -16,27 +16,34 @@ import org.linkerz.crawler.bot.matcher.SimpleRegexMatcher
  *
  */
 
-class VnExpressPlugin extends ParserPlugin with Logging {
+class VnExpressPlugin extends Parser with Logging {
 
-  /**
-   * Load from database
-   */
-  var parseData = new ParseData
+  var _pluginData: ParserPlugin = _
 
-  def isMatch(link: Link) = {
-    assert(link != null)
-    SimpleRegexMatcher.matcher(link.url, parseData.urlRegex)
+  override def pluginData_=(pluginData: ParserPlugin) {
+    _pluginData = pluginData
   }
 
-  def parse(link: Link) = {
-    assert(link != null)
-    val result = parse(link, parseData)
+  def pluginData = {
+    if (_pluginData == null) {
+      /**
+       * Default data
+       */
+      _pluginData = new ParserPlugin
+      _pluginData.pluginClass = this.getClass.getName
+      _pluginData.enable = true
+      _pluginData.urlRegex = "*/vnexpress.net/*/*/2012/*"
+      _pluginData.titleSelection = ".content h1.Title"
+      _pluginData.descriptionSelection = ".content .Lead"
+      _pluginData.imgSelection = ".content img"
+    }
+    _pluginData
+  }
 
+  override def afterParse(link: Link, doc: Document) {
     //Remove another link inside vnexpress description
     if (link.description.contains(". >")) {
       link.description = link.description.split(". >")(0)
     }
-
-    result
   }
 }

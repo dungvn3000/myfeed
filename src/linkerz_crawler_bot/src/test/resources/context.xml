@@ -5,4 +5,8 @@
 
     <import resource="db.xml"/>
 
+    <bean id="linkerZParser" class="org.linkerz.crawler.bot.parser.LinkerZParser" init-method="load">
+        <property name="mongoOperations" ref="mongoTemplate"/>
+    </bean>
+
 </beans>

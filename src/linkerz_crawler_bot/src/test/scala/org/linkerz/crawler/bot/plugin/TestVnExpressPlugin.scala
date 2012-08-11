@@ -6,7 +6,7 @@ package org.linkerz.crawler.bot.plugin
 
 import org.scalatest.FunSuite
 import org.springframework.data.mongodb.core.MongoOperations
-import org.linkerz.mongodb.model.{ParseData, Link}
+import org.linkerz.mongodb.model.{ParserPlugin, Link}
 import org.linkerz.test.spring.SpringContext
 
 import collection.JavaConversions._
@@ -23,14 +23,14 @@ class TestVnExpressPlugin extends FunSuite with SpringContext {
 
   val plugin = new VnExpressPlugin
   //Prepare data
-  val parseData = new ParseData
+  val parseData = new ParserPlugin
   parseData.urlRegex = "*/vnexpress.net/*/*/*/index.html"
   parseData.titleSelection = "title"
   parseData.descriptionSelection = "head meta[name=description]"
   parseData.descriptionAttName = "content"
   parseData.imgSelection = "img.img-logo"
 
-  plugin.parseData = parseData
+  plugin.pluginData = parseData
 
   test("testPlugin") {
     val mongoOperations = context.getBean("mongoTemplate", classOf[MongoOperations])
