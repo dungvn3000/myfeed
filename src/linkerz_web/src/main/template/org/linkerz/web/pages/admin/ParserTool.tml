@@ -3,25 +3,11 @@
 
     <section class="span6">
 
-        <t:zone t:id="downloadZone">
-            <div class="row-fluid">
-                <a href="${downloadUrl}">${title}</a>
-                <div class="btn-group">
-                    <t:actionlink t:id="nextTitleBtn" class="btn" zone="downloadZone">
-                        <i class="icon-chevron-left"></i>
-                    </t:actionlink>
-                    <a class="btn">
-                        <i class="icon-chevron-right"></i>
-                    </a>
-                </div>
-            </div>
-        </t:zone>
-
-        <t:zone t:id="updateZone">
+        <t:zone t:id="linksZone">
             <t:loop source="links" value="link">
                 <div class="row-fluid">
                     <div class="span4">
-                        <img src="http://vnexpress.net/${link.imgSrc}" alt="" width="80" height="80" style="padding-left:60px;"/>
+                        <img src="http://vnexpress.net/${link.featureImageUrl}" alt="" width="80" height="80" style="padding-left:60px;"/>
                     </div>
                     <div class="span8">
                         <h5>
@@ -40,20 +26,7 @@
 
     <section class="span6">
 
-        <t:form t:id="downloadForm" class="well form-search" zone="downloadZone">
-            <t:errors/>
-            <fieldset>
-                <lable class="control-label">
-                    Url:
-                </lable>
-                <t:textfield value="downloadUrl" t:id="downloadUrlTxt"/>
-                <button class="btn btn-primary" type="submit">
-                    Download
-                </button>
-            </fieldset>
-        </t:form>
-
-        <t:form t:id="parserForm" class="well form-inline" zone="updateZone">
+        <t:form t:id="parserForm" class="well form-inline">
             <t:errors/>
             <fieldset>
 
@@ -106,7 +79,7 @@
             </fieldset>
         </t:form>
 
-        <t:form t:id="testForm" class="well form-search" zone="updateZone">
+        <t:form t:id="testForm" class="well form-search" zone="linksZone">
             <t:errors/>
             <lable class="control-label">Url Test:</lable>
             <t:textfield value="urlTest" t:id="urlTestTxt"/>

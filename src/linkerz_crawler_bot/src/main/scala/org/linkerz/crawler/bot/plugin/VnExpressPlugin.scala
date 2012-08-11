@@ -30,6 +30,13 @@ class VnExpressPlugin extends ParserPlugin with Logging {
 
   def parse(link: Link) = {
     assert(link != null)
-    parse(link, parseData)
+    val result = parse(link, parseData)
+
+    //Remove another link inside vnexpress description
+    if (link.description.contains(". >")) {
+      link.description = link.description.split(". >")(0)
+    }
+
+    result
   }
 }

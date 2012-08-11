@@ -33,4 +33,9 @@ class Link extends LinkerZEntity {
 
   var indexDate: util.Date = _
 
+  override def equals(obj: Any) = {
+    obj.isInstanceOf[Link] && obj.asInstanceOf[Link].url == url
+  }
+
+  override def hashCode() = url.hashCode
 }

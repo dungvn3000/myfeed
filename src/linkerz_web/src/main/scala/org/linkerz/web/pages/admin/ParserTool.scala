@@ -15,10 +15,6 @@ import org.linkerz.crawler.core.model.WebUrl
 import collection.mutable.ListBuffer
 import org.linkerz.crawler.core.parser.ParserResult
 import org.linkerz.crawler.bot.matcher.SimpleRegexMatcher
-import java.io.ByteArrayInputStream
-import org.jsoup.Jsoup
-import com.googlecode.flaxcrawler.utils.UrlUtils
-import org.jsoup.nodes.Document
 
 
 /**
@@ -83,18 +79,6 @@ class ParserTool extends Logging {
   @Property
   var numberOfUrl: Int = _
 
-  @Persist
-  @Property
-  var title: String = _
-
-  @Persist
-  @Property
-  var description: String = _
-
-  @Persist
-  @Property
-  var img: String = _
-
   @Property
   var links = new util.ArrayList[Link]()
 
@@ -102,94 +86,81 @@ class ParserTool extends Logging {
   var link: Link = _
 
   @InjectComponent
-  var updateZone: Zone = _
-
-  @InjectComponent
-  var downloadZone: Zone = _
-
-  @Persist
-  @Property
-  var downloadUrl: String = _
+  var linksZone: Zone = _
 
   @InjectComponent
   var parserForm: Form = _
 
   @InjectComponent
-  var downloadForm: Form = _
+  var testForm: Form = _
 
-  def onSubmitFromParserForm() = {
+  @Persist
+  var parseData: ParseData = _
 
-    val linkParseData = new ParseData
-    linkParseData.urlRegex = urlRegex
+  def onSubmitFromParserForm() {
 
-    linkParseData.titleAttName = titleAttName
-    linkParseData.titleMaxLength = titleMaxLength
-    linkParseData.titleSelection = titleSelection
-
-    linkParseData.descriptionAttName = descriptionAttName
-    linkParseData.descriptionMaxLength = descriptionMaxLength
-    linkParseData.descriptionSelection = descriptionSelection
-
-    linkParseData.imgSelection = imgSelection
-
-    val fetchResults = new ListBuffer[ParserResult]
-    val fetcher = new Fetcher
-    val fetchResult = fetcher.fetch(new WebUrl(urlTest))
-
-    fetchResults += fetchResult
-
-    var count = 0
-    var index = 0
-    while (count != numberOfUrl && fetchResult.webUrls.size > index) {
-      if (SimpleRegexMatcher.matcher(fetchResult.webUrls(index).url, urlRegex)) {
-        fetchResults += fetcher.fetch(fetchResult.webUrls(index))
-        count += 1
-      }
-      index += 1
+    if (parseData == null) {
+      parseData = new ParseData
     }
 
-    val parser = new VnExpressPlugin
-    fetchResults.foreach(web => {
-      val link = web.webPage.asLink()
-      val result = parser.parse(link)
-      if (result) {
-        links.add(link)
-      } else {
-        info("Some thing wrong " + web.webPage.webUrl.url)
-      }
-    })
+    parseData.urlRegex = urlRegex
 
-    updateZone
+    parseData.titleAttName = titleAttName
+    parseData.titleMaxLength = titleMaxLength
+    parseData.titleSelection = titleSelection
+
+    parseData.descriptionAttName = descriptionAttName
+    parseData.descriptionMaxLength = descriptionMaxLength
+    parseData.descriptionSelection = descriptionSelection
+
+    parseData.imgSelection = imgSelection
   }
 
   def onActionFromCancelBtn() {
     links.clear()
   }
 
-  @Persist
-  var fetcher: Fetcher = _
+  def onSubmitFromTestForm() = {
 
-  @Persist
-  var doc: Document = _
+    val fetchResults = new ListBuffer[ParserResult]
+    val urlList = new ListBuffer[WebUrl]
+    val fetcher = new Fetcher
+    val beginUrl = new WebUrl(urlTest)
+    val fetchResult = fetcher.fetch(beginUrl)
 
-  def onSubmitFromDownloadForm() = {
-    fetcher = new Fetcher
-    val fetchResult = fetcher.fetch(new WebUrl(downloadUrl))
-    val link = fetchResult.webPage.asLink
-    val inputStream = new ByteArrayInputStream(link.content)
-    doc = Jsoup.parse(inputStream, link.contentEncoding, UrlUtils.getDomainName(link.url))
+    urlList += beginUrl
+    fetchResults += fetchResult
 
-    title = doc.title
+    var count = 0
+    var index = 0
+    while (count != numberOfUrl && fetchResult.webUrls.size > index) {
+      if (SimpleRegexMatcher.matcher(fetchResult.webUrls(index).url, urlRegex)
+        && !urlList.contains(fetchResult.webUrls(index))) {
+        fetchResults += fetcher.fetch(fetchResult.webUrls(index))
+        urlList += fetchResult.webUrls(index)
+        count += 1
+      }
+      index += 1
+    }
 
-    downloadZone
+    val parser = new VnExpressPlugin
+    parser.parseData = parseData
+
+    fetchResults.foreach(web => {
+      val link = web.webPage.asLink()
+      if (parser.isMatch(link)) {
+        if (parser.parse(link)) {
+          links.add(link)
+        } else {
+          info("Some thing worng " + link.url)
+        }
+      } else {
+        info("The link is not match " + link.url)
+      }
+    })
+
+    linksZone
   }
 
-  def onActionFromNextTitleBtn() {
-
-    title = doc.title
-
-    info(doc.getAllElements.iterator.next.toString)
-
-  }
 
 }

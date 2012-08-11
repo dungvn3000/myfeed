@@ -14,6 +14,9 @@ package org.linkerz.mongodb.model
 
 class ParseData extends LinkerZEntity {
 
+  //Only using for correct plugin
+  var pluginClass: String = _
+
   /**
    * Using simple regex.
    * Only two wildcard
@@ -31,5 +34,6 @@ class ParseData extends LinkerZEntity {
   var descriptionMaxLength: Int = _
 
   var imgSelection: String = _
+
 
 }
