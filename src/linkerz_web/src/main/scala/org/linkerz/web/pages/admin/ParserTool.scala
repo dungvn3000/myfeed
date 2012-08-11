@@ -7,7 +7,7 @@ package org.linkerz.web.pages.admin
 import org.apache.tapestry5.annotations.{InjectComponent, Persist, Property}
 import org.linkerz.crawler.bot.parser.{LinkerZParserResult, LinkerZParser}
 import org.linkerz.mongodb.model.LinkParseData
-import org.apache.tapestry5.corelib.components.Zone
+import org.apache.tapestry5.corelib.components.{Form, Zone}
 import java.util
 import grizzled.slf4j.Logging
 import org.linkerz.crawler.core.fetcher.Fetcher
@@ -15,6 +15,10 @@ import org.linkerz.crawler.core.model.WebUrl
 import collection.mutable.ListBuffer
 import org.linkerz.crawler.core.parser.ParserResult
 import org.linkerz.crawler.bot.matcher.SimpleRegexMatcher
+import java.io.ByteArrayInputStream
+import org.jsoup.Jsoup
+import com.googlecode.flaxcrawler.utils.UrlUtils
+import org.jsoup.nodes.Document
 
 
 /**
@@ -100,7 +104,20 @@ class ParserTool extends Logging {
   @InjectComponent
   var updateZone: Zone = _
 
-  def onSubmit() = {
+  @InjectComponent
+  var downloadZone: Zone = _
+
+  @Persist
+  @Property
+  var downloadUrl: String = _
+
+  @InjectComponent
+  var parserForm: Form = _
+
+  @InjectComponent
+  var downloadForm: Form = _
+
+  def onSubmitFromParserForm() = {
 
     val linkParseData = new LinkParseData
     linkParseData.urlRegex = urlRegex
@@ -144,5 +161,34 @@ class ParserTool extends Logging {
     updateZone
   }
 
+  def onActionFromCancelBtn() {
+    links.clear()
+  }
+
+  @Persist
+  var fetcher: Fetcher = _
+
+  @Persist
+  var doc: Document = _
+
+  def onSubmitFromDownloadForm() = {
+    fetcher = new Fetcher
+    val fetchResult = fetcher.fetch(new WebUrl(downloadUrl))
+    val link = fetchResult.webPage.asLink
+    val inputStream = new ByteArrayInputStream(link.content)
+    doc = Jsoup.parse(inputStream, link.contentEncoding, UrlUtils.getDomainName(link.url))
+
+    title = doc.title
+
+    downloadZone
+  }
+
+  def onActionFromNextTitleBtn() {
+
+    title = doc.title
+
+    info(doc.getAllElements.iterator.next.toString)
+
+  }
 
 }

@@ -43,14 +43,14 @@ class LinkerZParser extends Logging {
     if (SimpleRegexMatcher.matcher(link.url, linkParseData.urlRegex)) {
       val inputStream = new ByteArrayInputStream(link.content)
       val doc = Jsoup.parse(inputStream, link.contentEncoding, UrlUtils.getDomainName(link.url))
-      return parse(doc, linkParseData)
+      return parse(link.url, doc, linkParseData)
     } else {
       info("Url is not match: " + link.url + " - " + linkParseData.urlRegex)
     }
     return null
   }
 
-  private def parse(doc: Document, linkParseData: LinkParseData): LinkerZParserResult = {
+  private def parse(url: String, doc: Document, linkParseData: LinkParseData): LinkerZParserResult = {
     val title = doc.select(linkParseData.titleSelection)
     val description = doc.select(linkParseData.descriptionSelection)
     val img = doc.select(linkParseData.imgSelection)
@@ -66,6 +66,10 @@ class LinkerZParser extends Logging {
       titleText = titleText.substring(0, linkParseData.titleMaxLength)
     }
 
+    if (titleText == null || titleText.trim.length > 0) {
+      titleText = doc.title()
+    }
+
     var descriptionText = description.text()
     if (linkParseData.descriptionAttName != null
       && linkParseData.descriptionAttName.trim.length > 0) {
@@ -77,8 +81,12 @@ class LinkerZParser extends Logging {
       descriptionText = descriptionText.substring(0, linkParseData.descriptionMaxLength)
     }
 
-    new LinkerZParserResult(titleText, descriptionText, img.attr("src"))
+    if (descriptionText == null || descriptionText.trim.isEmpty) {
+      descriptionText = titleText
+    }
+
+    new LinkerZParserResult(url, titleText, descriptionText, img.attr("src"))
   }
 }
 
-case class LinkerZParserResult(title: String, description: String, imgSrc: String)
+case class LinkerZParserResult(url: String, title: String, description: String, imgSrc: String)

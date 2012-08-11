@@ -25,3 +25,12 @@ body {
 .controls input {
     margin-right: 2px;
 }
+
+.form-actions {
+    padding: 12px 20px 0px !important;
+    margin-bottom: 0px !important;
+}
+
+.form-actions button {
+    margin-right: 2px;
+}
