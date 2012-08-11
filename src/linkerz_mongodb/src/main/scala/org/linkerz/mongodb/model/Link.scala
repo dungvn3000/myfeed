@@ -27,7 +27,7 @@ class Link extends LinkerZEntity {
   var html: String = _
   var text: String = _
   var title: String = _
-  var subTitle: String = _
+  var description: String = _
   var featureImageUrl: String = _
   var language: String = _
 

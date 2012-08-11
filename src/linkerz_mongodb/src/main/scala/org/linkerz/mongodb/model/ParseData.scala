@@ -12,7 +12,7 @@ package org.linkerz.mongodb.model
  *
  */
 
-class LinkParseData extends LinkerZEntity {
+class ParseData extends LinkerZEntity {
 
   /**
    * Using simple regex.

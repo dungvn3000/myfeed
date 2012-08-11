@@ -5,8 +5,8 @@
 package org.linkerz.web.pages.admin
 
 import org.apache.tapestry5.annotations.{InjectComponent, Persist, Property}
-import org.linkerz.crawler.bot.parser.{LinkerZParserResult, LinkerZParser}
-import org.linkerz.mongodb.model.LinkParseData
+import org.linkerz.crawler.bot.plugin.VnExpressPlugin
+import org.linkerz.mongodb.model.{Link, ParseData}
 import org.apache.tapestry5.corelib.components.{Form, Zone}
 import java.util
 import grizzled.slf4j.Logging
@@ -96,10 +96,10 @@ class ParserTool extends Logging {
   var img: String = _
 
   @Property
-  var links = new util.ArrayList[LinkerZParserResult]()
+  var links = new util.ArrayList[Link]()
 
   @Property
-  var link: LinkerZParserResult = _
+  var link: Link = _
 
   @InjectComponent
   var updateZone: Zone = _
@@ -119,7 +119,7 @@ class ParserTool extends Logging {
 
   def onSubmitFromParserForm() = {
 
-    val linkParseData = new LinkParseData
+    val linkParseData = new ParseData
     linkParseData.urlRegex = urlRegex
 
     linkParseData.titleAttName = titleAttName
@@ -148,13 +148,14 @@ class ParserTool extends Logging {
       index += 1
     }
 
-    val parser = new LinkerZParser
+    val parser = new VnExpressPlugin
     fetchResults.foreach(web => {
-      val result = parser.parse(web.webPage.asLink(), linkParseData)
-      if (result != null && result.imgSrc != null) {
-        links.add(result)
+      val link = web.webPage.asLink()
+      val result = parser.parse(link)
+      if (result) {
+        links.add(link)
       } else {
-        info("can not get image " + web.webPage.webUrl.url)
+        info("Some thing wrong " + web.webPage.webUrl.url)
       }
     })
 
