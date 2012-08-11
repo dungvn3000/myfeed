@@ -4,10 +4,10 @@
 
     <div class="row-fluid">
         <section class="span12">
-            <table t:type="grid" t:source="plugins" t:rowsPerPage="4" t:pagerPosition="top"
+            <table t:type="grid" t:source="plugins" row="plugin" t:rowsPerPage="4" t:pagerPosition="top"
                    t:include="pluginName, pluginGroup, pluginVersion ,urlRegex, enable" t:add="action">
                 <p:actionCell>
-                    <a t:type="pagelink" t:page="admin/parsertool" href="#">
+                    <a t:type="pagelink" t:page="admin/parsertool" context="plugin.id" href="#">
                         View
                     </a>
                 </p:actionCell>

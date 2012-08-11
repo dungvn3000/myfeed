@@ -22,4 +22,11 @@ trait PluginService {
    */
   def parserPlugins: java.util.List[ParserPlugin]
 
+  /**
+   * Find the plugin by id.
+   * @param id
+   * @return
+   */
+  def findParserPlugin(id: String): ParserPlugin
+
 }

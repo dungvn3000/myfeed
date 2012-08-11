@@ -35,7 +35,7 @@
                         UrlRegex:
                     </lable>
                     <div class="controls">
-                        <t:textfield value="urlRegex" t:id="urlRegexTxt"/>
+                        <t:textfield value="parseData.urlRegex" t:id="urlRegexTxt"/>
                     </div>
                 </div>
 
@@ -44,9 +44,9 @@
                         Title:
                     </lable>
                     <div class="controls">
-                        <t:textfield value="titleSelection" t:id="titleSelectionTxt" class="input-medium" placeholder="titleSelection"/>
-                        <t:textfield value="titleAttName" t:id="titleAttNameTxt" class="input-small" placeholder="titleAttName"/>
-                        <t:textfield value="titleMaxLength" t:id="titleMaxLengthTxt" class="input-small" placeholder="maxlength"/>
+                        <t:textfield value="parseData.titleSelection" t:id="titleSelectionTxt" class="input-medium" placeholder="titleSelection"/>
+                        <t:textfield value="parseData.titleAttName" t:id="titleAttNameTxt" class="input-small" placeholder="titleAttName"/>
+                        <t:textfield value="parseData.titleMaxLength" t:id="titleMaxLengthTxt" class="input-small" placeholder="maxlength"/>
                     </div>
                 </div>
 
@@ -56,9 +56,9 @@
                     </label>
 
                     <div class="controls">
-                        <t:textfield value="descriptionSelection" t:id="descriptionSelectionTxt" class="input-medium" placeholder="descriptionSelection"/>
-                        <t:textfield value="descriptionAttName" t:id="descriptionAttNameTxt" class="input-small" placeholder="descriptionAttName"/>
-                        <t:textfield value="descriptionMaxLength" t:id="descriptionMaxLengthTxt" class="input-small" placeholder="descriptionMaxLength"/>
+                        <t:textfield value="parseData.descriptionSelection" t:id="descriptionSelectionTxt" class="input-medium" placeholder="descriptionSelection"/>
+                        <t:textfield value="parseData.descriptionAttName" t:id="descriptionAttNameTxt" class="input-small" placeholder="descriptionAttName"/>
+                        <t:textfield value="parseData.descriptionMaxLength" t:id="descriptionMaxLengthTxt" class="input-small" placeholder="descriptionMaxLength"/>
                     </div>
                 </div>
 
@@ -68,7 +68,7 @@
                     </label>
 
                     <div class="controls">
-                        <t:textfield value="imgSelection" t:id="imgSelectionTxt"/>
+                        <t:textfield value="parseData.imgSelection" t:id="imgSelectionTxt"/>
                     </div>
                 </div>
 

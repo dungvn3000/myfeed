@@ -24,4 +24,9 @@ class PluginServiceImpl extends PluginService {
   def parserPlugins = {
     mongoOperations.findAll(classOf[ParserPlugin])
   }
+
+
+  def findParserPlugin(id: String) = {
+    mongoOperations.findById(id, classOf[ParserPlugin])
+  }
 }

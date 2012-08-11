@@ -15,6 +15,8 @@ import org.linkerz.crawler.core.model.WebUrl
 import collection.mutable.ListBuffer
 import org.linkerz.crawler.core.parser.ParserResult
 import org.linkerz.crawler.bot.matcher.SimpleRegexMatcher
+import org.linkerz.web.services.plugin.PluginService
+import org.apache.tapestry5.ioc.annotations.Inject
 
 
 /**
@@ -26,50 +28,6 @@ import org.linkerz.crawler.bot.matcher.SimpleRegexMatcher
  */
 
 class ParserTool extends Logging {
-
-  @Persist
-  @Property
-  var urlRegex: String = _
-
-  @Persist
-  @Property
-  var titleSelection: String = _
-
-  @Persist
-  @Property
-  var titleAttName: String = _
-
-  @Persist
-  @Property
-  var titleMaxLength: Int = _
-
-  @Persist
-  @Property
-  var descriptionSelection: String = _
-
-  @Persist
-  @Property
-  var descriptionAttName: String = _
-
-  @Persist
-  @Property
-  var descriptionMaxLength: Int = _
-
-  @Persist
-  @Property
-  var contentSelection: String = _
-
-  @Persist
-  @Property
-  var contentAttName: String = _
-
-  @Persist
-  @Property
-  var contentMaxLength: Int = _
-
-  @Persist
-  @Property
-  var imgSelection: String = _
 
   @Persist
   @Property
@@ -97,23 +55,17 @@ class ParserTool extends Logging {
   @Persist
   var parseData: ParserPlugin = _
 
-  def onSubmitFromParserForm() {
+  @Inject
+  var pluginService: PluginService = _
 
+  def onActivate (id: String) {
+    parseData = pluginService.findParserPlugin(id)
+  }
+
+  def onSubmitFromParserForm() {
     if (parseData == null) {
       parseData = new ParserPlugin
     }
-
-    parseData.urlRegex = urlRegex
-
-    parseData.titleAttName = titleAttName
-    parseData.titleMaxLength = titleMaxLength
-    parseData.titleSelection = titleSelection
-
-    parseData.descriptionAttName = descriptionAttName
-    parseData.descriptionMaxLength = descriptionMaxLength
-    parseData.descriptionSelection = descriptionSelection
-
-    parseData.imgSelection = imgSelection
   }
 
   def onActionFromCancelBtn() {
@@ -134,7 +86,7 @@ class ParserTool extends Logging {
     var count = 0
     var index = 0
     while (count != numberOfUrl && fetchResult.webUrls.size > index) {
-      if (SimpleRegexMatcher.matcher(fetchResult.webUrls(index).url, urlRegex)
+      if (SimpleRegexMatcher.matcher(fetchResult.webUrls(index).url, parseData.urlRegex)
         && !urlList.contains(fetchResult.webUrls(index))) {
         fetchResults += fetcher.fetch(fetchResult.webUrls(index))
         urlList += fetchResult.webUrls(index)
