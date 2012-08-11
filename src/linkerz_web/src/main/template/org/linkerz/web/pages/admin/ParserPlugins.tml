@@ -1,0 +1,19 @@
+<html t:type="adminLayout" title="LinkerZ Parser Plugin List"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+
+
+    <div class="row-fluid">
+        <section class="span12">
+            <table t:type="grid" t:source="plugins" t:rowsPerPage="4" t:pagerPosition="top"
+                   t:include="pluginName, pluginGroup, pluginVersion ,urlRegex, enable" t:add="action">
+                <p:actionCell>
+                    <a t:type="pagelink" t:page="admin/parsertool" href="#">
+                        View
+                    </a>
+                </p:actionCell>
+            </table>
+        </section>
+    </div>
+
+
+</html>

@@ -30,6 +30,9 @@ class VnExpressPlugin extends Parser with Logging {
        * Default data
        */
       _pluginData = new ParserPlugin
+      _pluginData.pluginName = "VnExpress"
+      _pluginData.pluginVersion = "0.0.1"
+      _pluginData.pluginGroup = "vnexpress.net"
       _pluginData.pluginClass = this.getClass.getName
       _pluginData.enable = true
       _pluginData.urlRegex = "*/vnexpress.net/*/*/2012/*"

@@ -14,8 +14,10 @@ package org.linkerz.mongodb.model
 
 class ParserPlugin extends LinkerZEntity {
 
+  var pluginName: String = _
+  var pluginGroup: String = _
   var pluginClass: String = _
-
+  var pluginVersion: String = _
   var enable: Boolean = _
 
   /**
@@ -25,6 +27,8 @@ class ParserPlugin extends LinkerZEntity {
    * (*) and (?)
    */
   var urlRegex: String = _
+
+  var excludeUrl: String = _
 
   var titleSelection: String = _
   var titleAttName: String = _

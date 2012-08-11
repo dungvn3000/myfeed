@@ -11,4 +11,8 @@
         <property name="mongoOperations" ref="mongoTemplate"/>
     </bean>
 
+    <bean class="org.linkerz.web.services.plugin.PluginServiceImpl">
+        <property name="mongoOperations" ref="mongoTemplate"/>
+    </bean>
+
 </beans>
