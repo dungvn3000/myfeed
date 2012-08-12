@@ -6,7 +6,7 @@
     <import resource="db.xml"/>
     <import resource="crawlModule.xml"/>
 
-    <bean id="linkerZParser" class="org.linkerz.crawler.bot.parser.LinkerZParser" init-method="load">
+    <bean id="parserFactory" class="org.linkerz.crawler.bot.factory.ParserFactory">
         <property name="mongoOperations" ref="mongoTemplate"/>
     </bean>
 

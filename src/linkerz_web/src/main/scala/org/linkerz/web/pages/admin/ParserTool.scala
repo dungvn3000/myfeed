@@ -72,8 +72,8 @@ class ParserTool extends Logging {
   def onSubmitFromTestForm() = {
     val urlList = new ListBuffer[WebUrl]
 
-    val parser = parserService.getParser(parseData.pluginClass)
-    parser.pluginData = parseData
+    val parser = parserService.parserFactory.createParser
+//    parser.pluginData = parseData
     val fetcher = new Fetcher(new DefaultDownload, parser)
     val beginUrl = new WebUrl(parseData.urlTest)
     val fetchResult = fetcher.fetch(beginUrl)

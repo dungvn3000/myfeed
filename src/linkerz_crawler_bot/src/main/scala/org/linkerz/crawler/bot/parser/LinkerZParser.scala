@@ -5,12 +5,6 @@
 package org.linkerz.crawler.bot.parser
 
 import org.linkerz.crawler.bot.plugin.ParserPlugin
-import org.linkerz.mongodb.model.ParserPluginData
-import org.springframework.data.mongodb.core.MongoOperations
-import reflect.BeanProperty
-import collection.JavaConversions._
-import collection.mutable.ListBuffer
-import org.springframework.data.mongodb.core.query.{Criteria, Query}
 import org.linkerz.crawler.core.parser.{DefaultParser, ParserResult, Parser}
 import org.linkerz.crawler.core.downloader.DownloadResult
 
@@ -22,32 +16,9 @@ import org.linkerz.crawler.core.downloader.DownloadResult
  *
  */
 
-class LinkerZParser extends Parser {
-
-  var plugins: ListBuffer[ParserPlugin] = new ListBuffer[ParserPlugin]
+class LinkerZParser(plugins: List[ParserPlugin]) extends Parser {
 
   val defaultParser = new DefaultParser
-
-  @BeanProperty
-  var mongoOperations: MongoOperations = _
-
-  def load() {
-
-    //Clear plugin list to reload the list.
-    plugins.clear()
-
-    //Step 1: Load plugin list inside the database
-    val pluginList = mongoOperations.findAll(classOf[ParserPluginData])
-
-    //Step 2: Load data for the plugin, if custom data using default data inside each plugin.
-    pluginList.foreach(pluginData => {
-      if (pluginData.enable) {
-        val plugin = Class.forName(pluginData.pluginClass).newInstance.asInstanceOf[ParserPlugin]
-        plugin.pluginData = pluginData
-        plugins += plugin
-      }
-    })
-  }
 
   /**
    * The parser will automatic parser suitable for the website.
@@ -61,43 +32,4 @@ class LinkerZParser extends Parser {
     })
     defaultParser.parse(downloadResult)
   }
-
-  /**
-   * Install a plugin
-   * @param pluginClass
-   * @return
-   */
-  def install(pluginClass: String): Boolean = {
-    //Check on the database whether the plugin was installed.
-    val result = mongoOperations.findOne(Query.query(Criteria.where("pluginClass").is(pluginClass)), classOf[ParserPluginData])
-
-    if (result == null) {
-      val plugin = Class.forName(pluginClass).newInstance.asInstanceOf[ParserPlugin]
-      mongoOperations.save(plugin.pluginData)
-      return true
-    }
-    false
-  }
-
-  /**
-   * Delete a plugin
-   * @param pluginClass
-   */
-  def delete(pluginClass: String) {
-    mongoOperations.remove(Query.query(Criteria.where("pluginClass").is(pluginClass)), classOf[ParserPluginData])
-  }
-
-  /**
-   * Return the parser.
-   * @param pluginClass
-   * @return
-   */
-  def get(pluginClass: String): ParserPlugin = {
-    val plugin = plugins.find(plugin => plugin.getClass.getName == pluginClass)
-    if (!plugin.isEmpty) {
-      return plugin.get
-    }
-    null
-  }
-
 }

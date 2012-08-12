@@ -8,6 +8,7 @@ import org.linkerz.crawler.bot.plugin.ParserPlugin
 import org.linkerz.mongodb.model.Link
 import org.linkerz.crawler.bot.parser.LinkerZParser
 import reflect.BeanProperty
+import org.linkerz.crawler.bot.factory.ParserFactory
 
 /**
  * The Class ParserServiceImpl.
@@ -20,11 +21,7 @@ import reflect.BeanProperty
 class ParserServiceImpl extends ParserService {
 
   @BeanProperty
-  var autoParser: LinkerZParser = _
-
-  def getParser(pluginClass: String): ParserPlugin = {
-    autoParser.get(pluginClass)
-  }
+  var parserFactory: ParserFactory = _
 
 
 }
