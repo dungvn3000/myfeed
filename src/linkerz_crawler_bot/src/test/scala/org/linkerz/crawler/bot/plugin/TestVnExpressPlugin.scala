@@ -12,6 +12,8 @@ import org.linkerz.test.spring.SpringContext
 import collection.JavaConversions._
 import vnexpress.VnExpressPlugin
 import org.linkerz.crawler.core.parser.ParserResult
+import org.linkerz.crawler.core.downloader.DefaultDownload
+import org.linkerz.crawler.core.model.WebUrl
 
 /**
  * The Class TestVnExpressPlugin.
@@ -23,20 +25,17 @@ import org.linkerz.crawler.core.parser.ParserResult
 
 class TestVnExpressPlugin extends FunSuite with SpringContext {
 
+  val downloader = new DefaultDownload
   val plugin = new VnExpressPlugin
-  //Prepare data
-  val parseData = new ParserPluginData
-  parseData.urlRegex = "*/vnexpress.net/*/*/*/index.html"
-  parseData.titleSelection = "title"
-  parseData.descriptionSelection = "head meta[name=description]"
-  parseData.descriptionAttName = "content"
-  parseData.imgSelection = "img.img-logo"
-
-  plugin.pluginData = parseData
 
   test("testPlugin") {
+    val downloadResult = downloader.download(new WebUrl("http://vnexpress.net/gl/xa-hoi/2012/08/du-day-cap-vuot-song-du-toi-truong/"))
+    val parserResult = plugin.parse(downloadResult)
+    val webPage = parserResult.webPage
 
-
+    println("Title = " + webPage.title)
+    println("Desciption = " + webPage.description)
+    println("Image = " + webPage.featureImageUrl)
   }
 
 }

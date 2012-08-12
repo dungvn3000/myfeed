@@ -11,7 +11,7 @@ import reflect.BeanProperty
 import collection.JavaConversions._
 import collection.mutable.ListBuffer
 import org.springframework.data.mongodb.core.query.{Criteria, Query}
-import org.linkerz.crawler.core.parser.{ParserResult, Parser}
+import org.linkerz.crawler.core.parser.{DefaultParser, ParserResult, Parser}
 import org.linkerz.crawler.core.downloader.DownloadResult
 
 /**
@@ -25,6 +25,8 @@ import org.linkerz.crawler.core.downloader.DownloadResult
 class LinkerZParser extends Parser {
 
   var plugins: ListBuffer[ParserPlugin] = new ListBuffer[ParserPlugin]
+
+  val defaultParser = new DefaultParser
 
   @BeanProperty
   var mongoOperations: MongoOperations = _
@@ -47,12 +49,17 @@ class LinkerZParser extends Parser {
     })
   }
 
-
+  /**
+   * The parser will automatic parser suitable for the website.
+   * If can't not find it, the parser will using default parser.
+   * @param downloadResult
+   * @return
+   */
   def parse(downloadResult: DownloadResult): ParserResult = {
     plugins.foreach(plugin => {
       if (plugin.isMatch(downloadResult.webUrl.url)) return plugin.parse(downloadResult)
     })
-    null
+    defaultParser.parse(downloadResult)
   }
 
   /**
@@ -67,10 +74,9 @@ class LinkerZParser extends Parser {
     if (result == null) {
       val plugin = Class.forName(pluginClass).newInstance.asInstanceOf[ParserPlugin]
       mongoOperations.save(plugin.pluginData)
-    } else {
-      return false
+      return true
     }
-    true
+    false
   }
 
   /**

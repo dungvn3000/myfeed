@@ -25,6 +25,7 @@ class TestLinkerZParser extends FunSuite with SpringContext {
 
   test("testInstallPlugin") {
     val linkerZParser = context.getBean("linkerZParser", classOf[LinkerZParser])
+    linkerZParser.delete(classOf[VnExpressPlugin].getName)
     assert(linkerZParser.install(classOf[VnExpressPlugin].getName))
     linkerZParser.delete(classOf[VnExpressPlugin].getName)
   }
@@ -32,21 +33,18 @@ class TestLinkerZParser extends FunSuite with SpringContext {
   test("testParser") {
     //Install the plugin first
     val linkerZParser = context.getBean("linkerZParser", classOf[LinkerZParser])
-    assert(linkerZParser.install(classOf[VnExpressPlugin].getName))
+    linkerZParser.install(classOf[VnExpressPlugin].getName)
 
     //Reload the list
     linkerZParser.load()
 
-    val fetcher = new Fetcher(new DefaultDownload, new LinkerZParser)
+    val fetcher = new Fetcher(new DefaultDownload, linkerZParser)
     val result = fetcher.fetch(new WebUrl("http://vnexpress.net/gl/phap-luat/2012/08/dai-gia-dat-cang-bi-dieu-tra-lua-dao-1-000-ty-dong/"))
     val link = result.webPage.asLink()
     println("link = " + link.url)
     println("title = " + link.title)
     println("description = " + link.description)
     println("img = " + link.featureImageUrl)
-
-    //Delete the plugin
-    linkerZParser.delete(classOf[VnExpressPlugin].getName)
   }
 
   test("testGetParser") {

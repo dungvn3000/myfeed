@@ -37,6 +37,9 @@ class WebPage {
     val link = new Link
     link.url = webUrl.url
     link.content = content
+    link.title = title
+    link.description = description
+    link.featureImageUrl = featureImageUrl
     link.indexDate = new util.Date
     link.contentEncoding = contentEncoding
     link
