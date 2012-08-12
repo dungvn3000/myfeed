@@ -4,7 +4,7 @@
 
 package org.linkerz.web.services.parser
 
-import org.linkerz.crawler.bot.plugin.Parser
+import org.linkerz.crawler.bot.plugin.ParserPlugin
 import org.linkerz.mongodb.model.Link
 
 /**
@@ -21,6 +21,6 @@ trait ParserService {
    * Return correct parser.
    * @param pluginClass
    */
-  def getParser(pluginClass: String): Parser
+  def getParser(pluginClass: String): ParserPlugin
 
 }

@@ -17,7 +17,7 @@ import org.linkerz.crawler.bot.matcher.SimpleRegexMatcher
 import org.linkerz.web.services.plugin.PluginService
 import org.apache.tapestry5.ioc.annotations.Inject
 import org.linkerz.web.services.parser.ParserService
-import org.linkerz.crawler.bot.plugin.Parser
+import org.linkerz.crawler.bot.plugin.ParserPlugin
 import org.linkerz.crawler.core.downloader.DefaultDownload
 
 
@@ -101,12 +101,12 @@ class ParserTool extends Logging {
       if (parser.isMatch(link)) {
         val status = parser.parse(link)
         status.code match {
-          case Parser.DONE => links.add(link)
-          case Parser.SKIP => {
+          case ParserPlugin.DONE => links.add(link)
+          case ParserPlugin.SKIP => {
             info("Skip this link " + link.url)
             info(status.info.mkString)
           }
-          case Parser.ERROR => {
+          case ParserPlugin.ERROR => {
             error("Some thing worng " + link.url)
             error(status.error.mkString)
           }

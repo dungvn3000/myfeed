@@ -4,7 +4,7 @@
 
 package org.linkerz.crawler.bot.parser
 
-import org.linkerz.crawler.bot.plugin.{ParserStatus, Parser}
+import org.linkerz.crawler.bot.plugin.{ParserPluginStatus, ParserPlugin}
 import org.linkerz.mongodb.model.{ParserPluginData, Link}
 import org.springframework.data.mongodb.core.MongoOperations
 import reflect.BeanProperty
@@ -22,7 +22,7 @@ import org.springframework.data.mongodb.core.query.{Criteria, Query}
 
 class LinkerZParser {
 
-  var plugins: ListBuffer[Parser] = new ListBuffer[Parser]
+  var plugins: ListBuffer[ParserPlugin] = new ListBuffer[ParserPlugin]
 
   @BeanProperty
   var mongoOperations: MongoOperations = _
@@ -38,7 +38,7 @@ class LinkerZParser {
     //Step 2: Load data for the plugin, if custom data using default data inside each plugin.
     pluginList.foreach(pluginData => {
       if (pluginData.enable) {
-        val plugin = Class.forName(pluginData.pluginClass).newInstance.asInstanceOf[Parser]
+        val plugin = Class.forName(pluginData.pluginClass).newInstance.asInstanceOf[ParserPlugin]
         plugin.pluginData = pluginData
         plugins += plugin
       }
@@ -50,13 +50,13 @@ class LinkerZParser {
    * @param link
    * @return
    */
-  def parse(link: Link): ParserStatus = {
+  def parse(link: Link): ParserPluginStatus = {
     plugins.foreach(plugin => {
       if (plugin.isMatch(link)) return plugin.parse(link)
     })
-    val parserStatus = new ParserStatus
+    val parserStatus = new ParserPluginStatus
     parserStatus.error("Can not find any plugin for this link")
-    parserStatus.code = Parser.SKIP
+    parserStatus.code = ParserPlugin.SKIP
     parserStatus
   }
 
@@ -71,7 +71,7 @@ class LinkerZParser {
     val result = mongoOperations.findOne(Query.query(Criteria.where("pluginClass").is(pluginClass)), classOf[ParserPluginData])
 
     if (result == null) {
-      val plugin = Class.forName(pluginClass).newInstance.asInstanceOf[Parser]
+      val plugin = Class.forName(pluginClass).newInstance.asInstanceOf[ParserPlugin]
       mongoOperations.save(plugin.pluginData)
     } else {
       return false
@@ -92,7 +92,7 @@ class LinkerZParser {
    * @param pluginClass
    * @return
    */
-  def get(pluginClass: String): Parser = {
+  def get(pluginClass: String): ParserPlugin = {
     val plugin = plugins.find(plugin => plugin.getClass.getName == pluginClass)
     if (!plugin.isEmpty) {
       return plugin.get

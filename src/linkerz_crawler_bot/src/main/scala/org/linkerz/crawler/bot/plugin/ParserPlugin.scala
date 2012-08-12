@@ -21,7 +21,7 @@ import collection.mutable.ListBuffer
  *
  */
 
-trait Parser extends Logging {
+trait ParserPlugin extends Logging {
 
   var _pluginData: ParserPluginData = _
 
@@ -40,7 +40,7 @@ trait Parser extends Logging {
    * @param link
    * @return false if some thing go wrong.
    */
-  def parse(link: Link): ParserStatus = {
+  def parse(link: Link): ParserPluginStatus = {
     assert(link != null)
     parse(link, pluginData)
   }
@@ -51,14 +51,14 @@ trait Parser extends Logging {
    * @param doc
    * @return false then the parser will skip parse it.
    */
-  def beforeParse(link: Link, doc: Document, parserResult: ParserStatus): Boolean = true
+  def beforeParse(link: Link, doc: Document, parserResult: ParserPluginStatus): Boolean = true
 
   /**
    * After parse a link.
    * @param link
    * @param doc
    */
-  def afterParse(link: Link, doc: Document, parserResult: ParserStatus) {
+  def afterParse(link: Link, doc: Document, parserResult: ParserPluginStatus) {
     //Log error
     if (link.title == null || link.title.trim.isEmpty) {
       parserResult.error("Can not parse the title for " + link.url)
@@ -78,8 +78,8 @@ trait Parser extends Logging {
    * @param link
    * @param parseData
    */
-  protected def parse(link: Link, parseData: ParserPluginData): ParserStatus = {
-    val parserResult = new ParserStatus
+  protected def parse(link: Link, parseData: ParserPluginData): ParserPluginStatus = {
+    val parserResult = new ParserPluginStatus
 
     val inputStream = new ByteArrayInputStream(link.content)
     val doc = Jsoup.parse(inputStream, link.contentEncoding, UrlUtils.getDomainName(link.url))
@@ -163,13 +163,13 @@ trait Parser extends Logging {
   def defaultData: ParserPluginData
 }
 
-object Parser extends Enumeration {
+object ParserPlugin extends Enumeration {
   type Status = Value
   val DONE, SKIP, ERROR = Value
 }
 
-class ParserStatus {
-  var code: Parser.Status = Parser.DONE
+class ParserPluginStatus {
+  var code: ParserPlugin.Status = ParserPlugin.DONE
 
   private var _error = new ListBuffer[String]
   private var _info = new ListBuffer[String]
@@ -183,7 +183,7 @@ class ParserStatus {
   }
 
   def error(msg: String) {
-    code = Parser.ERROR
+    code = ParserPlugin.ERROR
     _error += msg
   }
 }

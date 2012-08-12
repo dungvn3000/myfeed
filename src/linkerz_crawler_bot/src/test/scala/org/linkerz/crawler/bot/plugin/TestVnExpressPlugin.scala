@@ -39,7 +39,7 @@ class TestVnExpressPlugin extends FunSuite with SpringContext {
 
     links.foreach(link => {
       if (plugin.isMatch(link)) {
-        assert(plugin.parse(link).code == Parser.DONE)
+        assert(plugin.parse(link).code == ParserPlugin.DONE)
 
         println("link = " + link.url)
         println("title = " + link.title)

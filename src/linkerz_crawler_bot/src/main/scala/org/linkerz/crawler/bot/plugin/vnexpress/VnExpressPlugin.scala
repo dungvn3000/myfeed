@@ -7,7 +7,7 @@ package org.linkerz.crawler.bot.plugin.vnexpress
 import grizzled.slf4j.Logging
 import org.linkerz.mongodb.model.{ParserPluginData, Link}
 import org.jsoup.nodes.Document
-import org.linkerz.crawler.bot.plugin.{ParserStatus, Parser}
+import org.linkerz.crawler.bot.plugin.{ParserPluginStatus, ParserPlugin}
 import org.apache.commons.lang.StringUtils
 
 /**
@@ -18,7 +18,7 @@ import org.apache.commons.lang.StringUtils
  *
  */
 
-class VnExpressPlugin extends Parser with Logging {
+class VnExpressPlugin extends ParserPlugin with Logging {
 
   def defaultData = {
     val pluginData = new ParserPluginData
@@ -35,10 +35,10 @@ class VnExpressPlugin extends Parser with Logging {
     pluginData
   }
 
-  override def beforeParse(link: Link, doc: Document, parserResult: ParserStatus): Boolean = {
+  override def beforeParse(link: Link, doc: Document, parserResult: ParserPluginStatus): Boolean = {
     //Skip it, because the url is no longer exist
      if (doc.text().contains("Không tìm thấy đường dẫn này")) {
-      parserResult.code = Parser.SKIP
+      parserResult.code = ParserPlugin.SKIP
       parserResult.info("The link is not exist " + link.url)
       return false
     }
@@ -46,7 +46,7 @@ class VnExpressPlugin extends Parser with Logging {
   }
 
 
-  override def afterParse(link: Link, doc: Document, parserResult: ParserStatus) {
+  override def afterParse(link: Link, doc: Document, parserResult: ParserPluginStatus) {
     //Remove another link inside vnexpress description
     if (link.description.contains(". >")) {
       link.description = link.description.split(". >")(0)
