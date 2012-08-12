@@ -5,6 +5,7 @@
 package org.linkerz.web.services.db
 
 import org.linkerz.crawler.core.model.WebPage
+import org.linkerz.mongodb.model.LinkerZEntity
 
 /**
  * The Class WebStore.
@@ -18,4 +19,7 @@ trait DBStore {
 
   def save(entity: AnyRef): AnyRef
 
+  def deleteById(id: String, entityClass: Class[_ <: LinkerZEntity])
+
+  def delete(entity: LinkerZEntity)
 }

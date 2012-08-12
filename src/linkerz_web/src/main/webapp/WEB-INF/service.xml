@@ -20,6 +20,10 @@
         <property name="autoParser" ref="linkerZParser"/>
     </bean>
 
+    <bean class="org.linkerz.web.services.newfeed.NewFeedServiceImpl">
+        <property name="mongoOperations" ref="mongoTemplate"/>
+    </bean>
+
     <bean id="linkerZParser" class="org.linkerz.crawler.bot.parser.LinkerZParser" init-method="load">
         <property name="mongoOperations" ref="mongoTemplate"/>
     </bean>

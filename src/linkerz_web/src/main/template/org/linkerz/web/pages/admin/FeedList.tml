@@ -1,0 +1,33 @@
+<html t:type="adminLayout" title="LinkerZ Parser Plugin List"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+
+
+    <div class="row-fluid">
+
+        <section class="span6">
+            <t:form t:id="newFeed" class="well">
+                <t:errors/>
+                <lable>Name</lable>
+                <t:textfield value="feed.name" class="span6" placeholder="Name"/>
+                <lable>Group Name</lable>
+                <t:textfield value="feed.group" class="span6" placeholder="Group Name"/>
+                <lable>Url</lable>
+                <t:textfield value="feed.url" class="span9" placeholder="Url"/>
+                <lable>Time</lable>
+                <t:textfield value="feed.time" class="span2" placeholder="Time"/>
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="cancel" class="btn">cancel</button>
+            </t:form>
+        </section>
+
+        <section class="span12">
+            <table t:type="grid" t:source="feeds" row="feed" t:rowsPerPage="4" t:pagerPosition="top"
+                   t:include="name, group, url, time, indexTime, enable" t:add="action">
+                <p:actionCell>
+                    <t:actionlink t:id="deleteBtn" context="feed.id">Delete</t:actionlink>
+                </p:actionCell>
+            </table>
+        </section>
+    </div>
+
+</html>

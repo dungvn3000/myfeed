@@ -33,6 +33,7 @@ class AdminMenu {
 
   def getPages = {
     Array(
+      new Page("admin/FeedList","Feed List"),
       new Page("admin/ParserPlugins", "Parser Plugins"),
       new Page("admin/ParserTool", " Parser Tool")
     )

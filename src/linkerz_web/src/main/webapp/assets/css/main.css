@@ -34,3 +34,7 @@ body {
 .form-actions button {
     margin-right: 2px;
 }
+
+form button {
+    margin-right: 2px;
+}

@@ -22,9 +22,9 @@ class VnExpressPlugin extends Parser with Logging {
 
   def defaultData = {
     val pluginData = new ParserPlugin
-    pluginData.pluginName = "VnExpress"
-    pluginData.pluginVersion = "0.0.1"
-    pluginData.pluginGroup = "vnexpress.net"
+    pluginData.name = "VnExpress"
+    pluginData.version = "0.0.1"
+    pluginData.group = "vnexpress.net"
     pluginData.pluginClass = this.getClass.getName
     pluginData.enable = true
     pluginData.urlRegex = "*/vnexpress.net/*/*/2012/*"

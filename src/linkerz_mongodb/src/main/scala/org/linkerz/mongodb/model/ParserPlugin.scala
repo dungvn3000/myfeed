@@ -14,10 +14,10 @@ package org.linkerz.mongodb.model
 
 class ParserPlugin extends LinkerZEntity {
 
-  var pluginName: String = _
-  var pluginGroup: String = _
+  var name: String = _
+  var group: String = _
   var pluginClass: String = _
-  var pluginVersion: String = _
+  var version: String = _
   var enable: Boolean = _
 
   /**
