@@ -8,6 +8,7 @@
                 http://www.hazelcast.com/schema/spring
                 http://www.hazelcast.com/schema/spring/hazelcast-spring-2.1.xsd">
 
+    <import resource="db.xml"/>
     <import resource="jobController.xml"/>
     <import resource="crawlModule.xml"/>
 

@@ -4,9 +4,15 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <import resource="db.xml"/>
+    <import resource="crawlModule.xml"/>
 
     <bean id="linkerZParser" class="org.linkerz.crawler.bot.parser.LinkerZParser" init-method="load">
         <property name="mongoOperations" ref="mongoTemplate"/>
+    </bean>
+
+    <bean id="newFeedController" class="org.linkerz.crawler.bot.controller.NewFeedController">
+        <property name="mongoOperations" ref="mongoTemplate"/>
+        <property name="crawlerController" ref="crawlerController"/>
     </bean>
 
 </beans>
