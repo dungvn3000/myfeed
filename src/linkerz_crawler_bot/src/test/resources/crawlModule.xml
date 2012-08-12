@@ -8,12 +8,14 @@
     <bean id="crawlerController" class="org.linkerz.crawler.core.controller.CrawlerController" init-method="start" destroy-method="stop">
         <property name="handlers">
             <scala:list>
-                <ref bean="crawlerHandler"/>
+                <ref bean="newFeedHandler"/>
             </scala:list>
         </property>
     </bean>
 
-    <bean id="crawlerHandler" class="org.linkerz.crawler.core.handler.CrawlerHandler">
+    <bean id="newFeedHandler" class="org.linkerz.crawler.bot.handler.NewFeedHandler">
+        <constructor-arg ref="parserFactory"/>
+        <!--Number of worker-->
         <constructor-arg value="5"/>
         <property name="dbService" ref="dBService"/>
         <property name="ideTime" value="5000"/>

@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.query.{Criteria, Query}
 import collection.mutable.ListBuffer
 import collection.JavaConversions._
 import org.linkerz.crawler.bot.parser.LinkerZParser
+import org.linkerz.crawler.core.parser.Parser
 
 /**
  * The Class ParserFactory.
@@ -51,7 +52,7 @@ class ParserFactory {
     mongoOperations.remove(Query.query(Criteria.where("pluginClass").is(pluginClass)), classOf[ParserPluginData])
   }
 
-  def createParser = {
+  def createParser: Parser = {
     var plugins = new ListBuffer[ParserPlugin]
 
     //Step 1: Load plugin list inside the database

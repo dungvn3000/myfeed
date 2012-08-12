@@ -13,8 +13,8 @@ import org.linkerz.crawler.core.model.WebUrl
 import collection.mutable
 import org.linkerz.crawler.db.DBService
 import reflect.BeanProperty
-import org.linkerz.crawler.core.downloader.{DefaultDownload, Downloader}
-import org.linkerz.crawler.core.parser.{DefaultParser, Parser}
+import org.linkerz.crawler.core.downloader.DefaultDownload
+import org.linkerz.crawler.core.parser.DefaultParser
 
 /**
  * The Class CrawlerHandler.
@@ -30,9 +30,6 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
 
   private var countUrl = 0
   private var maxDepth = 0
-
-  private var _downloadClass: Class[_ <: Downloader] = classOf[DefaultDownload]
-  private var _parserClass: Class[_ <: Parser] = classOf[DefaultParser]
 
   /**
    * Store fetched urls list
@@ -50,7 +47,7 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
     this
     assert(numberOfWorker > 0, "Number of worker of a handler must more than one")
     for (i <- 1 to numberOfWorker) {
-      val worker = new CrawlWorker(i, downloader, parser)
+      val worker = new CrawlWorker(i, new DefaultDownload, new DefaultParser)
       workers += worker
     }
   }
@@ -96,25 +93,5 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
         }
       })
     }
-  }
-
-  def downloader = {
-    _downloadClass.newInstance()
-  }
-
-  def parser = {
-    _parserClass.newInstance()
-  }
-
-  def downloadClass = _downloadClass
-
-  def downloadClass_=(downloadClass: Class[_ <: Downloader]) {
-    _downloadClass = downloadClass
-  }
-
-  def parserClass = _parserClass
-
-  def parserClass_=(parserClass: Class[_ <: Parser]) {
-    _parserClass = parserClass
   }
 }
