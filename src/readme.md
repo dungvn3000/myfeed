@@ -15,4 +15,7 @@
 	<li>
 	    website.sh running the website gui.
 	</li>
+	<li>
+	    parser.sh only build parser plugins
+	</li>
 </ul>

@@ -1,1 +1,1 @@
-mvn clean install -DskipTest=true
+mvn clean install -DskipTest=true -o

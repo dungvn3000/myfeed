@@ -55,8 +55,7 @@ class VnExpressPlugin extends ParserPlugin with Logging {
     }
 
     if (StringUtils.isBlank(webPage.featureImageUrl)) {
-      val logo = doc.select(".img-logo")
-      if (!logo.isEmpty) webPage.featureImageUrl = logo.attr("src")
+      webPage.featureImageUrl = "images/home_selected.gif"
     }
 
     super.afterParse(webPage, doc, parserResult)

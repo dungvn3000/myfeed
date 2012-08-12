@@ -13,6 +13,7 @@ import org.linkerz.crawler.bot.matcher.SimpleRegexMatcher
 import org.linkerz.crawler.core.parser.{DefaultParser, ParserResult}
 import org.linkerz.crawler.core.downloader.DownloadResult
 import org.linkerz.crawler.core.model.WebPage
+import org.apache.commons.lang.StringUtils
 
 /**
  * The Class ParserPlugin.
@@ -35,15 +36,15 @@ trait ParserPlugin extends DefaultParser with Logging {
 
   def afterParse(webPage: WebPage, doc: Document, parserResult: ParserResult) {
     //Log error
-    if (webPage.title == null || webPage.title.trim.isEmpty) {
+    if (StringUtils.isBlank(webPage.title)) {
       parserResult.error("Can not parse the title for " + webPage.webUrl.url)
     }
 
-    if (webPage.description == null || webPage.description.trim.isEmpty) {
+    if (StringUtils.isBlank(webPage.description)) {
       parserResult.error("Can not parse the description for " + webPage.webUrl.url)
     }
 
-    if (webPage.featureImageUrl == null || webPage.featureImageUrl.trim.isEmpty) {
+    if (StringUtils.isBlank(webPage.featureImageUrl)) {
       parserResult.error("Can not parse the image for " + webPage.webUrl.url)
     }
   }
