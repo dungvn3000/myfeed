@@ -17,10 +17,9 @@ import org.linkerz.test.spring.SpringContext
 
 class TestNewFeedController extends FunSuite with SpringContext {
 
-  test("testFeed") {
-
+  test("testController") {
     val controller = context.getBean("newFeedController", classOf[NewFeedController])
-
+    Thread.sleep(10000)
   }
 
 }

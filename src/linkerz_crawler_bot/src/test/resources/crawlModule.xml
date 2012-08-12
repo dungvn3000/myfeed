@@ -17,7 +17,7 @@
         <constructor-arg ref="parserFactory"/>
         <!--Number of worker-->
         <constructor-arg value="5"/>
-        <property name="dbService" ref="dBService"/>
+        <!--<property name="dbService" ref="dBService"/>-->
         <property name="ideTime" value="5000"/>
         <property name="maxRetry" value="10"/>
     </bean>

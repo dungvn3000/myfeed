@@ -9,6 +9,7 @@ import reflect.BeanProperty
 import org.springframework.data.mongodb.core.MongoOperations
 import org.linkerz.mongodb.model.NewFeed
 import collection.JavaConversions._
+import org.linkerz.crawler.core.job.CrawlJob
 
 /**
  * The Class NewFeedController.
@@ -28,6 +29,11 @@ class NewFeedController {
 
   def start() {
     var newFeeds = mongoOperations.findAll(classOf[NewFeed])
-    newFeeds.foreach(f => println(f.name))
+    newFeeds.foreach(newFeed => {
+      val job = new CrawlJob(newFeed.url)
+      crawlerController.add(job)
+    })
   }
+
+
 }
