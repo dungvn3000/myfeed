@@ -6,7 +6,7 @@ package org.linkerz.crawler.core.parser
 
 import org.scalatest.FunSuite
 import grizzled.slf4j.Logging
-import org.linkerz.crawler.core.downloader.Downloader
+import org.linkerz.crawler.core.downloader.{DefaultDownload, Downloader}
 import org.apache.tika.Tika
 import java.net.URL
 import org.apache.tika.sax.{BodyContentHandler, TeeContentHandler, LinkContentHandler}
@@ -26,7 +26,7 @@ import org.apache.tika.metadata.Metadata
 
 class TestParser extends FunSuite with Logging {
 
-  val downloader = new Downloader
+  val downloader = new DefaultDownload
 
   test("testSimpleParser") {
     val tika = new Tika

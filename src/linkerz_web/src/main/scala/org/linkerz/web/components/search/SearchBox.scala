@@ -12,6 +12,8 @@ import org.apache.tapestry5.ioc.annotations.Inject
 import org.linkerz.mongodb.model.{Link, User}
 import org.linkerz.crawler.core.model.WebUrl
 import org.linkerz.web.services.user.UserService
+import org.linkerz.crawler.core.downloader.DefaultDownload
+import org.linkerz.crawler.core.parser.DefaultParser
 
 /**
  * The Class SearchBox.
@@ -40,7 +42,7 @@ class SearchBox {
 
   def onSubmit() {
     println(keyWord)
-    val fetch = new Fetcher
+    val fetch = new Fetcher(new DefaultDownload, new DefaultParser)
     val result = fetch.fetch(new WebUrl(keyWord))
 
     var user = userService.getUser("dung")

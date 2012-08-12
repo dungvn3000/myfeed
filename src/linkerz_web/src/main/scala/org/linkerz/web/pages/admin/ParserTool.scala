@@ -12,12 +12,13 @@ import grizzled.slf4j.Logging
 import org.linkerz.crawler.core.fetcher.Fetcher
 import org.linkerz.crawler.core.model.WebUrl
 import collection.mutable.ListBuffer
-import org.linkerz.crawler.core.parser.ParserResult
+import org.linkerz.crawler.core.parser.{DefaultParser, ParserResult}
 import org.linkerz.crawler.bot.matcher.SimpleRegexMatcher
 import org.linkerz.web.services.plugin.PluginService
 import org.apache.tapestry5.ioc.annotations.Inject
 import org.linkerz.web.services.parser.ParserService
 import org.linkerz.crawler.bot.plugin.Parser
+import org.linkerz.crawler.core.downloader.DefaultDownload
 
 
 /**
@@ -73,7 +74,7 @@ class ParserTool extends Logging {
 
     val fetchResults = new ListBuffer[ParserResult]
     val urlList = new ListBuffer[WebUrl]
-    val fetcher = new Fetcher
+    val fetcher = new Fetcher(new DefaultDownload, new DefaultParser)
     val beginUrl = new WebUrl(parseData.urlTest)
     val fetchResult = fetcher.fetch(beginUrl)
 

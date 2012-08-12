@@ -10,6 +10,8 @@ import parser.LinkerZParser
 import plugin.vnexpress.VnExpressPlugin
 import org.linkerz.crawler.core.fetcher.Fetcher
 import org.linkerz.crawler.core.model.WebUrl
+import org.linkerz.crawler.core.downloader.DefaultDownload
+import org.linkerz.crawler.core.parser.DefaultParser
 
 /**
  * The Class TestLinkerZParser.
@@ -35,7 +37,7 @@ class TestLinkerZParser extends FunSuite with SpringContext {
     //Reload the list
     linkerZParser.load()
 
-    val fetcher = new Fetcher
+    val fetcher = new Fetcher(new DefaultDownload, new DefaultParser)
     val result = fetcher.fetch(new WebUrl("http://vnexpress.net/gl/phap-luat/2012/08/dai-gia-dat-cang-bi-dieu-tra-lua-dao-1-000-ty-dong/"))
     val link = result.webPage.asLink()
 

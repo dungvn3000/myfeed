@@ -16,10 +16,7 @@ import org.linkerz.crawler.core.model.WebUrl
  *
  */
 
-class Fetcher {
-
-  var downloader = new Downloader
-  var parser = new Parser
+class Fetcher(downloader: Downloader, parser: Parser) {
 
   /**
    * Fetch a url
@@ -30,6 +27,5 @@ class Fetcher {
     val parserResult = parser.parse(downloadResult)
     parserResult
   }
-
 
 }
