@@ -5,6 +5,7 @@
 package org.linkerz.crawler.core.parser
 
 import org.linkerz.crawler.core.model.{WebPage, WebUrl}
+import collection.mutable.ListBuffer
 
 /**
  * The Class ParserResult.
@@ -14,6 +15,29 @@ import org.linkerz.crawler.core.model.{WebPage, WebUrl}
  *
  */
 
-case class ParserResult(webPage: WebPage, webUrls: List[WebUrl]) {
+case class ParserResult(webPage: WebPage) {
 
+  private var _error = new ListBuffer[String]
+  private var _info = new ListBuffer[String]
+
+  var code: ParserResult.Status = ParserResult.DONE
+
+  def error = _error
+
+  def info = _info
+
+  def info(msg: String) {
+    _info += msg
+  }
+
+  def error(msg: String) {
+    code = ParserResult.ERROR
+    _error += msg
+  }
+
+}
+
+object ParserResult extends Enumeration {
+  type Status = Value
+  val DONE, SKIP, ERROR = Value
 }

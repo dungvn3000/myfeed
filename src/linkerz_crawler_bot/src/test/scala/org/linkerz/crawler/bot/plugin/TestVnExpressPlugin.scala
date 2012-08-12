@@ -11,6 +11,7 @@ import org.linkerz.test.spring.SpringContext
 
 import collection.JavaConversions._
 import vnexpress.VnExpressPlugin
+import org.linkerz.crawler.core.parser.ParserResult
 
 /**
  * The Class TestVnExpressPlugin.
@@ -39,7 +40,7 @@ class TestVnExpressPlugin extends FunSuite with SpringContext {
 
     links.foreach(link => {
       if (plugin.isMatch(link)) {
-        assert(plugin.parse(link).code == ParserPlugin.DONE)
+        assert(plugin.parse(link).code == ParserResult.DONE)
 
         println("link = " + link.url)
         println("title = " + link.title)

@@ -71,7 +71,7 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
 
   protected def createSubJobs(job: CrawlJob) {
     if (!job.result.isEmpty) {
-      countUrl += job.result.get.parserResult.webUrls.size
+      countUrl += job.result.get.parserResult.webPage.webUrls.size
       fetchedUrls += job.webUrl
 
       //Set the parent for the website.
@@ -88,7 +88,7 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
 
       val depth = job.depth + 1
       if (depth > maxDepth) maxDepth = depth
-      job.result.get.parserResult.webUrls.foreach(webUrl => {
+      job.result.get.parserResult.webPage.webUrls.foreach(webUrl => {
         //Make sure we not fectch a link we did already.
         if (fetchedUrls.findEntry(webUrl).isEmpty) {
           subJobQueue += new CrawlJob(webUrl, job)

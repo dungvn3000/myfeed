@@ -18,6 +18,7 @@ import java.util
 class WebPage {
 
   var webUrl: WebUrl = _
+  var webUrls: List[WebUrl] = _
   var content: Array[Byte] = _
 
   var contentEncoding: String = _

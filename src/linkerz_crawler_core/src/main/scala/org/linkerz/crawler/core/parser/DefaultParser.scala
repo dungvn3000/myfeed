@@ -87,7 +87,10 @@ class DefaultParser extends Parser with Logging {
         }
       })
     }
-    new ParserResult(webPage, webUrls.toList)
+
+    webPage.webUrls = webUrls.toList
+
+    new ParserResult(webPage)
   }
 
 }

@@ -12,6 +12,9 @@ import grizzled.slf4j.Logging
 import org.jsoup.nodes.Document
 import org.linkerz.crawler.bot.matcher.SimpleRegexMatcher
 import collection.mutable.ListBuffer
+import org.linkerz.crawler.core.parser.{DefaultParser, ParserResult, Parser}
+import org.linkerz.crawler.core.downloader.DownloadResult
+import org.linkerz.crawler.core.model.WebPage
 
 /**
  * The Class ParserPlugin.
@@ -21,7 +24,7 @@ import collection.mutable.ListBuffer
  *
  */
 
-trait ParserPlugin extends Logging {
+trait ParserPlugin extends DefaultParser with Logging {
 
   var _pluginData: ParserPluginData = _
 
@@ -40,7 +43,7 @@ trait ParserPlugin extends Logging {
    * @param link
    * @return false if some thing go wrong.
    */
-  def parse(link: Link): ParserPluginStatus = {
+  def parse(link: Link): ParserResult = {
     assert(link != null)
     parse(link, pluginData)
   }
@@ -51,14 +54,14 @@ trait ParserPlugin extends Logging {
    * @param doc
    * @return false then the parser will skip parse it.
    */
-  def beforeParse(link: Link, doc: Document, parserResult: ParserPluginStatus): Boolean = true
+  def beforeParse(link: Link, doc: Document, parserResult: ParserResult): Boolean = true
 
   /**
    * After parse a link.
    * @param link
    * @param doc
    */
-  def afterParse(link: Link, doc: Document, parserResult: ParserPluginStatus) {
+  def afterParse(link: Link, doc: Document, parserResult: ParserResult) {
     //Log error
     if (link.title == null || link.title.trim.isEmpty) {
       parserResult.error("Can not parse the title for " + link.url)
@@ -73,13 +76,18 @@ trait ParserPlugin extends Logging {
     }
   }
 
+
+  override def parse(downloadResult: DownloadResult) = {
+    super.parse(downloadResult)
+  }
+
   /**
    * Default parse method.
    * @param link
    * @param parseData
    */
-  protected def parse(link: Link, parseData: ParserPluginData): ParserPluginStatus = {
-    val parserResult = new ParserPluginStatus
+  protected def parse(link: Link, parseData: ParserPluginData): ParserResult = {
+    val parserResult = new ParserResult(new WebPage)
 
     val inputStream = new ByteArrayInputStream(link.content)
     val doc = Jsoup.parse(inputStream, link.contentEncoding, UrlUtils.getDomainName(link.url))
@@ -161,29 +169,4 @@ trait ParserPlugin extends Logging {
    * @return
    */
   def defaultData: ParserPluginData
-}
-
-object ParserPlugin extends Enumeration {
-  type Status = Value
-  val DONE, SKIP, ERROR = Value
-}
-
-class ParserPluginStatus {
-  var code: ParserPlugin.Status = ParserPlugin.DONE
-
-  private var _error = new ListBuffer[String]
-  private var _info = new ListBuffer[String]
-
-  def error = _error
-
-  def info = _info
-
-  def info(msg: String) {
-    _info += msg
-  }
-
-  def error(msg: String) {
-    code = ParserPlugin.ERROR
-    _error += msg
-  }
 }

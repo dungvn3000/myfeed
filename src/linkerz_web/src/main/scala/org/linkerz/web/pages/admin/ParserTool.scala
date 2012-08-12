@@ -17,7 +17,6 @@ import org.linkerz.crawler.bot.matcher.SimpleRegexMatcher
 import org.linkerz.web.services.plugin.PluginService
 import org.apache.tapestry5.ioc.annotations.Inject
 import org.linkerz.web.services.parser.ParserService
-import org.linkerz.crawler.bot.plugin.ParserPlugin
 import org.linkerz.crawler.core.downloader.DefaultDownload
 
 
@@ -83,11 +82,11 @@ class ParserTool extends Logging {
 
     var count = 0
     var index = 0
-    while (count != numberOfUrl && fetchResult.webUrls.size > index) {
-      if (SimpleRegexMatcher.matcher(fetchResult.webUrls(index).url, parseData.urlRegex)
-        && !urlList.contains(fetchResult.webUrls(index))) {
-        fetchResults += fetcher.fetch(fetchResult.webUrls(index))
-        urlList += fetchResult.webUrls(index)
+    while (count != numberOfUrl && fetchResult.webPage.webUrls.size > index) {
+      if (SimpleRegexMatcher.matcher(fetchResult.webPage.webUrls(index).url, parseData.urlRegex)
+        && !urlList.contains(fetchResult.webPage.webUrls(index))) {
+        fetchResults += fetcher.fetch(fetchResult.webPage.webUrls(index))
+        urlList += fetchResult.webPage.webUrls(index)
         count += 1
       }
       index += 1
@@ -101,12 +100,12 @@ class ParserTool extends Logging {
       if (parser.isMatch(link)) {
         val status = parser.parse(link)
         status.code match {
-          case ParserPlugin.DONE => links.add(link)
-          case ParserPlugin.SKIP => {
+          case ParserResult.DONE => links.add(link)
+          case ParserResult.SKIP => {
             info("Skip this link " + link.url)
             info(status.info.mkString)
           }
-          case ParserPlugin.ERROR => {
+          case ParserResult.ERROR => {
             error("Some thing worng " + link.url)
             error(status.error.mkString)
           }
