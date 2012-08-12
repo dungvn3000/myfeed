@@ -5,6 +5,7 @@
 package org.linkerz.crawler.core.model
 
 import com.googlecode.flaxcrawler.utils.UrlUtils
+import reflect.BeanProperty
 
 /**
  * The Class WebUrl.
@@ -18,7 +19,7 @@ case class WebUrl(private val _url: String) {
 
   def domainName = UrlUtils.getDomainName(url)
 
-  def url = _url.trim.toLowerCase
+  val url = _url.trim.toLowerCase
 
   override def equals(obj: Any) = {
     obj.isInstanceOf[WebUrl] && obj.asInstanceOf[WebUrl].url == url

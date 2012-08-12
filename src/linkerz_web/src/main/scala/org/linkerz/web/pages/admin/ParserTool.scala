@@ -10,9 +10,9 @@ import org.apache.tapestry5.corelib.components.{Form, Zone}
 import java.util
 import grizzled.slf4j.Logging
 import org.linkerz.crawler.core.fetcher.Fetcher
-import org.linkerz.crawler.core.model.WebUrl
+import org.linkerz.crawler.core.model.{WebPage, WebUrl}
 import collection.mutable.ListBuffer
-import org.linkerz.crawler.core.parser.{DefaultParser, ParserResult}
+import org.linkerz.crawler.core.parser.ParserResult
 import org.linkerz.crawler.bot.matcher.SimpleRegexMatcher
 import org.linkerz.web.services.plugin.PluginService
 import org.apache.tapestry5.ioc.annotations.Inject
@@ -34,10 +34,10 @@ class ParserTool extends Logging {
   var numberOfUrl: Int = 10
 
   @Property
-  var links = new util.ArrayList[Link]()
+  var webPages = new util.ArrayList[WebPage]()
 
   @Property
-  var link: Link = _
+  var webPage: WebPage = _
 
   @InjectComponent
   var linksZone: Zone = _
@@ -66,54 +66,44 @@ class ParserTool extends Logging {
   }
 
   def onActionFromCancelBtn() {
-    links.clear()
+    webPages.clear()
   }
 
   def onSubmitFromTestForm() = {
-
-    val fetchResults = new ListBuffer[ParserResult]
     val urlList = new ListBuffer[WebUrl]
-    val fetcher = new Fetcher(new DefaultDownload, new DefaultParser)
+
+    val parser = parserService.getParser(parseData.pluginClass)
+    parser.pluginData = parseData
+    val fetcher = new Fetcher(new DefaultDownload, parser)
     val beginUrl = new WebUrl(parseData.urlTest)
     val fetchResult = fetcher.fetch(beginUrl)
 
     urlList += beginUrl
-    fetchResults += fetchResult
 
     var count = 0
     var index = 0
     while (count != numberOfUrl && fetchResult.webPage.webUrls.size > index) {
       if (SimpleRegexMatcher.matcher(fetchResult.webPage.webUrls(index).url, parseData.urlRegex)
         && !urlList.contains(fetchResult.webPage.webUrls(index))) {
-        fetchResults += fetcher.fetch(fetchResult.webPage.webUrls(index))
+        val result = fetcher.fetch(fetchResult.webPage.webUrls(index))
+
+        result.code match {
+          case ParserResult.DONE => webPages.add(result.webPage)
+          case ParserResult.SKIP => {
+            info("Skip this link " + result.webPage.webUrl.url)
+            info(result.info.mkString)
+          }
+          case ParserResult.ERROR => {
+            error("Some thing worng " + result.webPage.webUrl.url)
+            error(result.error.mkString)
+          }
+        }
+
         urlList += fetchResult.webPage.webUrls(index)
         count += 1
       }
       index += 1
     }
-
-    val parser = parserService.getParser(parseData.pluginClass)
-    parser.pluginData = parseData
-
-//    fetchResults.foreach(web => {
-//      val link = web.webPage.asLink()
-//      if (parser.isMatch(link)) {
-//        val status = parser.parse(link)
-//        status.code match {
-//          case ParserResult.DONE => links.add(link)
-//          case ParserResult.SKIP => {
-//            info("Skip this link " + link.url)
-//            info(status.info.mkString)
-//          }
-//          case ParserResult.ERROR => {
-//            error("Some thing worng " + link.url)
-//            error(status.error.mkString)
-//          }
-//        }
-//      } else {
-//        info("The link is not match " + link.url)
-//      }
-//    })
 
     linksZone
   }
