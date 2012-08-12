@@ -5,7 +5,7 @@
 package org.linkerz.crawler.bot.plugin.vnexpress
 
 import grizzled.slf4j.Logging
-import org.linkerz.mongodb.model.{ParserPlugin, Link}
+import org.linkerz.mongodb.model.{ParserPluginData, Link}
 import org.jsoup.nodes.Document
 import org.linkerz.crawler.bot.plugin.{ParserStatus, Parser}
 import org.apache.commons.lang.StringUtils
@@ -21,7 +21,7 @@ import org.apache.commons.lang.StringUtils
 class VnExpressPlugin extends Parser with Logging {
 
   def defaultData = {
-    val pluginData = new ParserPlugin
+    val pluginData = new ParserPluginData
     pluginData.name = "VnExpress"
     pluginData.version = "0.0.1"
     pluginData.group = "vnexpress.net"

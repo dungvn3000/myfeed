@@ -12,7 +12,7 @@ package org.linkerz.mongodb.model
  *
  */
 
-class ParserPlugin extends LinkerZEntity {
+class ParserPluginData extends LinkerZEntity {
 
   var name: String = _
   var group: String = _

@@ -4,7 +4,7 @@
 
 package org.linkerz.web.services.plugin
 
-import org.linkerz.mongodb.model.ParserPlugin
+import org.linkerz.mongodb.model.ParserPluginData
 
 /**
  * The Class PluginService.
@@ -20,13 +20,13 @@ trait PluginService {
    * Return the parser plugin list.
    * @return
    */
-  def parserPlugins: java.util.List[ParserPlugin]
+  def parserPlugins: java.util.List[ParserPluginData]
 
   /**
    * Find the plugin by id.
    * @param id
    * @return
    */
-  def findParserPlugin(id: String): ParserPlugin
+  def findParserPlugin(id: String): ParserPluginData
 
 }

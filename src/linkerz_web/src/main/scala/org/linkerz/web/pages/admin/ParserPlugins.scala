@@ -4,7 +4,7 @@
 
 package org.linkerz.web.pages.admin
 
-import org.linkerz.mongodb.model.ParserPlugin
+import org.linkerz.mongodb.model.ParserPluginData
 import org.apache.tapestry5.annotations.{Property, SetupRender}
 import org.linkerz.web.services.plugin.PluginService
 import org.apache.tapestry5.ioc.annotations.Inject
@@ -19,10 +19,10 @@ import org.apache.tapestry5.ioc.annotations.Inject
 
 class ParserPlugins {
 
-  var plugins: java.util.List[ParserPlugin] = _
+  var plugins: java.util.List[ParserPluginData] = _
 
   @Property
-  var plugin: ParserPlugin = _
+  var plugin: ParserPluginData = _
 
   @Inject
   var pluginService: PluginService = _

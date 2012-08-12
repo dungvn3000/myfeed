@@ -5,7 +5,7 @@
 package org.linkerz.crawler.bot.parser
 
 import org.linkerz.crawler.bot.plugin.{ParserStatus, Parser}
-import org.linkerz.mongodb.model.{ParserPlugin, Link}
+import org.linkerz.mongodb.model.{ParserPluginData, Link}
 import org.springframework.data.mongodb.core.MongoOperations
 import reflect.BeanProperty
 import collection.JavaConversions._
@@ -33,7 +33,7 @@ class LinkerZParser {
     plugins.clear()
 
     //Step 1: Load plugin list inside the database
-    val pluginList = mongoOperations.findAll(classOf[ParserPlugin])
+    val pluginList = mongoOperations.findAll(classOf[ParserPluginData])
 
     //Step 2: Load data for the plugin, if custom data using default data inside each plugin.
     pluginList.foreach(pluginData => {
@@ -68,7 +68,7 @@ class LinkerZParser {
    */
   def install(pluginClass: String): Boolean = {
     //Check on the database whether the plugin was installed.
-    val result = mongoOperations.findOne(Query.query(Criteria.where("pluginClass").is(pluginClass)), classOf[ParserPlugin])
+    val result = mongoOperations.findOne(Query.query(Criteria.where("pluginClass").is(pluginClass)), classOf[ParserPluginData])
 
     if (result == null) {
       val plugin = Class.forName(pluginClass).newInstance.asInstanceOf[Parser]
@@ -84,7 +84,7 @@ class LinkerZParser {
    * @param pluginClass
    */
   def delete(pluginClass: String) {
-    mongoOperations.remove(Query.query(Criteria.where("pluginClass").is(pluginClass)), classOf[ParserPlugin])
+    mongoOperations.remove(Query.query(Criteria.where("pluginClass").is(pluginClass)), classOf[ParserPluginData])
   }
 
   /**

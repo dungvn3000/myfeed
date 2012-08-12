@@ -5,7 +5,7 @@
 package org.linkerz.web.pages.admin
 
 import org.apache.tapestry5.annotations.{InjectComponent, Persist, Property}
-import org.linkerz.mongodb.model.{ParserPlugin, Link}
+import org.linkerz.mongodb.model.{ParserPluginData, Link}
 import org.apache.tapestry5.corelib.components.{Form, Zone}
 import java.util
 import grizzled.slf4j.Logging
@@ -50,7 +50,7 @@ class ParserTool extends Logging {
   var testForm: Form = _
 
   @Persist
-  var parseData: ParserPlugin = _
+  var parseData: ParserPluginData = _
 
   @Inject
   var pluginService: PluginService = _

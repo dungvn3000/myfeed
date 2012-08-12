@@ -4,7 +4,7 @@
 
 package org.linkerz.crawler.bot.plugin
 
-import org.linkerz.mongodb.model.{ParserPlugin, Link}
+import org.linkerz.mongodb.model.{ParserPluginData, Link}
 import java.io.ByteArrayInputStream
 import org.jsoup.Jsoup
 import com.googlecode.flaxcrawler.utils.UrlUtils
@@ -23,7 +23,7 @@ import collection.mutable.ListBuffer
 
 trait Parser extends Logging {
 
-  var _pluginData: ParserPlugin = _
+  var _pluginData: ParserPluginData = _
 
   /**
    * Check the url is suitable with the plugin or not
@@ -78,7 +78,7 @@ trait Parser extends Logging {
    * @param link
    * @param parseData
    */
-  protected def parse(link: Link, parseData: ParserPlugin): ParserStatus = {
+  protected def parse(link: Link, parseData: ParserPluginData): ParserStatus = {
     val parserResult = new ParserStatus
 
     val inputStream = new ByteArrayInputStream(link.content)
@@ -141,7 +141,7 @@ trait Parser extends Logging {
    * Data for the plugin
    * @return
    */
-  def pluginData: ParserPlugin = {
+  def pluginData: ParserPluginData = {
     if (_pluginData == null) {
       return defaultData
     }
@@ -152,7 +152,7 @@ trait Parser extends Logging {
    * Setter for the data
    * @param pluginData
    */
-  def pluginData_=(pluginData: ParserPlugin) {
+  def pluginData_=(pluginData: ParserPluginData) {
     _pluginData = pluginData
   }
 
@@ -160,7 +160,7 @@ trait Parser extends Logging {
    * Default data.
    * @return
    */
-  def defaultData: ParserPlugin
+  def defaultData: ParserPluginData
 }
 
 object Parser extends Enumeration {
