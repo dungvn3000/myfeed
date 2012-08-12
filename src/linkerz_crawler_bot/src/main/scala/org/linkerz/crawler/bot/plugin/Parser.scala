@@ -58,7 +58,20 @@ trait Parser extends Logging {
    * @param link
    * @param doc
    */
-  def afterParse(link: Link, doc: Document, parserResult: ParserStatus) {}
+  def afterParse(link: Link, doc: Document, parserResult: ParserStatus) {
+    //Log error
+    if (link.title == null || link.title.trim.isEmpty) {
+      parserResult.error("Can not parse the title for " + link.url)
+    }
+
+    if (link.description == null || link.description.trim.isEmpty) {
+      parserResult.error("Can not parse the description for " + link.url)
+    }
+
+    if (link.featureImageUrl == null || link.featureImageUrl.trim.isEmpty) {
+      parserResult.error("Can not parse the image for " + link.url)
+    }
+  }
 
   /**
    * Default parse method.
@@ -115,21 +128,6 @@ trait Parser extends Logging {
       descriptionText = titleText
     }
 
-    val imgSrc = img.attr("src")
-
-    //Log error
-    if (titleText == null || titleText.trim.isEmpty) {
-      parserResult.error("Can not parse the title for " + link.url)
-    }
-
-    if (descriptionText == null || descriptionText.trim.isEmpty) {
-      parserResult.error("Can not parse the description for " + link.url)
-    }
-
-    if (imgSrc == null || imgSrc.trim.isEmpty) {
-      parserResult.error("Can not parse the image for " + link.url)
-    }
-
     link.title = titleText
     link.description = descriptionText
     link.featureImageUrl = img.attr("src")
@@ -154,7 +152,9 @@ trait Parser extends Logging {
    * Setter for the data
    * @param pluginData
    */
-  def pluginData_=(pluginData: ParserPlugin) {}
+  def pluginData_=(pluginData: ParserPlugin) {
+    _pluginData = pluginData
+  }
 
   /**
    * Default data.
@@ -170,11 +170,20 @@ object Parser extends Enumeration {
 
 class ParserStatus {
   var code: Parser.Status = Parser.DONE
-  var _error = new ListBuffer[String]
+
+  private var _error = new ListBuffer[String]
+  private var _info = new ListBuffer[String]
 
   def error = _error
 
+  def info = _info
+
+  def info(msg: String) {
+    _info += msg
+  }
+
   def error(msg: String) {
+    code = Parser.ERROR
     _error += msg
   }
 }

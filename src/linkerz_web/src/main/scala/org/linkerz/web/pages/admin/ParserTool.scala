@@ -62,9 +62,7 @@ class ParserTool extends Logging {
   }
 
   def onSubmitFromParserForm() {
-    if (parseData == null) {
-      parseData = new ParserPlugin
-    }
+    println("parseData = " + parseData.imgSelection)
   }
 
   def onActionFromCancelBtn() {
@@ -103,10 +101,13 @@ class ParserTool extends Logging {
         val status = parser.parse(link)
         status.code match {
           case Parser.DONE => links.add(link)
-          case Parser.SKIP => info("Skip this link " + link.url)
+          case Parser.SKIP => {
+            info("Skip this link " + link.url)
+            info(status.info.mkString)
+          }
           case Parser.ERROR => {
-            info("Some thing worng " + link.url)
-            println(status.error.mkString)
+            error("Some thing worng " + link.url)
+            error(status.error.mkString)
           }
         }
       } else {

@@ -8,6 +8,7 @@ import grizzled.slf4j.Logging
 import org.linkerz.mongodb.model.{ParserPlugin, Link}
 import org.jsoup.nodes.Document
 import org.linkerz.crawler.bot.plugin.{ParserStatus, Parser}
+import org.apache.commons.lang.StringUtils
 
 /**
  * The Class VnExpress.net Plugin.
@@ -29,16 +30,16 @@ class VnExpressPlugin extends Parser with Logging {
     pluginData.urlRegex = "*/vnexpress.net/*/*/2012/*"
     pluginData.titleSelection = ".content h1.Title"
     pluginData.descriptionSelection = ".content .Lead"
-    pluginData.imgSelection = ".content img"
+    pluginData.imgSelection = ".content td img"
     pluginData.urlTest = "http://vnexpress.net/"
     pluginData
   }
 
   override def beforeParse(link: Link, doc: Document, parserResult: ParserStatus): Boolean = {
     //Skip it, because the url is no longer exist
-    if (doc.text().contains("Không tìm thấy đường dẫn này")) {
+     if (doc.text().contains("Không tìm thấy đường dẫn này")) {
       parserResult.code = Parser.SKIP
-      parserResult.error("The link is not exist " + link.url)
+      parserResult.info("The link is not exist " + link.url)
       return false
     }
     true
@@ -50,5 +51,12 @@ class VnExpressPlugin extends Parser with Logging {
     if (link.description.contains(". >")) {
       link.description = link.description.split(". >")(0)
     }
+
+    if (StringUtils.isBlank(link.featureImageUrl)) {
+      val logo = doc.select(".img-logo")
+      if (!logo.isEmpty) link.featureImageUrl = logo.attr("src")
+    }
+
+    super.afterParse(link, doc, parserResult)
   }
 }
