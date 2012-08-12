@@ -95,25 +95,25 @@ class ParserTool extends Logging {
     val parser = parserService.getParser(parseData.pluginClass)
     parser.pluginData = parseData
 
-    fetchResults.foreach(web => {
-      val link = web.webPage.asLink()
-      if (parser.isMatch(link)) {
-        val status = parser.parse(link)
-        status.code match {
-          case ParserResult.DONE => links.add(link)
-          case ParserResult.SKIP => {
-            info("Skip this link " + link.url)
-            info(status.info.mkString)
-          }
-          case ParserResult.ERROR => {
-            error("Some thing worng " + link.url)
-            error(status.error.mkString)
-          }
-        }
-      } else {
-        info("The link is not match " + link.url)
-      }
-    })
+//    fetchResults.foreach(web => {
+//      val link = web.webPage.asLink()
+//      if (parser.isMatch(link)) {
+//        val status = parser.parse(link)
+//        status.code match {
+//          case ParserResult.DONE => links.add(link)
+//          case ParserResult.SKIP => {
+//            info("Skip this link " + link.url)
+//            info(status.info.mkString)
+//          }
+//          case ParserResult.ERROR => {
+//            error("Some thing worng " + link.url)
+//            error(status.error.mkString)
+//          }
+//        }
+//      } else {
+//        info("The link is not match " + link.url)
+//      }
+//    })
 
     linksZone
   }

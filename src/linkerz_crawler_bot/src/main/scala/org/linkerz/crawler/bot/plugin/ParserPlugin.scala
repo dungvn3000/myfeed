@@ -4,15 +4,13 @@
 
 package org.linkerz.crawler.bot.plugin
 
-import org.linkerz.mongodb.model.{ParserPluginData, Link}
+import org.linkerz.mongodb.model.ParserPluginData
 import java.io.ByteArrayInputStream
 import org.jsoup.Jsoup
-import com.googlecode.flaxcrawler.utils.UrlUtils
 import grizzled.slf4j.Logging
 import org.jsoup.nodes.Document
 import org.linkerz.crawler.bot.matcher.SimpleRegexMatcher
-import collection.mutable.ListBuffer
-import org.linkerz.crawler.core.parser.{DefaultParser, ParserResult, Parser}
+import org.linkerz.crawler.core.parser.{DefaultParser, ParserResult}
 import org.linkerz.crawler.core.downloader.DownloadResult
 import org.linkerz.crawler.core.model.WebPage
 
@@ -28,87 +26,52 @@ trait ParserPlugin extends DefaultParser with Logging {
 
   var _pluginData: ParserPluginData = _
 
-  /**
-   * Check the url is suitable with the plugin or not
-   * @param link
-   * @return
-   */
-  def isMatch(link: Link): Boolean = {
-    assert(link != null)
-    SimpleRegexMatcher.matcher(link.url, pluginData.urlRegex)
+  def isMatch(url: String): Boolean = {
+    assert(url != null)
+    SimpleRegexMatcher.matcher(url, pluginData.urlRegex)
   }
 
-  /**
-   * Parse the link. The meta data will be add to the link after parsed it.
-   * @param link
-   * @return false if some thing go wrong.
-   */
-  def parse(link: Link): ParserResult = {
-    assert(link != null)
-    parse(link, pluginData)
-  }
+  def beforeParse(webPage: WebPage, doc: Document, parserResult: ParserResult): Boolean = true
 
-  /**
-   * Before parse a link.
-   * @param link
-   * @param doc
-   * @return false then the parser will skip parse it.
-   */
-  def beforeParse(link: Link, doc: Document, parserResult: ParserResult): Boolean = true
-
-  /**
-   * After parse a link.
-   * @param link
-   * @param doc
-   */
-  def afterParse(link: Link, doc: Document, parserResult: ParserResult) {
+  def afterParse(webPage: WebPage, doc: Document, parserResult: ParserResult) {
     //Log error
-    if (link.title == null || link.title.trim.isEmpty) {
-      parserResult.error("Can not parse the title for " + link.url)
+    if (webPage.title == null || webPage.title.trim.isEmpty) {
+      parserResult.error("Can not parse the title for " + webPage.webUrl.url)
     }
 
-    if (link.description == null || link.description.trim.isEmpty) {
-      parserResult.error("Can not parse the description for " + link.url)
+    if (webPage.description == null || webPage.description.trim.isEmpty) {
+      parserResult.error("Can not parse the description for " + webPage.webUrl.url)
     }
 
-    if (link.featureImageUrl == null || link.featureImageUrl.trim.isEmpty) {
-      parserResult.error("Can not parse the image for " + link.url)
+    if (webPage.featureImageUrl == null || webPage.featureImageUrl.trim.isEmpty) {
+      parserResult.error("Can not parse the image for " + webPage.webUrl.url)
     }
   }
 
 
-  override def parse(downloadResult: DownloadResult) = {
-    super.parse(downloadResult)
-  }
+  override def parse(downloadResult: DownloadResult): ParserResult = {
+    val parserResult = super.parse(downloadResult)
+    val webPage = parserResult.webPage
+    val inputStream = new ByteArrayInputStream(webPage.content)
+    val doc = Jsoup.parse(inputStream, webPage.contentEncoding, webPage.webUrl.domainName)
 
-  /**
-   * Default parse method.
-   * @param link
-   * @param parseData
-   */
-  protected def parse(link: Link, parseData: ParserPluginData): ParserResult = {
-    val parserResult = new ParserResult(new WebPage)
-
-    val inputStream = new ByteArrayInputStream(link.content)
-    val doc = Jsoup.parse(inputStream, link.contentEncoding, UrlUtils.getDomainName(link.url))
-
-    if (!beforeParse(link, doc, parserResult)) {
+    if (!beforeParse(webPage, doc, parserResult)) {
       return parserResult
     }
 
-    val title = doc.select(parseData.titleSelection)
-    val description = doc.select(parseData.descriptionSelection)
-    val img = doc.select(parseData.imgSelection)
+    val title = doc.select(pluginData.titleSelection)
+    val description = doc.select(pluginData.descriptionSelection)
+    val img = doc.select(pluginData.imgSelection)
 
     var titleText = title.text()
-    if (parseData.titleAttName != null
-      && parseData.titleAttName.trim.length > 0) {
-      titleText = title.attr(parseData.titleAttName)
+    if (pluginData.titleAttName != null
+      && pluginData.titleAttName.trim.length > 0) {
+      titleText = title.attr(pluginData.titleAttName)
     }
 
-    if (titleText.length > parseData.titleMaxLength
-      && parseData.titleMaxLength > 0) {
-      titleText = titleText.substring(0, parseData.titleMaxLength)
+    if (titleText.length > pluginData.titleMaxLength
+      && pluginData.titleMaxLength > 0) {
+      titleText = titleText.substring(0, pluginData.titleMaxLength)
     }
 
     //To make sure the title will be never null
@@ -118,31 +81,32 @@ trait ParserPlugin extends DefaultParser with Logging {
 
     //Recheck again
     if (titleText == null || titleText.trim.isEmpty) {
-      titleText = link.url
+      titleText = webPage.webUrl.url
     }
 
     var descriptionText = description.text()
-    if (parseData.descriptionAttName != null
-      && parseData.descriptionAttName.trim.length > 0) {
-      descriptionText = description.attr(parseData.descriptionAttName)
+    if (pluginData.descriptionAttName != null
+      && pluginData.descriptionAttName.trim.length > 0) {
+      descriptionText = description.attr(pluginData.descriptionAttName)
     }
 
-    if (descriptionText.length > parseData.descriptionMaxLength
-      && parseData.descriptionMaxLength > 0) {
-      descriptionText = descriptionText.substring(0, parseData.descriptionMaxLength)
+    if (descriptionText.length > pluginData.descriptionMaxLength
+      && pluginData.descriptionMaxLength > 0) {
+      descriptionText = descriptionText.substring(0, pluginData.descriptionMaxLength)
     }
 
     if (descriptionText == null || descriptionText.trim.isEmpty) {
       descriptionText = titleText
     }
 
-    link.title = titleText
-    link.description = descriptionText
-    link.featureImageUrl = img.attr("src")
+    webPage.title = titleText
+    webPage.description = descriptionText
+    webPage.featureImageUrl = img.attr("src")
 
-    afterParse(link, doc, parserResult)
+    afterParse(webPage, doc, parserResult)
 
     parserResult
+
   }
 
   /**

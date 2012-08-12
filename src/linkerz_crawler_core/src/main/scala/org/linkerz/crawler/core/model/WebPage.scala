@@ -21,7 +21,11 @@ class WebPage {
   var webUrls: List[WebUrl] = _
   var content: Array[Byte] = _
 
+  //Meta data
   var contentEncoding: String = _
+  var title: String = _
+  var description: String = _
+  var featureImageUrl: String = _
 
   var parent: WebPage = _
 

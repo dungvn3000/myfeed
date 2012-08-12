@@ -5,14 +5,14 @@
 package org.linkerz.crawler.bot.parser
 
 import org.linkerz.crawler.bot.plugin.ParserPlugin
-import org.linkerz.mongodb.model.{ParserPluginData, Link}
+import org.linkerz.mongodb.model.ParserPluginData
 import org.springframework.data.mongodb.core.MongoOperations
 import reflect.BeanProperty
 import collection.JavaConversions._
 import collection.mutable.ListBuffer
 import org.springframework.data.mongodb.core.query.{Criteria, Query}
-import org.linkerz.crawler.core.parser.ParserResult
-import org.linkerz.crawler.core.model.WebPage
+import org.linkerz.crawler.core.parser.{ParserResult, Parser}
+import org.linkerz.crawler.core.downloader.DownloadResult
 
 /**
  * The Class LinkerZParser.
@@ -22,7 +22,7 @@ import org.linkerz.crawler.core.model.WebPage
  *
  */
 
-class LinkerZParser {
+class LinkerZParser extends Parser {
 
   var plugins: ListBuffer[ParserPlugin] = new ListBuffer[ParserPlugin]
 
@@ -47,21 +47,13 @@ class LinkerZParser {
     })
   }
 
-  /**
-   * Auto find a suitable plugin for the link.
-   * @param link
-   * @return
-   */
-  def parse(link: Link): ParserResult = {
-    plugins.foreach(plugin => {
-      if (plugin.isMatch(link)) return plugin.parse(link)
-    })
-    val parserStatus = new ParserResult(new WebPage)
-    parserStatus.error("Can not find any plugin for this link")
-    parserStatus.code = ParserResult.SKIP
-    parserStatus
-  }
 
+  def parse(downloadResult: DownloadResult): ParserResult = {
+    plugins.foreach(plugin => {
+      if (plugin.isMatch(downloadResult.webUrl.url)) return plugin.parse(downloadResult)
+    })
+    null
+  }
 
   /**
    * Install a plugin

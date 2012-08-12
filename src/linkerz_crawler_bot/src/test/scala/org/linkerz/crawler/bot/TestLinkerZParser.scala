@@ -37,12 +37,9 @@ class TestLinkerZParser extends FunSuite with SpringContext {
     //Reload the list
     linkerZParser.load()
 
-    val fetcher = new Fetcher(new DefaultDownload, new DefaultParser)
+    val fetcher = new Fetcher(new DefaultDownload, new LinkerZParser)
     val result = fetcher.fetch(new WebUrl("http://vnexpress.net/gl/phap-luat/2012/08/dai-gia-dat-cang-bi-dieu-tra-lua-dao-1-000-ty-dong/"))
     val link = result.webPage.asLink()
-
-    linkerZParser.parse(link)
-
     println("link = " + link.url)
     println("title = " + link.title)
     println("description = " + link.description)

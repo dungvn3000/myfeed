@@ -35,19 +35,7 @@ class TestVnExpressPlugin extends FunSuite with SpringContext {
   plugin.pluginData = parseData
 
   test("testPlugin") {
-    val mongoOperations = context.getBean("mongoTemplate", classOf[MongoOperations])
-    val links = mongoOperations.findAll(classOf[Link])
 
-    links.foreach(link => {
-      if (plugin.isMatch(link)) {
-        assert(plugin.parse(link).code == ParserResult.DONE)
-
-        println("link = " + link.url)
-        println("title = " + link.title)
-        println("description = " + link.description)
-        println("img = " + link.featureImageUrl)
-      }
-    })
 
   }
 

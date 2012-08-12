@@ -5,11 +5,12 @@
 package org.linkerz.crawler.bot.plugin.vnexpress
 
 import grizzled.slf4j.Logging
-import org.linkerz.mongodb.model.{ParserPluginData, Link}
+import org.linkerz.mongodb.model.ParserPluginData
 import org.jsoup.nodes.Document
 import org.linkerz.crawler.bot.plugin.ParserPlugin
 import org.apache.commons.lang.StringUtils
 import org.linkerz.crawler.core.parser.ParserResult
+import org.linkerz.crawler.core.model.WebPage
 
 /**
  * The Class VnExpress.net Plugin.
@@ -36,28 +37,28 @@ class VnExpressPlugin extends ParserPlugin with Logging {
     pluginData
   }
 
-  override def beforeParse(link: Link, doc: Document, parserResult: ParserResult): Boolean = {
+  override def beforeParse(webPage: WebPage, doc: Document, parserResult: ParserResult): Boolean = {
     //Skip it, because the url is no longer exist
-     if (doc.text().contains("Không tìm thấy đường dẫn này")) {
+    if (doc.text().contains("Không tìm thấy đường dẫn này")) {
       parserResult.code = ParserResult.SKIP
-      parserResult.info("The link is not exist " + link.url)
+      parserResult.info("The link is not exist " + webPage.webUrl.url)
       return false
     }
     true
   }
 
 
-  override def afterParse(link: Link, doc: Document, parserResult: ParserResult) {
+  override def afterParse(webPage: WebPage, doc: Document, parserResult: ParserResult) {
     //Remove another link inside vnexpress description
-    if (link.description.contains(". >")) {
-      link.description = link.description.split(". >")(0)
+    if (webPage.description.contains(". >")) {
+      webPage.description = webPage.description.split(". >")(0)
     }
 
-    if (StringUtils.isBlank(link.featureImageUrl)) {
+    if (StringUtils.isBlank(webPage.featureImageUrl)) {
       val logo = doc.select(".img-logo")
-      if (!logo.isEmpty) link.featureImageUrl = logo.attr("src")
+      if (!logo.isEmpty) webPage.featureImageUrl = logo.attr("src")
     }
 
-    super.afterParse(link, doc, parserResult)
+    super.afterParse(webPage, doc, parserResult)
   }
 }
