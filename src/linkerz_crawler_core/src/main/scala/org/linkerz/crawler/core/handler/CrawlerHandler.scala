@@ -27,9 +27,8 @@ import org.linkerz.crawler.core.parser.DefaultParser
 class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
 
   private var crawlTime: Long = 0
-
   private var countUrl = 0
-  private var maxDepth = 0
+  private var currentDepth = 0
 
   /**
    * Store fetched urls list
@@ -38,6 +37,9 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
 
   @BeanProperty
   var dbService: DBService = _
+
+  @BeanProperty
+  var maxDepth = 0
 
   /**
    * Construct a handler with number of worker.
@@ -62,7 +64,7 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
     crawlTime = System.currentTimeMillis - crawlTime
     println(countUrl + " links found")
     println(fetchedUrls.size + " links downloaded")
-    println(maxDepth + " level")
+    println(currentDepth + " level")
     println(crawlTime + " ms")
   }
 
@@ -84,14 +86,22 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
         dbService.save(job.result.get.parserResult.webPage)
       }
 
-      val depth = job.depth + 1
-      if (depth > maxDepth) maxDepth = depth
-      webUrls.foreach(webUrl => {
-        //Make sure we not fectch a link we did already.
-        if (fetchedUrls.findEntry(webUrl).isEmpty) {
-          subJobQueue += new CrawlJob(webUrl, job)
-        }
-      })
+      if (job.depth > currentDepth) {
+          currentDepth = job.depth
+      }
+
+      if (currentDepth < maxDepth) {
+        webUrls.foreach(webUrl => {
+          //Make sure we not fetch a link we did already.
+          if (fetchedUrls.findEntry(webUrl).isEmpty) {
+            //And make sure the url is not in the queue
+            val result = subJobQueue.realQueue.find(job => job.webUrl == webUrl)
+            if (result.isEmpty) {
+              subJobQueue += new CrawlJob(webUrl, job)
+            }
+          }
+        })
+      }
     }
   }
 }

@@ -28,12 +28,15 @@ class NewFeedController {
   var mongoOperations: MongoOperations = _
 
   def start() {
-    var newFeeds = mongoOperations.findAll(classOf[NewFeed])
+    val newFeeds = mongoOperations.findAll(classOf[NewFeed])
     newFeeds.foreach(newFeed => {
       val job = new CrawlJob(newFeed.url)
       crawlerController.add(job)
     })
   }
 
+  def stop() {
+   crawlerController.stop()
+  }
 
 }
