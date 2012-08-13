@@ -34,4 +34,8 @@ class DBStoreImpl extends DBStore {
   def deleteById(id: String, entityClass: Class[_ <: LinkerZEntity]) {
     mongoOperations.findAndRemove(Query.query(Criteria.where("id").is(id)), entityClass)
   }
+
+  def findAll(entityClass: Class[_ <: LinkerZEntity]) = {
+    mongoOperations.findAll(entityClass)
+  }
 }

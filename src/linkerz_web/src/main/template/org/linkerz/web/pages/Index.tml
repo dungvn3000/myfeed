@@ -2,24 +2,25 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
         >
 
-    <ul class="nav">
-        <t:loop source="result" value="link">
-            <li>
-                <table class="table">
-                    <tr>
-                        <td style="width:64px">
-                            <img src="http://localhost/vnexpress/vnexpress.net/Files/Subject/3b/a0/7b/44/tantho250.jpg" width="64" height="64"/>
-                        </td>
-                        <td>
-                            <a href="${link.url}">${link.title}</a>
-                            <p>
-                                ${link.subTitle}
-                            </p>
-                        </td>
-                    </tr>
-                </table>
-            </li>
+    <section class="row-fluid">
+
+        <t:loop source="links" value="link">
+            <div class="row-fluid">
+                <div class="span2">
+                    <img src="http://vnexpress.net/${link.featureImageUrl}" alt="" width="80" height="80" style="padding-left:10px;"/>
+                </div>
+                <div class="span8">
+                    <h5>
+                        <a href="${link.url}">
+                            ${link.title}
+                        </a>
+                    </h5>
+                    <p>${link.description}</p>
+                </div>
+            </div>
+            <br/>
         </t:loop>
-    </ul>
+
+    </section>
 
 </html>

@@ -4,7 +4,6 @@
 
 package org.linkerz.web.services.db
 
-import org.linkerz.crawler.core.model.WebPage
 import org.linkerz.mongodb.model.LinkerZEntity
 
 /**
@@ -22,4 +21,6 @@ trait DBStore {
   def deleteById(id: String, entityClass: Class[_ <: LinkerZEntity])
 
   def delete(entity: LinkerZEntity)
+
+  def findAll(entityClass: Class[_ <: LinkerZEntity]): java.util.List[_ <: LinkerZEntity]
 }

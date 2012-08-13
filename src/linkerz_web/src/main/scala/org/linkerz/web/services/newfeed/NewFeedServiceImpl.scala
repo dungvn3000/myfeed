@@ -6,7 +6,10 @@ package org.linkerz.web.services.newfeed
 
 import reflect.BeanProperty
 import org.springframework.data.mongodb.core.MongoOperations
-import org.linkerz.mongodb.model.NewFeed
+import org.linkerz.mongodb.model.{Link, NewFeed}
+import collection.JavaConversions._
+import org.apache.commons.lang.StringUtils
+import org.springframework.data.mongodb.core.query.{Criteria, Query}
 
 /**
  * The Class NewFeedServiceImpl.
@@ -23,5 +26,10 @@ class NewFeedServiceImpl extends NewFeedService {
 
   def feedList = {
     mongoOperations.findAll(classOf[NewFeed])
+  }
+
+  def linkList = {
+    val links = mongoOperations.find(Query.query(Criteria.where("title").exists(true)).limit(20), classOf[Link])
+    links.filter(link => StringUtils.isNotBlank(link.title))
   }
 }

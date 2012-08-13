@@ -8,6 +8,8 @@ import org.apache.tapestry5.annotations._
 import org.apache.tapestry5.ioc.annotations.Inject
 import org.linkerz.web.services.user.UserService
 import org.linkerz.mongodb.model.Link
+import org.linkerz.web.services.db.DBStore
+import org.linkerz.web.services.newfeed.NewFeedService
 
 /**
  * The Class Index.
@@ -20,7 +22,7 @@ import org.linkerz.mongodb.model.Link
 class Index {
 
   @Property
-  private var result: java.util.List[Link] = _
+  private var links: java.util.List[Link] = _
 
   @Property
   private var link: Link = _
@@ -28,10 +30,12 @@ class Index {
   @Inject
   private var userService: UserService = _
 
+  @Inject
+  private var newFeedService: NewFeedService = _
 
   @SetupRender
   def initializeValue() {
-    result = userService.getUserWebPages("dung")
+    links = newFeedService.linkList
   }
 
 }

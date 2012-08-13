@@ -4,7 +4,7 @@
 
 package org.linkerz.web.services.newfeed
 
-import org.linkerz.mongodb.model.NewFeed
+import org.linkerz.mongodb.model.{Link, NewFeed}
 
 /**
  * The Class NewFeedService.
@@ -17,5 +17,7 @@ import org.linkerz.mongodb.model.NewFeed
 trait NewFeedService {
 
   def feedList: java.util.List[NewFeed]
+
+  def linkList: java.util.List[Link]
 
 }
