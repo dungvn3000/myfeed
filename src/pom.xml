@@ -26,6 +26,7 @@
     </modules>
 
     <properties>
+        <quartz.version>1.8.6</quartz.version>
         <weka.version>3.6.7</weka.version>
         <opennlp.maxent.version>3.0.2-incubating</opennlp.maxent.version>
         <opennlp.version>1.5.2-incubating</opennlp.version>

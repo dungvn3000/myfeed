@@ -5,6 +5,7 @@
 
     <import resource="db.xml"/>
     <import resource="crawlModule.xml"/>
+    <import resource="quartz.xml"/>
 
     <bean id="newFeedController" class="org.linkerz.crawler.bot.controller.NewFeedController">
         <property name="mongoOperations" ref="mongoTemplate"/>

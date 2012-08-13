@@ -28,14 +28,18 @@ class NewFeedController {
   var mongoOperations: MongoOperations = _
 
   def start() {
-    while (true) {
-      val newFeeds = mongoOperations.findAll(classOf[NewFeed])
-      newFeeds.foreach(newFeed => {
-        val job = new CrawlJob(newFeed.url)
-        crawlerController.add(job)
-      })
-      Thread.sleep(1000 * 60 * 30)
-    }
+//    while (true) {
+//      val newFeeds = mongoOperations.findAll(classOf[NewFeed])
+//      newFeeds.foreach(newFeed => {
+//        val job = new CrawlJob(newFeed.url)
+//        crawlerController.add(job)
+//      })
+//      Thread.sleep(1000 * 60 * 30)
+//    }
+  }
+
+  def test() {
+    println("dung ne")
   }
 
   def stop() {
