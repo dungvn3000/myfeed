@@ -13,6 +13,7 @@ import org.linkerz.crawler.db.DBService
 import reflect.BeanProperty
 import org.linkerz.crawler.core.factory.{ParserFactory, DownloadFactory}
 import org.linkerz.crawler.core.model.WebUrl
+import java.util.regex.Pattern
 
 /**
  * The Class CrawlerHandler.
@@ -23,6 +24,9 @@ import org.linkerz.crawler.core.model.WebUrl
  */
 
 class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
+
+  private val filters = Pattern.compile(".*(\\.(css|js|bmp|gif|jpe?g" + "|png|tiff?|mid|mp2|mp3|mp4"
+    + "|wav|avi|mov|mpeg|ram|m4v|pdf" + "|rm|smil|wmv|swf|wma|zip|rar|gz))$")
 
   private var _downloadFactory: DownloadFactory = _
 
@@ -38,6 +42,10 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
   var onlyCrawlInSameDomain = true
 
   private var _session: CrawlSession = _
+
+  def sessionClass = classOf[CrawlSession]
+
+  def accept(job: Job) = job.isInstanceOf[CrawlJob]
 
   /**
    * Construct a handler with number of worker.
@@ -57,10 +65,6 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
       workers += worker
     }
   }
-
-  def sessionClass = classOf[CrawlSession]
-
-  def accept(job: Job) = job.isInstanceOf[CrawlJob]
 
   override protected def doHandle(job: CrawlJob, session: CrawlSession) {
     _session = session
@@ -106,6 +110,7 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
   }
 
   protected def shouldCrawl(webUrl: WebUrl): Boolean = {
+    if (filters.matcher(webUrl.url).matches()) return false
     //Only crawl in same domain.
     if (!onlyCrawlInSameDomain
       || (onlyCrawlInSameDomain && webUrl.domainName == _session.domainName)) {
