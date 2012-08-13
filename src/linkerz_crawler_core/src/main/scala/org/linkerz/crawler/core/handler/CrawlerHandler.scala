@@ -9,12 +9,9 @@ import org.linkerz.crawler.core.job.CrawlJob
 import org.linkerz.crawler.core.session.CrawlSession
 import org.linkerz.job.queue.core.Job
 import org.linkerz.crawler.core.worker.CrawlWorker
-import org.linkerz.crawler.core.model.WebUrl
-import collection.mutable
 import org.linkerz.crawler.db.DBService
 import reflect.BeanProperty
-import org.linkerz.crawler.core.downloader.DefaultDownload
-import org.linkerz.crawler.core.parser.DefaultParser
+import org.linkerz.crawler.core.factory.{ParserFactory, DownloadFactory}
 
 /**
  * The Class CrawlerHandler.
@@ -26,23 +23,36 @@ import org.linkerz.crawler.core.parser.DefaultParser
 
 class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
 
+  private var _downloadFactory: DownloadFactory = _
+
+  private var _parserFactory: ParserFactory = _
+
   @BeanProperty
   var dbService: DBService = _
 
   @BeanProperty
   var maxDepth = 0
 
+  @BeanProperty
+  var onlyCrawlInSameDomain = true
+
   private var _session: CrawlSession = _
 
   /**
    * Construct a handler with number of worker.
    * @param numberOfWorker must greater than one
+   * @param downloadFactory
+   * @param parserFactory
    */
-  def this(numberOfWorker: Int) {
+  def this(numberOfWorker: Int, downloadFactory: DownloadFactory, parserFactory: ParserFactory) {
     this
     assert(numberOfWorker > 0, "Number of worker of a handler must more than one")
+    assert(downloadFactory != null)
+    assert(parserFactory != null)
+    _downloadFactory = downloadFactory
+    _parserFactory = parserFactory
     for (i <- 1 to numberOfWorker) {
-      val worker = new CrawlWorker(i, new DefaultDownload, new DefaultParser)
+      val worker = new CrawlWorker(i, downloadFactory.createDownloader(), parserFactory.createParser())
       workers += worker
     }
   }
@@ -86,12 +96,16 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
 
       if (_session.currentDepth < maxDepth) {
         webUrls.foreach(webUrl => {
-          //Make sure we not fetch a link we did already.
-          if (_session.fetchedUrls.findEntry(webUrl).isEmpty) {
-            //And make sure the url is not in the queue
-            val result = subJobQueue.realQueue.find(job => job.webUrl == webUrl)
-            if (result.isEmpty) {
-              subJobQueue += new CrawlJob(webUrl, job)
+          //Only crawl in same domain.
+          if (!onlyCrawlInSameDomain
+            || (onlyCrawlInSameDomain && webUrl.domainName == _session.domainName)) {
+            //Make sure we not fetch a link we did already.
+            if (_session.fetchedUrls.findEntry(webUrl).isEmpty) {
+              //And make sure the url is not in the queue
+              val result = subJobQueue.realQueue.find(job => job.webUrl == webUrl)
+              if (result.isEmpty) {
+                subJobQueue += new CrawlJob(webUrl, job)
+              }
             }
           }
         })

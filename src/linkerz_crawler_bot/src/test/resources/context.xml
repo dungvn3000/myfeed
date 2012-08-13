@@ -6,10 +6,6 @@
     <import resource="db.xml"/>
     <import resource="crawlModule.xml"/>
 
-    <bean id="parserFactory" class="org.linkerz.crawler.bot.factory.ParserFactory">
-        <property name="mongoOperations" ref="mongoTemplate"/>
-    </bean>
-
     <bean id="newFeedController" class="org.linkerz.crawler.bot.controller.NewFeedController" init-method="start">
         <property name="mongoOperations" ref="mongoTemplate"/>
         <property name="crawlerController" ref="crawlerController"/>

@@ -51,7 +51,7 @@ class JobHasSubJobSession extends Session[JobHasSubJob] with Logging {
     this
   }
 
-  def endSession() {
+  override def endSession() {
     info("endSession")
   }
 }

@@ -9,6 +9,7 @@ import grizzled.slf4j.Logging
 import org.linkerz.crawler.core.model.WebUrl
 import org.linkerz.crawler.core.downloader.DefaultDownload
 import org.linkerz.crawler.core.parser.DefaultParser
+import org.linkerz.crawler.core.factory.{DefaultParserFactory, DefaultDownloadFactory}
 
 /**
  * The Class TestFetcher.
@@ -21,7 +22,9 @@ import org.linkerz.crawler.core.parser.DefaultParser
 class TestFetcher extends FunSuite with Logging {
 
   test("testFetchVnExpress") {
-    val fetcher = new Fetcher(new DefaultDownload, new DefaultParser)
+    val downloader = new DefaultDownloadFactory().createDownloader()
+    val parser = new DefaultParserFactory().createParser()
+    val fetcher = new Fetcher(downloader, parser)
 
     var time = System.currentTimeMillis()
     val result = fetcher.fetch(new WebUrl("http://localhost/vnexpress/vnexpress.net/"))

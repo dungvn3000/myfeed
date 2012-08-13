@@ -5,7 +5,7 @@
 package org.linkerz.web.pages.admin
 
 import org.apache.tapestry5.annotations.{InjectComponent, Persist, Property}
-import org.linkerz.mongodb.model.{ParserPluginData, Link}
+import org.linkerz.mongodb.model.ParserPluginData
 import org.apache.tapestry5.corelib.components.{Form, Zone}
 import java.util
 import grizzled.slf4j.Logging
@@ -17,7 +17,7 @@ import org.linkerz.crawler.bot.matcher.SimpleRegexMatcher
 import org.linkerz.web.services.plugin.PluginService
 import org.apache.tapestry5.ioc.annotations.Inject
 import org.linkerz.web.services.parser.ParserService
-import org.linkerz.crawler.core.downloader.DefaultDownload
+import org.linkerz.crawler.core.factory.{DownloadFactory, ParserFactory}
 
 
 /**
@@ -57,6 +57,12 @@ class ParserTool extends Logging {
   @Inject
   var parserService: ParserService = _
 
+  @Inject
+  var parserFactory: ParserFactory = _
+
+  @Inject
+  var downloadFactory: DownloadFactory = _
+
   def onActivate(id: String) {
     parseData = pluginService.findParserPlugin(id)
   }
@@ -73,8 +79,8 @@ class ParserTool extends Logging {
     val urlList = new ListBuffer[WebUrl]
 
     val parser = parserService.parserFactory.createParser
-//    parser.pluginData = parseData
-    val fetcher = new Fetcher(new DefaultDownload, parser)
+    //    parser.pluginData = parseData
+    val fetcher = new Fetcher(downloadFactory.createDownloader(), parserFactory.createParser())
     val beginUrl = new WebUrl(parseData.urlTest)
     val fetchResult = fetcher.fetch(beginUrl)
 

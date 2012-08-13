@@ -42,21 +42,5 @@ class SearchBox {
 
   def onSubmit() {
     println(keyWord)
-    val fetch = new Fetcher(new DefaultDownload, new DefaultParser)
-    val result = fetch.fetch(new WebUrl(keyWord))
-
-    var user = userService.getUser("dung")
-    if (user == null) {
-      user = new User
-      user.userName = "dung"
-      user.passWord = "dung"
-      dbStore.save(user)
-    }
-
-    val link = new Link
-    link.userId = user.id
-    link.url = keyWord
-
-    dbStore.save(link)
   }
 }

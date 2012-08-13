@@ -5,6 +5,7 @@
 package org.linkerz.crawler.core
 
 import controller.CrawlerController
+import factory.{DefaultParserFactory, DefaultDownloadFactory}
 import handler.CrawlerHandler
 import job.CrawlJob
 import model.WebUrl
@@ -23,13 +24,16 @@ class TestBasicCrawlJob extends FunSuite with Logging {
 
   test("testBasicJob") {
     val controller = new CrawlerController
-    val handler = new CrawlerHandler(10)
+    val handler = new CrawlerHandler(10, new DefaultDownloadFactory, new DefaultParserFactory)
+
     //Limit retry
-    handler.maxRetry = 100
+    handler.maxRetry = 10
     //Ide time
     handler.ideTime = 5000
 
     handler.maxDepth = 1
+
+    handler.politenessDelay = 1000
 
     controller.handlers = List(handler)
 

@@ -7,7 +7,7 @@ package org.linkerz.web.services.parser
 import org.linkerz.crawler.bot.plugin.ParserPlugin
 import org.linkerz.mongodb.model.Link
 import org.linkerz.crawler.bot.parser.LinkerZParser
-import org.linkerz.crawler.bot.factory.ParserFactory
+import org.linkerz.crawler.bot.factory.ParserPluginFactory
 
 /**
  * The Class ParserService.
@@ -18,5 +18,5 @@ import org.linkerz.crawler.bot.factory.ParserFactory
  */
 
 trait ParserService {
-  def parserFactory: ParserFactory
+  def parserFactory: ParserPluginFactory
 }

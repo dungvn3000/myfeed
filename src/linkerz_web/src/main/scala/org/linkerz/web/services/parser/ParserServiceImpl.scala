@@ -8,7 +8,7 @@ import org.linkerz.crawler.bot.plugin.ParserPlugin
 import org.linkerz.mongodb.model.Link
 import org.linkerz.crawler.bot.parser.LinkerZParser
 import reflect.BeanProperty
-import org.linkerz.crawler.bot.factory.ParserFactory
+import org.linkerz.crawler.bot.factory.ParserPluginFactory
 
 /**
  * The Class ParserServiceImpl.
@@ -21,7 +21,7 @@ import org.linkerz.crawler.bot.factory.ParserFactory
 class ParserServiceImpl extends ParserService {
 
   @BeanProperty
-  var parserFactory: ParserFactory = _
+  var parserFactory: ParserPluginFactory = _
 
 
 }

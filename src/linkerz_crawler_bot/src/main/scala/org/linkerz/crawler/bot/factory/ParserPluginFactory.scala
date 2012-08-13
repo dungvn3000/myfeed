@@ -13,6 +13,7 @@ import collection.mutable.ListBuffer
 import collection.JavaConversions._
 import org.linkerz.crawler.bot.parser.LinkerZParser
 import org.linkerz.crawler.core.parser.Parser
+import org.linkerz.crawler.core.factory.ParserFactory
 
 /**
  * The Class ParserFactory.
@@ -22,7 +23,7 @@ import org.linkerz.crawler.core.parser.Parser
  *
  */
 
-class ParserFactory {
+class ParserPluginFactory extends ParserFactory {
 
   @BeanProperty
   var mongoOperations: MongoOperations = _
@@ -52,7 +53,7 @@ class ParserFactory {
     mongoOperations.remove(Query.query(Criteria.where("pluginClass").is(pluginClass)), classOf[ParserPluginData])
   }
 
-  def createParser: Parser = {
+  override def createParser: Parser = {
     var plugins = new ListBuffer[ParserPlugin]
 
     //Step 1: Load plugin list inside the database

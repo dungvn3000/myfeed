@@ -32,6 +32,13 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
   @BeanProperty
   var ideTime = 1000
 
+  /**
+ 	 * Politeness delay in milliseconds (delay between sending two requests to
+ 	 * the same job parent).
+ 	 */
+  @BeanProperty
+  var politenessDelay = 0
+
   private var _retryCount = 0
 
   protected def doHandle(job: J, session: S) {
@@ -72,6 +79,10 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
     breakable {
       workers.foreach(worker => if (worker.isFree) {
         worker.work(job, session)
+        if (politenessDelay > 0) {
+          //Delay time for each job.
+          Thread.sleep(politenessDelay)
+        }
         isDone = true
         break()
       })

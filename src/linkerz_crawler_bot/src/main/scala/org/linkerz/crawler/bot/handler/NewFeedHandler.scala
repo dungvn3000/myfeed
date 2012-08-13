@@ -5,9 +5,8 @@
 package org.linkerz.crawler.bot.handler
 
 import org.linkerz.crawler.core.handler.CrawlerHandler
-import org.linkerz.crawler.bot.factory.ParserFactory
 import org.linkerz.crawler.core.worker.CrawlWorker
-import org.linkerz.crawler.core.downloader.DefaultDownload
+import org.linkerz.crawler.core.factory.{ParserFactory, DownloadFactory}
 
 /**
  * The Class NewFeedHandler.
@@ -19,11 +18,11 @@ import org.linkerz.crawler.core.downloader.DefaultDownload
 
 class NewFeedHandler extends CrawlerHandler {
 
-  def this(parserFactory: ParserFactory, numberOfWorker: Int) {
+  def this(numberOfWorker: Int, downloadFactory: DownloadFactory, parserFactory: ParserFactory) {
     this
     assert(numberOfWorker > 0, "Number of worker of a handler must more than one")
     for (i <- 1 to numberOfWorker) {
-      val worker = new CrawlWorker(i, new DefaultDownload, parserFactory.createParser)
+      val worker = new CrawlWorker(i, downloadFactory.createDownloader(), parserFactory.createParser())
       workers += worker
     }
   }

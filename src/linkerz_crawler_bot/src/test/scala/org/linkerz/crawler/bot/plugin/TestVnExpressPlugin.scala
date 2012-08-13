@@ -14,6 +14,7 @@ import vnexpress.VnExpressPlugin
 import org.linkerz.crawler.core.parser.ParserResult
 import org.linkerz.crawler.core.downloader.DefaultDownload
 import org.linkerz.crawler.core.model.WebUrl
+import org.linkerz.crawler.core.factory.DefaultDownloadFactory
 
 /**
  * The Class TestVnExpressPlugin.
@@ -25,7 +26,7 @@ import org.linkerz.crawler.core.model.WebUrl
 
 class TestVnExpressPlugin extends FunSuite with SpringContext {
 
-  val downloader = new DefaultDownload
+  val downloader = new DefaultDownloadFactory().createDownloader()
   val plugin = new VnExpressPlugin
 
   test("testPlugin") {

@@ -82,7 +82,7 @@ class TestSession extends Session[InSessionJob] with Logging {
     this
   }
 
-  def endSession() {
+  override def endSession() {
     info("endSession")
   }
 }

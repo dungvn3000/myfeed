@@ -15,6 +15,7 @@ import org.linkerz.crawler.core.model.WebUrl
 import org.apache.tika.parser.html.{DefaultHtmlMapper, IdentityHtmlMapper, HtmlMapper, HtmlParser}
 import org.apache.tika.parser.ParseContext
 import org.apache.tika.metadata.Metadata
+import org.linkerz.crawler.core.factory.DefaultDownloadFactory
 
 /**
  * The Class TestParser.
@@ -26,7 +27,7 @@ import org.apache.tika.metadata.Metadata
 
 class TestParser extends FunSuite with Logging {
 
-  val downloader = new DefaultDownload
+  val downloader = new DefaultDownloadFactory().createDownloader()
 
   test("testSimpleParser") {
     val tika = new Tika
