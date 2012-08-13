@@ -58,6 +58,13 @@
             <artifactId>linkerz_crawler_core</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.linkerz</groupId>
+            <artifactId>linkerz_crawler_bot</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
     </dependencies>
 
 </project>
