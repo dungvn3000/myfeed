@@ -13,7 +13,7 @@ package org.linkerz.job.queue.core
  *
  */
 
-trait HandlerInSession[J <: Job, S <: Session] extends Handler[J] {
+trait HandlerInSession[J <: Job, S <: Session[J]] extends Handler[J] {
 
   /**
    * Not using this method.

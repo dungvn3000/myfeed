@@ -43,8 +43,21 @@ class JobHasSubJob extends Job {
   }
 }
 
-class TestWorker(id: Int) extends Worker[JobHasSubJob, TestSession] with Logging {
-  def analyze(job: JobHasSubJob, session: TestSession) {
+class JobHasSubJobSession extends Session[JobHasSubJob] with Logging {
+  val id = "JobHasSubJobSession"
+
+  def openSession(job: JobHasSubJob) = {
+    info("openSession")
+    this
+  }
+
+  def endSession() {
+    info("endSession")
+  }
+}
+
+class TestWorker(id: Int) extends Worker[JobHasSubJob, JobHasSubJobSession] with Logging {
+  def analyze(job: JobHasSubJob, session: JobHasSubJobSession) {
     info("Worker " + id + " is working...")
     if (job.parent.isEmpty) {
       //Only add sub job for first job
@@ -59,9 +72,9 @@ class TestWorker(id: Int) extends Worker[JobHasSubJob, TestSession] with Logging
   }
 }
 
-class TestAsyncHandler extends AsyncHandler[JobHasSubJob, TestSession] {
+class TestAsyncHandler extends AsyncHandler[JobHasSubJob, JobHasSubJobSession] {
   def accept(job: Job) = job.isInstanceOf[JobHasSubJob]
-  def sessionClass = classOf[TestSession]
+  def sessionClass = classOf[JobHasSubJobSession]
   protected def createSubJobs(job: JobHasSubJob) {
     job.result match {
       case Some(subJob) => subJobQueue ++= subJob

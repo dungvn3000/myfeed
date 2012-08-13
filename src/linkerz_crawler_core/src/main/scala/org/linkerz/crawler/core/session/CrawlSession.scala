@@ -5,6 +5,7 @@
 package org.linkerz.crawler.core.session
 
 import org.linkerz.job.queue.core.Session
+import org.linkerz.crawler.core.job.CrawlJob
 
 /**
  * The Class CrawlSession.
@@ -14,9 +15,9 @@ import org.linkerz.job.queue.core.Session
  *
  */
 
-class CrawlSession extends Session {
+class CrawlSession extends Session[CrawlJob] {
 
-  def openSession() = null
+  def openSession(job: CrawlJob) = null
 
   def endSession() {}
 }

@@ -12,12 +12,12 @@ package org.linkerz.job.queue.core
  *
  */
 
-trait Session {
+trait Session[J <: Job] {
 
   /**
    * Open the session.
    */
-  def openSession(): Session
+  def openSession(job: J): Session[J]
 
   /**
    * End the session.

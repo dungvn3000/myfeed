@@ -65,8 +65,8 @@ class SumHandler extends Handler[SumJob] with Logging {
 }
 
 class InSessionJob extends Job {
-  private var _result: Session = _
-  def result_=(result: Session) {
+  private var _result: Session[InSessionJob] = _
+  def result_=(result: Session[InSessionJob]) {
     _result = result
   }
   def result = {
@@ -74,10 +74,10 @@ class InSessionJob extends Job {
   }
 }
 
-class TestSession extends Session with Logging {
+class TestSession extends Session[InSessionJob] with Logging {
   val id = "TestSession"
 
-  def openSession() = {
+  def openSession(job: InSessionJob) = {
     info("openSession")
     this
   }

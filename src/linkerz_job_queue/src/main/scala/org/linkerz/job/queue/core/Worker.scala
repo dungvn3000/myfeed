@@ -15,7 +15,7 @@ import actors.Actor
  * @since 7/9/12, 1:53 AM
  *
  */
-trait Worker[J <: Job, S <: Session] extends CallBackable[J] {
+trait Worker[J <: Job, S <: Session[J]] extends CallBackable[J] {
 
   case object STOP
   case class NEXT(job: J, session: S)

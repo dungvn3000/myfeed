@@ -20,7 +20,7 @@ import reflect.BeanProperty
  *
  */
 
-abstract class AsyncHandler[J <: Job, S <: Session] extends HandlerInSession[J, S] with CallBack[J] with Logging {
+abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[J, S] with CallBack[J] with Logging {
 
   val workers = new ListBuffer[Worker[J, S]]
   var subJobQueue = new Queue[J] with ScalaQueue[J]
