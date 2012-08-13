@@ -19,7 +19,8 @@ class TestNewFeedController extends FunSuite with SpringContext {
 
   test("testController") {
     val controller = context.getBean("newFeedController", classOf[NewFeedController])
-    Thread.sleep(10000)
+    controller.start()
+    controller.stop()
   }
 
 }

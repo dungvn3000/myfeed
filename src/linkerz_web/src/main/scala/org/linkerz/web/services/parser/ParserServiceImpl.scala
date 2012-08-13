@@ -4,9 +4,6 @@
 
 package org.linkerz.web.services.parser
 
-import org.linkerz.crawler.bot.plugin.ParserPlugin
-import org.linkerz.mongodb.model.Link
-import org.linkerz.crawler.bot.parser.LinkerZParser
 import reflect.BeanProperty
 import org.linkerz.crawler.bot.factory.ParserPluginFactory
 
