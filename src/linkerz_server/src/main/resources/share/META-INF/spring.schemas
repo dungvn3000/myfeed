@@ -20,3 +20,8 @@ http\://www.springframework.org/schema/cache/spring-cache.xsd=org/springframewor
 
 http\://www.hazelcast.com/schema/spring/hazelcast-spring-2.1.xsd=hazelcast-spring-2.1.xsd
 http\://www.adesso.de/schema/scala-0.2.xsd=de/adesso/scala/config/spring-scala-0.2.xsd
+
+http\://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd=org/springframework/data/mongodb/config/spring-mongo-1.0.xsd
+http\://www.springframework.org/schema/data/mongo/spring-mongo.xsd=org/springframework/data/mongodb/config/spring-mongo-1.0.xsd
+http\://www.springframework.org/schema/data/repository/spring-repository-1.0.xsd=org/springframework/data/repository/config/spring-repository-1.0.xsd
+http\://www.springframework.org/schema/data/repository/spring-repository.xsd=org/springframework/data/repository/config/spring-repository-1.0.xsd

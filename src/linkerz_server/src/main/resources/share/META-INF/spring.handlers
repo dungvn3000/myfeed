@@ -6,3 +6,4 @@ http\://www.springframework.org/schema/cache=org.springframework.cache.config.Ca
 
 http\://www.hazelcast.com/schema/spring=com.hazelcast.spring.HazelcastNamespaceHandler
 http\://www.adesso.de/schema/scala=de.adesso.scalaspring.xmlnamespace.ScalaNamespaceHandler
+http\://www.springframework.org/schema/data/mongo=org.springframework.data.mongodb.config.MongoNamespaceHandler

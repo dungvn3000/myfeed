@@ -51,7 +51,7 @@ class VnExpressPlugin extends ParserPlugin with Logging {
   override def afterParse(webPage: WebPage, doc: Document, parserResult: ParserResult) {
     //Remove another link inside vnexpress description
     if (webPage.description.contains(". >")) {
-      webPage.description = webPage.description.split(". >")(0)
+      webPage.description = webPage.description.split(" >")(0)
     }
 
     if (StringUtils.isBlank(webPage.featureImageUrl)) {
