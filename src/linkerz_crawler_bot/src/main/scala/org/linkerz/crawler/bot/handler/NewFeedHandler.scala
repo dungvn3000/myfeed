@@ -7,6 +7,7 @@ package org.linkerz.crawler.bot.handler
 import org.linkerz.crawler.core.handler.CrawlerHandler
 import org.linkerz.crawler.core.worker.CrawlWorker
 import org.linkerz.crawler.core.factory.{ParserFactory, DownloadFactory}
+import org.linkerz.crawler.core.model.WebUrl
 
 /**
  * The Class NewFeedHandler.
@@ -27,4 +28,7 @@ class NewFeedHandler extends CrawlerHandler {
     }
   }
 
+  override protected def shouldCrawl(webUrl: WebUrl) = {
+    dbService.find(webUrl) == null && super.shouldCrawl(webUrl)
+  }
 }

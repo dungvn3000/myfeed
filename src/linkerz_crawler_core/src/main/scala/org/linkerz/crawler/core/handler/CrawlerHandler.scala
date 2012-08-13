@@ -12,6 +12,7 @@ import org.linkerz.crawler.core.worker.CrawlWorker
 import org.linkerz.crawler.db.DBService
 import reflect.BeanProperty
 import org.linkerz.crawler.core.factory.{ParserFactory, DownloadFactory}
+import org.linkerz.crawler.core.model.WebUrl
 
 /**
  * The Class CrawlerHandler.
@@ -96,20 +97,27 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
 
       if (_session.currentDepth < maxDepth) {
         webUrls.foreach(webUrl => {
-          //Only crawl in same domain.
-          if (!onlyCrawlInSameDomain
-            || (onlyCrawlInSameDomain && webUrl.domainName == _session.domainName)) {
-            //Make sure we not fetch a link we did already.
-            if (_session.fetchedUrls.findEntry(webUrl).isEmpty) {
-              //And make sure the url is not in the queue
-              val result = subJobQueue.realQueue.find(job => job.webUrl == webUrl)
-              if (result.isEmpty) {
-                subJobQueue += new CrawlJob(webUrl, job)
-              }
-            }
+          if (shouldCrawl(webUrl)) {
+            subJobQueue += new CrawlJob(webUrl, job)
           }
         })
       }
     }
+  }
+
+  protected def shouldCrawl(webUrl: WebUrl): Boolean = {
+    //Only crawl in same domain.
+    if (!onlyCrawlInSameDomain
+      || (onlyCrawlInSameDomain && webUrl.domainName == _session.domainName)) {
+      //Make sure we not fetch a link we did already.
+      if (_session.fetchedUrls.findEntry(webUrl).isEmpty) {
+        //And make sure the url is not in the queue
+        val result = subJobQueue.realQueue.find(job => job.webUrl == webUrl)
+        if (result.isEmpty) {
+          return true
+        }
+      }
+    }
+    false
   }
 }

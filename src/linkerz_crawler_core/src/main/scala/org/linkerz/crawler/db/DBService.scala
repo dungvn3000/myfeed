@@ -24,4 +24,6 @@ trait DBService {
    */
   def save(webPage: WebPage)
 
+
+  def find(webUrl: WebUrl): Link
 }

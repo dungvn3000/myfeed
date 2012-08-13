@@ -4,7 +4,7 @@
 
 package org.linkerz.crawler.db
 
-import org.linkerz.crawler.core.model.WebPage
+import org.linkerz.crawler.core.model.{WebUrl, WebPage}
 import reflect.BeanProperty
 import org.springframework.data.mongodb.core.MongoOperations
 import org.linkerz.mongodb.model.{LinkConnection, Link}
@@ -27,7 +27,7 @@ class DBServiceImpl extends DBService {
 
   def save(webPage: WebPage) {
     //Check the page is exist on the database or not.
-    val result = find(webPage.webUrl.url)
+    val result = find(webPage.webUrl)
 
     if (result == null) {
       val link = webPage.asLink()
@@ -36,7 +36,7 @@ class DBServiceImpl extends DBService {
       if (webPage.parent != null) {
         //find the parent id in the database
 
-        val parent = find(webPage.parent.webUrl.url)
+        val parent = find(webPage.parent.webUrl)
         assert(parent != null, "Can not find the website " + webPage.parent.webUrl.url)
 
         val connection = new LinkConnection(parent.id, link.id)
@@ -51,7 +51,7 @@ class DBServiceImpl extends DBService {
     }
   }
 
-  def find(url: String) = {
-    mongoOperations.findOne(query(where("url").is(url)), classOf[Link])
+  def find(webUrl: WebUrl) = {
+    mongoOperations.findOne(query(where("url").is(webUrl.url)), classOf[Link])
   }
 }
