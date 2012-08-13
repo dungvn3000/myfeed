@@ -22,6 +22,6 @@ trait Session[J <: Job] {
   /**
    * End the session.
    */
-  def endSession()
+  def endSession() {}
 
 }

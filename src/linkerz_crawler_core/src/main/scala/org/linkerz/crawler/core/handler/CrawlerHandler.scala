@@ -26,20 +26,13 @@ import org.linkerz.crawler.core.parser.DefaultParser
 
 class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
 
-  private var crawlTime: Long = 0
-  private var countUrl = 0
-  private var currentDepth = 0
-
-  /**
-   * Store fetched urls list
-   */
-  private var fetchedUrls = mutable.HashSet.empty[WebUrl]
-
   @BeanProperty
   var dbService: DBService = _
 
   @BeanProperty
   var maxDepth = 0
+
+  private var _session: CrawlSession = _
 
   /**
    * Construct a handler with number of worker.
@@ -59,20 +52,21 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
   def accept(job: Job) = job.isInstanceOf[CrawlJob]
 
   override protected def doHandle(job: CrawlJob, session: CrawlSession) {
-    crawlTime = System.currentTimeMillis
+    _session = session
+    _session.crawlTime = System.currentTimeMillis
     super.doHandle(job, session)
-    crawlTime = System.currentTimeMillis - crawlTime
-    println(countUrl + " links found")
-    println(fetchedUrls.size + " links downloaded")
-    println(currentDepth + " level")
-    println(crawlTime + " ms")
+    _session.crawlTime = System.currentTimeMillis - _session.crawlTime
+    println(_session.countUrl + " links found")
+    println(_session.fetchedUrls.size + " links downloaded")
+    println(_session.currentDepth + " level")
+    println(_session.crawlTime + " ms")
   }
 
   protected def createSubJobs(job: CrawlJob) {
     if (!job.result.isEmpty) {
       val webUrls = job.result.get.parserResult.webPage.webUrls
-      countUrl += webUrls.size
-      fetchedUrls += job.webUrl
+      _session.countUrl += webUrls.size
+      _session.fetchedUrls += job.webUrl
 
       //Set the parent for the website.
       if (!job.parent.isEmpty) {
@@ -86,14 +80,14 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
         dbService.save(job.result.get.parserResult.webPage)
       }
 
-      if (job.depth > currentDepth) {
-          currentDepth = job.depth
+      if (job.depth > _session.currentDepth) {
+        _session.currentDepth = job.depth
       }
 
-      if (currentDepth < maxDepth) {
+      if (_session.currentDepth < maxDepth) {
         webUrls.foreach(webUrl => {
           //Make sure we not fetch a link we did already.
-          if (fetchedUrls.findEntry(webUrl).isEmpty) {
+          if (_session.fetchedUrls.findEntry(webUrl).isEmpty) {
             //And make sure the url is not in the queue
             val result = subJobQueue.realQueue.find(job => job.webUrl == webUrl)
             if (result.isEmpty) {

@@ -6,6 +6,8 @@ package org.linkerz.crawler.core.session
 
 import org.linkerz.job.queue.core.Session
 import org.linkerz.crawler.core.job.CrawlJob
+import collection.mutable
+import org.linkerz.crawler.core.model.WebUrl
 
 /**
  * The Class CrawlSession.
@@ -17,7 +19,18 @@ import org.linkerz.crawler.core.job.CrawlJob
 
 class CrawlSession extends Session[CrawlJob] {
 
-  def openSession(job: CrawlJob) = null
+  var crawlTime: Long = 0
+  var countUrl = 0
+  var currentDepth = 0
+  /**
+   * Store fetched urls list
+   */
+  var fetchedUrls = mutable.HashSet.empty[WebUrl]
 
-  def endSession() {}
+  var domainName: String = _
+
+  def openSession(job: CrawlJob) = {
+    domainName = job.webUrl.domainName
+    this
+  }
 }
