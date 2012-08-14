@@ -16,4 +16,6 @@ import org.linkerz.crawler.core.model.WebUrl
 
 case class DownloadResult(webUrl: WebUrl, byteContent: Array[Byte]) {
 
+  var responseCode: Int = _
+
 }

@@ -18,9 +18,7 @@ class Link extends LinkerZEntity {
 
   var url: String = _
   var content: Array[Byte] = _
-
-  //Link to user
-  var userId: String = _
+  var responseCode: Int = _
 
   //Metadata
   var contentEncoding: String = _

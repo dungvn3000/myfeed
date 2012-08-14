@@ -21,6 +21,8 @@ class WebPage {
   var webUrls: List[WebUrl] = _
   var content: Array[Byte] = _
 
+  var responseCode: Int = _
+
   //Meta data
   var contentEncoding: String = _
   var title: String = _
@@ -42,6 +44,7 @@ class WebPage {
     link.featureImageUrl = featureImageUrl
     link.indexDate = new util.Date
     link.contentEncoding = contentEncoding
+    link.responseCode = responseCode
     link
   }
 }

@@ -7,6 +7,7 @@ package org.linkerz.crawler.core.downloader
 import grizzled.slf4j.Logging
 import com.ning.http.client.{AsyncHttpClient, AsyncHttpClientConfig}
 import org.linkerz.crawler.core.model.WebUrl
+import edu.uci.ics.crawler4j.fetcher.PageFetcher
 
 /**
  * The Class DefaultDownload.
@@ -19,9 +20,11 @@ import org.linkerz.crawler.core.model.WebUrl
 class DefaultDownload(httpClient: AsyncHttpClient) extends Downloader with Logging {
 
   def download(webUrl: WebUrl): DownloadResult = {
-    info("Download: " + webUrl.url)
     val result = httpClient.prepareGet(webUrl.url).execute().get()
-    new DownloadResult(webUrl, result.getResponseBodyAsBytes)
+    info("Download " + result.getStatusCode + " : " + webUrl.url)
+    val downloadResult = new DownloadResult(webUrl, result.getResponseBodyAsBytes)
+    downloadResult.responseCode = result.getStatusCode
+    downloadResult
   }
 
 }

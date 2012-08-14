@@ -4,8 +4,9 @@
 
 package org.linkerz.crawler.core.factory
 
-import com.ning.http.client.{AsyncHttpClient, AsyncHttpClientConfig}
+import com.ning.http.client.{AsyncHttpProviderConfig, AsyncHttpClient, AsyncHttpClientConfig}
 import org.linkerz.crawler.core.downloader.DefaultDownload
+import com.ning.http.client.providers.apache.{ApacheAsyncHttpProviderConfig, ApacheAsyncHttpProvider}
 
 /**
  * The Class DefaultDownloadFactory.
@@ -18,10 +19,12 @@ import org.linkerz.crawler.core.downloader.DefaultDownload
 class DefaultDownloadFactory extends DownloadFactory {
 
   val cf = new AsyncHttpClientConfig.Builder()
-    .setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:10.0.2) Gecko/20100101 Firefox/10.0.2")
+    .setUserAgent("Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
     .setCompressionEnabled(true)
     .setAllowPoolingConnection(true)
-    .setFollowRedirects(false)
+    .setFollowRedirects(true)
+    .setMaximumNumberOfRedirects(100)
+    .setMaximumConnectionsPerHost(5)
     .build()
 
   def createDownloader() = {

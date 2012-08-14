@@ -6,7 +6,7 @@ package org.linkerz.crawler.core.fetcher
 
 import org.linkerz.crawler.core.downloader.Downloader
 import org.linkerz.crawler.core.parser.{ParserResult, Parser}
-import org.linkerz.crawler.core.model.WebUrl
+import org.linkerz.crawler.core.model.{WebPage, WebUrl}
 
 /**
  * The Class Fetcher.
@@ -24,7 +24,21 @@ class Fetcher(downloader: Downloader, parser: Parser) {
    */
   def fetch(webUrl: WebUrl): ParserResult = {
     val downloadResult = downloader.download(webUrl)
-    val parserResult = parser.parse(downloadResult)
+
+    var parserResult: ParserResult = null
+    if (downloadResult.responseCode == 200) {
+      //Only parse when the response code is ok
+      parserResult = parser.parse(downloadResult)
+    } else {
+      val webPage = new WebPage
+      webPage.webUrl = downloadResult.webUrl
+      webPage.content = downloadResult.byteContent
+      parserResult = new ParserResult(webPage)
+    }
+
+    //Set response for sever to model
+    parserResult.webPage.responseCode = downloadResult.responseCode
+
     parserResult
   }
 
