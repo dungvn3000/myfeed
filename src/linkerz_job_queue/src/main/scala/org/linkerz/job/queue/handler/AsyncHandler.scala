@@ -9,6 +9,7 @@ import collection.mutable.ListBuffer
 import util.control.Breaks._
 import grizzled.slf4j.Logging
 import reflect.BeanProperty
+import Job._
 
 /**
  * The Class AsyncHandler.
@@ -22,8 +23,12 @@ import reflect.BeanProperty
 
 abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[J, S] with CallBack[J] with Logging {
 
+  private var _retryCount = 0
+  private var jobConfig: Map[String, AnyRef] = _
+
+  protected var subJobQueue = new Queue[J] with ScalaQueue[J]
+
   val workers = new ListBuffer[Worker[J, S]]
-  var subJobQueue = new Queue[J] with ScalaQueue[J]
 
   @BeanProperty
   var maxRetry = 100
@@ -33,15 +38,27 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
   var ideTime = 1000
 
   /**
- 	 * Politeness delay in milliseconds (delay between sending two requests to
- 	 * the same job parent).
- 	 */
+   * Politeness delay in milliseconds (delay between sending two requests to
+   * the same job parent).
+   */
   @BeanProperty
   var politenessDelay = 0
 
-  private var _retryCount = 0
-
   protected def doHandle(job: J, session: S) {
+    //Save job config form the job. If it not exist using default value
+    jobConfig = job.jobConfig
+    if (!jobConfig.isEmpty) {
+      if (!jobConfig.get(MAX_RETRY).isEmpty) {
+        maxRetry = jobConfig.get(MAX_RETRY).get.asInstanceOf[Int]
+      }
+      if(!jobConfig.get(IDE_TIME).isEmpty) {
+        ideTime = jobConfig.get(IDE_TIME).get.asInstanceOf[Int]
+      }
+      if (!jobConfig.get(POLITENESS_DELAY).isEmpty) {
+        politenessDelay = jobConfig.get(POLITENESS_DELAY).get.asInstanceOf[Int]
+      }
+    }
+
     //Step 1: Analyze the job fist,
     //check the result then decide will continue or not.
     workers.head.analyze(job, session)
@@ -113,7 +130,6 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
 
 
   def onSuccess(source: Any, result: Option[J]) {
-    info("Callback form " + source)
     if (!result.isEmpty) createSubJobs(result.get)
   }
 

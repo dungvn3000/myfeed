@@ -28,4 +28,18 @@ trait Job {
    * @return
    */
   def parent: Option[Job] = None
+
+  /**
+   * Job configuration data.
+   */
+  def jobConfig: Map[String, AnyRef] = Map.empty[String, String]
+}
+
+object Job {
+  //Int
+  val MAX_RETRY = "maxRetry"
+  //Int
+  val IDE_TIME = "ideTime"
+  //Int
+  val POLITENESS_DELAY = "politenessDelay"
 }
