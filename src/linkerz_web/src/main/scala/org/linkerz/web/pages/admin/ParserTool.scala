@@ -13,7 +13,7 @@ import org.linkerz.crawler.core.fetcher.Fetcher
 import org.linkerz.crawler.core.model.{WebPage, WebUrl}
 import collection.mutable.ListBuffer
 import org.linkerz.crawler.core.parser.ParserResult
-import org.linkerz.crawler.bot.matcher.SimpleRegexMatcher
+import org.linkerz.core.matcher.SimpleRegexMatcher
 import org.linkerz.web.services.plugin.PluginService
 import org.apache.tapestry5.ioc.annotations.Inject
 import org.linkerz.web.services.parser.ParserService

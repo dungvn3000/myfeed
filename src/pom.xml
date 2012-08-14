@@ -26,7 +26,7 @@
     </modules>
 
     <properties>
-        <quartz.version>1.8.6</quartz.version>
+        <quartz.version>2.1.5</quartz.version>
         <weka.version>3.6.7</weka.version>
         <opennlp.maxent.version>3.0.2-incubating</opennlp.maxent.version>
         <opennlp.version>1.5.2-incubating</opennlp.version>
@@ -45,6 +45,7 @@
         <flaxcrawler.version>1.1</flaxcrawler.version>
         <crawler4j.verion>3.3.2-SNAPSHOT</crawler4j.verion>
         <httpclient.version>4.2</httpclient.version>
+        <commons.digester.version>1.6</commons.digester.version>
         <commons.io.version>1.4</commons.io.version>
         <commons.lang.version>2.6</commons.lang.version>
         <commons.collection.version>3.2</commons.collection.version>

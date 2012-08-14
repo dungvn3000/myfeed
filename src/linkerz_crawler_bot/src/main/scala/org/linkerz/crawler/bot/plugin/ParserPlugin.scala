@@ -9,7 +9,7 @@ import java.io.ByteArrayInputStream
 import org.jsoup.Jsoup
 import grizzled.slf4j.Logging
 import org.jsoup.nodes.Document
-import org.linkerz.crawler.bot.matcher.SimpleRegexMatcher
+import org.linkerz.core.matcher.SimpleRegexMatcher
 import org.linkerz.crawler.core.parser.{DefaultParser, ParserResult}
 import org.linkerz.crawler.core.downloader.DownloadResult
 import org.linkerz.crawler.core.model.WebPage

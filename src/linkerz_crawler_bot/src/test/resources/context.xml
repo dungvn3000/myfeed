@@ -10,6 +10,7 @@
     <bean id="newFeedController" class="org.linkerz.crawler.bot.controller.NewFeedController">
         <property name="mongoOperations" ref="mongoTemplate"/>
         <property name="crawlerController" ref="crawlerController"/>
+        <property name="scheduler" ref="schedulerFactoryBean"/>
     </bean>
 
 </beans>
