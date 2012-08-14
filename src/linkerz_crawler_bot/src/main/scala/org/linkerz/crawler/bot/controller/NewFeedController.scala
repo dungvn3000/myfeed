@@ -14,6 +14,7 @@ import org.quartz.JobBuilder._
 import org.quartz.TriggerBuilder._
 import org.quartz.SimpleScheduleBuilder._
 import collection.JavaConversions._
+import NewFeedController._
 
 /**
  * The Class NewFeedController.
@@ -38,8 +39,8 @@ class NewFeedController {
     val newFeeds = mongoOperations.findAll(classOf[NewFeed])
     newFeeds.foreach(newFeed => {
       val jobDetail = newJob(classOf[NewFeedJob]).build()
-      jobDetail.getJobDataMap.put(NewFeedController.CONTROLLER, crawlerController)
-      jobDetail.getJobDataMap.put(NewFeedController.URL, newFeed.url)
+      jobDetail.getJobDataMap.put(CONTROLLER, crawlerController)
+      jobDetail.getJobDataMap.put(NEW_FEED, newFeed)
 
       val trigger = newTrigger().startNow()
         .withSchedule(repeatMinutelyForever(newFeed.time)).build()
@@ -55,15 +56,21 @@ class NewFeedController {
 
 object NewFeedController {
   val CONTROLLER = "controller"
-  val URL = "url"
+  val NEW_FEED = "newFeed"
 }
 
 class NewFeedJob extends Job {
   def execute(context: JobExecutionContext) {
-    val controller = context.getJobDetail.getJobDataMap.get(NewFeedController.CONTROLLER)
-    val url = context.getJobDetail.getJobDataMap.getString(NewFeedController.URL)
+    val controller = context.getJobDetail.getJobDataMap.get(CONTROLLER)
+    val newFeed = context.getJobDetail.getJobDataMap.get(NEW_FEED).asInstanceOf[NewFeed]
     if (controller.isInstanceOf[CrawlerController]) {
-      controller.asInstanceOf[CrawlerController].add(new CrawlJob(url))
+      val job = new CrawlJob(newFeed.url) {
+        override def jobConfig = Map(
+          CrawlJob.EXCLUDE_URL -> newFeed.excludeUrl,
+          CrawlJob.URL_REGEX -> newFeed.urlRegex
+        )
+      }
+      controller.asInstanceOf[CrawlerController].add(job)
     }
   }
 }

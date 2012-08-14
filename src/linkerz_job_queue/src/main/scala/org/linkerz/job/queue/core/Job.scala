@@ -33,6 +33,13 @@ trait Job {
    * Job configuration data.
    */
   def jobConfig: Map[String, AnyRef] = Map.empty[String, String]
+
+
+  /**
+   * Setter for job config.
+   * @param config
+   */
+  def jobConfig_=(config: Map[String, AnyRef]) {}
 }
 
 object Job {

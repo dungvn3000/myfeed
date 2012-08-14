@@ -24,7 +24,7 @@ import Job._
 abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[J, S] with CallBack[J] with Logging {
 
   private var _retryCount = 0
-  private var jobConfig: Map[String, AnyRef] = _
+  protected var jobConfig: Map[String, AnyRef] = _
 
   protected var subJobQueue = new Queue[J] with ScalaQueue[J]
 
@@ -45,19 +45,8 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
   var politenessDelay = 0
 
   protected def doHandle(job: J, session: S) {
-    //Save job config form the job. If it not exist using default value
-    jobConfig = job.jobConfig
-    if (!jobConfig.isEmpty) {
-      if (!jobConfig.get(MAX_RETRY).isEmpty) {
-        maxRetry = jobConfig.get(MAX_RETRY).get.asInstanceOf[Int]
-      }
-      if(!jobConfig.get(IDE_TIME).isEmpty) {
-        ideTime = jobConfig.get(IDE_TIME).get.asInstanceOf[Int]
-      }
-      if (!jobConfig.get(POLITENESS_DELAY).isEmpty) {
-        politenessDelay = jobConfig.get(POLITENESS_DELAY).get.asInstanceOf[Int]
-      }
-    }
+    //Read Job Config
+    readJobConfig(job)
 
     //Step 1: Analyze the job fist,
     //check the result then decide will continue or not.
@@ -121,6 +110,27 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
       }
     }
     isDone
+  }
+
+  /**
+   * Read config from job. Just in case for each job have different setting.
+   * Note: The default setting will be change with the last Job Config.
+   * @param job
+   */
+  protected def readJobConfig(job: J) {
+    //Save job config form the job. If it not exist using default value
+    jobConfig = job.jobConfig
+    if (!jobConfig.isEmpty) {
+      if (!jobConfig.get(MAX_RETRY).isEmpty) {
+        maxRetry = jobConfig.get(MAX_RETRY).get.asInstanceOf[Int]
+      }
+      if (!jobConfig.get(IDE_TIME).isEmpty) {
+        ideTime = jobConfig.get(IDE_TIME).get.asInstanceOf[Int]
+      }
+      if (!jobConfig.get(POLITENESS_DELAY).isEmpty) {
+        politenessDelay = jobConfig.get(POLITENESS_DELAY).get.asInstanceOf[Int]
+      }
+    }
   }
 
 

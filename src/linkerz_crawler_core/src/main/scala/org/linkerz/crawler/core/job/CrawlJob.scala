@@ -68,3 +68,10 @@ case class CrawlJob(var webUrl: WebUrl) extends Job {
 }
 
 case class CrawlJobResult(parserResult: ParserResult)
+
+object CrawlJob {
+  val MAX_DEPTH = "maxDepth"
+  val ONLY_CRAWL_IN_SAME_DOMAIN = "onlyCrawlInSameDomain"
+  val URL_REGEX = "urlRegex"
+  val EXCLUDE_URL = "excludeUrl"
+}

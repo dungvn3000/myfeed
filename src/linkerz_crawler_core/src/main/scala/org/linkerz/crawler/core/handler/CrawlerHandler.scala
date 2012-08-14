@@ -6,14 +6,17 @@ package org.linkerz.crawler.core.handler
 
 import org.linkerz.job.queue.handler.AsyncHandler
 import org.linkerz.crawler.core.job.CrawlJob
+import org.linkerz.crawler.core.job.CrawlJob._
 import org.linkerz.crawler.core.session.CrawlSession
 import org.linkerz.job.queue.core.Job
 import org.linkerz.crawler.core.worker.CrawlWorker
 import org.linkerz.crawler.db.DBService
 import reflect.BeanProperty
 import org.linkerz.crawler.core.factory.{ParserFactory, DownloadFactory}
-import org.linkerz.crawler.core.model.WebUrl
 import java.util.regex.Pattern
+import org.linkerz.crawler.core.model.WebUrl
+import org.apache.commons.lang.StringUtils
+import org.linkerz.core.matcher.SimpleRegexMatcher
 
 /**
  * The Class CrawlerHandler.
@@ -40,6 +43,12 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
 
   @BeanProperty
   var onlyCrawlInSameDomain = true
+
+  @BeanProperty
+  var urlRegex: String = _
+
+  @BeanProperty
+  var excludeUrl: String = _
 
   private var _session: CrawlSession = _
 
@@ -110,7 +119,22 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
   }
 
   protected def shouldCrawl(webUrl: WebUrl): Boolean = {
+
     if (filters.matcher(webUrl.url).matches()) return false
+
+    //Only crawl the url is match with url regex
+    if (StringUtils.isNotBlank(urlRegex)
+      && !SimpleRegexMatcher.matcher(webUrl.url, urlRegex)) {
+      return false
+    }
+
+    //Not crawl the exclude url
+    if (StringUtils.isNotBlank(excludeUrl)
+      && SimpleRegexMatcher.matcher(webUrl.url, excludeUrl)) {
+      return false
+    }
+
+
     //Only crawl in same domain.
     if (!onlyCrawlInSameDomain
       || (onlyCrawlInSameDomain && webUrl.domainName == _session.domainName)) {
@@ -124,5 +148,23 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
       }
     }
     false
+  }
+
+  override protected def readJobConfig(job: CrawlJob) {
+    super.readJobConfig(job)
+    if (!jobConfig.isEmpty) {
+      if (!jobConfig.get(MAX_DEPTH).isEmpty) {
+        maxDepth = jobConfig.get(MAX_DEPTH).get.asInstanceOf[Int]
+      }
+      if (!jobConfig.get(ONLY_CRAWL_IN_SAME_DOMAIN).isEmpty) {
+        onlyCrawlInSameDomain = jobConfig.get(ONLY_CRAWL_IN_SAME_DOMAIN).get.asInstanceOf[Boolean]
+      }
+      if (!jobConfig.get(URL_REGEX).isEmpty) {
+        urlRegex = jobConfig.get(URL_REGEX).get.asInstanceOf[String]
+      }
+      if (!jobConfig.get(EXCLUDE_URL).isEmpty) {
+        excludeUrl = jobConfig.get(EXCLUDE_URL).get.asInstanceOf[String]
+      }
+    }
   }
 }
