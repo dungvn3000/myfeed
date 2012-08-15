@@ -22,7 +22,7 @@ class TestNewFeedController extends FunSuite with SpringContext {
     controller.start()
 //    controller.stop()
 
-    Thread.sleep(1000 * 60)
+    Thread.sleep(1000 * 60 * 2)
   }
 
 }

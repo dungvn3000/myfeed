@@ -30,6 +30,7 @@ class Fetcher(downloader: Downloader, parser: Parser) {
       //Only parse when the response code is ok
       parserResult = parser.parse(downloadResult)
     } else {
+      //TODO: Find the way how to treat the error url
       val webPage = new WebPage
       webPage.webUrl = downloadResult.webUrl
       webPage.content = downloadResult.byteContent

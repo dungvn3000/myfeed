@@ -22,8 +22,7 @@ class DefaultDownloadFactory extends DownloadFactory {
     .setUserAgent("Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
     .setCompressionEnabled(true)
     .setAllowPoolingConnection(true)
-    .setFollowRedirects(true)
-    .setMaximumNumberOfRedirects(100)
+    .setFollowRedirects(false)
     .setMaximumConnectionsPerHost(5)
     .build()
 
