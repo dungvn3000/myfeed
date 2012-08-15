@@ -6,6 +6,7 @@ package org.linkerz.crawler.core.parser
 
 import org.scalatest.FunSuite
 import com.googlecode.flaxcrawler.utils.UrlUtils
+import edu.uci.ics.crawler4j.url.URLCanonicalizer
 
 /**
  * The Class TestUrlUtil.
@@ -30,6 +31,13 @@ class TestUrlUtil extends FunSuite {
     assert(domainName1 == "vnexpress.net")
     assert(domainName2 == "vnexpress.net")
     assert(domainName3 == "search.vnexpress.net")
+  }
+
+  test("testURLCanonicalizer") {
+    assert(URLCanonicalizer
+      .getCanonicalURL("http://www.example.com/display?category=foo/bar+baz") ==
+      "http://www.example.com/display?category=foo%2Fbar%2Bbaz")
+    assert(URLCanonicalizer.getCanonicalURL("http://HOSTNAME.com") == "http://hostname.com/")
   }
 
 }
