@@ -30,7 +30,7 @@ class DefaultParser extends Parser with Logging {
   val htmlHandler = new HtmlContentHandler
 
   def parse(downloadResult: DownloadResult): ParserResult = {
-    info("Parse: " + downloadResult.webUrl)
+    info("Parse: " + downloadResult.webUrl.url)
     var webUrls = new ListBuffer[WebUrl]
     val webPage = new WebPage
 
