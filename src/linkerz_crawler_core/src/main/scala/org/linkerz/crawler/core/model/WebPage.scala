@@ -32,6 +32,14 @@ class WebPage {
   var parent: WebPage = _
 
   /**
+   * Check the is any error on this page.
+   * @return
+   */
+  def isError = {
+    responseCode != 200
+  }
+
+  /**
    * Convenient method to convert a webpage to link model to store the database.
    * @return
    */

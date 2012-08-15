@@ -87,8 +87,10 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
   }
 
   protected def createSubJobs(job: CrawlJob) {
-    if (!job.result.isEmpty) {
-      val webUrls = job.result.get.parserResult.webPage.webUrls
+    val jobResult = job.result
+    if (!jobResult.isEmpty && !jobResult.get.parserResult.webPage.isError) {
+      val webPage = jobResult.get.parserResult.webPage
+      val webUrls = jobResult.get.parserResult.webPage.webUrls
       _session.countUrl += webUrls.size
       _session.fetchedUrls += job.webUrl
 
@@ -96,12 +98,12 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
       if (!job.parent.isEmpty) {
         val parent = job.parent.get.result.get
         val parentWebPage = parent.parserResult.webPage
-        job.result.get.parserResult.webPage.parent = parentWebPage
+        webPage.parent = parentWebPage
       }
 
       if (dbService != null) {
         //Store the website into the database
-        dbService.save(job.result.get.parserResult.webPage)
+        dbService.save(webPage)
       }
 
       if (job.depth > _session.currentDepth) {
