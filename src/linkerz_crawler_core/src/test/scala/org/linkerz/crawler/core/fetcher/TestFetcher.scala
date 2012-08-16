@@ -6,7 +6,6 @@ package org.linkerz.crawler.core.fetcher
 
 import org.scalatest.FunSuite
 import grizzled.slf4j.Logging
-import org.linkerz.crawler.core.model.WebUrl
 import org.linkerz.crawler.core.factory.{DefaultParserFactory, DefaultDownloadFactory}
 
 /**
@@ -25,7 +24,7 @@ class TestFetcher extends FunSuite with Logging {
     val fetcher = new Fetcher(downloader, parser)
 
     var time = System.currentTimeMillis()
-    val result = fetcher.fetch(new WebUrl("http://localhost/vnexpress/vnexpress.net/"))
+//    val result = fetcher.fetch(new WebUrl("http://localhost/vnexpress/vnexpress.net/"))
 
     time = System.currentTimeMillis() - time
 

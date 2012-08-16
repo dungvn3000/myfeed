@@ -31,13 +31,4 @@ class Fetcher(downloader: Downloader, parser: Parser) {
     }
   }
 
-
-  /**
-   * Fetch a url
-   * @param webUrl
-   */
-  def fetch(webUrl: WebUrl): ParserResult = {
-    null
-  }
-
 }
