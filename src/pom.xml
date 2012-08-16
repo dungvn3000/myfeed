@@ -45,6 +45,7 @@
         <flaxcrawler.version>1.1</flaxcrawler.version>
         <crawler4j.verion>3.3.2-SNAPSHOT</crawler4j.verion>
         <httpclient.version>4.2.1</httpclient.version>
+        <commons.validator.version>1.4.0</commons.validator.version>
         <commons.digester.version>2.1</commons.digester.version>
         <commons.io.version>1.4</commons.io.version>
         <commons.lang.version>2.6</commons.lang.version>
