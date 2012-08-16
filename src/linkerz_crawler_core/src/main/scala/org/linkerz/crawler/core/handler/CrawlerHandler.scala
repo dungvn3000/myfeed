@@ -84,6 +84,10 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
     println(session.fetchedUrls.size + " links downloaded")
     println(session.currentDepth + " level")
     println(session.crawlTime + " ms")
+    println(job.error.length + " error found")
+    job.error.foreach(error => {
+      println("error = " + error)
+    })
   }
 
   protected def createSubJobs(job: CrawlJob) {
@@ -175,5 +179,11 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
         excludeUrl = jobConfig.get(EXCLUDE_URL).get.asInstanceOf[String]
       }
     }
+  }
+
+  override def onFailed(source: Any, ex: Exception) {
+    super.onFailed(source, ex)
+    //Logging error
+    session.job.error(ex.getMessage)
   }
 }
