@@ -9,6 +9,7 @@ import org.apache.http.HttpStatus
 import org.apache.commons.lang.StringUtils
 import org.linkerz.crawler.core.job.CrawlJob
 import org.linkerz.crawler.core.model.WebPage
+import edu.uci.ics.crawler4j.url.URLCanonicalizer
 
 /**
  * The Class DefaultDownload.
@@ -31,7 +32,7 @@ class DefaultDownload(httpClient: AsyncHttpClient) extends Downloader {
       || response.getStatusCode == HttpStatus.SC_MOVED_TEMPORARILY) {
       val location = response.getHeader("Location")
       if (StringUtils.isNotBlank(location)) {
-        webUrl.movedToUrl = location
+        webUrl.movedToUrl = URLCanonicalizer.getCanonicalURL(location, webUrl.baseUrl)
       }
     } else if (response.getStatusCode == HttpStatus.SC_OK) {
       webPage.content = response.getResponseBodyAsBytes

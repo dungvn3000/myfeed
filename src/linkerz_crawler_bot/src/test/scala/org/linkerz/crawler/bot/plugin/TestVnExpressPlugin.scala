@@ -15,6 +15,7 @@ import org.linkerz.crawler.core.parser.ParserResult
 import org.linkerz.crawler.core.downloader.DefaultDownload
 import org.linkerz.crawler.core.model.WebUrl
 import org.linkerz.crawler.core.factory.DefaultDownloadFactory
+import org.linkerz.crawler.core.job.CrawlJob
 
 /**
  * The Class TestVnExpressPlugin.
@@ -30,13 +31,14 @@ class TestVnExpressPlugin extends FunSuite with SpringContext {
   val plugin = new VnExpressPlugin
 
   test("testPlugin") {
-//    val downloadResult = downloader.download(new WebUrl("http://vnexpress.net/gl/kinh-doanh/2012/08/phong-loa-doi-no-dai-gia-dieu-hien/"))
-//    val parserResult = plugin.parse(downloadResult)
-//    val webPage = parserResult.webPage
-//
-//    println("Title = " + webPage.title)
-//    println("Desciption = " + webPage.description)
-//    println("Image = " + webPage.featureImageUrl)
+    val crawlJob = new CrawlJob("http://vnexpress.net/gl/kinh-doanh/2012/08/phong-loa-doi-no-dai-gia-dieu-hien/")
+    downloader.download(crawlJob)
+    plugin.parse(crawlJob)
+    val webPage = crawlJob.result.get
+
+    println("Title = " + webPage.title)
+    println("Desciption = " + webPage.description)
+    println("Image = " + webPage.featureImageUrl)
   }
 
 }

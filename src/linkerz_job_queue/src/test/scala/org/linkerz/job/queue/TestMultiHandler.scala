@@ -5,6 +5,8 @@
 package org.linkerz.job.queue
 
 import controller.BaseController
+import core.Job
+import handler.AsyncHandler
 import org.scalatest.FunSuite
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
@@ -16,6 +18,26 @@ import org.scalatest.junit.JUnitRunner
  * @since 7/10/12, 12:35 AM
  *
  */
+
+class ErrorAsyncHandler extends AsyncHandler[JobHasSubJob, JobHasSubJobSession] {
+
+  var count: Int = 0
+
+  def accept(job: Job) = job.isInstanceOf[JobHasSubJob]
+
+  def sessionClass = classOf[JobHasSubJobSession]
+
+  protected def createSubJobs(job: JobHasSubJob) {
+    job.result match {
+      case Some(subJob) => subJobQueue ++= subJob
+      case None =>
+    }
+    if (count == 1) {
+      throw new Exception("Test Exception")
+    }
+    count += 1
+  }
+}
 
 @RunWith(classOf[JUnitRunner])
 class TestMultiHandler extends FunSuite {
@@ -60,4 +82,37 @@ class TestMultiHandler extends FunSuite {
     assert(jobHasSubJob.result.get.size == 10)
   }
 
+  test("testControllerWithErrorHandler") {
+    val controller = new BaseController
+
+    val echoJob = new EchoJob("Hello Frist Task")
+    val echoHandler = new EchoHandler
+
+    val sumJob = new SumJob(1, 2)
+    val sumHandler = new SumHandler
+
+    val inSessionJob = new InSessionJob
+    val handlerWithSession = new HandlerWithSession
+
+    val jobHasSubJob = new JobHasSubJob
+    val errorHandler = new ErrorAsyncHandler
+    for (i <- 1 to 10) {
+      errorHandler.workers += new TestWorker(i)
+    }
+
+    controller.handlers = List(echoHandler, sumHandler, handlerWithSession, errorHandler)
+
+    //Add async job first to test.
+    controller.add(jobHasSubJob)
+
+    controller.add(echoJob)
+    controller.add(sumJob)
+    controller.add(inSessionJob)
+
+    controller.start()
+
+    Thread.sleep(10000)
+
+    controller.stop()
+  }
 }

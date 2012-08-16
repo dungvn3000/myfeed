@@ -38,18 +38,6 @@ class VnExpressPlugin extends ParserPlugin with Logging {
     pluginData
   }
 
-  override def beforeParse(crawlJob: CrawlJob, doc: Document): Boolean = {
-    val webPage = crawlJob.result.get
-    //Skip it, because the url is no longer exist
-    if (doc.text().contains("Không tìm thấy đường dẫn này")) {
-      crawlJob.code = CrawlJob.SKIP
-      crawlJob.info("The link is not exist " + webPage.webUrl.url)
-      return false
-    }
-    true
-  }
-
-
   override def afterParse(crawlJob: CrawlJob, doc: Document) {
     val webPage = crawlJob.result.get
     //Remove another link inside vnexpress description

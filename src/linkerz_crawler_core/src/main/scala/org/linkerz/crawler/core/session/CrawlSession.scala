@@ -19,9 +19,12 @@ import org.linkerz.crawler.core.model.WebUrl
 
 class CrawlSession extends Session[CrawlJob] {
 
+  var job: CrawlJob = _
+
   var crawlTime: Long = 0
   var countUrl = 0
   var currentDepth = 0
+
   /**
    * Store fetched urls list
    */
@@ -30,6 +33,7 @@ class CrawlSession extends Session[CrawlJob] {
   var domainName: String = _
 
   def openSession(job: CrawlJob) = {
+    this.job = job
     domainName = job.webUrl.domainName
     this
   }

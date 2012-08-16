@@ -5,9 +5,9 @@
 package org.linkerz.crawler.core.model
 
 import org.apache.http.client.utils.URIUtils
-import java.net.URI
+import java.net.{URL, URI}
 import org.linkerz.crawler.core.util.UrlUtils
-import org.apache.commons.validator.routines.UrlValidator
+import grizzled.slf4j.Logging
 
 /**
  * The Class WebUrl.
@@ -17,20 +17,20 @@ import org.apache.commons.validator.routines.UrlValidator
  *
  */
 
-class WebUrl(_url: String) {
-
-  //Validate the url
-  val validator = new UrlValidator
-  assert(validator.isValid(_url))
+class WebUrl(_url: String) extends Logging {
 
   /**
    * Redirect url. in case response code is 301 and 302
    */
   var movedToUrl: String = _
 
-  def domainName = URIUtils.extractHost(new URI(url)).getHostName
+  def domainName = httpHost.getHostName
 
-  val url = UrlUtils.normalize(_url)
+  def baseUrl = httpHost.toURI.toString
+
+  def url = UrlUtils.normalize(_url)
+
+  def httpHost = URIUtils.extractHost(new URI(url))
 
   override def equals(obj: Any) = {
     obj.isInstanceOf[WebUrl] && obj.asInstanceOf[WebUrl].url == url

@@ -50,7 +50,7 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
   @BeanProperty
   var excludeUrl: String = _
 
-  private var _session: CrawlSession = _
+  private var session: CrawlSession = _
 
   def sessionClass = classOf[CrawlSession]
 
@@ -76,14 +76,14 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
   }
 
   override protected def doHandle(job: CrawlJob, session: CrawlSession) {
-    _session = session
-    _session.crawlTime = System.currentTimeMillis
+    this.session = session
+    session.crawlTime = System.currentTimeMillis
     super.doHandle(job, session)
-    _session.crawlTime = System.currentTimeMillis - _session.crawlTime
-    println(_session.countUrl + " links found")
-    println(_session.fetchedUrls.size + " links downloaded")
-    println(_session.currentDepth + " level")
-    println(_session.crawlTime + " ms")
+    session.crawlTime = System.currentTimeMillis - session.crawlTime
+    println(session.countUrl + " links found")
+    println(session.fetchedUrls.size + " links downloaded")
+    println(session.currentDepth + " level")
+    println(session.crawlTime + " ms")
   }
 
   protected def createSubJobs(job: CrawlJob) {
@@ -91,8 +91,8 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
     if (!jobResult.isEmpty && !jobResult.get.isError) {
       val webPage = jobResult.get
       val webUrls = webPage.webUrls
-      _session.countUrl += webUrls.size
-      _session.fetchedUrls += job.webUrl
+      session.countUrl += webUrls.size
+      session.fetchedUrls += job.webUrl
 
       //Set the parent for the website.
       if (!job.parent.isEmpty) {
@@ -105,16 +105,24 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
         dbService.save(webPage)
       }
 
-      if (job.depth > _session.currentDepth) {
-        _session.currentDepth = job.depth
+      if (job.depth > session.currentDepth) {
+        session.currentDepth = job.depth
       }
 
-      if (_session.currentDepth < maxDepth) {
+      if (session.currentDepth < maxDepth) {
         webUrls.foreach(webUrl => {
           if (shouldCrawl(webUrl)) {
             subJobQueue += new CrawlJob(webUrl, job)
           }
         })
+      }
+    } else if (!jobResult.isEmpty && jobResult.get.isRedirect) {
+      val movedUrl = jobResult.get.webUrl.movedToUrl
+      if (StringUtils.isNotBlank(movedUrl)) {
+        val newWebUrl = new WebUrl(movedUrl)
+        if (shouldCrawl(newWebUrl)) {
+          subJobQueue += new CrawlJob(newWebUrl, job)
+        }
       }
     }
   }
@@ -138,9 +146,9 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
 
     //Only crawl in same domain.
     if (!onlyCrawlInSameDomain
-      || (onlyCrawlInSameDomain && webUrl.domainName == _session.domainName)) {
+      || (onlyCrawlInSameDomain && webUrl.domainName == session.domainName)) {
       //Make sure we not fetch a link we did already.
-      if (_session.fetchedUrls.findEntry(webUrl).isEmpty) {
+      if (session.fetchedUrls.findEntry(webUrl).isEmpty) {
         //And make sure the url is not in the queue
         val result = subJobQueue.realQueue.find(job => job.webUrl == webUrl)
         if (result.isEmpty) {

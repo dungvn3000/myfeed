@@ -6,10 +6,12 @@ package org.linkerz.crawler.core.parser
 
 import org.scalatest.FunSuite
 import edu.uci.ics.crawler4j.url.URLCanonicalizer
-import java.net.URI
+import java.net.{URLDecoder, URL, URLEncoder, URI}
 import org.apache.http.client.utils.URIUtils
 import org.linkerz.crawler.core.util.UrlUtils
 import org.springframework.web.util.UriComponentsBuilder
+import com.ning.http.util.UTF8UrlEncoder
+import org.apache.commons.codec.net.URLCodec
 
 /**
  * The Class TestUrlUtil.
@@ -40,6 +42,24 @@ class TestUrlUtil extends FunSuite {
     assert(URLCanonicalizer
       .getCanonicalURL("http://www.example.com/display?category=foo/bar+baz") ==
       "http://www.example.com/display?category=foo%2Fbar%2Bbaz")
+
+    val url1 = "http://abc.net/"
+    val url2 = "./abc/bcd"
+
+    val url3 = URLCanonicalizer.getCanonicalURL(url2, url1)
+    assert(url3 == "http://abc.net/abc/bcd")
+
+    val url4 = "http://abc.net//abc/bcd"
+    val url5 = URLCanonicalizer.getCanonicalURL(url4)
+
+    assert(url5 == "http://abc.net/abc/bcd")
+
+    val url6 = "http://abc.net/"
+    val url7 = "http://abc.net/abc/bcd"
+
+    val url8 = URLCanonicalizer.getCanonicalURL(url7, url6)
+
+    assert(url8 == "http://abc.net/abc/bcd")
   }
 
   test("testParse") {
@@ -48,7 +68,7 @@ class TestUrlUtil extends FunSuite {
     assert(UrlUtils.normalize(url1).equals(url2))
 
     val url3 = "http://search.vnexpress.net/news?s=%C4%91&g=66FD8EC7-FA76-4A7C-8FE3-DB605B4C9CE0&butS=yes"
-    val url4 = "http://search.vnexpress.net/news?s=%c4%91&g=66fd8ec7-fa76-4a7c-8fe3-db605b4c9ce0&buts=yes"
+    val url4 = "http://search.vnexpress.net/news?buts=yes&g=66fd8ec7-fa76-4a7c-8fe3-db605b4c9ce0&s=%C4%91"
 
     assert(UrlUtils.normalize(url3).equals(url4))
 
@@ -61,6 +81,15 @@ class TestUrlUtil extends FunSuite {
     val url8 = "http://vnexpress.net/"
 
     assert(UrlUtils.normalize(url7).equals(url8))
+
+    val url9 = "http://abc.net//abcd/ddd"
+    val url10 = "http://abc.net/abcd/ddd/"
+    assert(UrlUtils.normalize(url9) == url10)
+
+    val url11 = "http://vnexpress.net/gl/xa%2Dhoi/giao%2Dduc/2012/08/tu%2Dchoi%2Dtuyen%2Dthang%2Dnu%2Dsinh%2Dthi%2Ddo%2Dthu%2Dkhoa%2Dbao%2Dchi"
+    val url12 = "http://vnexpress.net/gl/xa-hoi/giao-duc/2012/08/tu-choi-tuyen-thang-nu-sinh-thi-do-thu-khoa-bao-chi/"
+
+    assert(UrlUtils.normalize(url11) == url12)
   }
 
 }

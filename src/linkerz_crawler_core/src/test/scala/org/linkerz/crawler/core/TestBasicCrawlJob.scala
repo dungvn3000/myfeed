@@ -38,7 +38,7 @@ class TestBasicCrawlJob extends FunSuite with Logging {
     controller.handlers = List(handler)
 
     controller.start()
-    val job = new CrawlJob(new WebUrl("http://localhost/vnexpress/vnexpress.net/"))
+    val job = new CrawlJob("http://vnexpress.net/gl/24h-qua/")
     controller.add(job)
     controller.stop()
   }

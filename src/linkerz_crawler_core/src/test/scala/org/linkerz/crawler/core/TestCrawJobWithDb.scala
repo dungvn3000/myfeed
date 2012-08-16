@@ -23,7 +23,7 @@ class TestCrawJobWithDb extends FunSuite with Logging with SpringContext {
 
   test("testCrawJobWithDb") {
     val controller = context.getBean("crawlerController", classOf[Controller])
-    val job = new CrawlJob(new WebUrl("http://localhost/vnexpress/vnexpress.net/"))
+    val job = new CrawlJob("http://vnexpress.net/")
     controller.add(job)
     controller.stop()
   }

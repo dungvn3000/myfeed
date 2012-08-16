@@ -36,7 +36,13 @@ class BaseController extends Controller with Logging {
     def act() {
       loop {
         react {
-          case NEXT(job) => handleJob(job)
+          case NEXT(job) => {
+            try {
+              handleJob(job)
+            } catch {
+              case e: Exception => error(e)
+            }
+          }
           case STOP => {
             info("Stoping...")
             reply("Stoping...")

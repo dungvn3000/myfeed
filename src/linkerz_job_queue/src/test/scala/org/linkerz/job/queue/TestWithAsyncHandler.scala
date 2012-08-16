@@ -56,7 +56,7 @@ class JobHasSubJobSession extends Session[JobHasSubJob] with Logging {
   }
 }
 
-class TestWorker(id: Int) extends Worker[JobHasSubJob, JobHasSubJobSession] with Logging {
+case class TestWorker(id: Int) extends Worker[JobHasSubJob, JobHasSubJobSession] with Logging {
   def analyze(job: JobHasSubJob, session: JobHasSubJobSession) {
     info("Worker " + id + " is working...")
     if (job.parent.isEmpty) {
@@ -74,7 +74,9 @@ class TestWorker(id: Int) extends Worker[JobHasSubJob, JobHasSubJobSession] with
 
 class TestAsyncHandler extends AsyncHandler[JobHasSubJob, JobHasSubJobSession] {
   def accept(job: Job) = job.isInstanceOf[JobHasSubJob]
+
   def sessionClass = classOf[JobHasSubJobSession]
+
   protected def createSubJobs(job: JobHasSubJob) {
     job.result match {
       case Some(subJob) => subJobQueue ++= subJob
@@ -108,6 +110,22 @@ class TestWithAsyncHandler extends FunSuite with BeforeAndAfter with Logging {
       }
       handler.workers += busyWorker
     }
+    handler.maxRetry = 3
+    handler.handle(job, null)
+    assert(handler.retryCount == 3)
+  }
+
+  test("testHandlerWithErrorWorker") {
+    for (i <- 1 to 3) {
+      val errorWorker = new TestWorker(i) {
+        override def analyze(job: JobHasSubJob, session: JobHasSubJobSession) {
+          super.analyze(job, session)
+          if (id != 1) throw new Exception("Test Exception")
+        }
+      }
+      handler.workers += errorWorker
+    }
+
     handler.maxRetry = 3
     handler.handle(job, null)
     assert(handler.retryCount == 3)

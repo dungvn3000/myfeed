@@ -48,7 +48,7 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
     //Read Job Config
     readJobConfig(job)
 
-    //Step 1: Analyze the job fist,
+    //Step 1: Analyze the job first,
     //check the result then decide will continue or not.
     workers.head.analyze(job, session)
     createSubJobs(job)
