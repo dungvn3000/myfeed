@@ -7,8 +7,6 @@ package org.linkerz.crawler.core.fetcher
 import org.scalatest.FunSuite
 import grizzled.slf4j.Logging
 import org.linkerz.crawler.core.model.WebUrl
-import org.linkerz.crawler.core.downloader.DefaultDownload
-import org.linkerz.crawler.core.parser.DefaultParser
 import org.linkerz.crawler.core.factory.{DefaultParserFactory, DefaultDownloadFactory}
 
 /**

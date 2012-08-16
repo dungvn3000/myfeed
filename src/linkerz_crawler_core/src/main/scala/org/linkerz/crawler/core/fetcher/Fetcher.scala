@@ -7,6 +7,7 @@ package org.linkerz.crawler.core.fetcher
 import org.linkerz.crawler.core.downloader.Downloader
 import org.linkerz.crawler.core.parser.{ParserResult, Parser}
 import org.linkerz.crawler.core.model.{WebPage, WebUrl}
+import org.linkerz.crawler.core.job.CrawlJob
 
 /**
  * The Class Fetcher.
@@ -20,27 +21,23 @@ class Fetcher(downloader: Downloader, parser: Parser) {
 
   /**
    * Fetch a url
+   * @param crawlJob
+   */
+  def fetch(crawlJob: CrawlJob) {
+    downloader.download(crawlJob)
+    if (!crawlJob.result.isEmpty && !crawlJob.result.get.isError) {
+      //Only parse when the response code is ok
+      parser.parse(crawlJob)
+    }
+  }
+
+
+  /**
+   * Fetch a url
    * @param webUrl
    */
   def fetch(webUrl: WebUrl): ParserResult = {
-    val downloadResult = downloader.download(webUrl)
-
-    var parserResult: ParserResult = null
-    if (downloadResult.responseCode == 200) {
-      //Only parse when the response code is ok
-      parserResult = parser.parse(downloadResult)
-    } else {
-      //TODO: Find the way how to treat the error url
-      val webPage = new WebPage
-      webPage.webUrl = downloadResult.webUrl
-      webPage.content = downloadResult.byteContent
-      parserResult = new ParserResult(webPage)
-    }
-
-    //Set response for sever to model
-    parserResult.webPage.responseCode = downloadResult.responseCode
-
-    parserResult
+    null
   }
 
 }

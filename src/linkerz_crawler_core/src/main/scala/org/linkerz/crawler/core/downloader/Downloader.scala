@@ -7,6 +7,7 @@ package org.linkerz.crawler.core.downloader
 import org.linkerz.crawler.core.model.WebUrl
 import com.ning.http.client.{AsyncHttpClient, AsyncHttpClientConfig}
 import grizzled.slf4j.Logging
+import org.linkerz.crawler.core.job.CrawlJob
 
 /**
  * The Class Downloader.
@@ -18,6 +19,6 @@ import grizzled.slf4j.Logging
 
 trait Downloader extends Logging {
 
-  def download(webUrl: WebUrl): DownloadResult
+  def download(crawlJob: CrawlJob)
 
 }

@@ -5,7 +5,7 @@
 package org.linkerz.crawler.core.worker
 
 import org.linkerz.job.queue.core.Worker
-import org.linkerz.crawler.core.job.{CrawlJobResult, CrawlJob}
+import org.linkerz.crawler.core.job.CrawlJob
 import org.linkerz.crawler.core.session.CrawlSession
 import org.linkerz.crawler.core.fetcher.Fetcher
 import org.linkerz.crawler.core.downloader.Downloader
@@ -24,12 +24,7 @@ class CrawlWorker(_id: Int, downloader: Downloader, parser: Parser) extends Work
   val fetcher = new Fetcher(downloader, parser)
 
   def analyze(job: CrawlJob, session: CrawlSession) {
-    val result = fetcher.fetch(job.webUrl)
-    if (result != null) {
-      job.result = new Some(new CrawlJobResult(result))
-    } else {
-      job.result = None
-    }
+    fetcher.fetch(job)
   }
 
   def id = _id

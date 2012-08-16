@@ -11,6 +11,7 @@ import org.linkerz.crawler.bot.plugin.ParserPlugin
 import org.apache.commons.lang.StringUtils
 import org.linkerz.crawler.core.parser.ParserResult
 import org.linkerz.crawler.core.model.WebPage
+import org.linkerz.crawler.core.job.CrawlJob
 
 /**
  * The Class VnExpress.net Plugin.
@@ -37,18 +38,20 @@ class VnExpressPlugin extends ParserPlugin with Logging {
     pluginData
   }
 
-  override def beforeParse(webPage: WebPage, doc: Document, parserResult: ParserResult): Boolean = {
+  override def beforeParse(crawlJob: CrawlJob, doc: Document): Boolean = {
+    val webPage = crawlJob.result.get
     //Skip it, because the url is no longer exist
     if (doc.text().contains("Không tìm thấy đường dẫn này")) {
-      parserResult.code = ParserResult.SKIP
-      parserResult.info("The link is not exist " + webPage.webUrl.url)
+      crawlJob.code = CrawlJob.SKIP
+      crawlJob.info("The link is not exist " + webPage.webUrl.url)
       return false
     }
     true
   }
 
 
-  override def afterParse(webPage: WebPage, doc: Document, parserResult: ParserResult) {
+  override def afterParse(crawlJob: CrawlJob, doc: Document) {
+    val webPage = crawlJob.result.get
     //Remove another link inside vnexpress description
     if (webPage.description.contains(". >")) {
       webPage.description = webPage.description.split(" >")(0)
@@ -58,6 +61,6 @@ class VnExpressPlugin extends ParserPlugin with Logging {
       webPage.featureImageUrl = "images/home_selected.gif"
     }
 
-    super.afterParse(webPage, doc, parserResult)
+    super.afterParse(crawlJob, doc)
   }
 }

@@ -6,6 +6,7 @@ package org.linkerz.crawler.core.model
 
 import org.linkerz.mongodb.model.Link
 import java.util
+import org.apache.http.HttpStatus
 
 /**
  * The Class WebPage.
@@ -24,6 +25,7 @@ class WebPage {
   var responseCode: Int = _
 
   //Meta data
+  var contentType: String = _
   var contentEncoding: String = _
   var title: String = _
   var description: String = _
@@ -36,7 +38,12 @@ class WebPage {
    * @return
    */
   def isError = {
-    responseCode != 200
+    responseCode != HttpStatus.SC_OK
+  }
+
+
+  def isRedirect = {
+    responseCode == HttpStatus.SC_MOVED_PERMANENTLY || responseCode == HttpStatus.SC_MOVED_TEMPORARILY
   }
 
   /**

@@ -16,6 +16,7 @@ import org.apache.tika.parser.html.{DefaultHtmlMapper, IdentityHtmlMapper, HtmlM
 import org.apache.tika.parser.ParseContext
 import org.apache.tika.metadata.Metadata
 import org.linkerz.crawler.core.factory.DefaultDownloadFactory
+import com.ning.http.client.AsyncHttpClient
 
 /**
  * The Class TestParser.
@@ -48,10 +49,8 @@ class TestParser extends FunSuite with Logging {
   }
 
   test("testHtmlParser") {
-
-    val downloadResult = downloader.download(new WebUrl("http://localhost/vnexpress/vnexpress.net/"))
-    val inputStream = new ByteArrayInputStream(downloadResult.byteContent)
-
+    val httpClient = new AsyncHttpClient
+    val response = httpClient.prepareGet("http://localhost/vnexpress/vnexpress.net/").execute().get()
     val linkCollector = new LinkContentHandler
     val handler = new TeeContentHandler(new BodyContentHandler(new PrintWriter(System.out)), linkCollector)
 
@@ -59,7 +58,7 @@ class TestParser extends FunSuite with Logging {
     val parseContext = new ParseContext
     parseContext.set(classOf[HtmlMapper], new DefaultHtmlMapper())
     val htmlParser = new HtmlParser
-    htmlParser.parse(inputStream, handler, metadata, parseContext)
+    htmlParser.parse(response.getResponseBodyAsStream, handler, metadata, parseContext)
 
     println(metadata.toString)
     println(metadata.get(Metadata.DESCRIPTION))

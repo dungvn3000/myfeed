@@ -7,14 +7,14 @@ package org.linkerz.crawler.core.parser
 import org.apache.tika.parser.html.HtmlParser
 import org.apache.tika.parser.ParseContext
 import edu.uci.ics.crawler4j.parser.HtmlContentHandler
-import org.linkerz.crawler.core.downloader.DownloadResult
 import collection.mutable.ListBuffer
-import org.linkerz.crawler.core.model.{WebPage, WebUrl}
+import org.linkerz.crawler.core.model.WebUrl
 import org.apache.tika.metadata.Metadata
 import java.io.ByteArrayInputStream
 import edu.uci.ics.crawler4j.url.URLCanonicalizer
-import grizzled.slf4j.Logging
 import collection.JavaConversions._
+import org.linkerz.crawler.core.job.CrawlJob
+
 /**
  * The Class DefaultParser.
  *
@@ -23,25 +23,27 @@ import collection.JavaConversions._
  *
  */
 
-class DefaultParser extends Parser with Logging {
+class DefaultParser extends Parser {
 
   val htmlParser = new HtmlParser
   val parseContext = new ParseContext
   val htmlHandler = new HtmlContentHandler
 
-  def parse(downloadResult: DownloadResult): ParserResult = {
-    info("Parse: " + downloadResult.webUrl.url)
-    var webUrls = new ListBuffer[WebUrl]
-    val webPage = new WebPage
+  def parse(crawlJob: CrawlJob) {
+    val webUrl = crawlJob.result.get.webUrl
+    val webPage = crawlJob.result.get
 
-    if (downloadResult.byteContent != null) {
+    info("Parse: " + webUrl.url)
+
+    var webUrls = new ListBuffer[WebUrl]
+
+    if (webPage.content != null) {
       val metadata = new Metadata
-      val inputStream = new ByteArrayInputStream(downloadResult.byteContent)
+      val inputStream = new ByteArrayInputStream(webPage.content)
       htmlParser.parse(inputStream, htmlHandler, metadata, parseContext)
 
+      webPage.title = metadata.get(Metadata.TITLE)
       webPage.contentEncoding = metadata.get("Content-Encoding")
-      webPage.webUrl = downloadResult.webUrl
-      webPage.content = downloadResult.byteContent
 
       //Get web page content
       //      val title = metadata.get(Metadata.TITLE)
@@ -65,7 +67,7 @@ class DefaultParser extends Parser with Logging {
 
       //Extract links in side a website
       val baseURL = htmlHandler.getBaseUrl
-      var contextURL = downloadResult.webUrl.url
+      var contextURL = webUrl.url
       if (baseURL != null) {
         contextURL = baseURL
       }
@@ -89,8 +91,6 @@ class DefaultParser extends Parser with Logging {
     }
 
     webPage.webUrls = webUrls.toList
-
-    new ParserResult(webPage)
   }
 
 }

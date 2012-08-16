@@ -4,8 +4,8 @@
 
 package org.linkerz.crawler.core.parser
 
-import org.linkerz.crawler.core.downloader.DownloadResult
 import grizzled.slf4j.Logging
+import org.linkerz.crawler.core.job.CrawlJob
 
 
 /**
@@ -18,6 +18,6 @@ import grizzled.slf4j.Logging
 
 trait Parser extends Logging {
 
-  def parse(downloadResult: DownloadResult): ParserResult
+  def parse(crawlJob: CrawlJob)
 
 }

@@ -5,8 +5,8 @@
 package org.linkerz.crawler.bot.parser
 
 import org.linkerz.crawler.bot.plugin.ParserPlugin
-import org.linkerz.crawler.core.parser.{DefaultParser, ParserResult, Parser}
-import org.linkerz.crawler.core.downloader.DownloadResult
+import org.linkerz.crawler.core.parser.{DefaultParser, Parser}
+import org.linkerz.crawler.core.job.CrawlJob
 
 /**
  * The Class LinkerZParser.
@@ -23,13 +23,12 @@ class LinkerZParser(plugins: List[ParserPlugin]) extends Parser {
   /**
    * The parser will automatic parser suitable for the website.
    * If can't not find it, the parser will using default parser.
-   * @param downloadResult
-   * @return
+   * @param crawlJob
    */
-  def parse(downloadResult: DownloadResult): ParserResult = {
+  def parse(crawlJob: CrawlJob) {
     plugins.foreach(plugin => {
-      if (plugin.isMatch(downloadResult.webUrl.url)) return plugin.parse(downloadResult)
+      if (plugin.isMatch(crawlJob.webUrl.url)) return plugin.parse(crawlJob)
     })
-    defaultParser.parse(downloadResult)
+    defaultParser.parse(crawlJob)
   }
 }

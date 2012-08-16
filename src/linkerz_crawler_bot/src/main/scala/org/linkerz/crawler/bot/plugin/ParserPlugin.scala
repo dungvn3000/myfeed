@@ -10,10 +10,9 @@ import org.jsoup.Jsoup
 import grizzled.slf4j.Logging
 import org.jsoup.nodes.Document
 import org.linkerz.core.matcher.SimpleRegexMatcher
-import org.linkerz.crawler.core.parser.{DefaultParser, ParserResult}
-import org.linkerz.crawler.core.downloader.DownloadResult
-import org.linkerz.crawler.core.model.WebPage
+import org.linkerz.crawler.core.parser.DefaultParser
 import org.apache.commons.lang.StringUtils
+import org.linkerz.crawler.core.job.CrawlJob
 
 /**
  * The Class ParserPlugin.
@@ -32,32 +31,36 @@ trait ParserPlugin extends DefaultParser with Logging {
     SimpleRegexMatcher.matcher(url, pluginData.urlRegex)
   }
 
-  def beforeParse(webPage: WebPage, doc: Document, parserResult: ParserResult): Boolean = true
+  def beforeParse(crawlJob: CrawlJob, doc: Document): Boolean = true
 
-  def afterParse(webPage: WebPage, doc: Document, parserResult: ParserResult) {
+  def afterParse(crawlJob: CrawlJob, doc: Document) {
+    val webPage = crawlJob.result.get
+
     //Log error
     if (StringUtils.isBlank(webPage.title)) {
-      parserResult.error("Can not parse the title for " + webPage.webUrl.url)
+      crawlJob.error("Can not parse the title for " + webPage.webUrl.url)
     }
 
     if (StringUtils.isBlank(webPage.description)) {
-      parserResult.error("Can not parse the description for " + webPage.webUrl.url)
+      crawlJob.error("Can not parse the description for " + webPage.webUrl.url)
     }
 
     if (StringUtils.isBlank(webPage.featureImageUrl)) {
-      parserResult.error("Can not parse the image for " + webPage.webUrl.url)
+      crawlJob.error("Can not parse the image for " + webPage.webUrl.url)
     }
   }
 
 
-  override def parse(downloadResult: DownloadResult): ParserResult = {
-    val parserResult = super.parse(downloadResult)
-    val webPage = parserResult.webPage
+  override def parse(crawlJob: CrawlJob) {
+    super.parse(crawlJob)
+    val webPage = crawlJob.result.get
+
     val inputStream = new ByteArrayInputStream(webPage.content)
     val doc = Jsoup.parse(inputStream, webPage.contentEncoding, webPage.webUrl.domainName)
 
-    if (!beforeParse(webPage, doc, parserResult)) {
-      return parserResult
+    if (!beforeParse(crawlJob, doc)) {
+      //Skip if any error exist
+      return
     }
 
     val title = doc.select(pluginData.titleSelection)
@@ -104,10 +107,7 @@ trait ParserPlugin extends DefaultParser with Logging {
     webPage.description = descriptionText
     webPage.featureImageUrl = img.attr("src")
 
-    afterParse(webPage, doc, parserResult)
-
-    parserResult
-
+    afterParse(crawlJob, doc)
   }
 
   /**

@@ -5,8 +5,9 @@
 package org.linkerz.crawler.core.job
 
 import org.linkerz.job.queue.core.Job
-import org.linkerz.crawler.core.model.WebUrl
-import org.linkerz.crawler.core.parser.ParserResult
+import org.linkerz.crawler.core.model.{WebPage, WebUrl}
+import collection.mutable.ListBuffer
+import scala.Some
 
 /**
  * The Class CrawlJob.
@@ -16,15 +17,41 @@ import org.linkerz.crawler.core.parser.ParserResult
  *
  */
 
-case class CrawlJob(var webUrl: WebUrl) extends Job {
+case class CrawlJob(webUrl: WebUrl) extends Job {
 
   private var _parent: Option[CrawlJob] = None
-  private var _result: Option[CrawlJobResult] = None
+  private var _result: Option[WebPage] = None
+
+  private var _error = new ListBuffer[String]
+  private var _info = new ListBuffer[String]
 
   /**
    * The depth of the job from the first job.
    */
   private var _depth: Int = 0
+
+  var code: CrawlJob.Status = CrawlJob.DONE
+
+  def error = _error
+
+  def info = _info
+
+  /**
+   * For debug information.
+   * @param msg
+   */
+  def info(msg: String) {
+    _info += msg
+  }
+
+  /**
+   * For detect error.
+   * @param msg
+   */
+  def error(msg: String) {
+    code = CrawlJob.ERROR
+    _error += msg
+  }
 
   /**
    * String url.
@@ -49,7 +76,7 @@ case class CrawlJob(var webUrl: WebUrl) extends Job {
     _result
   }
 
-  def result_=(result: Option[CrawlJobResult]) {
+  def result_=(result: Option[WebPage]) {
     _result = result
   }
 
@@ -67,9 +94,10 @@ case class CrawlJob(var webUrl: WebUrl) extends Job {
   }
 }
 
-case class CrawlJobResult(parserResult: ParserResult)
+object CrawlJob extends Enumeration {
+  type Status = Value
+  val DONE, SKIP, ERROR = Value
 
-object CrawlJob {
   val MAX_DEPTH = "maxDepth"
   val ONLY_CRAWL_IN_SAME_DOMAIN = "onlyCrawlInSameDomain"
   val URL_REGEX = "urlRegex"

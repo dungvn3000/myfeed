@@ -4,13 +4,11 @@
 
 package org.linkerz.crawler.core.downloader
 
-import grizzled.slf4j.Logging
 import com.ning.http.client.AsyncHttpClient
-import org.linkerz.crawler.core.model.WebUrl
 import org.apache.http.HttpStatus
 import org.apache.commons.lang.StringUtils
-import org.apache.http.client.utils.URIUtils
-import java.net.URI
+import org.linkerz.crawler.core.job.CrawlJob
+import org.linkerz.crawler.core.model.WebPage
 
 /**
  * The Class DefaultDownload.
@@ -20,9 +18,12 @@ import java.net.URI
  *
  */
 
-class DefaultDownload(httpClient: AsyncHttpClient) extends Downloader with Logging {
+class DefaultDownload(httpClient: AsyncHttpClient) extends Downloader {
 
-  def download(webUrl: WebUrl): DownloadResult = {
+  def download(crawlJob: CrawlJob) {
+    val webUrl = crawlJob.webUrl
+    val webPage = new WebPage
+
     val response = httpClient.prepareGet(webUrl.url).execute().get()
     info("Download " + response.getStatusCode + " : " + webUrl.url)
 
@@ -32,11 +33,15 @@ class DefaultDownload(httpClient: AsyncHttpClient) extends Downloader with Loggi
       if (StringUtils.isNotBlank(location)) {
         webUrl.movedToUrl = location
       }
+    } else if (response.getStatusCode == HttpStatus.SC_OK) {
+      webPage.content = response.getResponseBodyAsBytes
+      webPage.contentType = response.getContentType
     }
 
-    val downloadResult = new DownloadResult(webUrl, response.getResponseBodyAsBytes)
-    downloadResult.responseCode = response.getStatusCode
-    downloadResult
+    webPage.webUrl = webUrl
+    webPage.responseCode = response.getStatusCode
+
+    crawlJob.result = Some(webPage)
   }
 
 }

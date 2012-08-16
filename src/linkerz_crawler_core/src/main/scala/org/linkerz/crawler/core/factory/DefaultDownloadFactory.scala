@@ -5,7 +5,7 @@
 package org.linkerz.crawler.core.factory
 
 import com.ning.http.client.{AsyncHttpClient, AsyncHttpClientConfig}
-import org.linkerz.crawler.core.downloader.{DefaultResponseFilter, DefaultDownload}
+import org.linkerz.crawler.core.downloader.DefaultDownload
 
 /**
  * The Class DefaultDownloadFactory.
@@ -24,7 +24,6 @@ class DefaultDownloadFactory extends DownloadFactory {
     .setFollowRedirects(false)
     .setMaximumConnectionsPerHost(5)
     .setMaximumConnectionsTotal(100)
-    .addResponseFilter(new DefaultResponseFilter)
     .build()
 
   def createDownloader() = {
