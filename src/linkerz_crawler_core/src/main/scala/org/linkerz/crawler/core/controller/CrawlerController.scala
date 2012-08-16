@@ -5,6 +5,8 @@
 package org.linkerz.crawler.core.controller
 
 import org.linkerz.job.queue.controller.BaseController
+import org.linkerz.job.queue.core.Job
+import org.linkerz.crawler.core.job.CrawlJob
 
 /**
  * The Class CrawlerController.
@@ -15,5 +17,10 @@ import org.linkerz.job.queue.controller.BaseController
  */
 
 class CrawlerController extends BaseController {
-
+  override protected def handleError(job: Job, ex: Exception) {
+    super.handleError(job, ex)
+    job match {
+      case crawlJob: CrawlJob => crawlJob.error(ex.getMessage)
+    }
+  }
 }

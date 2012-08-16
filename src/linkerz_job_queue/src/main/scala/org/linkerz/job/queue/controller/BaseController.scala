@@ -40,7 +40,7 @@ class BaseController extends Controller with Logging {
             try {
               handleJob(job)
             } catch {
-              case e: Exception => error(e)
+              case ex: Exception => handleError(job, ex)
             }
           }
           case STOP => {
@@ -91,5 +91,14 @@ class BaseController extends Controller with Logging {
         case _ => handler.handle(job)
       }
     })
+  }
+
+  /**
+   * Handle error for the job
+   * @param job
+   * @param ex
+   */
+  protected def handleError(job: Job, ex: Exception) {
+    error(ex)
   }
 }
