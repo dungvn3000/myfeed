@@ -59,6 +59,9 @@ object NewFeedController {
   val NEW_FEED = "newFeed"
 }
 
+/**
+ * This job using quartz job to warp the real job, for scheduling the job.
+ */
 class NewFeedJob extends Job {
   def execute(context: JobExecutionContext) {
     val controller = context.getJobDetail.getJobDataMap.get(CONTROLLER)
@@ -66,8 +69,8 @@ class NewFeedJob extends Job {
     if (controller.isInstanceOf[CrawlerController]) {
       val job = new CrawlJob(newFeed.url) {
         override def jobConfig = Map(
-          CrawlJob.EXCLUDE_URL -> newFeed.excludeUrl,
-          CrawlJob.URL_REGEX -> newFeed.urlRegex
+          CrawlJob.EXCLUDE_URL -> newFeed.excludeUrl.toList,
+          CrawlJob.URL_REGEX -> newFeed.urlRegex.toList
         )
       }
       controller.asInstanceOf[CrawlerController].add(job)

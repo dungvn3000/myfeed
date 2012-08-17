@@ -98,8 +98,23 @@ object CrawlJob extends Enumeration {
   type Status = Value
   val DONE, SKIP, ERROR = Value
 
+  /**
+   * Int
+   */
   val MAX_DEPTH = "maxDepth"
+
+  /**
+   * Boolean
+   */
   val ONLY_CRAWL_IN_SAME_DOMAIN = "onlyCrawlInSameDomain"
+
+  /**
+   * List[String]
+   */
   val URL_REGEX = "urlRegex"
+
+  /**
+   * List[String]
+   */
   val EXCLUDE_URL = "excludeUrl"
 }

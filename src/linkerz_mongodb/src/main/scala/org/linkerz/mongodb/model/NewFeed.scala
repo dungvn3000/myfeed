@@ -22,8 +22,8 @@ class NewFeed extends LinkerZEntity {
   var time: Int = _
   var enable: Boolean = _
 
-  var urlRegex: String = _
-  var excludeUrl: String = _
+  var urlRegex: java.util.List[String] = _
+  var excludeUrl: java.util.List[String] = _
 
   var indexTime: util.Date = _
 }

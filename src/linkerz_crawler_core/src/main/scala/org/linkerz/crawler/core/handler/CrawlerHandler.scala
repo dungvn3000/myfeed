@@ -45,10 +45,10 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
   var onlyCrawlInSameDomain = true
 
   @BeanProperty
-  var urlRegex: String = _
+  var urlRegex: List[String] = _
 
   @BeanProperty
-  var excludeUrl: String = _
+  var excludeUrl: List[String] = _
 
   private var session: CrawlSession = _
 
@@ -136,17 +136,18 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
     if (filters.matcher(webUrl.url).matches()) return false
 
     //Only crawl the url is match with url regex
-    if (StringUtils.isNotBlank(urlRegex)
-      && !SimpleRegexMatcher.matcher(webUrl.url, urlRegex)) {
-      return false
-    }
+    if (urlRegex != null) urlRegex.foreach(regex => {
+      if (!SimpleRegexMatcher.matcher(webUrl.url, regex)) {
+        return false
+      }
+    })
 
     //Not crawl the exclude url
-    if (StringUtils.isNotBlank(excludeUrl)
-      && SimpleRegexMatcher.matcher(webUrl.url, excludeUrl)) {
-      return false
-    }
-
+    if (excludeUrl != null) excludeUrl.foreach(regex => {
+      if (SimpleRegexMatcher.matcher(webUrl.url, regex)) {
+        return false
+      }
+    })
 
     //Only crawl in same domain.
     if (!onlyCrawlInSameDomain
@@ -173,10 +174,10 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
         onlyCrawlInSameDomain = jobConfig.get(ONLY_CRAWL_IN_SAME_DOMAIN).get.asInstanceOf[Boolean]
       }
       if (!jobConfig.get(URL_REGEX).isEmpty) {
-        urlRegex = jobConfig.get(URL_REGEX).get.asInstanceOf[String]
+        urlRegex = jobConfig.get(URL_REGEX).get.asInstanceOf[List[String]]
       }
       if (!jobConfig.get(EXCLUDE_URL).isEmpty) {
-        excludeUrl = jobConfig.get(EXCLUDE_URL).get.asInstanceOf[String]
+        excludeUrl = jobConfig.get(EXCLUDE_URL).get.asInstanceOf[List[String]]
       }
     }
   }
