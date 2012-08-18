@@ -29,6 +29,9 @@ class Link extends LinkerZEntity {
   var featureImageUrl: String = _
   var language: String = _
 
+  //Feature Image
+  var featureImage: Array[Byte] = _
+
   var indexDate: util.Date = _
 
   override def equals(obj: Any) = {
