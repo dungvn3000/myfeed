@@ -52,7 +52,7 @@ object AppModule {
     // the first locale name is the default when there's no reasonable match).
     configuration.add(SymbolConstants.SUPPORTED_LOCALES, "en")
 
-    configuration.add(SymbolConstants.APPLICATION_FOLDER, "app")
+    configuration.add(SymbolConstants.APPLICATION_FOLDER, "home")
 
     //Disable PrototypeJS using JQuery instead
     configuration.add(JQuerySymbolConstants.SUPPRESS_PROTOTYPE, "true")

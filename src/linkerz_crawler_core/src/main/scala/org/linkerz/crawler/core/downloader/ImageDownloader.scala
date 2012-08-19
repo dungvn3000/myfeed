@@ -8,6 +8,8 @@ import com.ning.http.client.AsyncHttpClient
 import org.linkerz.crawler.core.job.CrawlJob
 import org.apache.commons.lang.StringUtils
 import org.apache.http.HttpStatus
+import net.coobird.thumbnailator.Thumbnails
+import java.io.ByteArrayOutputStream
 
 /**
  * The Class ImageDownloader.
@@ -24,7 +26,9 @@ class ImageDownloader(httpClient: AsyncHttpClient) extends Downloader {
     if (StringUtils.isNotBlank(imgUrl)) {
       val response = httpClient.prepareGet(imgUrl).execute().get()
       if (response.getStatusCode == HttpStatus.SC_OK) {
-        webPage.featureImage = response.getResponseBodyAsBytes
+        val outputStream = new ByteArrayOutputStream()
+        Thumbnails.of(response.getResponseBodyAsStream).forceSize(80, 80).toOutputStream(outputStream)
+        webPage.featureImage = outputStream.toByteArray
       }
     }
   }

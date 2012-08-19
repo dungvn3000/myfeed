@@ -42,7 +42,7 @@ of where to look for pages, components and mixins. -->
 
     <filter-mapping>
         <filter-name>app</filter-name>
-        <url-pattern>/app/*</url-pattern>
+        <url-pattern>/home/*</url-pattern>
     </filter-mapping>
 
     <servlet>

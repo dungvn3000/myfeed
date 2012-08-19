@@ -9,9 +9,8 @@ import org.linkerz.mongodb.model.ParserPluginData
 import org.jsoup.nodes.Document
 import org.linkerz.crawler.bot.plugin.ParserPlugin
 import org.apache.commons.lang.StringUtils
-import org.linkerz.crawler.core.parser.ParserResult
-import org.linkerz.crawler.core.model.WebPage
 import org.linkerz.crawler.core.job.CrawlJob
+import edu.uci.ics.crawler4j.url.URLCanonicalizer
 
 /**
  * The Class VnExpress.net Plugin.
@@ -46,7 +45,8 @@ class VnExpressPlugin extends ParserPlugin with Logging {
     }
 
     if (StringUtils.isBlank(webPage.featureImageUrl)) {
-      webPage.featureImageUrl = "images/home_selected.gif"
+      webPage.featureImageUrl = URLCanonicalizer
+        .getCanonicalURL("images/home_selected.gif", webPage.webUrl.baseUrl)
     }
 
     super.afterParse(crawlJob, doc)
