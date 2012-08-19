@@ -32,6 +32,6 @@ class NewFeedServiceImpl extends NewFeedService {
     val query = Query.query(Criteria.where("title").exists(true)).limit(20)
     query.sort().on("indexDate", Order.DESCENDING)
     val links = mongoOperations.find(query, classOf[Link])
-    links.filter(link => StringUtils.isNotBlank(link.title) && link.title != "Document Moved")
+    links.filter(link => StringUtils.isNotBlank(link.title) && StringUtils.isNotBlank(link.description))
   }
 }

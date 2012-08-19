@@ -106,8 +106,11 @@ trait ParserPlugin extends DefaultParser with Logging {
 
     webPage.title = titleText
     webPage.description = descriptionText
-    webPage.featureImageUrl = URLCanonicalizer
-      .getCanonicalURL(img.attr("src"), webPage.webUrl.baseUrl)
+
+    val imgSrc = img.attr("src")
+    if (StringUtils.isNotBlank(imgSrc)) {
+      webPage.featureImageUrl = URLCanonicalizer.getCanonicalURL(imgSrc, webPage.webUrl.baseUrl)
+    }
 
     afterParse(crawlJob, doc)
   }
