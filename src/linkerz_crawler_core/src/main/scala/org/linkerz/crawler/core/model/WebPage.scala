@@ -30,6 +30,7 @@ class WebPage {
   var title: String = _
   var description: String = _
   var featureImageUrl: String = _
+  var featureImage: Array[Byte] = _
 
   var parent: WebPage = _
 
@@ -57,6 +58,7 @@ class WebPage {
     link.title = title
     link.description = description
     link.featureImageUrl = featureImageUrl
+    link.featureImage = featureImage
     link.indexDate = new util.Date
     link.contentEncoding = contentEncoding
     link.responseCode = responseCode

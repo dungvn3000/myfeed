@@ -23,7 +23,8 @@ class NewFeedHandler extends CrawlerHandler {
     this
     assert(numberOfWorker > 0, "Number of worker of a handler must more than one")
     for (i <- 1 to numberOfWorker) {
-      val worker = new CrawlWorker(i, downloadFactory.createDownloader(), parserFactory.createParser())
+      val worker = new CrawlWorker(i, downloadFactory.createDownloader()
+        , downloadFactory.createImageDownloader(), parserFactory.createParser())
       workers += worker
     }
   }

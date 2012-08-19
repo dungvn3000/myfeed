@@ -19,9 +19,9 @@ import org.linkerz.crawler.core.parser.Parser
  *
  */
 
-class CrawlWorker(_id: Int, downloader: Downloader, parser: Parser) extends Worker[CrawlJob, CrawlSession] {
+class CrawlWorker(_id: Int, downloader: Downloader, imageDownloader: Downloader, parser: Parser) extends Worker[CrawlJob, CrawlSession] {
 
-  val fetcher = new Fetcher(downloader, parser)
+  val fetcher = new Fetcher(downloader, imageDownloader, parser)
 
   def analyze(job: CrawlJob, session: CrawlSession) {
     fetcher.fetch(job)

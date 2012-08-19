@@ -13,6 +13,7 @@ import org.linkerz.core.matcher.SimpleRegexMatcher
 import org.linkerz.crawler.core.parser.DefaultParser
 import org.apache.commons.lang.StringUtils
 import org.linkerz.crawler.core.job.CrawlJob
+import edu.uci.ics.crawler4j.url.URLCanonicalizer
 
 /**
  * The Class ParserPlugin.
@@ -105,7 +106,8 @@ trait ParserPlugin extends DefaultParser with Logging {
 
     webPage.title = titleText
     webPage.description = descriptionText
-    webPage.featureImageUrl = img.attr("src")
+    webPage.featureImageUrl = URLCanonicalizer
+      .getCanonicalURL(img.attr("src"), webPage.webUrl.baseUrl)
 
     afterParse(crawlJob, doc)
   }

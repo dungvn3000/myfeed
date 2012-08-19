@@ -5,7 +5,7 @@
 package org.linkerz.crawler.core.factory
 
 import com.ning.http.client.{AsyncHttpClient, AsyncHttpClientConfig}
-import org.linkerz.crawler.core.downloader.DefaultDownload
+import org.linkerz.crawler.core.downloader.{ImageDownloader, DefaultDownload}
 
 /**
  * The Class DefaultDownloadFactory.
@@ -28,5 +28,9 @@ class DefaultDownloadFactory extends DownloadFactory {
 
   def createDownloader() = {
     new DefaultDownload(new AsyncHttpClient(cf))
+  }
+
+  def createImageDownloader() = {
+    new ImageDownloader(new AsyncHttpClient(cf))
   }
 }

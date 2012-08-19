@@ -18,4 +18,5 @@ trait DownloadFactory {
 
   def createDownloader(): Downloader
 
+  def createImageDownloader(): Downloader
 }

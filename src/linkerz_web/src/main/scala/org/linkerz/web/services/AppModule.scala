@@ -4,7 +4,7 @@
 
 package org.linkerz.web.services
 
-import org.apache.tapestry5.ioc.{MappedConfiguration, ServiceBinder}
+import org.apache.tapestry5.ioc.{Configuration, MappedConfiguration, ServiceBinder}
 import org.apache.tapestry5.SymbolConstants
 import org.slf4j.Logger
 import org.apache.tapestry5.services.{RequestHandler, Response, Request, RequestFilter}
@@ -52,6 +52,8 @@ object AppModule {
     // the first locale name is the default when there's no reasonable match).
     configuration.add(SymbolConstants.SUPPORTED_LOCALES, "en")
 
+    configuration.add(SymbolConstants.APPLICATION_FOLDER, "app")
+
     //Disable PrototypeJS using JQuery instead
     configuration.add(JQuerySymbolConstants.SUPPRESS_PROTOTYPE, "true")
   }
@@ -89,6 +91,10 @@ object AppModule {
         }
       }
     }
+  }
+
+  def contributeIgnoredPathsFilter(configuration: Configuration[String]) {
+    configuration.add("/images/*")
   }
 
 }

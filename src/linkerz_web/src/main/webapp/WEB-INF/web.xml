@@ -42,8 +42,18 @@ of where to look for pages, components and mixins. -->
 
     <filter-mapping>
         <filter-name>app</filter-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/app/*</url-pattern>
     </filter-mapping>
+
+    <servlet>
+        <servlet-name>images</servlet-name>
+        <servlet-class>org.linkerz.web.servlet.DownloadServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>images</servlet-name>
+        <url-pattern>/images/*</url-pattern>
+    </servlet-mapping>
 
 </web-app>
       

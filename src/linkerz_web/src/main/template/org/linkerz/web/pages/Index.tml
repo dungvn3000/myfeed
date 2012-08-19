@@ -7,7 +7,7 @@
         <t:loop source="links" value="link">
             <div class="row-fluid">
                 <div class="span2">
-                    <img src="http://vnexpress.net/${link.featureImageUrl}" alt="" width="80" height="80" style="padding-left:20px;"/>
+                    <img src="http://localhost:8080/linkerz_web/images/${link.id}" alt="" width="80" height="80" style="padding-left:20px;"/>
                 </div>
                 <div class="span8">
                     <h5>

@@ -17,7 +17,7 @@ import org.linkerz.crawler.core.job.CrawlJob
  *
  */
 
-class Fetcher(downloader: Downloader, parser: Parser) {
+class Fetcher(downloader: Downloader, imageDownloader: Downloader , parser: Parser) {
 
   /**
    * Fetch a url
@@ -28,6 +28,9 @@ class Fetcher(downloader: Downloader, parser: Parser) {
     if (!crawlJob.result.isEmpty && !crawlJob.result.get.isError) {
       //Only parse when the response code is ok
       parser.parse(crawlJob)
+
+      //Download the feature image of the website if it's exits.
+      imageDownloader.download(crawlJob)
     }
   }
 

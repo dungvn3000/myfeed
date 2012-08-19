@@ -20,9 +20,11 @@ import org.linkerz.crawler.core.job.CrawlJob
 class TestFetcher extends FunSuite with Logging {
 
   test("testFetchVnExpress") {
-    val downloader = new DefaultDownloadFactory().createDownloader()
+    val downloadFactory = new DefaultDownloadFactory()
+    val downloader = downloadFactory.createDownloader()
+    val imageDownloader = downloadFactory.createImageDownloader()
     val parser = new DefaultParserFactory().createParser()
-    val fetcher = new Fetcher(downloader, parser)
+    val fetcher = new Fetcher(downloader, imageDownloader, parser)
 
     var time = System.currentTimeMillis()
     val result = fetcher.fetch(new CrawlJob("http://vnexpress.net/"))

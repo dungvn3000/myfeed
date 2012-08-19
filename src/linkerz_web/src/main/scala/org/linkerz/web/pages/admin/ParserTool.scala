@@ -12,8 +12,6 @@ import grizzled.slf4j.Logging
 import org.linkerz.crawler.core.fetcher.Fetcher
 import org.linkerz.crawler.core.model.{WebPage, WebUrl}
 import collection.mutable.ListBuffer
-import org.linkerz.crawler.core.parser.ParserResult
-import org.linkerz.core.matcher.SimpleRegexMatcher
 import org.linkerz.web.services.plugin.PluginService
 import org.apache.tapestry5.ioc.annotations.Inject
 import org.linkerz.web.services.parser.ParserService
@@ -80,36 +78,37 @@ class ParserTool extends Logging {
 
     val parser = parserService.parserFactory.createParser
     //    parser.pluginData = parseData
-    val fetcher = new Fetcher(downloadFactory.createDownloader(), parserFactory.createParser())
+    val fetcher = new Fetcher(downloadFactory.createDownloader(),
+      downloadFactory.createImageDownloader(), parserFactory.createParser())
     val beginUrl = new WebUrl(parseData.urlTest)
-//    val fetchResult = fetcher.fetch(beginUrl)
-//
-//    urlList += beginUrl
-//
-//    var count = 0
-//    var index = 0
-//    while (count != numberOfUrl && fetchResult.webPage.webUrls.size > index) {
-//      if (SimpleRegexMatcher.matcher(fetchResult.webPage.webUrls(index).url, parseData.urlRegex)
-//        && !urlList.contains(fetchResult.webPage.webUrls(index))) {
-//        val result = fetcher.fetch(fetchResult.webPage.webUrls(index))
-//
-//        result.code match {
-//          case ParserResult.DONE => webPages.add(result.webPage)
-//          case ParserResult.SKIP => {
-//            info("Skip this link " + result.webPage.webUrl.url)
-//            info(result.info.mkString)
-//          }
-//          case ParserResult.ERROR => {
-//            error("Some thing worng " + result.webPage.webUrl.url)
-//            error(result.error.mkString)
-//          }
-//        }
-//
-//        urlList += fetchResult.webPage.webUrls(index)
-//        count += 1
-//      }
-//      index += 1
-//    }
+    //    val fetchResult = fetcher.fetch(beginUrl)
+    //
+    //    urlList += beginUrl
+    //
+    //    var count = 0
+    //    var index = 0
+    //    while (count != numberOfUrl && fetchResult.webPage.webUrls.size > index) {
+    //      if (SimpleRegexMatcher.matcher(fetchResult.webPage.webUrls(index).url, parseData.urlRegex)
+    //        && !urlList.contains(fetchResult.webPage.webUrls(index))) {
+    //        val result = fetcher.fetch(fetchResult.webPage.webUrls(index))
+    //
+    //        result.code match {
+    //          case ParserResult.DONE => webPages.add(result.webPage)
+    //          case ParserResult.SKIP => {
+    //            info("Skip this link " + result.webPage.webUrl.url)
+    //            info(result.info.mkString)
+    //          }
+    //          case ParserResult.ERROR => {
+    //            error("Some thing worng " + result.webPage.webUrl.url)
+    //            error(result.error.mkString)
+    //          }
+    //        }
+    //
+    //        urlList += fetchResult.webPage.webUrls(index)
+    //        count += 1
+    //      }
+    //      index += 1
+    //    }
 
     linksZone
   }
