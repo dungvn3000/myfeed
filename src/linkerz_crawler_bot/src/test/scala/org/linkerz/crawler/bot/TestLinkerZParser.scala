@@ -27,8 +27,7 @@ class TestLinkerZParser extends FunSuite with SpringContext {
     val parserFactory = context.getBean("parserFactory", classOf[ParserPluginFactory])
     parserFactory.install(classOf[VnExpressPlugin].getName)
     val downloadFactory = context.getBean("downloadFactory", classOf[DownloadFactory])
-    val fetcher = new Fetcher(downloadFactory.createDownloader(),
-      downloadFactory.createImageDownloader(), parserFactory.createParser)
+    val fetcher = new Fetcher(downloadFactory, parserFactory)
     val crawlJob = new CrawlJob("http://vnexpress.net/gl/phap-luat/2012/08/dai-gia-dat-cang-bi-dieu-tra-lua-dao-1-000-ty-dong/")
     fetcher.fetch(crawlJob)
     val webPage = crawlJob.result.get

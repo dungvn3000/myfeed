@@ -78,8 +78,7 @@ class ParserTool extends Logging {
 
     val parser = parserService.parserFactory.createParser
     //    parser.pluginData = parseData
-    val fetcher = new Fetcher(downloadFactory.createDownloader(),
-      downloadFactory.createImageDownloader(), parserFactory.createParser())
+    val fetcher = new Fetcher(downloadFactory, parserFactory)
     val beginUrl = new WebUrl(parseData.urlTest)
     //    val fetchResult = fetcher.fetch(beginUrl)
     //

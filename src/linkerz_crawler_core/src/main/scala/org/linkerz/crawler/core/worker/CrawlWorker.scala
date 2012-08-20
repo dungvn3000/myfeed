@@ -10,6 +10,7 @@ import org.linkerz.crawler.core.session.CrawlSession
 import org.linkerz.crawler.core.fetcher.Fetcher
 import org.linkerz.crawler.core.downloader.Downloader
 import org.linkerz.crawler.core.parser.Parser
+import org.linkerz.crawler.core.factory.{ParserFactory, DownloadFactory}
 
 /**
  * The Class CrawlWorker.
@@ -19,9 +20,9 @@ import org.linkerz.crawler.core.parser.Parser
  *
  */
 
-class CrawlWorker(_id: Int, downloader: Downloader, imageDownloader: Downloader, parser: Parser) extends Worker[CrawlJob, CrawlSession] {
+class CrawlWorker(_id: Int, downloadFactory: DownloadFactory, parserFactory: ParserFactory) extends Worker[CrawlJob, CrawlSession] {
 
-  val fetcher = new Fetcher(downloader, imageDownloader, parser)
+  val fetcher = new Fetcher(downloadFactory, parserFactory)
 
   def analyze(job: CrawlJob, session: CrawlSession) {
     fetcher.fetch(job)

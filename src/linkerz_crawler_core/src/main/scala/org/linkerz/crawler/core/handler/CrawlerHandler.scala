@@ -70,8 +70,7 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
     _downloadFactory = downloadFactory
     _parserFactory = parserFactory
     for (i <- 1 to numberOfWorker) {
-      val worker = new CrawlWorker(i, downloadFactory.createDownloader(), downloadFactory.createImageDownloader()
-        , parserFactory.createParser())
+      val worker = new CrawlWorker(i, downloadFactory, parserFactory)
       workers += worker
     }
   }

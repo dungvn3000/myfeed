@@ -4,10 +4,8 @@
 
 package org.linkerz.crawler.core.fetcher
 
-import org.linkerz.crawler.core.downloader.Downloader
-import org.linkerz.crawler.core.parser.{ParserResult, Parser}
-import org.linkerz.crawler.core.model.{WebPage, WebUrl}
 import org.linkerz.crawler.core.job.CrawlJob
+import org.linkerz.crawler.core.factory.{ParserFactory, DownloadFactory}
 
 /**
  * The Class Fetcher.
@@ -17,7 +15,11 @@ import org.linkerz.crawler.core.job.CrawlJob
  *
  */
 
-class Fetcher(downloader: Downloader, imageDownloader: Downloader , parser: Parser) {
+class Fetcher(downloadFactory: DownloadFactory, parserFactory: ParserFactory) {
+
+  val downloader = downloadFactory.createDownloader()
+  val imageDownloader = downloadFactory.createImageDownloader()
+  val parser = parserFactory.createParser()
 
   /**
    * Fetch a url

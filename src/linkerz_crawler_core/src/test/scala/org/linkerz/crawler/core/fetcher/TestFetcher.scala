@@ -21,10 +21,8 @@ class TestFetcher extends FunSuite with Logging {
 
   test("testFetchVnExpress") {
     val downloadFactory = new DefaultDownloadFactory()
-    val downloader = downloadFactory.createDownloader()
-    val imageDownloader = downloadFactory.createImageDownloader()
-    val parser = new DefaultParserFactory().createParser()
-    val fetcher = new Fetcher(downloader, imageDownloader, parser)
+    val parserFactory = new DefaultParserFactory()
+    val fetcher = new Fetcher(downloadFactory, parserFactory)
 
     var time = System.currentTimeMillis()
     val result = fetcher.fetch(new CrawlJob("http://vnexpress.net/"))
