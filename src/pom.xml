@@ -38,7 +38,6 @@
         <servlet.api.version>2.5</servlet.api.version>
         <testng.version>5.14.10</testng.version>
         <easymock.version>3.0</easymock.version>
-        <scala.spring.version>1.0-SNAPSHOT</scala.spring.version>
         <langdetect.version>1.1-20120112</langdetect.version>
         <async.http.client.version>1.7.5</async.http.client.version>
         <twitter.util.version>5.3.0</twitter.util.version>
