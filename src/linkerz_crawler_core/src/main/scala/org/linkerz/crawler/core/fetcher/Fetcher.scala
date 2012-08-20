@@ -22,4 +22,10 @@ trait Fetcher {
    */
   def fetch(crawlJob: CrawlJob)
 
+  /**
+   * This method will be call after finish download.
+   * @param crawlJob
+   */
+  def parse(crawlJob: CrawlJob)
+
 }

@@ -23,8 +23,11 @@ class DefaultFetcher(downloadFactory: DownloadFactory, parserFactory: ParserFact
     downloader.download(crawlJob)
     if (!crawlJob.result.isEmpty && !crawlJob.result.get.isError) {
       //Only parse when the response code is ok
-      parser.parse(crawlJob)
+      parse(crawlJob)
     }
   }
 
+  def parse(crawlJob: CrawlJob) {
+    parser.parse(crawlJob)
+  }
 }
