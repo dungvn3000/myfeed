@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:scala="http://www.adesso.de/schema/scala"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation=
                "http://www.springframework.org/schema/beans
-                http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.adesso.de/schema/scala http://www.adesso.de/schema/scala-0.2.xsd">
+                http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
     <bean id="crawlerController" class="org.linkerz.crawler.core.controller.CrawlerController" init-method="start" destroy-method="stop">
         <property name="handlers">
-            <scala:list>
+            <list>
                 <ref bean="newFeedHandler"/>
-            </scala:list>
+            </list>
         </property>
     </bean>
 

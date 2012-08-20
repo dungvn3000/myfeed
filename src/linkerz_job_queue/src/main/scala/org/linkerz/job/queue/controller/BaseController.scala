@@ -7,7 +7,7 @@ package org.linkerz.job.queue.controller
 import org.linkerz.job.queue.core._
 import grizzled.slf4j.Logging
 import actors.DaemonActor
-import reflect.BeanProperty
+import collection.JavaConversions._
 
 /**
  * The Class BaseController.
@@ -29,7 +29,14 @@ class BaseController extends Controller with Logging {
 
   case class NEXT(job: Job)
 
-  @BeanProperty var handlers: List[Handler[_ <: Job]] = Nil
+  var handlers: List[Handler[_ <: Job]] = Nil
+
+  /**
+   * Only using for spring bean. Hopefully spring is gonna support scala.
+   */
+  def setHandlers(springHandlers: java.util.List[Handler[_ <: Job]]) {
+    handlers = springHandlers.toList
+  }
 
   //The handler actor to handle all the handler
   val handlerActor = new DaemonActor {
