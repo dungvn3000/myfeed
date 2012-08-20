@@ -7,6 +7,8 @@ package org.linkerz.crawler.bot.plugin.zing
 import org.linkerz.crawler.bot.plugin.ParserPlugin
 import org.linkerz.mongodb.model.ParserPluginData
 import grizzled.slf4j.Logging
+import org.linkerz.crawler.core.job.CrawlJob
+import org.jsoup.nodes.Document
 
 /**
  * The Class ZingPlugin.
@@ -32,5 +34,13 @@ class ZingPlugin extends ParserPlugin with Logging {
     pluginData
   }
 
-
+  override def beforeParse(crawlJob: CrawlJob, doc: Document): Boolean = {
+    if (doc.select("#content_document").isEmpty) {
+      crawlJob.code = CrawlJob.SKIP
+      crawlJob.info("Skip it, cause it is not a new detail page " + crawlJob.webUrl.url)
+      info("Skip it, cause it is not a new detail page " + crawlJob.webUrl.url)
+      return false
+    }
+    true
+  }
 }
