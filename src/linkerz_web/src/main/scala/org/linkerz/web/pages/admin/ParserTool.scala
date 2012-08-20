@@ -9,7 +9,7 @@ import org.linkerz.mongodb.model.ParserPluginData
 import org.apache.tapestry5.corelib.components.{Form, Zone}
 import java.util
 import grizzled.slf4j.Logging
-import org.linkerz.crawler.core.fetcher.Fetcher
+import org.linkerz.crawler.core.fetcher.DefaultFetcher
 import org.linkerz.crawler.core.model.{WebPage, WebUrl}
 import collection.mutable.ListBuffer
 import org.linkerz.web.services.plugin.PluginService
@@ -78,7 +78,7 @@ class ParserTool extends Logging {
 
     val parser = parserService.parserFactory.createParser
     //    parser.pluginData = parseData
-    val fetcher = new Fetcher(downloadFactory, parserFactory)
+    val fetcher = new DefaultFetcher(downloadFactory, parserFactory)
     val beginUrl = new WebUrl(parseData.urlTest)
     //    val fetchResult = fetcher.fetch(beginUrl)
     //

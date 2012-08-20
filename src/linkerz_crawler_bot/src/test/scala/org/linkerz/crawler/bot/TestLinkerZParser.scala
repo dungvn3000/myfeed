@@ -8,7 +8,7 @@ import factory.ParserPluginFactory
 import org.scalatest.FunSuite
 import org.linkerz.test.spring.SpringContext
 import plugin.vnexpress.VnExpressPlugin
-import org.linkerz.crawler.core.fetcher.Fetcher
+import org.linkerz.crawler.core.fetcher.DefaultFetcher
 import org.linkerz.crawler.core.factory.DownloadFactory
 import org.linkerz.crawler.core.job.CrawlJob
 
@@ -27,7 +27,7 @@ class TestLinkerZParser extends FunSuite with SpringContext {
     val parserFactory = context.getBean("parserFactory", classOf[ParserPluginFactory])
     parserFactory.install(classOf[VnExpressPlugin].getName)
     val downloadFactory = context.getBean("downloadFactory", classOf[DownloadFactory])
-    val fetcher = new Fetcher(downloadFactory, parserFactory)
+    val fetcher = new DefaultFetcher(downloadFactory, parserFactory)
     val crawlJob = new CrawlJob("http://vnexpress.net/gl/phap-luat/2012/08/dai-gia-dat-cang-bi-dieu-tra-lua-dao-1-000-ty-dong/")
     fetcher.fetch(crawlJob)
     val webPage = crawlJob.result.get
