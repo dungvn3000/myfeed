@@ -106,6 +106,6 @@ class BaseController extends Controller with Logging {
    * @param ex
    */
   protected def handleError(job: Job, ex: Exception) {
-    error(ex)
+    error(ex.getMessage, ex)
   }
 }

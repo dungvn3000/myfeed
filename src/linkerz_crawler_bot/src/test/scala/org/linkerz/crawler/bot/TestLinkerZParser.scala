@@ -11,6 +11,7 @@ import plugin.vnexpress.VnExpressPlugin
 import org.linkerz.crawler.core.fetcher.DefaultFetcher
 import org.linkerz.crawler.core.factory.DownloadFactory
 import org.linkerz.crawler.core.job.CrawlJob
+import plugin.zing.ZingPlugin
 
 /**
  * The Class TestLinkerZParser.
@@ -26,6 +27,7 @@ class TestLinkerZParser extends FunSuite with SpringContext {
     //Install the plugin first
     val parserFactory = context.getBean("parserFactory", classOf[ParserPluginFactory])
     parserFactory.install(classOf[VnExpressPlugin].getName)
+    parserFactory.install(classOf[ZingPlugin].getName)
     val downloadFactory = context.getBean("downloadFactory", classOf[DownloadFactory])
     val fetcher = new DefaultFetcher(downloadFactory, parserFactory)
     val crawlJob = new CrawlJob("http://vnexpress.net/gl/phap-luat/2012/08/dai-gia-dat-cang-bi-dieu-tra-lua-dao-1-000-ty-dong/")

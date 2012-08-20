@@ -69,7 +69,13 @@ class NewFeedJob extends Job {
     if (controller.isInstanceOf[CrawlerController]) {
       val job = new CrawlJob(newFeed.url) {
         override def jobConfig = Map(
-          CrawlJob.EXCLUDE_URL -> newFeed.excludeUrl.toList,
+          CrawlJob.EXCLUDE_URL -> {
+            var excludeUrl: List[String] = Nil
+            if (newFeed.excludeUrl != null) {
+              excludeUrl = newFeed.excludeUrl.toList
+            }
+            excludeUrl
+          },
           CrawlJob.URL_REGEX -> newFeed.urlRegex.toList
         )
       }
