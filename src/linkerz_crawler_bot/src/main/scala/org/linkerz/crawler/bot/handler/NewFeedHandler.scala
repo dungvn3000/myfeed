@@ -8,6 +8,7 @@ import org.linkerz.crawler.core.handler.CrawlerHandler
 import org.linkerz.crawler.core.worker.CrawlWorker
 import org.linkerz.crawler.core.factory.{ParserFactory, DownloadFactory}
 import org.linkerz.crawler.core.model.WebUrl
+import org.linkerz.crawler.core.fetcher.Fetcher
 
 /**
  * The Class NewFeedHandler.
@@ -23,7 +24,7 @@ class NewFeedHandler extends CrawlerHandler {
     this
     assert(numberOfWorker > 0, "Number of worker of a handler must more than one")
     for (i <- 1 to numberOfWorker) {
-      val worker = new CrawlWorker(i, downloadFactory, parserFactory)
+      val worker = new CrawlWorker(i, new Fetcher(downloadFactory, parserFactory))
       workers += worker
     }
   }

@@ -17,6 +17,7 @@ import java.util.regex.Pattern
 import org.linkerz.crawler.core.model.WebUrl
 import org.apache.commons.lang.StringUtils
 import org.linkerz.core.matcher.SimpleRegexMatcher
+import org.linkerz.crawler.core.fetcher.Fetcher
 
 /**
  * The Class CrawlerHandler.
@@ -70,7 +71,7 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
     _downloadFactory = downloadFactory
     _parserFactory = parserFactory
     for (i <- 1 to numberOfWorker) {
-      val worker = new CrawlWorker(i, downloadFactory, parserFactory)
+      val worker = new CrawlWorker(i, new Fetcher(downloadFactory, parserFactory))
       workers += worker
     }
   }
