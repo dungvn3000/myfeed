@@ -32,9 +32,11 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
   private val filters = Pattern.compile(".*(\\.(css|js|bmp|gif|jpe?g" + "|png|tiff?|mid|mp2|mp3|mp4"
     + "|wav|avi|mov|mpeg|ram|m4v|pdf" + "|rm|smil|wmv|swf|wma|zip|rar|gz))$")
 
-  private var _downloadFactory: DownloadFactory = _
+  @BeanProperty
+  var downloadFactory: DownloadFactory = _
 
-  private var _parserFactory: ParserFactory = _
+  @BeanProperty
+  var parserFactory: ParserFactory = _
 
   @BeanProperty
   var dbService: DBService = _
@@ -57,19 +59,10 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
 
   def accept(job: Job) = job.isInstanceOf[CrawlJob]
 
-  /**
-   * Construct a handler with number of worker.
-   * @param numberOfWorker must greater than one
-   * @param downloadFactory
-   * @param parserFactory
-   */
-  def this(numberOfWorker: Int, downloadFactory: DownloadFactory, parserFactory: ParserFactory) {
-    this
+  protected def createWorker(numberOfWorker: Int) {
     assert(numberOfWorker > 0, "Number of worker of a handler must more than one")
     assert(downloadFactory != null)
     assert(parserFactory != null)
-    _downloadFactory = downloadFactory
-    _parserFactory = parserFactory
     for (i <- 1 to numberOfWorker) {
       val worker = new CrawlWorker(i, new DefaultFetcher(downloadFactory, parserFactory))
       workers += worker

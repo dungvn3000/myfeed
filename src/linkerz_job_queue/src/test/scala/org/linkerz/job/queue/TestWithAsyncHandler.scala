@@ -83,6 +83,13 @@ class TestAsyncHandler extends AsyncHandler[JobHasSubJob, JobHasSubJobSession] {
       case None =>
     }
   }
+
+
+  protected def createWorker(numberOfWorker: Int) {
+    for (i <- 0 to numberOfWorker) {
+      workers += new TestWorker(i)
+    }
+  }
 }
 
 @RunWith(classOf[JUnitRunner])
@@ -103,47 +110,12 @@ class TestWithAsyncHandler extends FunSuite with BeforeAndAfter with Logging {
     assert(job.result.get.size == 10)
   }
 
-  test("testHandlerWithBusyWorker") {
-    for (i <- 1 to 3) {
-      val busyWorker = new TestWorker(i) {
-        override def isFree = false
-      }
-      handler.workers += busyWorker
-    }
-    handler.maxRetry = 3
-    handler.handle(job, null)
-    assert(handler.retryCount == 3)
-  }
-
-  test("testHandlerWithErrorWorker") {
-    for (i <- 1 to 3) {
-      val errorWorker = new TestWorker(i) {
-        override def analyze(job: JobHasSubJob, session: JobHasSubJobSession) {
-          super.analyze(job, session)
-          if (id != 1) throw new Exception("Test Exception")
-        }
-      }
-      handler.workers += errorWorker
-    }
-
-    handler.maxRetry = 3
-    handler.handle(job, null)
-    assert(handler.retryCount == 3)
-  }
-
   test("testHandler") {
-    for (i <- 1 to 3) {
-      handler.workers += new TestWorker(i)
-    }
     handler.handle(job, null)
   }
 
   test("testBaseHandler") {
     val controller = new BaseController
-    //Add worker to the handler
-    for (i <- 1 to 10) {
-      handler.workers += new TestWorker(i)
-    }
     controller.handlers = List(handler)
     controller.add(job)
     controller.start()

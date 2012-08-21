@@ -107,5 +107,7 @@ class BaseController extends Controller with Logging {
    */
   protected def handleError(job: Job, ex: Exception) {
     error(ex.getMessage, ex)
+    //The logger is not working probably.
+    ex.printStackTrace()
   }
 }

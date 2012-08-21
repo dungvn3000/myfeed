@@ -37,6 +37,12 @@ class ErrorAsyncHandler extends AsyncHandler[JobHasSubJob, JobHasSubJobSession] 
     }
     count += 1
   }
+
+  protected def createWorker(numberOfWorker: Int) {
+    for (i <- 0 to numberOfWorker) {
+      workers += new TestWorker(i)
+    }
+  }
 }
 
 @RunWith(classOf[JUnitRunner])
@@ -56,9 +62,6 @@ class TestMultiHandler extends FunSuite {
 
     val jobHasSubJob = new JobHasSubJob
     val asyncHandler = new TestAsyncHandler
-    for (i <- 1 to 10) {
-      asyncHandler.workers += new TestWorker(i)
-    }
 
     controller.handlers = List(echoHandler, sumHandler, handlerWithSession, asyncHandler)
 
@@ -96,9 +99,7 @@ class TestMultiHandler extends FunSuite {
 
     val jobHasSubJob = new JobHasSubJob
     val errorHandler = new ErrorAsyncHandler
-    for (i <- 1 to 10) {
-      errorHandler.workers += new TestWorker(i)
-    }
+
 
     controller.handlers = List(echoHandler, sumHandler, handlerWithSession, errorHandler)
 

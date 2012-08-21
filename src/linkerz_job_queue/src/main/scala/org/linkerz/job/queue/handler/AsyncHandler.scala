@@ -15,6 +15,7 @@ import Job._
  * The Class AsyncHandler.
  * The Handler with workers, the job will be do async in here.
  * Make sure the handler always has at least one worker.
+ * The Worker will be created before handle a job.
  *
  * @author Nguyen Duc Dung
  * @since 7/9/12, 1:56 AM
@@ -28,7 +29,7 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
 
   protected var subJobQueue = new Queue[J] with ScalaQueue[J]
 
-  val workers = new ListBuffer[Worker[J, S]]
+  protected val workers = new ListBuffer[Worker[J, S]]
 
   @BeanProperty
   var maxRetry = 100
@@ -44,9 +45,17 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
   @BeanProperty
   var politenessDelay = 0
 
+  @BeanProperty
+  var numberOfWorker = 1
+
   protected def doHandle(job: J, session: S) {
     //Read Job Config
     readJobConfig(job)
+
+    createWorker(numberOfWorker)
+
+    //Make sure the handler at least has one worker.
+    assert(workers.size > 0)
 
     //Step 1: Analyze the job first,
     //check the result then decide will continue or not.
@@ -68,6 +77,7 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
           case None => {
             //There is no more job. Check all worker if they are free, finish the job.
             if (workers.filter(worker => !worker.isFree).size == 0) {
+              stopWorker()
               logger.info("No more job and all workers is free. Finish....")
               break()
             } else {
@@ -104,12 +114,19 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
       _retryCount += 1
       if (_retryCount >= maxRetry) {
         subJobQueue.clear()
-        workers.foreach(worker => worker.stop())
-        workers.clear()
+        stopWorker()
         info("Stop because all workers can't finish it job.")
       }
     }
     isDone
+  }
+
+  /**
+   * Stop all worker life and remove it from the handler.
+   */
+  private def stopWorker() {
+    workers.foreach(worker => worker.stop())
+    workers.clear()
   }
 
   /**
@@ -130,8 +147,17 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
       if (!jobConfig.get(POLITENESS_DELAY).isEmpty) {
         politenessDelay = jobConfig.get(POLITENESS_DELAY).get.asInstanceOf[Int]
       }
+      if (!jobConfig.get(NUMBER_OF_WORKER).isEmpty) {
+        numberOfWorker = jobConfig.get(NUMBER_OF_WORKER).get.asInstanceOf[Int]
+      }
     }
   }
+
+  /**
+   * Create worker for handler.
+   * @param numberOfWorker
+   */
+  protected def createWorker(numberOfWorker: Int)
 
 
   def onFailed(source: Any, ex: Exception) {

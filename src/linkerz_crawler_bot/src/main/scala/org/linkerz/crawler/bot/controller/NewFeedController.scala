@@ -35,6 +35,13 @@ class NewFeedController {
   @BeanProperty
   var scheduler: Scheduler = _
 
+  /**
+   * Politeness delay in milliseconds (delay between sending two Feeder).
+   * default 5 minutes.
+   */
+  @BeanProperty
+  var politenessDelay = 1000 * 60 * 5
+
   def start() {
     val newFeeds = mongoOperations.findAll(classOf[NewFeed])
     newFeeds.foreach(newFeed => {
@@ -45,6 +52,9 @@ class NewFeedController {
       val trigger = newTrigger().startNow()
         .withSchedule(repeatMinutelyForever(newFeed.time)).build()
       scheduler.scheduleJob(jobDetail, trigger)
+
+      //Sleep 5 minute before start another feed.
+      Thread.sleep(politenessDelay)
     })
   }
 

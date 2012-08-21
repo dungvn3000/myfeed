@@ -49,4 +49,7 @@ object Job {
   val IDE_TIME = "ideTime"
   //Int
   val POLITENESS_DELAY = "politenessDelay"
+
+  //Int
+  val NUMBER_OF_WORKER = "numberOfWorker"
 }
