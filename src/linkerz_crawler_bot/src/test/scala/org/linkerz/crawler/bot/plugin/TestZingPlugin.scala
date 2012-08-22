@@ -9,6 +9,8 @@ import org.linkerz.test.spring.SpringContext
 import org.linkerz.crawler.core.factory.DefaultDownloadFactory
 import org.linkerz.crawler.core.job.CrawlJob
 import zing.ZingPlugin
+import org.linkerz.test.categories.ManualTest
+import org.junit.experimental.categories.Category
 
 /**
  * The Class TestZingPlugin.
@@ -17,6 +19,7 @@ import zing.ZingPlugin
  * @since 8/21/12, 3:14 AM
  *
  */
+@Category(Array(classOf[ManualTest]))
 class TestZingPlugin extends FunSuite with SpringContext {
 
   val downloader = new DefaultDownloadFactory().createDownloader()

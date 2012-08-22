@@ -12,6 +12,8 @@ import com.twitter.util.Time
 import com.ning.http.client._
 import net.coobird.thumbnailator.Thumbnails
 import java.io.{File, PrintStream}
+import org.linkerz.test.categories.ManualTest
+import org.junit.experimental.categories.Category
 
 /**
  * The Class TestFinagle.
@@ -20,8 +22,7 @@ import java.io.{File, PrintStream}
  * @since 7/10/12, 1:03 AM
  *
  */
-
-@RunWith(classOf[JUnitRunner])
+@Category(Array(classOf[ManualTest]))
 class TestHttpClient extends FunSuite {
 
   val cf = new AsyncHttpClientConfig.Builder()

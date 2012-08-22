@@ -12,6 +12,8 @@ import java.net.URL
 import de.l3s.boilerpipe.document.TextDocument
 
 import collection.JavaConversions._
+import org.linkerz.test.categories.ManualTest
+import org.junit.experimental.categories.Category
 
 /**
  * The Class TestExtractPageContent.
@@ -20,7 +22,7 @@ import collection.JavaConversions._
  * @since 8/11/12, 4:22 AM
  *
  */
-
+@Category(Array(classOf[ManualTest]))
 class TestExtractPageContent extends FunSuite {
 
   test("testExtractDescription") {

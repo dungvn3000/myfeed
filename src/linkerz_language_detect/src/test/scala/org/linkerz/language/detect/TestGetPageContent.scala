@@ -14,6 +14,8 @@ import java.io.ByteArrayInputStream
 
 import collection.JavaConversions._
 import vietnamese.WordClean
+import org.linkerz.test.categories.ManualTest
+import org.junit.experimental.categories.Category
 
 /**
  * The Class TestGetPageContent.
@@ -22,7 +24,7 @@ import vietnamese.WordClean
  * @since 8/8/12, 3:06 AM
  *
  */
-
+@Category(Array(classOf[ManualTest]))
 class TestGetPageContent extends FunSuite with SpringContext {
 
   test("testGetPageContentInDB") {

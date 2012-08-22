@@ -12,6 +12,8 @@ import org.linkerz.crawler.core.fetcher.DefaultFetcher
 import org.linkerz.crawler.core.factory.DownloadFactory
 import org.linkerz.crawler.core.job.CrawlJob
 import plugin.zing.ZingPlugin
+import org.linkerz.test.categories.ManualTest
+import org.junit.experimental.categories.Category
 
 /**
  * The Class TestLinkerZParser.
@@ -20,7 +22,7 @@ import plugin.zing.ZingPlugin
  * @since 8/11/12, 4:34 PM
  *
  */
-
+@Category(Array(classOf[ManualTest]))
 class TestLinkerZParser extends FunSuite with SpringContext {
 
   test("testParser") {

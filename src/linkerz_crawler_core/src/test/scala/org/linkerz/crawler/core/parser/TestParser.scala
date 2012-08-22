@@ -17,6 +17,8 @@ import org.apache.tika.parser.ParseContext
 import org.apache.tika.metadata.Metadata
 import org.linkerz.crawler.core.factory.DefaultDownloadFactory
 import com.ning.http.client.AsyncHttpClient
+import org.linkerz.test.categories.ManualTest
+import org.junit.experimental.categories.Category
 
 /**
  * The Class TestParser.
@@ -25,7 +27,7 @@ import com.ning.http.client.AsyncHttpClient
  * @since 8/3/12, 10:58 PM
  *
  */
-
+@Category(Array(classOf[ManualTest]))
 class TestParser extends FunSuite with Logging {
 
   val downloader = new DefaultDownloadFactory().createDownloader()

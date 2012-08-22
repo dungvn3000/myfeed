@@ -11,6 +11,8 @@ import org.springframework.data.mongodb.core.MongoOperations
 import org.linkerz.mongodb.model.Link
 import java.io.ByteArrayInputStream
 import collection.JavaConversions._
+import org.linkerz.test.categories.ManualTest
+import org.junit.experimental.categories.Category
 
 
 /**
@@ -20,7 +22,7 @@ import collection.JavaConversions._
  * @since 8/9/12, 10:55 PM
  *
  */
-
+@Category(Array(classOf[ManualTest]))
 class TestJSoup extends FunSuite with SpringContext {
 
   test("testJSoup1") {

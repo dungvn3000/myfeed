@@ -8,6 +8,8 @@ import org.scalatest.FunSuite
 import grizzled.slf4j.Logging
 import org.linkerz.crawler.core.factory.{DefaultParserFactory, DefaultDownloadFactory}
 import org.linkerz.crawler.core.job.CrawlJob
+import org.linkerz.test.categories.ManualTest
+import org.junit.experimental.categories.Category
 
 /**
  * The Class TestFetcher.
@@ -16,7 +18,7 @@ import org.linkerz.crawler.core.job.CrawlJob
  * @since 8/3/12, 9:08 PM
  *
  */
-
+@Category(Array(classOf[ManualTest]))
 class TestFetcher extends FunSuite with Logging {
 
   test("testFetchVnExpress") {

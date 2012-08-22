@@ -12,6 +12,8 @@ import org.linkerz.crawler.core.util.UrlUtils
 import org.springframework.web.util.UriComponentsBuilder
 import com.ning.http.util.UTF8UrlEncoder
 import org.apache.commons.codec.net.URLCodec
+import org.linkerz.test.categories.ManualTest
+import org.junit.experimental.categories.Category
 
 /**
  * The Class TestUrlUtil.
@@ -20,7 +22,7 @@ import org.apache.commons.codec.net.URLCodec
  * @since 8/5/12, 7:58 PM
  *
  */
-
+@Category(Array(classOf[ManualTest]))
 class TestUrlUtil extends FunSuite {
 
   test("testUrlUtil") {

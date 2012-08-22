@@ -10,6 +10,8 @@ import org.scalatest.FunSuite
 import grizzled.slf4j.Logging
 import org.linkerz.test.spring.SpringContext
 import org.linkerz.job.queue.core.Controller
+import org.linkerz.test.categories.ManualTest
+import org.junit.experimental.categories.Category
 
 /**
  * The Class TestCrawJobWithDb.
@@ -18,13 +20,13 @@ import org.linkerz.job.queue.core.Controller
  * @since 8/5/12, 9:46 PM
  *
  */
-
+@Category(Array(classOf[ManualTest]))
 class TestCrawJobWithDb extends FunSuite with Logging with SpringContext {
 
   test("testCrawJobWithDb") {
     val controller = context.getBean("crawlerController", classOf[Controller])
     val job = new CrawlJob("http://vnexpress.net/")
-    controller.add(job)
+    controller ! job
     controller.stop()
   }
 

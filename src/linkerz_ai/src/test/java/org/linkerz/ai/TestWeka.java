@@ -6,6 +6,8 @@ package org.linkerz.ai;
 
 import com.google.common.io.Resources;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
+import org.linkerz.test.categories.ManualTest;
 import org.springframework.util.Assert;
 import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayesUpdateable;
@@ -28,6 +30,7 @@ import static weka.core.converters.ConverterUtils.DataSource;
  * @author Nguyen Duc Dung
  * @since 8/6/12, 2:53 PM
  */
+@Category(ManualTest.class)
 public class TestWeka extends Assert {
 
     @Test

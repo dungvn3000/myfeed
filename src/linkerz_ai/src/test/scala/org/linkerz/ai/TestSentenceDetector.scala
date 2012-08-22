@@ -12,6 +12,8 @@ import opennlp.tools.tokenize.{TokenizerME, TokenizerModel}
 import opennlp.tools.namefind.{TokenNameFinderEvaluator, NameSampleDataStream, NameFinderME, TokenNameFinderModel}
 import java.nio.charset.Charset
 import opennlp.tools.util.PlainTextByLineStream
+import org.junit.experimental.categories.Category
+import org.linkerz.test.categories.ManualTest
 
 /**
  * The Class TestSentenceDetector.
@@ -20,7 +22,7 @@ import opennlp.tools.util.PlainTextByLineStream
  * @since 8/5/12, 10:56 PM
  *
  */
-
+@Category(Array(classOf[ManualTest]))
 class TestSentenceDetector extends FunSuite {
 
   val testData = "Pierre Vinken, 61 years old," +

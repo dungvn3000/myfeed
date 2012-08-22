@@ -84,7 +84,7 @@ class NewFeedJob extends Job {
       if (newFeed.urlRegex != null) {
         job.urlRegex = newFeed.urlRegex.toList
       }
-      controller.asInstanceOf[CrawlerController].add(job)
+      controller.asInstanceOf[CrawlerController] ! job
     }
   }
 }

@@ -8,6 +8,8 @@ import org.scalatest.FunSuite
 import collection.mutable.ListBuffer
 import weka.classifiers.trees.J48
 import weka.classifiers.Evaluation
+import org.linkerz.test.categories.ManualTest
+import org.junit.experimental.categories.Category
 
 /**
  * The Class TestJavaBeanBuilder.
@@ -16,7 +18,7 @@ import weka.classifiers.Evaluation
  * @since 8/7/12, 3:47 AM
  *
  */
-
+@Category(Array(classOf[ManualTest]))
 class TestJavaBeanBuilder extends FunSuite {
 
   test("testBuilder") {

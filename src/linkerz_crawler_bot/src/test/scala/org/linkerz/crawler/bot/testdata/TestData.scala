@@ -12,6 +12,8 @@ import collection.JavaConverters._
 import org.linkerz.crawler.bot.plugin.zing.ZingPlugin
 import org.linkerz.crawler.bot.factory.ParserPluginFactory
 import org.linkerz.crawler.bot.plugin.vnexpress.VnExpressPlugin
+import org.linkerz.test.categories.ManualTest
+import org.junit.experimental.categories.Category
 
 /**
  * The Class TestData.
@@ -20,6 +22,7 @@ import org.linkerz.crawler.bot.plugin.vnexpress.VnExpressPlugin
  * @since 8/18/12, 5:22 AM
  *
  */
+@Category(Array(classOf[ManualTest]))
 class TestData extends FunSuite with SpringContext {
 
   val mongoOperations = context.getBean("mongoTemplate", classOf[MongoOperations])

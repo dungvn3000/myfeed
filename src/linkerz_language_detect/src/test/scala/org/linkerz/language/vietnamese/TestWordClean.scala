@@ -6,6 +6,8 @@ package org.linkerz.language.vietnamese
 
 import org.scalatest.FunSuite
 import org.linkerz.language.detect.vietnamese.WordClean
+import org.linkerz.test.categories.ManualTest
+import org.junit.experimental.categories.Category
 
 /**
  * The Class TestWordClean.
@@ -14,7 +16,7 @@ import org.linkerz.language.detect.vietnamese.WordClean
  * @since 8/8/12, 12:46 PM
  *
  */
-
+@Category(Array(classOf[ManualTest]))
 class TestWordClean extends FunSuite {
 
   test("testWordClean") {

@@ -9,6 +9,8 @@ import de.l3s.boilerpipe.extractors.CommonExtractors
 import de.l3s.boilerpipe.sax.HTMLHighlighter
 import java.io.PrintWriter
 import java.net.URL
+import org.linkerz.test.categories.ManualTest
+import org.junit.experimental.categories.Category
 
 /**
  * The Class TestBoilerpipe.
@@ -17,7 +19,7 @@ import java.net.URL
  * @since 8/5/12, 2:27 PM
  *
  */
-
+@Category(Array(classOf[ManualTest]))
 class TestBoilerpipe extends FunSuite {
 
   test("testExtractorFormAmazon") {

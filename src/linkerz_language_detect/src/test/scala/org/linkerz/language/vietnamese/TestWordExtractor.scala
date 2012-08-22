@@ -17,6 +17,8 @@ import collection.JavaConversions._
 import collection.JavaConverters._
 import org.springframework.data.mongodb.core.query.{Criteria, Query}
 import collection.mutable.ListBuffer
+import org.linkerz.test.categories.ManualTest
+import org.junit.experimental.categories.Category
 
 
 /**
@@ -26,7 +28,7 @@ import collection.mutable.ListBuffer
  * @since 8/8/12, 2:28 PM
  *
  */
-
+@Category(Array(classOf[ManualTest]))
 class TestWordExtractor extends FunSuite with SpringContext {
 
   test("testExtractor") {

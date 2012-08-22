@@ -16,6 +16,8 @@ import org.linkerz.crawler.core.downloader.DefaultDownload
 import org.linkerz.crawler.core.model.WebUrl
 import org.linkerz.crawler.core.factory.DefaultDownloadFactory
 import org.linkerz.crawler.core.job.CrawlJob
+import org.linkerz.test.categories.ManualTest
+import org.junit.experimental.categories.Category
 
 /**
  * The Class TestVnExpressPlugin.
@@ -24,7 +26,7 @@ import org.linkerz.crawler.core.job.CrawlJob
  * @since 8/11/12, 1:59 PM
  *
  */
-
+@Category(Array(classOf[ManualTest]))
 class TestVnExpressPlugin extends FunSuite with SpringContext {
 
   val downloader = new DefaultDownloadFactory().createDownloader()
