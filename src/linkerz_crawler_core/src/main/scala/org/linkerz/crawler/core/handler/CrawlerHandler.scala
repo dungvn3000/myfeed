@@ -55,7 +55,7 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
   }
 
   override protected def doHandle(job: CrawlJob, session: CrawlSession) {
-    this.session = session
+    this.currentSession = session
     session.crawlTime = System.currentTimeMillis
     super.doHandle(job, session)
     session.crawlTime = System.currentTimeMillis - session.crawlTime
@@ -74,8 +74,8 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
     if (!jobResult.isEmpty && !jobResult.get.isError) {
       val webPage = jobResult.get
       val webUrls = webPage.webUrls
-      session.countUrl += webUrls.size
-      session.fetchedUrls += job.webUrl
+      currentSession.countUrl += webUrls.size
+      currentSession.fetchedUrls += job.webUrl
 
       //Set the parent for the website.
       if (!job.parent.isEmpty) {
@@ -88,11 +88,11 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
         dbService.save(webPage)
       }
 
-      if (job.depth > session.currentDepth) {
-        session.currentDepth = job.depth
+      if (job.depth > currentSession.currentDepth) {
+        currentSession.currentDepth = job.depth
       }
 
-      if (session.currentDepth < currentJob.maxDepth) {
+      if (currentSession.currentDepth < currentJob.maxDepth) {
         webUrls.foreach(webUrl => {
           if (shouldCrawl(webUrl)) {
             subJobQueue += new CrawlJob(webUrl, job)
@@ -130,9 +130,9 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
 
     //Only crawl in same domain.
     if (!currentJob.onlyCrawlInSameDomain
-      || (currentJob.onlyCrawlInSameDomain && webUrl.domainName == session.domainName)) {
+      || (currentJob.onlyCrawlInSameDomain && webUrl.domainName == currentSession.domainName)) {
       //Make sure we not fetch a link we did already.
-      if (session.fetchedUrls.findEntry(webUrl).isEmpty) {
+      if (currentSession.fetchedUrls.findEntry(webUrl).isEmpty) {
         //And make sure the url is not in the queue
         val result = subJobQueue.realQueue.find(job => job.webUrl == webUrl)
         if (result.isEmpty) {
@@ -146,6 +146,6 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
   override def onFailed(source: Any, ex: Exception) {
     super.onFailed(source, ex)
     //Logging error
-    session.job.error(ex.getMessage)
+    currentSession.job.error(ex.getMessage)
   }
 }

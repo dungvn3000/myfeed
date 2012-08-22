@@ -5,6 +5,7 @@
 package org.linkerz.job.queue.core
 
 import actors.Actor
+import grizzled.slf4j.Logging
 
 /**
  * The Class Worker.
@@ -15,9 +16,10 @@ import actors.Actor
  * @since 7/9/12, 1:53 AM
  *
  */
-trait Worker[J <: Job, S <: Session[J]] extends CallBackable[J] {
+trait Worker[J <: Job, S <: Session[J]] extends CallBackable[J] with Logging {
 
   case object STOP
+
   case class NEXT(job: J, session: S)
 
   private var _callback: CallBack[J] = _

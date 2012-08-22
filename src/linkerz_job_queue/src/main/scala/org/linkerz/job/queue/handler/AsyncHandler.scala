@@ -32,16 +32,16 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
   /**
    * The current session.
    */
-  protected var session: S = _
+  protected var currentSession: S = _
 
   /**
    * The current job inside the session.
    */
-  protected val currentJob: J = session.job
+  protected var currentJob: J = _
 
   protected def doHandle(job: J, session: S) {
-
-    this.session = session
+    currentSession = session
+    currentJob = job
 
     createWorker(currentJob.numberOfWorker)
 

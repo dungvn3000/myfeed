@@ -7,7 +7,7 @@ package org.linkerz.job.queue
 import controller.BaseController
 import core.JobStatus
 import exception.TestException
-import handler.{ErrorSyncHandler, SyncHandler}
+import handler.{AsyncTestHandler, ErrorSyncHandler, SyncHandler}
 import job.SumJob
 import org.junit.Test
 import junit.framework.Assert
@@ -26,8 +26,8 @@ class TestBaseController {
     val controller = new BaseController
     controller.handlers = List(new SyncHandler)
     controller.start()
-    val sumJob1 = new SumJob(1, 2)
-    val sumJob2 = new SumJob(3, 4)
+    val sumJob1 = SumJob(1, 2)
+    val sumJob2 = SumJob(3, 4)
     controller ! sumJob1
     controller ! sumJob2
     controller.stop()
@@ -50,6 +50,22 @@ class TestBaseController {
 
     Assert.assertEquals(JobStatus.ERROR, sumJob.status)
     Assert.assertEquals(classOf[TestException], sumJob.error.head._2.getClass)
+  }
+
+
+  @Test
+  def testWithAsyncHandler() {
+    val controller = new BaseController
+    controller.handlers = List(new AsyncTestHandler)
+    controller.start()
+    val sumJob = new SumJob(1, 2)
+    sumJob.numberOfWorker = 3
+
+    controller ! sumJob
+    controller.stop()
+
+    Assert.assertEquals(sumJob.result.get, 3)
+    Assert.assertEquals(JobStatus.DONE, sumJob.status)
   }
 
 }
