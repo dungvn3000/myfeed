@@ -81,7 +81,7 @@ class BaseController extends Controller with Logging {
    * Add a job to the queue
    * @param job
    */
-  def add(job: Job) {
+  def !(job: Job) {
     handlerActor ! NEXT(job)
   }
 
