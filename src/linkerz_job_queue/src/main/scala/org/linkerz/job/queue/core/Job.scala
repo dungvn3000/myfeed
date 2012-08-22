@@ -4,6 +4,8 @@
 
 package org.linkerz.job.queue.core
 
+import collection.mutable.ListBuffer
+
 /**
  * The Class Job.
  *
@@ -16,6 +18,9 @@ package org.linkerz.job.queue.core
  * The trait job represent for a job. It can be add to a Job Queue.
  */
 trait Job {
+
+  private var _error = new ListBuffer[(String, Throwable)]
+  private var _info = new ListBuffer[String]
 
   /**
    * The retry time when the worker is busy.
@@ -39,6 +44,11 @@ trait Job {
   var numberOfWorker: Int = 1
 
   /**
+   * The status of the job.
+   */
+  var status: Int = _
+
+  /**
    * Return the result of the job.
    * @return
    */
@@ -49,4 +59,35 @@ trait Job {
    * @return
    */
   def parent: Option[Job] = None
+
+  def error = _error
+
+  def info = _info
+
+  /**
+   * For debug information.
+   * @param msg
+   */
+  def info(msg: String) {
+    _info += msg
+  }
+
+  /**
+   * For detect error.
+   * @param msg
+   */
+  def error(msg: String) {
+    status = JobStatus.ERROR
+    _error += Tuple2(msg, null)
+  }
+
+  /**
+   * For detect error.
+   * @param msg
+   * @param ex Throwable.
+   */
+  def error(msg: String, ex: Throwable) {
+    status = JobStatus.ERROR
+    _error += Tuple2(msg, ex)
+  }
 }

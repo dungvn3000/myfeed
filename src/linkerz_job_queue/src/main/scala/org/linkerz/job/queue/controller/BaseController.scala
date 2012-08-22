@@ -20,11 +20,6 @@ import collection.JavaConversions._
  */
 class BaseController extends Controller with Logging {
 
-  /**
-   * Object will be sent when the job was be done.
-   */
-  case object DONE
-
   case object STOP
 
   case class NEXT(job: Job)
@@ -107,7 +102,8 @@ class BaseController extends Controller with Logging {
    */
   protected def handleError(job: Job, ex: Exception) {
     error(ex.getMessage, ex)
-    //The logger is not working probably.
-    ex.printStackTrace()
+
+    //marking the error job
+    job.error(ex.getMessage, ex)
   }
 }

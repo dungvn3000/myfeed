@@ -22,19 +22,12 @@ case class CrawlJob(webUrl: WebUrl) extends Job {
   private var _parent: Option[CrawlJob] = None
   private var _result: Option[WebPage] = None
 
-  private var _error = new ListBuffer[String]
-  private var _info = new ListBuffer[String]
-
   /**
    * The depth of the job from the first job.
    */
   private var _depth: Int = 0
 
   var code: CrawlJob.Status = CrawlJob.DONE
-
-  def error = _error
-
-  def info = _info
 
   /**
    * Max depth for a crawl job.
@@ -52,23 +45,6 @@ case class CrawlJob(webUrl: WebUrl) extends Job {
    * For those of url match with this regex will not be crawl.
    */
   var excludeUrl: List[String] = _
-
-  /**
-   * For debug information.
-   * @param msg
-   */
-  def info(msg: String) {
-    _info += msg
-  }
-
-  /**
-   * For detect error.
-   * @param msg
-   */
-  def error(msg: String) {
-    code = CrawlJob.ERROR
-    _error += msg
-  }
 
   /**
    * String url.
