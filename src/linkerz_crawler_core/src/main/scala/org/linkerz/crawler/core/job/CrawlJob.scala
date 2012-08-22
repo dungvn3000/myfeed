@@ -37,6 +37,23 @@ case class CrawlJob(webUrl: WebUrl) extends Job {
   def info = _info
 
   /**
+   * Max depth for a crawl job.
+   */
+  var maxDepth: Int = 1
+
+  var onlyCrawlInSameDomain: Boolean = true
+
+  /**
+   * Only crawl the url match with this regex.
+    */
+  var urlRegex: List[String] = _
+
+  /**
+   * For those of url match with this regex will not be crawl.
+   */
+  var excludeUrl: List[String] = _
+
+  /**
    * For debug information.
    * @param msg
    */
@@ -97,24 +114,4 @@ case class CrawlJob(webUrl: WebUrl) extends Job {
 object CrawlJob extends Enumeration {
   type Status = Value
   val DONE, SKIP, ERROR = Value
-
-  /**
-   * Int
-   */
-  val MAX_DEPTH = "maxDepth"
-
-  /**
-   * Boolean
-   */
-  val ONLY_CRAWL_IN_SAME_DOMAIN = "onlyCrawlInSameDomain"
-
-  /**
-   * List[String]
-   */
-  val URL_REGEX = "urlRegex"
-
-  /**
-   * List[String]
-   */
-  val EXCLUDE_URL = "excludeUrl"
 }

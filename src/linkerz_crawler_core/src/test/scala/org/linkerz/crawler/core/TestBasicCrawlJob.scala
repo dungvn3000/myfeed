@@ -28,15 +28,6 @@ class TestBasicCrawlJob extends FunSuite with Logging {
     handler.downloadFactory = new DefaultDownloadFactory
     handler.parserFactory = new DefaultParserFactory
 
-    //Limit retry
-    handler.maxRetry = 10
-    //Ide time
-    handler.ideTime = 5000
-
-    handler.maxDepth = 1
-
-    handler.politenessDelay = 1000
-
     controller.handlers = List(handler)
 
     controller.start()

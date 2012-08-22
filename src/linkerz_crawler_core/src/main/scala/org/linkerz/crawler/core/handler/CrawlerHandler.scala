@@ -6,7 +6,6 @@ package org.linkerz.crawler.core.handler
 
 import org.linkerz.job.queue.handler.AsyncHandler
 import org.linkerz.crawler.core.job.CrawlJob
-import org.linkerz.crawler.core.job.CrawlJob._
 import org.linkerz.crawler.core.session.CrawlSession
 import org.linkerz.job.queue.core.Job
 import org.linkerz.crawler.core.worker.CrawlWorker
@@ -40,20 +39,6 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
 
   @BeanProperty
   var dbService: DBService = _
-
-  @BeanProperty
-  var maxDepth = 0
-
-  @BeanProperty
-  var onlyCrawlInSameDomain = true
-
-  @BeanProperty
-  var urlRegex: List[String] = _
-
-  @BeanProperty
-  var excludeUrl: List[String] = _
-
-  private var session: CrawlSession = _
 
   def sessionClass = classOf[CrawlSession]
 
@@ -107,7 +92,7 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
         session.currentDepth = job.depth
       }
 
-      if (session.currentDepth < maxDepth) {
+      if (session.currentDepth < currentJob.maxDepth) {
         webUrls.foreach(webUrl => {
           if (shouldCrawl(webUrl)) {
             subJobQueue += new CrawlJob(webUrl, job)
@@ -130,22 +115,22 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
     if (filters.matcher(webUrl.url).matches()) return false
 
     //Only crawl the url is match with url regex
-    if (urlRegex != null) urlRegex.foreach(regex => {
+    if (currentJob.urlRegex != null) currentJob.urlRegex.foreach(regex => {
       if (!SimpleRegexMatcher.matcher(webUrl.url, regex)) {
         return false
       }
     })
 
     //Not crawl the exclude url
-    if (excludeUrl != null) excludeUrl.foreach(regex => {
+    if (currentJob.excludeUrl != null) currentJob.excludeUrl.foreach(regex => {
       if (SimpleRegexMatcher.matcher(webUrl.url, regex)) {
         return false
       }
     })
 
     //Only crawl in same domain.
-    if (!onlyCrawlInSameDomain
-      || (onlyCrawlInSameDomain && webUrl.domainName == session.domainName)) {
+    if (!currentJob.onlyCrawlInSameDomain
+      || (currentJob.onlyCrawlInSameDomain && webUrl.domainName == session.domainName)) {
       //Make sure we not fetch a link we did already.
       if (session.fetchedUrls.findEntry(webUrl).isEmpty) {
         //And make sure the url is not in the queue
@@ -156,24 +141,6 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
       }
     }
     false
-  }
-
-  override protected def readJobConfig(job: CrawlJob) {
-    super.readJobConfig(job)
-    if (!jobConfig.isEmpty) {
-      if (!jobConfig.get(MAX_DEPTH).isEmpty) {
-        maxDepth = jobConfig.get(MAX_DEPTH).get.asInstanceOf[Int]
-      }
-      if (!jobConfig.get(ONLY_CRAWL_IN_SAME_DOMAIN).isEmpty) {
-        onlyCrawlInSameDomain = jobConfig.get(ONLY_CRAWL_IN_SAME_DOMAIN).get.asInstanceOf[Boolean]
-      }
-      if (!jobConfig.get(URL_REGEX).isEmpty) {
-        urlRegex = jobConfig.get(URL_REGEX).get.asInstanceOf[List[String]]
-      }
-      if (!jobConfig.get(EXCLUDE_URL).isEmpty) {
-        excludeUrl = jobConfig.get(EXCLUDE_URL).get.asInstanceOf[List[String]]
-      }
-    }
   }
 
   override def onFailed(source: Any, ex: Exception) {

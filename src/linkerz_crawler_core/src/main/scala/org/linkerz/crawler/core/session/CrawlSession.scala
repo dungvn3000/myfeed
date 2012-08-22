@@ -19,8 +19,6 @@ import org.linkerz.crawler.core.model.WebUrl
 
 class CrawlSession extends Session[CrawlJob] {
 
-  var job: CrawlJob = _
-
   var crawlTime: Long = 0
   var countUrl = 0
   var currentDepth = 0

@@ -8,8 +8,6 @@ import org.linkerz.job.queue.core._
 import collection.mutable.ListBuffer
 import util.control.Breaks._
 import grizzled.slf4j.Logging
-import reflect.BeanProperty
-import Job._
 
 /**
  * The Class AsyncHandler.
@@ -31,28 +29,21 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
 
   protected val workers = new ListBuffer[Worker[J, S]]
 
-  @BeanProperty
-  var maxRetry = 100
-
-  //Time for waiting when all worker are busy. Time unit is ms.
-  @BeanProperty
-  var ideTime = 1000
+  /**
+   * The current session.
+   */
+  protected var session: S = _
 
   /**
-   * Politeness delay in milliseconds (delay between sending two requests to
-   * the same job parent).
+   * The current job inside the session.
    */
-  @BeanProperty
-  var politenessDelay = 0
-
-  @BeanProperty
-  var numberOfWorker = 1
+  protected val currentJob: J = session.job
 
   protected def doHandle(job: J, session: S) {
-    //Read Job Config
-    readJobConfig(job)
 
-    createWorker(numberOfWorker)
+    this.session = session
+
+    createWorker(currentJob.numberOfWorker)
 
     //Make sure the handler at least has one worker.
     assert(workers.size > 0)
@@ -95,10 +86,8 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
     breakable {
       workers.foreach(worker => if (worker.isFree) {
         worker.work(job, session)
-        if (politenessDelay > 0) {
-          //Delay time for each job.
-          Thread.sleep(politenessDelay)
-        }
+        //Delay time for each job.
+        if (currentJob.politenessDelay > 0) Thread.sleep(currentJob.politenessDelay)
         isDone = true
         break()
       })
@@ -108,11 +97,11 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
       //Re add the job.
       subJobQueue += job
       //Sleep 1s waiting for workers
-      Thread.sleep(ideTime)
+      Thread.sleep(currentJob.ideTime)
 
       //Count time to retry, if it is too much, stop the handler and report error to controller.
       _retryCount += 1
-      if (_retryCount >= maxRetry) {
+      if (_retryCount >= currentJob.maxRetry) {
         subJobQueue.clear()
         stopWorker()
         info("Stop because all workers can't finish it job.")
@@ -127,30 +116,6 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
   private def stopWorker() {
     workers.foreach(worker => worker.stop())
     workers.clear()
-  }
-
-  /**
-   * Read config from job. Just in case for each job have different setting.
-   * Note: The default setting will be change with the last Job Config.
-   * @param job
-   */
-  protected def readJobConfig(job: J) {
-    //Save job config form the job. If it not exist using default value
-    jobConfig = job.jobConfig
-    if (!jobConfig.isEmpty) {
-      if (!jobConfig.get(MAX_RETRY).isEmpty) {
-        maxRetry = jobConfig.get(MAX_RETRY).get.asInstanceOf[Int]
-      }
-      if (!jobConfig.get(IDE_TIME).isEmpty) {
-        ideTime = jobConfig.get(IDE_TIME).get.asInstanceOf[Int]
-      }
-      if (!jobConfig.get(POLITENESS_DELAY).isEmpty) {
-        politenessDelay = jobConfig.get(POLITENESS_DELAY).get.asInstanceOf[Int]
-      }
-      if (!jobConfig.get(NUMBER_OF_WORKER).isEmpty) {
-        numberOfWorker = jobConfig.get(NUMBER_OF_WORKER).get.asInstanceOf[Int]
-      }
-    }
   }
 
   /**

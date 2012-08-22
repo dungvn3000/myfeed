@@ -18,6 +18,27 @@ package org.linkerz.job.queue.core
 trait Job {
 
   /**
+   * The retry time when the worker is busy.
+   */
+  var maxRetry: Int = 100
+
+  /**
+   * Sleep time waiting for the working worker.
+   */
+  var ideTime: Int = 1000
+
+  /**
+   * Politeness delay in milliseconds (delay between sending two requests to
+   * the same job parent).
+   */
+  var politenessDelay: Int = 0
+
+  /**
+   * This setting only for async handler.
+   */
+  var numberOfWorker: Int = 1
+
+  /**
    * Return the result of the job.
    * @return
    */
@@ -28,28 +49,4 @@ trait Job {
    * @return
    */
   def parent: Option[Job] = None
-
-  /**
-   * Job configuration data.
-   */
-  def jobConfig: Map[String, AnyRef] = Map.empty[String, String]
-
-
-  /**
-   * Setter for job config.
-   * @param config
-   */
-  def jobConfig_=(config: Map[String, AnyRef]) {}
-}
-
-object Job {
-  //Int
-  val MAX_RETRY = "maxRetry"
-  //Int
-  val IDE_TIME = "ideTime"
-  //Int
-  val POLITENESS_DELAY = "politenessDelay"
-
-  //Int
-  val NUMBER_OF_WORKER = "numberOfWorker"
 }

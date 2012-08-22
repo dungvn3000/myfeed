@@ -14,6 +14,8 @@ package org.linkerz.job.queue.core
 
 trait Session[J <: Job] {
 
+  var job: J = _
+
   /**
    * Open the session.
    */
