@@ -41,6 +41,8 @@ class BaseController extends Controller with Logging {
           case NEXT(job) => {
             try {
               handleJob(job)
+              //Change Job Status.
+              job.status = JobStatus.DONE
             } catch {
               case ex: Exception => handleError(job, ex)
             }

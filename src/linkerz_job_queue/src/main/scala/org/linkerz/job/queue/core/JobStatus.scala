@@ -13,11 +13,11 @@ package org.linkerz.job.queue.core
  */
 object JobStatus {
   //The code for the job has done by the handler.
-  val DONE = 0
+  val DONE = "DONE"
 
   //The code for the error job.
-  val ERROR = 1
+  val ERROR = "ERROR"
 
   //The code for the job has skipped by the handler.
-  val SKIP = 2
+  val SKIP = "SKIP"
 }

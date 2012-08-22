@@ -33,7 +33,10 @@ class TestBaseController {
     controller.stop()
 
     Assert.assertEquals(sumJob1.result.get, 3)
+    Assert.assertEquals(JobStatus.DONE, sumJob1.status)
+
     Assert.assertEquals(sumJob2.result.get, 7)
+    Assert.assertEquals(JobStatus.DONE, sumJob1.status)
   }
 
   @Test
@@ -41,12 +44,12 @@ class TestBaseController {
     val controller = new BaseController
     controller.handlers = List(new ErrorSyncHandler)
     controller.start()
-    val sumJob1 = new SumJob(1, 2)
-    controller ! sumJob1
+    val sumJob = new SumJob(1, 2)
+    controller ! sumJob
     controller.stop()
 
-    Assert.assertEquals(sumJob1.status, JobStatus.ERROR)
-    Assert.assertEquals(sumJob1.error.head._2.getClass, classOf[TestException])
+    Assert.assertEquals(JobStatus.ERROR, sumJob.status)
+    Assert.assertEquals(classOf[TestException], sumJob.error.head._2.getClass)
   }
 
 }

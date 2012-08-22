@@ -46,7 +46,7 @@ trait Job {
   /**
    * The status of the job.
    */
-  var status: Int = _
+  var status: String = _
 
   /**
    * Return the result of the job.
