@@ -21,6 +21,12 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.rabbitmq</groupId>
+            <artifactId>amqp-client</artifactId>
+            <version>${amqp.client.version}</version>
+        </dependency>
+
         <!--Test-->
         <dependency>
             <groupId>org.linkerz</groupId>
