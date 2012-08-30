@@ -195,13 +195,6 @@
             <artifactId>scalatest_${scala.version}</artifactId>
             <version>${scala.test.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.typesafe.akka</groupId>
-            <artifactId>akka-actor</artifactId>
-            <version>${akka.actor.version}</version>
-        </dependency>
-
         <!--End-->
 
         <!--Twitter Util-->
