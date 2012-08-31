@@ -10,7 +10,7 @@ import util.control.Breaks._
 import grizzled.slf4j.Logging
 import scalaz.Scalaz._
 import java.util.concurrent.{TimeUnit, Executors}
-import scalaz.concurrent.Strategy
+import scalaz.concurrent.{Actor, Strategy}
 
 /**
  * The Class AsyncHandler.
@@ -43,11 +43,8 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
    */
   protected var currentJob: J = _
 
-  val workerManager = actor {
-    (job: J) => {
-      doSubJob(job)
-    }
-  }
+  //The manager of all workers.
+  var workerManager: Actor[J] = _
 
   protected def doHandle(job: J, session: S) {
     currentSession = session
@@ -56,6 +53,13 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
     //Create Thread pool for worker
     val threadPool = Executors.newCachedThreadPool()
     val strategy = Strategy.Executor(threadPool)
+
+    //Create worker manager.
+    workerManager = actor {
+      (job: J) => {
+        doSubJob(job)
+      }
+    } (strategy)
 
     //Create worker and create actor for it.
     createWorker(currentJob.numberOfWorker)
@@ -76,10 +80,12 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
     //Step 3: Waiting for all worker finished their job
     waitForFinish()
 
-    //Step 4: Finish
+    //Step 4: Finish and reset.
     threadPool.shutdown()
     threadPool.awaitTermination(60L, TimeUnit.SECONDS)
     workers.clear()
+    _retryCount = 0
+    isStop = false
   }
 
   private def waitForFinish() {

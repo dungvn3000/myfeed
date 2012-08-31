@@ -36,7 +36,7 @@ class TestBaseController {
     Assert.assertEquals(JobStatus.DONE, sumJob1.status)
 
     Assert.assertEquals(sumJob2.result.get, 7)
-    Assert.assertEquals(JobStatus.DONE, sumJob1.status)
+    Assert.assertEquals(JobStatus.DONE, sumJob2.status)
   }
 
   @Test
@@ -63,6 +63,7 @@ class TestBaseController {
     sumJob.maxRetry = 3
 
     controller ! sumJob
+
     controller.stop()
 
     Assert.assertEquals(sumJob.result.get, 3)
