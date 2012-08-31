@@ -11,6 +11,8 @@ import handler.{AsyncTestHandler, ErrorSyncHandler, SyncHandler}
 import job.SumJob
 import org.junit.Test
 import junit.framework.Assert
+import org.junit.experimental.categories.Category
+import org.linkerz.test.categories.ManualTest
 
 /**
  * The Class TestBaseController.
@@ -68,6 +70,29 @@ class TestBaseController {
 
     Assert.assertEquals(sumJob.result.get, 3)
     Assert.assertEquals(JobStatus.DONE, sumJob.status)
+  }
+
+  //This test case two slow, only run it by manually.
+  @Test
+  @Category(Array(classOf[ManualTest]))
+  def testWithAsyncHandlerAnd100Job() {
+    val controller = new BaseController
+    controller.handlers = List(new AsyncTestHandler)
+    controller.start()
+
+    var time = System.currentTimeMillis()
+    for (i <- 0 to 99) {
+      val sumJob = new SumJob(1, 2)
+      sumJob.numberOfWorker = 1000
+      sumJob.maxRetry = 3
+
+      controller ! sumJob
+    }
+
+    controller.stop()
+    time = System.currentTimeMillis() - time
+
+    println("time = " + time)
   }
 
 }

@@ -25,8 +25,8 @@ class AsyncTestHandler extends AsyncHandler[SumJob, SimpleSession] {
   }
 
   protected def createSubJobs(job: SumJob) {
-    //Making 10 sub job for testing
-    for (i <- 0 to 1000) {
+    //Making 1000 sub job for testing
+    for (i <- 0 to 999) {
       workerManager ! SumJob(1, 2)
     }
   }
