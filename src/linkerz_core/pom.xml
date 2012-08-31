@@ -173,12 +173,6 @@
 
         <!--Scala library-->
         <dependency>
-            <groupId>org.clapper</groupId>
-            <artifactId>grizzled-scala_${scala.version}</artifactId>
-            <version>${grizzled.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.scalaz</groupId>
             <artifactId>scalaz-full_${scala.version}</artifactId>
             <version>${scalaz.version}</version>
@@ -195,36 +189,6 @@
             <artifactId>scalatest_${scala.version}</artifactId>
             <version>${scala.test.version}</version>
         </dependency>
-        <!--End-->
-
-        <!--Twitter Util-->
-        <dependency>
-            <groupId>com.twitter</groupId>
-            <artifactId>util-codec</artifactId>
-            <version>${twitter.util.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.twitter</groupId>
-            <artifactId>util-collection</artifactId>
-            <version>${twitter.util.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.twitter</groupId>
-            <artifactId>util-core</artifactId>
-            <version>${twitter.util.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.twitter</groupId>
-            <artifactId>util-eval</artifactId>
-            <version>${twitter.util.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.twitter</groupId>
-            <artifactId>util-reflect</artifactId>
-            <version>${twitter.util.version}</version>
-        </dependency>
-        <!--End-->
-
         <!--End-->
 
         <dependency>

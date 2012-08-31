@@ -4,14 +4,9 @@
 
 package org.linkerz.crawler.core
 
-import model.WebUrl
-import org.junit.runner.RunWith
-import org.scalatest.junit.JUnitRunner
 import org.scalatest.FunSuite
-import com.twitter.util.Time
 import com.ning.http.client._
 import net.coobird.thumbnailator.Thumbnails
-import java.io.{File, PrintStream}
 import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
 
@@ -33,22 +28,22 @@ class TestHttpClient extends FunSuite {
   test("testAsyncHttpClient") {
     val asyncHttpClient = new AsyncHttpClient(cf)
     val f = asyncHttpClient.prepareGet("http://vnexpress.net/").execute()
-    val time = Time.now
+    val time = System.currentTimeMillis()
     val r = f.get()
-    println(Time.now.inMilliseconds - time.inMilliseconds + "ms")
+    println(System.currentTimeMillis() - time + "ms")
     r.getHeaders.values().toArray.foreach(println)
   }
 
   test("testDownloadAndResizeImage") {
     val asyncHttpClient = new AsyncHttpClient(cf)
-    val time = Time.now
+    val time = System.currentTimeMillis()
     val response = asyncHttpClient
       .prepareGet("http://vnexpress.net/Files/Subject/3b/bd/b0/a4/ba_Huong.jpg").execute().get()
     println("response = " + response.getStatusCode)
     val img = Thumbnails.of(response.getResponseBodyAsStream).forceSize(80, 80)
       .asBufferedImage()
 
-    println(Time.now.inMilliseconds - time.inMilliseconds + "ms")
+    println(System.currentTimeMillis - time + "ms")
     assert(img.getWidth == 80)
     assert(img.getHeight == 80)
   }

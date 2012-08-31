@@ -41,7 +41,6 @@
         <easymock.version>3.0</easymock.version>
         <langdetect.version>1.1-20120112</langdetect.version>
         <async.http.client.version>1.7.5</async.http.client.version>
-        <twitter.util.version>5.3.0</twitter.util.version>
         <tika.version>1.2</tika.version>
         <flaxcrawler.version>1.1</flaxcrawler.version>
         <crawler4j.verion>3.3.2-SNAPSHOT</crawler4j.verion>
@@ -63,7 +62,6 @@
         <scalaz.version>6.0.4</scalaz.version>
         <scala.test.version>1.8</scala.test.version>
         <grizzled.slf4j.version>0.6.9</grizzled.slf4j.version>
-        <grizzled.version>1.0.13</grizzled.version>
         <scala.version>2.9.2</scala.version>
         <project.version>0.0.1</project.version>
         <appplicationMode>DEV</appplicationMode>
