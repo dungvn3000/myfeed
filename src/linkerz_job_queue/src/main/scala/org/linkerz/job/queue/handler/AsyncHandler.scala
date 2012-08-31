@@ -8,6 +8,9 @@ import org.linkerz.job.queue.core._
 import collection.mutable.ListBuffer
 import util.control.Breaks._
 import grizzled.slf4j.Logging
+import scalaz.Scalaz._
+import java.util.concurrent.{TimeUnit, Executors}
+import scalaz.concurrent.Strategy
 
 /**
  * The Class AsyncHandler.
@@ -23,10 +26,11 @@ import grizzled.slf4j.Logging
 abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[J, S] with CallBack[J] with Logging {
 
   private var _retryCount = 0
-  protected var jobConfig: Map[String, AnyRef] = _
 
-  protected var subJobQueue = new Queue[J] with ScalaQueue[J]
-
+  /**
+   * The handler will stop when it turn on.
+   */
+  protected var isStop = false
   protected val workers = new ListBuffer[Worker[J, S]]
 
   /**
@@ -39,11 +43,23 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
    */
   protected var currentJob: J = _
 
+  val workerManager = actor {
+    (job: J) => {
+      doSubJob(job)
+    }
+  }
+
   protected def doHandle(job: J, session: S) {
     currentSession = session
     currentJob = job
 
+    //Create Thread pool for worker
+    val threadPool = Executors.newCachedThreadPool()
+    val strategy = Strategy.Executor(threadPool)
+
+    //Create worker and create actor for it.
     createWorker(currentJob.numberOfWorker)
+    workers.foreach(worker => worker.createActor(strategy))
 
     //Make sure the handler at least has one worker.
     assert(workers.size > 0)
@@ -51,71 +67,65 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
     //Step 1: Analyze the job first,
     //check the result then decide will continue or not.
     workers.head.analyze(job, session)
-    createSubJobs(job)
-
 
     //Step 2: Working on the sub job.
     //Hook to the worker
     workers.foreach(worker => worker.callback = this)
-    doSubJobs(session)
+    createSubJobs(job)
+
+    //Step 3: Waiting for all worker finished their job
+    waitForFinish()
+
+    //Step 4: Finish
+    threadPool.shutdown()
+    threadPool.awaitTermination(60L, TimeUnit.SECONDS)
+    workers.clear()
   }
 
-  private def doSubJobs(session: S) {
-    breakable {
-      while (true) {
-        subJobQueue.next() match {
-          case Some(job) => doSubJob(job, session)
-          case None => {
-            //There is no more job. Check all worker if they are free, finish the job.
-            if (workers.filter(worker => !worker.isFree).size == 0) {
-              stopWorker()
-              logger.info("No more job and all workers is free. Finish....")
-              break()
-            } else {
-              //No more job, but some worker is still doing, sleep 1s waiting for them.
-              Thread.sleep(1000)
-            }
-          }
+  private def waitForFinish() {
+    while (!isStop) {
+      //Check all worker if they are free, finish the job.
+      if (workers.filter(worker => !worker.isFree).size == 0) {
+        //waiting for 10s and recheck again
+        info("All worker are free, waiting for 10s and recheck")
+        Thread.sleep(1000 * 10)
+        if (workers.filter(worker => !worker.isFree).size == 0) {
+          logger.info("It seem is no more job and all workers is free. Finish....")
+          isStop = true
         }
+      } else {
+        //No more job, but some worker is still doing, sleep 1s waiting for them.
+        Thread.sleep(1000)
       }
     }
   }
 
-  private def doSubJob(job: J, session: S): Boolean = {
-    var isDone = false
+  private def doSubJob(job: J): Boolean = {
+    var isWorking = false
     breakable {
       workers.foreach(worker => if (worker.isFree) {
-        worker.work(job, session)
+        worker.work(job, currentSession)
         //Delay time for each job.
         if (currentJob.politenessDelay > 0) Thread.sleep(currentJob.politenessDelay)
-        isDone = true
+        isWorking = true
         break()
       })
     }
-    if (!isDone) {
+    if (!isWorking) {
       info("It seem all workers are busy now...")
       //Re add the job.
-      subJobQueue += job
+      workerManager ! job
       //Sleep 1s waiting for workers
       Thread.sleep(currentJob.ideTime)
 
       //Count time to retry, if it is too much, stop the handler and report error to controller.
       _retryCount += 1
       if (_retryCount >= currentJob.maxRetry) {
-        subJobQueue.clear()
-        stopWorker()
+        isStop = true
         info("Stop because all workers can't finish it job.")
       }
     }
-    isDone
-  }
-
-  /**
-   * Stop all worker life and remove it from the handler.
-   */
-  private def stopWorker() {
-    workers.foreach(worker => worker.stop())
-    workers.clear()
+    isWorking
   }
 
   /**

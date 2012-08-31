@@ -4,8 +4,6 @@
 
 package org.linkerz.example.scalaz
 
-import org.scalatest.junit.JUnitRunner
-import org.junit.runner.RunWith
 import org.scalatest.FunSuite
 import java.util.concurrent.Executors._
 import scalaz.concurrent.{Actor, Strategy}

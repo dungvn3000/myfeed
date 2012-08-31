@@ -4,8 +4,10 @@
 
 package org.linkerz.job.queue.core
 
-import actors.Actor
 import grizzled.slf4j.Logging
+import scalaz.Scalaz._
+import scalaz.concurrent.{Actor, Strategy}
+
 
 /**
  * The Class Worker.
@@ -18,38 +20,33 @@ import grizzled.slf4j.Logging
  */
 trait Worker[J <: Job, S <: Session[J]] extends CallBackable[J] with Logging {
 
-  case object STOP
-
-  case class NEXT(job: J, session: S)
-
   private var _callback: CallBack[J] = _
   private var _isFree = true
 
-  var actor = new Actor {
-    def act() {
-      loop {
-        react {
-          case NEXT(job, session) => {
-            try {
-              //Analyze the job
-              analyze(job, session)
-              if (callback != null) callback.onSuccess(this, new Some(job))
-            } catch {
-              case e: Exception => if (callback != null) callback.onFailed(this, e)
-            } finally {
-              _isFree = true
-            }
-          }
-          case STOP => {
-            reply("STOP")
-            exit()
-          }
+  case class NEXT(job: J, session: S)
+
+  var workerActor: Actor[NEXT] = _
+
+  /**
+   * Create actor for the worker, this method must be called before the worker is going to work.
+   * @param strategy
+   */
+  def createActor(strategy: Strategy) {
+    workerActor = actor {
+      (next: NEXT) => {
+        try {
+          //Analyze the job
+          analyze(next.job, next.session)
+          if (callback != null) callback.onSuccess(Worker.this, new Some(next.job))
+        } catch {
+          case e: Exception => if (callback != null) callback.onFailed(Worker.this, e)
+        } finally {
+          _isFree = true
         }
       }
-    }
+    } (strategy)
   }
 
-  actor.start()
 
   /**
    * The handler will check the worker is free or not, if he free, he has to work
@@ -73,15 +70,10 @@ trait Worker[J <: Job, S <: Session[J]] extends CallBackable[J] with Logging {
    * @param session
    */
   def work(job: J, session: S) {
+    //mark the work was taken the job.
     _isFree = false
-    actor ! NEXT(job, session)
-  }
 
-  /**
-   * Tell the worker stop and waiting for the worker stop.
-   */
-  def stop() {
-    actor !? STOP
+    workerActor ! NEXT(job, session)
   }
 
   def callback = _callback

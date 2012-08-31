@@ -59,7 +59,8 @@ class TestBaseController {
     controller.handlers = List(new AsyncTestHandler)
     controller.start()
     val sumJob = new SumJob(1, 2)
-    sumJob.numberOfWorker = 3
+    sumJob.numberOfWorker = 1000
+    sumJob.maxRetry = 3
 
     controller ! sumJob
     controller.stop()

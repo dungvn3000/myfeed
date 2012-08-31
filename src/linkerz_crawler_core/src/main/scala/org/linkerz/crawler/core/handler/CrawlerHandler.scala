@@ -95,7 +95,8 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
       if (currentSession.currentDepth < currentJob.maxDepth) {
         webUrls.foreach(webUrl => {
           if (shouldCrawl(webUrl)) {
-            subJobQueue += new CrawlJob(webUrl, job)
+            //FIXME
+//            subJobQueue += new CrawlJob(webUrl, job)
           }
         })
       }
@@ -104,7 +105,8 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
       if (StringUtils.isNotBlank(movedUrl)) {
         val newWebUrl = new WebUrl(movedUrl)
         if (shouldCrawl(newWebUrl)) {
-          subJobQueue += new CrawlJob(newWebUrl, job)
+          //FIXME
+//          subJobQueue += new CrawlJob(newWebUrl, job)
         }
       }
     }
@@ -134,10 +136,11 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
       //Make sure we not fetch a link we did already.
       if (currentSession.fetchedUrls.findEntry(webUrl).isEmpty) {
         //And make sure the url is not in the queue
-        val result = subJobQueue.realQueue.find(job => job.webUrl == webUrl)
-        if (result.isEmpty) {
-          return true
-        }
+        //FIXME
+//        val result = subJobQueue.realQueue.find(job => job.webUrl == webUrl)
+//        if (result.isEmpty) {
+//          return true
+//        }
       }
     }
     false
