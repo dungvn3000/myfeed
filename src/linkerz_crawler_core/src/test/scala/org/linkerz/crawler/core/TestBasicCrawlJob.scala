@@ -33,7 +33,7 @@ class TestBasicCrawlJob extends Logging {
     controller.handlers = List(handler)
     controller.start()
 
-    val job = new CrawlJob("http://vnexpress.net/gl/24h-qua/")
+    val job = new CrawlJob("http://vnexpress.net")
     job.numberOfWorker = 10
     job.maxSubJob = 100
 

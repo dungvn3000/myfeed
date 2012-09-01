@@ -64,9 +64,7 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
     println(session.currentDepth + " level")
     println(session.crawlTime + " ms")
     println(job.error.length + " error found")
-    job.error.foreach(error => {
-      println("error = " + error)
-    })
+    job.error.foreach(error => println("error = " + error))
   }
 
   protected def createSubJobs(job: CrawlJob) {
@@ -112,6 +110,11 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
     }
   }
 
+  /**
+   * Check the url should crawl or not.
+   * @param webUrl
+   * @return
+   */
   protected def shouldCrawl(webUrl: WebUrl): Boolean = {
 
     if (filters.matcher(webUrl.url).matches()) return false
