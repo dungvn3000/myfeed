@@ -28,6 +28,12 @@ class CrawlSession extends Session[CrawlJob] {
    */
   var fetchedUrls = mutable.HashSet.empty[WebUrl]
 
+  /**
+   * Store queue urls list, It is not using for queue url,
+   * it is using for mark the url already queue then we won't queue again.
+   */
+  var queueUrls = mutable.HashSet.empty[WebUrl]
+
   var domainName: String = _
 
   def openSession(job: CrawlJob) = {

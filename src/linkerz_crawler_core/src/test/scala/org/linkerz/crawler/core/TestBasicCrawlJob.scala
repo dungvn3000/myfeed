@@ -12,6 +12,7 @@ import org.scalatest.FunSuite
 import grizzled.slf4j.Logging
 import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
+import org.junit.Test
 
 /**
  * The Class TestBasicCrawlJob.
@@ -20,19 +21,21 @@ import org.junit.experimental.categories.Category
  * @since 7/29/12, 2:47 AM
  *
  */
-@Category(Array(classOf[ManualTest]))
-class TestBasicCrawlJob extends FunSuite with Logging {
+class TestBasicCrawlJob extends Logging {
 
-  test("testBasicJob") {
+  @Test
+  def testBasicJob {
     val controller = new CrawlerController
-    val handler = new CrawlerHandler()
+    val handler = new CrawlerHandler
     handler.downloadFactory = new DefaultDownloadFactory
     handler.parserFactory = new DefaultParserFactory
-
     controller.handlers = List(handler)
-
     controller.start()
+
     val job = new CrawlJob("http://vnexpress.net/gl/24h-qua/")
+    job.numberOfWorker = 10
+    job.maxSubJob = 10
+
     controller ! job
     controller.stop()
   }

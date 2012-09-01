@@ -4,11 +4,11 @@
 
 package org.linkerz.crawler.core
 
-import org.scalatest.FunSuite
 import com.ning.http.client._
 import net.coobird.thumbnailator.Thumbnails
 import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
+import org.junit.Test
 
 /**
  * The Class TestFinagle.
@@ -18,14 +18,15 @@ import org.junit.experimental.categories.Category
  *
  */
 @Category(Array(classOf[ManualTest]))
-class TestHttpClient extends FunSuite {
+class TestHttpClient {
 
   val cf = new AsyncHttpClientConfig.Builder()
     .setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:10.0.2) Gecko/20100101 Firefox/10.0.2")
     .setCompressionEnabled(true)
     .build()
 
-  test("testAsyncHttpClient") {
+  @Test
+  def testAsyncHttpClient {
     val asyncHttpClient = new AsyncHttpClient(cf)
     val f = asyncHttpClient.prepareGet("http://vnexpress.net/").execute()
     val time = System.currentTimeMillis()
@@ -34,7 +35,8 @@ class TestHttpClient extends FunSuite {
     r.getHeaders.values().toArray.foreach(println)
   }
 
-  test("testDownloadAndResizeImage") {
+  @Test
+  def testDownloadAndResizeImage {
     val asyncHttpClient = new AsyncHttpClient(cf)
     val time = System.currentTimeMillis()
     val response = asyncHttpClient

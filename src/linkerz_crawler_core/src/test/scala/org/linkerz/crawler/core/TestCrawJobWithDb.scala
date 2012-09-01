@@ -12,6 +12,7 @@ import org.linkerz.test.spring.SpringContext
 import org.linkerz.job.queue.core.Controller
 import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
+import org.junit.Test
 
 /**
  * The Class TestCrawJobWithDb.
@@ -21,9 +22,10 @@ import org.junit.experimental.categories.Category
  *
  */
 @Category(Array(classOf[ManualTest]))
-class TestCrawJobWithDb extends FunSuite with Logging with SpringContext {
+class TestCrawJobWithDb extends Logging with SpringContext {
 
-  test("testCrawJobWithDb") {
+  @Test
+  def testCrawJobWithDb {
     val controller = context.getBean("crawlerController", classOf[Controller])
     val job = new CrawlJob("http://vnexpress.net/")
     controller ! job
