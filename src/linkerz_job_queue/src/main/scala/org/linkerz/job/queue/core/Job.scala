@@ -23,6 +23,16 @@ trait Job {
   private var _info = new ListBuffer[String]
 
   /**
+   * The depth of the job from the first job.
+   */
+  private var _depth: Int = 0
+
+  /**
+   * Max depth for a crawl job.
+   */
+  var maxDepth: Int = 1
+
+  /**
    * The retry time when the worker is busy.
    */
   var maxRetry: Int = 100
@@ -95,5 +105,13 @@ trait Job {
   def error(msg: String, ex: Throwable) {
     status = JobStatus.ERROR
     _error += Tuple2(msg, ex)
+  }
+
+
+  def depth: Int = {
+    if (!parent.isEmpty) {
+      _depth = parent.get.depth + 1
+    }
+    _depth
   }
 }

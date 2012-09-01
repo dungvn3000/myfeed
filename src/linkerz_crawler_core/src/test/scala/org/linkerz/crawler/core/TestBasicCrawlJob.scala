@@ -12,7 +12,8 @@ import org.scalatest.FunSuite
 import grizzled.slf4j.Logging
 import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
-import org.junit.Test
+import org.junit.{Assert, Test}
+import org.linkerz.job.queue.core.JobStatus
 
 /**
  * The Class TestBasicCrawlJob.
@@ -34,10 +35,12 @@ class TestBasicCrawlJob extends Logging {
 
     val job = new CrawlJob("http://vnexpress.net/gl/24h-qua/")
     job.numberOfWorker = 10
-    job.maxSubJob = 10
+    job.maxSubJob = 100
 
     controller ! job
     controller.stop()
+
+    Assert.assertEquals(JobStatus.DONE, job.status)
   }
 
 }

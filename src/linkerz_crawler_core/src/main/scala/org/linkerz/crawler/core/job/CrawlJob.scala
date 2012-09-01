@@ -22,17 +22,7 @@ case class CrawlJob(webUrl: WebUrl) extends Job {
   private var _parent: Option[CrawlJob] = None
   private var _result: Option[WebPage] = None
 
-  /**
-   * The depth of the job from the first job.
-   */
-  private var _depth: Int = 0
-
   var code: CrawlJob.Status = CrawlJob.DONE
-
-  /**
-   * Max depth for a crawl job.
-   */
-  var maxDepth: Int = 1
 
   var onlyCrawlInSameDomain: Boolean = true
 
@@ -77,13 +67,6 @@ case class CrawlJob(webUrl: WebUrl) extends Job {
 
   def parent_=(parent: Option[CrawlJob]) {
     _parent = parent
-  }
-
-  def depth: Int = {
-    if (!parent.isEmpty) {
-      _depth = parent.get.depth + 1
-    }
-    _depth
   }
 }
 
