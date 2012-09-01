@@ -111,7 +111,26 @@ class TestBaseController {
 
   @Test
   def testMultiHandler() {
+    val controller = new BaseController
+    controller.handlers = List(new AsyncTestHandler, new SyncHandler, new ErrorSyncHandler)
+    controller.start()
 
+    val echoJob = EchoJob("Hello")
+    val sumJob = SumJob(4, 5)
+    val emptyJob = new EmptyJob
+    emptyJob.numberOfWorker = 10
+    emptyJob.maxSubJob = 20
+
+    controller ! echoJob
+    controller ! sumJob
+    controller ! emptyJob
+
+    controller.stop()
+
+    Assert.assertEquals(JobStatus.ERROR, echoJob.status)
+    Assert.assertEquals(9, sumJob.result.get)
+    Assert.assertEquals(JobStatus.DONE, sumJob.status)
+    Assert.assertEquals(emptyJob.maxSubJob, emptyJob.count)
   }
 
 }
