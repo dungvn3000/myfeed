@@ -40,9 +40,10 @@ class BaseController extends Controller with Logging {
         react {
           case NEXT(job) => {
             try {
-              handleJob(job)
-              //Change Job Status.
-              job.status = JobStatus.DONE
+              if (handleJob(job)) {
+                //Change Job Status.
+                job.status = JobStatus.DONE
+              }
             } catch {
               case ex: Exception => handleError(job, ex)
             }
@@ -82,7 +83,8 @@ class BaseController extends Controller with Logging {
     handlerActor ! NEXT(job)
   }
 
-  protected def handleJob(job: Job) {
+  protected def handleJob(job: Job): Boolean = {
+    var isDone = false
     handlers.foreach(handler => if (handler accept job) {
       handler match {
         case handler: HandlerInSession[Job, Session[Job]] => {
@@ -94,7 +96,10 @@ class BaseController extends Controller with Logging {
         }
         case _ => handler.handle(job)
       }
+      //Mark the job was done.
+      isDone = true
     })
+    isDone
   }
 
   /**

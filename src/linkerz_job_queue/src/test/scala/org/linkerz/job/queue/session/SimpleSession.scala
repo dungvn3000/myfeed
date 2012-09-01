@@ -5,7 +5,7 @@
 package org.linkerz.job.queue.session
 
 import org.linkerz.job.queue.core.Session
-import org.linkerz.job.queue.job.SumJob
+import org.linkerz.job.queue.job.{EmptyJob, SumJob}
 import grizzled.slf4j.Logging
 
 /**
@@ -15,9 +15,9 @@ import grizzled.slf4j.Logging
  * @since 8/23/12, 6:30 AM
  *
  */
-class SimpleSession extends Session[SumJob] with Logging {
+class SimpleSession extends Session[EmptyJob] with Logging {
 
-  def openSession(job: SumJob) = {
+  def openSession(job: EmptyJob) = {
     this.job = job
     info("Opening Session")
     this

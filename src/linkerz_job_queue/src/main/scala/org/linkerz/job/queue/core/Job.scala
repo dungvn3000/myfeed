@@ -46,7 +46,13 @@ trait Job {
   /**
    * The status of the job.
    */
-  var status: String = _
+  var status: String = JobStatus.NEW
+
+  /**
+   * Maximum number of sub job, the job can have.
+   * -1 is unlimited.
+   */
+  var maxSubJob: Int = -1
 
   /**
    * Return the result of the job.

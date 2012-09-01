@@ -26,6 +26,8 @@ import scalaz.concurrent.{Actor, Strategy}
 abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[J, S] with CallBack[J] with Logging {
 
   private var _retryCount = 0
+  //Counting child jobs was done by the current job.
+  private var _subJobCount = 0
 
   /**
    * The handler will stop when it turn on.
@@ -44,7 +46,13 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
   protected var currentJob: J = _
 
   //The manager of all workers.
-  var workerManager: Actor[J] = _
+  var workerManager = actor {
+    (job: J) => {
+      if (!isStop) {
+        doSubJob(job)
+      }
+    }
+  }
 
   protected def doHandle(job: J, session: S) {
     currentSession = session
@@ -53,13 +61,6 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
     //Create Thread pool for worker
     val threadPool = Executors.newCachedThreadPool()
     val strategy = Strategy.Executor(threadPool)
-
-    //Create worker manager.
-    workerManager = actor {
-      (job: J) => {
-        doSubJob(job)
-      }
-    } (strategy)
 
     //Create worker and create actor for it.
     createWorker(currentJob.numberOfWorker)
@@ -81,10 +82,13 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
     waitForFinish()
 
     //Step 4: Finish and reset.
+    onFinish()
     threadPool.shutdown()
+    info("Waitting for all workers stoped")
     threadPool.awaitTermination(60L, TimeUnit.SECONDS)
     workers.clear()
     _retryCount = 0
+    _subJobCount = 0
     isStop = false
   }
 
@@ -109,11 +113,17 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
   private def doSubJob(job: J): Boolean = {
     var isWorking = false
     breakable {
+      if (currentJob.maxSubJob >= 0 && _subJobCount >= currentJob.maxSubJob) {
+        info("Stop because the number of sub job reached maximum")
+        isStop = true
+        return false
+      }
       workers.foreach(worker => if (worker.isFree) {
         worker.work(job, currentSession)
         //Delay time for each job.
         if (currentJob.politenessDelay > 0) Thread.sleep(currentJob.politenessDelay)
         isWorking = true
+        _subJobCount += 1
         break()
       })
     }
@@ -133,6 +143,11 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
     }
     isWorking
   }
+
+  /**
+   * This method will be called before the hander finish and reset everything.
+   */
+  protected def onFinish() {}
 
   /**
    * Create worker for handler.
@@ -161,4 +176,6 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
    * @return
    */
   def retryCount = _retryCount
+
+  def subJobCount = _subJobCount
 }

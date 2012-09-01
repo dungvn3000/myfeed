@@ -5,7 +5,7 @@
 package org.linkerz.job.queue.worker
 
 import org.linkerz.job.queue.core.Worker
-import org.linkerz.job.queue.job.SumJob
+import org.linkerz.job.queue.job.{EmptyJob, SumJob}
 import org.linkerz.job.queue.session.SimpleSession
 
 /**
@@ -15,11 +15,10 @@ import org.linkerz.job.queue.session.SimpleSession
  * @since 8/23/12, 6:36 AM
  * 
  */
-case class LazyWorker(id: Int) extends Worker[SumJob, SimpleSession] {
-  def analyze(job: SumJob, session: SimpleSession) {
+case class LazyWorker(id: Int) extends Worker[EmptyJob, SimpleSession] {
+  def analyze(job: EmptyJob, session: SimpleSession) {
     info("Worker " + id + " is working")
-    //Sleep first, before done the job.
+    //Sleep first, and done nothing.
     Thread.sleep(1000)
-    job.result = job.x + job.y
   }
 }

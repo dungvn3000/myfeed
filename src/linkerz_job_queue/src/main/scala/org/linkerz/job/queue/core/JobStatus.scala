@@ -12,6 +12,10 @@ package org.linkerz.job.queue.core
  *
  */
 object JobStatus {
+
+  //The code for the new job.
+  val NEW = "NEW"
+
   //The code for the job has done by the handler.
   val DONE = "DONE"
 

@@ -4,7 +4,7 @@
 
 package org.linkerz.job.queue.handler
 
-import org.linkerz.job.queue.job.SumJob
+import org.linkerz.job.queue.job.EmptyJob
 import org.linkerz.job.queue.session.SimpleSession
 import org.linkerz.job.queue.core.Job
 import org.linkerz.job.queue.worker.LazyWorker
@@ -16,7 +16,12 @@ import org.linkerz.job.queue.worker.LazyWorker
  * @since 8/23/12, 6:29 AM
  *
  */
-class AsyncTestHandler extends AsyncHandler[SumJob, SimpleSession] {
+class AsyncTestHandler extends AsyncHandler[EmptyJob, SimpleSession] {
+
+
+  override protected def onFinish() {
+    currentJob.count = subJobCount
+  }
 
   protected def createWorker(numberOfWorker: Int) {
     for (i <- 0 to numberOfWorker - 1) {
@@ -24,14 +29,14 @@ class AsyncTestHandler extends AsyncHandler[SumJob, SimpleSession] {
     }
   }
 
-  protected def createSubJobs(job: SumJob) {
+  protected def createSubJobs(job: EmptyJob) {
     //Making 1000 sub job for testing
     for (i <- 0 to 999) {
-      workerManager ! SumJob(1, 2)
+      workerManager ! new EmptyJob
     }
   }
 
   def sessionClass = classOf[SimpleSession]
 
-  def accept(job: Job) = job.isInstanceOf[SumJob]
+  def accept(job: Job) = job.isInstanceOf[EmptyJob]
 }
