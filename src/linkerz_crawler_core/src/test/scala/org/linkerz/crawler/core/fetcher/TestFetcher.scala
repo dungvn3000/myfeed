@@ -10,6 +10,7 @@ import org.linkerz.crawler.core.factory.{DefaultParserFactory, DefaultDownloadFa
 import org.linkerz.crawler.core.job.CrawlJob
 import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
+import org.junit.Test
 
 /**
  * The Class TestFetcher.
@@ -18,10 +19,10 @@ import org.junit.experimental.categories.Category
  * @since 8/3/12, 9:08 PM
  *
  */
-@Category(Array(classOf[ManualTest]))
-class TestFetcher extends FunSuite with Logging {
+class TestFetcher extends Logging {
 
-  test("testFetchVnExpress") {
+  @Test
+  def testFetchVnExpress() {
     val downloadFactory = new DefaultDownloadFactory()
     val parserFactory = new DefaultParserFactory()
     val fetcher = new DefaultFetcher(downloadFactory, parserFactory)
