@@ -28,6 +28,9 @@ class TestCrawJobWithDb extends Logging with SpringContext {
   def testCrawJobWithDb {
     val controller = context.getBean("crawlerController", classOf[Controller])
     val job = new CrawlJob("http://vnexpress.net/")
+    job.numberOfWorker = 10
+    job.maxSubJob = 100
+
     controller ! job
     controller.stop()
   }
