@@ -147,10 +147,4 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
     }
     false
   }
-
-  override def onFailed(source: Any, ex: Exception) {
-    super.onFailed(source, ex)
-    //Logging error
-    currentSession.job.error(ex.getMessage)
-  }
 }

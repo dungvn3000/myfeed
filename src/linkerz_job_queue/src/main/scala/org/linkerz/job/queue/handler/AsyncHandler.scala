@@ -10,7 +10,7 @@ import util.control.Breaks._
 import grizzled.slf4j.Logging
 import scalaz.Scalaz._
 import java.util.concurrent.{TimeUnit, Executors}
-import scalaz.concurrent.{Actor, Strategy}
+import scalaz.concurrent.Strategy
 
 /**
  * The Class AsyncHandler.
@@ -49,7 +49,14 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
   var workerManager = actor {
     (job: J) => {
       if (!isStop) {
-        doSubJob(job)
+        try {
+          doSubJob(job)
+        } catch {
+          case ex: Exception => {
+            error(ex.getMessage, ex)
+            currentJob.error(ex.getMessage, ex)
+          }
+        }
       }
     }
   }
@@ -158,6 +165,7 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
 
   def onFailed(source: Any, ex: Exception) {
     error(ex.getMessage, ex)
+    currentJob.error(ex.getMessage, ex)
   }
 
 

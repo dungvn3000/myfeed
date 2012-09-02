@@ -46,17 +46,18 @@ class RabbitMQController extends BaseController {
           _channel.basicQos(prefetchCount)
           val consumer = new QueueingConsumer(_channel)
           _channel.basicConsume(queueName, false, consumer)
+          var job: Job = null
           try {
             while (!_isStop) {
               val delivery = consumer.nextDelivery(deliverTimeOut)
               if (delivery != null && delivery.getBody != null) {
-                val job = Marshal.load[Job](delivery.getBody)
+                job = Marshal.load[Job](delivery.getBody)
                 handlerActor ! NEXT(job)
                 _channel.basicAck(delivery.getEnvelope.getDeliveryTag, false)
               }
             }
           } catch {
-            case e: Exception => e.printStackTrace()
+            case ex: Exception => handleError(job, ex)
           }
         }
       }
