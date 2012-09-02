@@ -4,10 +4,10 @@
 
 package org.linkerz.job.queue.controller
 
-import com.rabbitmq.client.{QueueingConsumer, ConnectionFactory}
+import com.rabbitmq.client._
 import util.Marshal
 import org.linkerz.job.queue.core.Job
-import actors.Actor
+import scalaz.Scalaz._
 
 /**
  * This controller will reivce job from RabbitMQ server.
@@ -21,18 +21,25 @@ class RabbitMQController extends BaseController {
   var connectionFactory: ConnectionFactory = _
   var queueName = "jobQueue"
 
-  val consumerActor = new Actor() {
-    def act() {
-      val connection = connectionFactory.newConnection()
-      val channel = connection.createChannel()
-      val consumer = new QueueingConsumer(channel)
-      channel.basicConsume(queueName, false, consumer)
-      loop {
-        val delivery = consumer.nextDelivery()
-        if (delivery.getBody != null) {
-          val job = Marshal.load[Job](delivery.getBody)
-          handlerActor ! NEXT(job)
-          channel.basicAck(delivery.getEnvelope.getDeliveryTag, false)
+  private var _connection: Connection = _
+  private var _channel: Channel = _
+
+  val consumerActor = actor {
+    (event: Event) => {
+      event match {
+        case START => {
+          _connection = connectionFactory.newConnection()
+          _channel = _connection.createChannel()
+          val consumer = new QueueingConsumer(_channel)
+          _channel.basicConsume(queueName, false, consumer)
+          while (true) {
+            val delivery = consumer.nextDelivery()
+            if (delivery.getBody != null) {
+              val job = Marshal.load[Job](delivery.getBody)
+              handlerActor ! NEXT(job)
+              _channel.basicAck(delivery.getEnvelope.getDeliveryTag, false)
+            }
+          }
         }
       }
     }
@@ -40,6 +47,12 @@ class RabbitMQController extends BaseController {
 
   override def start() {
     super.start()
-    consumerActor.start()
+    consumerActor ! START
+  }
+
+  override def stop() {
+    super.stop()
+    _channel.close()
+    _connection.close()
   }
 }

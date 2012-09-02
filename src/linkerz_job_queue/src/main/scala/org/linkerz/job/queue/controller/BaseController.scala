@@ -20,9 +20,10 @@ import collection.JavaConversions._
  */
 class BaseController extends Controller with Logging {
 
-  case object STOP
-
-  case class NEXT(job: Job)
+  sealed trait Event
+  case object STOP extends Event
+  case object START extends Event
+  case class NEXT(job: Job) extends Event
 
   var handlers: List[Handler[_ <: Job]] = Nil
 
