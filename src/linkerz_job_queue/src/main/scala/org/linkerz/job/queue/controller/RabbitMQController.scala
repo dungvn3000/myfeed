@@ -4,7 +4,7 @@
 
 package org.linkerz.job.queue.controller
 
-import com.rabbitmq.client.{QueueingConsumer, ConnectionFactory}
+import com.rabbitmq.client.{FlowListener, QueueingConsumer, ConnectionFactory}
 import util.Marshal
 import org.linkerz.job.queue.core.Job
 import actors.DaemonActor

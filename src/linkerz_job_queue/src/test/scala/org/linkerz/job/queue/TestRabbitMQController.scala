@@ -24,6 +24,12 @@ class TestRabbitMQController {
 
   @Test
   def testBasicJob() {
+    val controller = new RabbitMQController
+    controller.connectionFactory = factory
+    controller.handlers = List(new EchoHandler)
+    controller.start()
+
+    //Send a job to server.
     factory.setHost("localhost")
     val connection = factory.newConnection()
     val channel = connection.createChannel()
@@ -32,10 +38,7 @@ class TestRabbitMQController {
     channel.close()
     connection.close()
 
-    val controller = new RabbitMQController
-    controller.connectionFactory = factory
-    controller.handlers = List(new EchoHandler)
-    controller.start()
+    Thread.sleep(1000)
     controller.stop()
   }
 
