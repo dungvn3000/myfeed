@@ -68,4 +68,38 @@ class TestRabbitMQController {
     controller.stop()
   }
 
+  @Test
+  def testWith1000JobAndTwoController() {
+    //Controller 1
+    val controller1 = new RabbitMQController
+    controller1.connectionFactory = factory
+    controller1.handlers = List(new EchoHandler)
+    controller1.start()
+
+    //Controller 2
+    val controller2 = new RabbitMQController
+    controller2.connectionFactory = factory
+    controller2.handlers = List(new EchoHandler)
+    controller2.start()
+
+    //Send a job to server.
+    val connection = factory.newConnection()
+    val channel = connection.createChannel()
+    channel.queueDeclare("jobQueue", false, false, true, null)
+
+    for (i <-0 to 999) {
+      channel.basicPublish("", "jobQueue", MessageProperties.PERSISTENT_BASIC,
+        Marshal.dump(new EchoJob("Hello Rabbit " + i)))
+    }
+
+    channel.close()
+    connection.close()
+
+    //Waiting for the controller.
+    Thread.sleep(2000)
+
+    controller1.stop()
+    controller2.stop()
+  }
+
 }
