@@ -58,9 +58,8 @@ class NewFeedBot {
         val trigger = newTrigger().startNow()
           .withSchedule(repeatMinutelyForever(newFeed.time)).build()
         NewFeedBot.this.scheduler.scheduleJob(jobDetail, trigger)
-
         //Sleep 5 minute before start another feed.
-        Thread.sleep(politenessDelay)
+//        Thread.sleep(politenessDelay)
       })
     }
   }
