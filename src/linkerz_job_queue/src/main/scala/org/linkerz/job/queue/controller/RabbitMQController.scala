@@ -58,7 +58,7 @@ class RabbitMQController extends BaseController {
               val delivery = consumer.nextDelivery(deliverTimeOut)
               if (delivery != null && delivery.getBody != null) {
                 job = Marshal.load[Job](delivery.getBody)
-                handlerActor ! NEXT(job)
+                handlerActor !? NEXT(job)
                 _channel.basicAck(delivery.getEnvelope.getDeliveryTag, false)
               }
             }
