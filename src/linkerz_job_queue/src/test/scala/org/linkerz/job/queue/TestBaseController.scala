@@ -9,7 +9,7 @@ import core.JobStatus
 import exception.TestException
 import handler.{AsyncTestHandler, ErrorSyncHandler, SyncHandler}
 import job.{EmptyJob, EchoJob, SumJob}
-import org.junit.Test
+import org.junit.{Ignore, Test}
 import junit.framework.Assert
 import org.junit.experimental.categories.Category
 import org.linkerz.test.categories.ManualTest
@@ -102,6 +102,7 @@ class TestBaseController {
 
   //This test case is too slow, only run it by manually.
   @Test
+  @Ignore
   @Category(Array(classOf[ManualTest]))
   def testWithAsyncHandlerAnd100Job() {
     val controller = new BaseController

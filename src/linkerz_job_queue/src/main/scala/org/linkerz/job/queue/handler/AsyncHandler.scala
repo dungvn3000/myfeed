@@ -33,6 +33,9 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
   //Starting time on current job.
   protected var startTime: Long = _
 
+  //The flag will turn on when the worker manager is free.
+  protected var isManagerFree: Boolean = _
+
   /**
    * The handler will stop when it turn on.
    */
@@ -54,12 +57,15 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
     (job: J) => {
       if (!isStop) {
         try {
+          isManagerFree = false
           doSubJob(job)
         } catch {
           case ex: Exception => {
             error(ex.getMessage, ex)
             currentJob.error(ex.getMessage, ex)
           }
+        } finally {
+          isManagerFree = true
         }
       }
     }
@@ -71,6 +77,7 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
 
     //Reset to start
     isStop = false
+    isManagerFree = true
     workers.clear()
     _subJobCount = 0
 
@@ -111,11 +118,11 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
   private def waitForFinish() {
     while (!isStop) {
       //Check all worker if they are free, finish the job.
-      if (workers.filter(worker => !worker.isFree).size == 0) {
+      if (isManagerFree && workers.filter(worker => !worker.isFree).size == 0) {
         //waiting for 3s and recheck again
         info("All worker are free, waiting for 5s and recheck")
         Thread.sleep(1000 * 5)
-        if (workers.filter(worker => !worker.isFree).size == 0) {
+        if (isManagerFree && workers.filter(worker => !worker.isFree).size == 0) {
           logger.info("It seem is no more job and all workers is free. Finish....")
           isStop = true
         }
@@ -147,10 +154,10 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
       }
       workers.foreach(worker => if (worker.isFree) {
         worker.work(job, currentSession)
-        //Delay time for each job.
-        if (currentJob.politenessDelay > 0) Thread.sleep(currentJob.politenessDelay)
         isWorking = true
         _subJobCount += 1
+        //Delay time for each job.
+        if (currentJob.politenessDelay > 0) Thread.sleep(currentJob.politenessDelay)
         break()
       })
     }
