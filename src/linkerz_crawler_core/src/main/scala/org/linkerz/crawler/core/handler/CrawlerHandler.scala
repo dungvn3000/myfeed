@@ -28,9 +28,6 @@ import org.linkerz.crawler.core.fetcher.DefaultFetcher
 
 class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
 
-  private val filters = Pattern.compile(".*(\\.(css|js|bmp|gif|jpe?g" + "|png|tiff?|mid|mp2|mp3|mp4"
-    + "|wav|avi|mov|mpeg|ram|m4v|pdf" + "|rm|smil|wmv|swf|wma|zip|rar|gz))$")
-
   @BeanProperty
   var downloadFactory: DownloadFactory = _
 
@@ -117,7 +114,7 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
    */
   protected def shouldCrawl(webUrl: WebUrl): Boolean = {
 
-    if (filters.matcher(webUrl.url).matches()) return false
+    if (currentJob.filterPattern.matcher(webUrl.url).matches()) return false
 
     //Only crawl the url is match with url regex
     if (currentJob.urlRegex != null) currentJob.urlRegex.foreach(regex => {

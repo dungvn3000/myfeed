@@ -6,8 +6,8 @@ package org.linkerz.crawler.core.job
 
 import org.linkerz.job.queue.core.Job
 import org.linkerz.crawler.core.model.{WebPage, WebUrl}
-import collection.mutable.ListBuffer
 import scala.Some
+import java.util.regex.Pattern
 
 /**
  * The Class CrawlJob.
@@ -26,9 +26,16 @@ case class CrawlJob(webUrl: WebUrl) extends Job {
 
   var onlyCrawlInSameDomain: Boolean = true
 
+  //File Filter
+  var filter = ".*(\\.(css|js|bmp|gif|jpe?g" + "|png|tiff?|mid|mp2|mp3|mp4" +
+    "|wav|avi|mov|mpeg|ram|m4v|pdf" + "|rm|smil|wmv|swf|wma|zip|rar|gz))$"
+
+
+  def filterPattern = Pattern.compile(filter)
+
   /**
    * Only crawl the url match with this regex.
-    */
+   */
   var urlRegex: List[String] = _
 
   /**

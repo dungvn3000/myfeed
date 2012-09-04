@@ -10,6 +10,7 @@ import org.linkerz.job.queue.core.Job
 import scalaz.Scalaz._
 import java.util.concurrent.{TimeUnit, Executors}
 import scalaz.concurrent.Strategy
+import reflect.BeanProperty
 
 /**
  * This controller will reivce job from RabbitMQ server.
@@ -20,13 +21,18 @@ import scalaz.concurrent.Strategy
  */
 class RabbitMQController extends BaseController {
 
+  @BeanProperty
   var connectionFactory: ConnectionFactory = _
+
+  @BeanProperty
   var queueName = "jobQueue"
 
   //The number of job the controller will take at a time.
+  @BeanProperty
   var prefetchCount = 10
 
   //Time out for waiting a delivery.
+  @BeanProperty
   var deliverTimeOut = 1000
 
   private var _connection: Connection = _
@@ -74,7 +80,9 @@ class RabbitMQController extends BaseController {
     _isStop = true
     _threadPool.shutdown()
     _threadPool.awaitTermination(60, TimeUnit.SECONDS)
-    _channel.close()
+    if (_channel.isOpen) {
+      _channel.close()
+    }
     _connection.close()
   }
 }
