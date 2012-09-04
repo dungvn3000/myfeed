@@ -4,7 +4,6 @@
 
 package org.linkerz.crawler.bot.controller
 
-import org.linkerz.crawler.core.controller.CrawlerController
 import reflect.BeanProperty
 import org.springframework.data.mongodb.core.MongoOperations
 import org.quartz._
@@ -15,6 +14,8 @@ import org.quartz.TriggerBuilder._
 import org.quartz.SimpleScheduleBuilder._
 import collection.JavaConversions._
 import NewFeedController._
+import com.rabbitmq.client.{MessageProperties, Channel, Connection, ConnectionFactory}
+import util.Marshal
 
 /**
  * The Class NewFeedController.
@@ -27,7 +28,7 @@ import NewFeedController._
 class NewFeedController {
 
   @BeanProperty
-  var crawlerController: CrawlerController = _
+  var connectionFactory: ConnectionFactory = _
 
   @BeanProperty
   var mongoOperations: MongoOperations = _
@@ -42,11 +43,18 @@ class NewFeedController {
   @BeanProperty
   var politenessDelay = 1000 * 60 * 5
 
+  private var _connection: Connection = _
+  private var _channel: Channel = _
+
   def start() {
+    _connection = connectionFactory.newConnection()
+    _channel = _connection.createChannel()
+    _channel.queueDeclare("jobQueue", true, false, false, null)
+
     val newFeeds = mongoOperations.findAll(classOf[NewFeed])
     newFeeds.foreach(newFeed => {
       val jobDetail = newJob(classOf[NewFeedJob]).build()
-      jobDetail.getJobDataMap.put(CONTROLLER, crawlerController)
+      jobDetail.getJobDataMap.put(CHANNEL, _channel)
       jobDetail.getJobDataMap.put(NEW_FEED, newFeed)
 
       val trigger = newTrigger().startNow()
@@ -59,13 +67,14 @@ class NewFeedController {
   }
 
   def stop() {
-    crawlerController.stop()
+    _channel.close()
+    _connection.close()
   }
 
 }
 
 object NewFeedController {
-  val CONTROLLER = "controller"
+  val CHANNEL = "channel"
   val NEW_FEED = "newFeed"
 }
 
@@ -74,9 +83,9 @@ object NewFeedController {
  */
 class NewFeedJob extends Job {
   def execute(context: JobExecutionContext) {
-    val controller = context.getJobDetail.getJobDataMap.get(CONTROLLER)
+    val channel = context.getJobDetail.getJobDataMap.get(CHANNEL).asInstanceOf[Channel]
     val newFeed = context.getJobDetail.getJobDataMap.get(NEW_FEED).asInstanceOf[NewFeed]
-    if (controller.isInstanceOf[CrawlerController]) {
+    if (channel != null) {
       val job = new CrawlJob(newFeed.url)
       if (newFeed.excludeUrl != null) {
         job.excludeUrl = newFeed.excludeUrl.toList
@@ -84,7 +93,7 @@ class NewFeedJob extends Job {
       if (newFeed.urlRegex != null) {
         job.urlRegex = newFeed.urlRegex.toList
       }
-      controller.asInstanceOf[CrawlerController] ! job
+      channel.basicPublish("", "jobQueue", MessageProperties.PERSISTENT_BASIC, Marshal.dump(job))
     }
   }
 }

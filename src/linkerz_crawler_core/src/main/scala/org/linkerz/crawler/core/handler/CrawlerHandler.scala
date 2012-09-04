@@ -55,13 +55,16 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
     this.currentSession = session
     session.crawlTime = System.currentTimeMillis
     super.doHandle(job, session)
-    session.crawlTime = System.currentTimeMillis - session.crawlTime
-    println(session.countUrl + " links found")
-    println(session.fetchedUrls.size + " links downloaded")
-    println(session.currentDepth + " level")
-    println(session.crawlTime + " ms")
-    println(job.error.length + " error found")
-    job.error.foreach(error => println("error = " + error))
+  }
+
+  override protected def onFinish() {
+    currentSession.crawlTime = System.currentTimeMillis - currentSession.crawlTime
+    println(currentSession.countUrl + " links found")
+    println(currentSession.fetchedUrls.size + " links downloaded")
+    println(currentSession.currentDepth + " level")
+    println(currentSession.crawlTime + " ms")
+    println(currentSession.job.error.length + " error found")
+    currentSession.job.error.foreach(error => println("error = " + error))
   }
 
   protected def createSubJobs(job: CrawlJob) {

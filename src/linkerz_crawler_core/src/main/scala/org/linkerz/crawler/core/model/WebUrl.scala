@@ -17,7 +17,7 @@ import grizzled.slf4j.Logging
  *
  */
 
-class WebUrl(_url: String) extends Logging {
+class WebUrl(_url: String) extends Logging with Serializable {
 
   /**
    * Redirect url. in case response code is 301 and 302

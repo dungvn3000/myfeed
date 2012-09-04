@@ -5,7 +5,12 @@
                "http://www.springframework.org/schema/beans
                 http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
+    <bean id="connectionFactory" class="com.rabbitmq.client.ConnectionFactory">
+        <property name="host" value="127.0.0.1"/>
+    </bean>
+
     <bean id="crawlerController" class="org.linkerz.crawler.core.controller.CrawlerController" init-method="start" destroy-method="stop">
+        <property name="connectionFactory" ref="connectionFactory"/>
         <property name="handlers">
             <list>
                 <ref bean="newFeedHandler"/>
@@ -14,16 +19,9 @@
     </bean>
 
     <bean id="newFeedHandler" class="org.linkerz.crawler.bot.handler.NewFeedHandler">
-        <!--Number of worker-->
-        <constructor-arg value="5"/>
-        <constructor-arg ref="downloadFactory"/>
-        <constructor-arg ref="parserFactory"/>
+        <property name="downloadFactory" ref="downloadFactory"/>
+        <property name="parserFactory" ref="parserFactory"/>
         <property name="dbService" ref="dBService"/>
-        <property name="ideTime" value="5000"/>
-        <property name="maxRetry" value="10"/>
-        <property name="maxDepth" value="1"/>
-        <property name="onlyCrawlInSameDomain" value="true"/>
-        <property name="politenessDelay" value="1000"/>
     </bean>
 
     <bean id="dBService" class="org.linkerz.crawler.db.DBServiceImpl">

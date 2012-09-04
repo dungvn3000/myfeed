@@ -104,7 +104,7 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
       //Check all worker if they are free, finish the job.
       if (workers.filter(worker => !worker.isFree).size == 0) {
         //waiting for 3s and recheck again
-        info("All worker are free, waiting for 10s and recheck")
+        info("All worker are free, waiting for 3s and recheck")
         Thread.sleep(1000 * 3)
         if (workers.filter(worker => !worker.isFree).size == 0) {
           logger.info("It seem is no more job and all workers is free. Finish....")
