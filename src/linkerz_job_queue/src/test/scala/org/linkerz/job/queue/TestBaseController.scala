@@ -114,8 +114,9 @@ class TestBaseController {
       val job = new EmptyJob
       job.numberOfWorker = 1000
       job.maxSubJob = 1000
+      controller !? job
 
-      controller ! job
+      Assert.assertEquals(JobStatus.DONE, job.status)
     }
 
     controller.stop()
@@ -147,6 +148,26 @@ class TestBaseController {
     Assert.assertEquals(9, sumJob.result.get)
     Assert.assertEquals(JobStatus.DONE, sumJob.status)
     Assert.assertEquals(emptyJob.maxSubJob, emptyJob.count)
+  }
+
+  @Test
+  def testSyncHandleController() {
+    val controller = new BaseController
+    controller.handlers = List(new SyncHandler)
+    controller.start()
+    val sumJob1 = SumJob(1, 2)
+    val sumJob2 = SumJob(3, 4)
+    controller !? sumJob1
+
+    Assert.assertEquals(3, sumJob1.result.get)
+    Assert.assertEquals(JobStatus.DONE, sumJob1.status)
+
+    controller !? sumJob2
+
+    Assert.assertEquals(7, sumJob2.result.get)
+    Assert.assertEquals(JobStatus.DONE, sumJob2.status)
+
+    controller.stop()
   }
 
 }

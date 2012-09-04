@@ -49,6 +49,8 @@ class BaseController extends Controller with Logging {
               }
             } catch {
               case ex: Exception => handleError(job, ex)
+            } finally {
+              reply("DONE")
             }
           }
           case STOP => {
@@ -77,6 +79,14 @@ class BaseController extends Controller with Logging {
     info("Stoped.")
   }
 
+
+  /**
+   * Add and waiting for finishing the job.
+   * @param job
+   */
+  def !?(job: Job) {
+    handlerActor !? NEXT(job)
+  }
 
   /**
    * Add a job to the queue
