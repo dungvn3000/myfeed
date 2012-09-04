@@ -25,14 +25,18 @@ import scalaz.concurrent.{Actor, Strategy}
 
 abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[J, S] with CallBack[J] with Logging {
 
-  private var _retryCount = 0
   //Counting child jobs was done by the current job.
-  private var _subJobCount = 0
+  private var _subJobCount: Int = _
+
+  def subJobCount = _subJobCount
+
+  //Starting time on current job.
+  protected var startTime: Long = _
 
   /**
    * The handler will stop when it turn on.
    */
-  protected var isStop = false
+  protected var isStop: Boolean = _
   protected val workers = new ListBuffer[Worker[J, S]]
 
   /**
@@ -46,9 +50,30 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
   protected var currentJob: J = _
 
   //The manager of all workers.
-  var workerManager: Actor[J] = _
+  var workerManager: Actor[J] = actor {
+    (job: J) => {
+      if (!isStop) {
+        try {
+          doSubJob(job)
+        } catch {
+          case ex: Exception => {
+            error(ex.getMessage, ex)
+            currentJob.error(ex.getMessage, ex)
+          }
+        }
+      }
+    }
+  }
 
   protected def doHandle(job: J, session: S) {
+    //Start counting time.
+    startTime = System.currentTimeMillis
+
+    //Reset to start
+    isStop = false
+    workers.clear()
+    _subJobCount = 0
+
     currentSession = session
     currentJob = job
 
@@ -59,22 +84,6 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
     //Create worker and create actor for it.
     createWorker(currentJob.numberOfWorker)
     workers.foreach(worker => worker.createActor(strategy))
-
-    //Create Worker Manager
-    workerManager = actor {
-      (job: J) => {
-        if (!isStop) {
-          try {
-            doSubJob(job)
-          } catch {
-            case ex: Exception => {
-              error(ex.getMessage, ex)
-              currentJob.error(ex.getMessage, ex)
-            }
-          }
-        }
-      }
-    } (strategy)
 
     //Make sure the handler at least has one worker.
     assert(workers.size > 0)
@@ -91,15 +100,11 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
     //Step 3: Waiting for all worker finished their job
     waitForFinish()
 
-    //Step 4: Finish and reset.
+    //Step 4: Finish.
     onFinish()
     threadPool.shutdown()
     info("Waitting for all workers stoped")
     threadPool.awaitTermination(60L, TimeUnit.SECONDS)
-    workers.clear()
-    _retryCount = 0
-    _subJobCount = 0
-    isStop = false
     onFinished()
   }
 
@@ -108,14 +113,14 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
       //Check all worker if they are free, finish the job.
       if (workers.filter(worker => !worker.isFree).size == 0) {
         //waiting for 3s and recheck again
-        info("All worker are free, waiting for 3s and recheck")
-        Thread.sleep(1000 * 3)
+        info("All worker are free, waiting for 5s and recheck")
+        Thread.sleep(1000 * 5)
         if (workers.filter(worker => !worker.isFree).size == 0) {
           logger.info("It seem is no more job and all workers is free. Finish....")
           isStop = true
         }
       } else {
-        //No more job, but some worker is still doing, sleep 1s waiting for them.
+        //Worker is doing, sleep 1s waiting for them.
         Thread.sleep(1000)
       }
     }
@@ -139,24 +144,21 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
       })
     }
     if (!isWorking) {
-      info("It seem all workers are busy now...")
       //Re add the job.
       workerManager ! job
       //Sleep 1s waiting for workers
-      Thread.sleep(currentJob.ideTime)
-
-      //Count time to retry, if it is too much, stop the handler and report error to controller.
-      _retryCount += 1
-      if (_retryCount >= currentJob.maxRetry) {
+      //      Thread.sleep(currentJob.ideTime)
+      val time = System.currentTimeMillis - startTime
+      if (time > currentJob.timeOut) {
+        info("Stop because time is out")
         isStop = true
-        info("Stop because all workers can't finish it job.")
       }
     }
     isWorking
   }
 
   /**
-   * This method will be called before the hander finish and reset everything.
+   * This method will be called before the hander finish everything.
    */
   protected def onFinish() {}
 
@@ -187,12 +189,4 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
    * @param job
    */
   protected def createSubJobs(job: J)
-
-  /**
-   * Getter for _retryCount
-   * @return
-   */
-  def retryCount = _retryCount
-
-  def subJobCount = _subJobCount
 }

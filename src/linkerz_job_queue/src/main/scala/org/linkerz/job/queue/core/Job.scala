@@ -33,14 +33,9 @@ trait Job {
   var maxDepth: Int = 1
 
   /**
-   * The retry time when the worker is busy.
+   * Time out for working on the job, default is 10s
    */
-  var maxRetry: Int = 100
-
-  /**
-   * Sleep time waiting for the working worker.
-   */
-  var ideTime: Int = 1000
+  var timeOut = 10000
 
   /**
    * Politeness delay in milliseconds (delay between sending two requests to

@@ -51,14 +51,8 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
     }
   }
 
-  override protected def doHandle(job: CrawlJob, session: CrawlSession) {
-    this.currentSession = session
-    session.crawlTime = System.currentTimeMillis
-    super.doHandle(job, session)
-  }
-
   override protected def onFinished() {
-    currentSession.crawlTime = System.currentTimeMillis - currentSession.crawlTime
+    currentSession.crawlTime = System.currentTimeMillis - startTime
     info(currentSession.countUrl + " links found")
     info(currentSession.fetchedUrls.size + " links downloaded")
     info(currentSession.currentDepth + " level")

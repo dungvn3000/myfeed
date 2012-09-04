@@ -20,7 +20,6 @@ import org.linkerz.crawler.bot.fetcher.NewFetcher
 
 class NewFeedHandler extends CrawlerHandler {
 
-
   override protected def createWorker(numberOfWorker: Int) {
     assert(numberOfWorker > 0, "Number of worker of a handler must more than one")
     for (i <- 1 to numberOfWorker) {
