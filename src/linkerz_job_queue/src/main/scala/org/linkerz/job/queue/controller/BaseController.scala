@@ -28,7 +28,7 @@ class BaseController extends Controller with Logging {
   var handlers: List[Handler[_ <: Job]] = Nil
 
   /**
-   * Only using for spring bean. Hopefully spring is gonna support scala.
+   * Only using for spring bean. Hopefully the spring framework is gonna support scala.
    */
   def setHandlers(springHandlers: java.util.List[Handler[_ <: Job]]) {
     handlers = springHandlers.toList
@@ -43,7 +43,9 @@ class BaseController extends Controller with Logging {
             try {
               if (handleJob(job)) {
                 //Change Job Status.
-                job.status = JobStatus.DONE
+                if (!job.isError) {
+                  job.status = JobStatus.DONE
+                }
               }
             } catch {
               case ex: Exception => handleError(job, ex)

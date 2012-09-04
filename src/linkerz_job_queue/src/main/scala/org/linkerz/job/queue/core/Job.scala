@@ -73,6 +73,9 @@ trait Job {
 
   def error = _error
 
+  //Check whether the job is error or not.
+  def isError = !error.isEmpty
+
   def info = _info
 
   /**

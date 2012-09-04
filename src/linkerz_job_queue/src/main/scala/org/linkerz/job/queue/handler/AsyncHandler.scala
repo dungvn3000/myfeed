@@ -103,7 +103,7 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
     //Step 4: Finish.
     onFinish()
     threadPool.shutdown()
-    info("Waitting for all workers stoped")
+    info("Waiting for all workers stoped")
     threadPool.awaitTermination(60L, TimeUnit.SECONDS)
     onFinished()
   }
@@ -122,6 +122,15 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
       } else {
         //Worker is doing, sleep 1s waiting for them.
         Thread.sleep(1000)
+      }
+
+      //Checking working time.
+      val time = System.currentTimeMillis - startTime
+      if (time > currentJob.timeOut) {
+        info("Stop because the time is out")
+        //marking the job is error
+        currentJob.error("Time Out")
+        isStop = true
       }
     }
   }
@@ -147,12 +156,7 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
       //Re add the job.
       workerManager ! job
       //Sleep 1s waiting for workers
-      //      Thread.sleep(currentJob.ideTime)
-      val time = System.currentTimeMillis - startTime
-      if (time > currentJob.timeOut) {
-        info("Stop because time is out")
-        isStop = true
-      }
+      Thread.sleep(1000)
     }
     isWorking
   }

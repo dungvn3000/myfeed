@@ -85,6 +85,21 @@ class TestBaseController {
     Assert.assertEquals(job.maxSubJob, job.result.get)
   }
 
+  @Test
+  def testTimeOutJob() {
+    val controller = new BaseController
+    controller.handlers = List(new AsyncTestHandler)
+    controller.start()
+    val job = new EmptyJob
+    job.numberOfWorker = 3
+    job.timeOut = 5000
+
+    controller ! job
+    controller.stop()
+
+    Assert.assertEquals(JobStatus.ERROR, job.status)
+  }
+
   //This test case is too slow, only run it by manually.
   @Test
   @Category(Array(classOf[ManualTest]))
