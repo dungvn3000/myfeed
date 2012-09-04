@@ -3,10 +3,9 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <import resource="db.xml"/>
-    <import resource="crawlModule.xml"/>
-    <import resource="quartz.xml"/>
-    <import resource="jobController.xml"/>
+    <bean id="connectionFactory" class="com.rabbitmq.client.ConnectionFactory">
+        <property name="host" value="127.0.0.1"/>
+    </bean>
 
     <bean id="newFeedBot" class="org.linkerz.crawler.bot.NewFeedBot">
         <property name="connectionFactory" ref="connectionFactory"/>

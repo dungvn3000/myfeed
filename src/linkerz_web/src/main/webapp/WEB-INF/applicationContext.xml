@@ -10,6 +10,8 @@
 
     <import resource="db.xml"/>
     <import resource="service.xml"/>
+    <import resource="quartz.xml"/>
+    <import resource="bot.xml"/>
 
     <hz:hazelcast id="instance">
         <hz:config>

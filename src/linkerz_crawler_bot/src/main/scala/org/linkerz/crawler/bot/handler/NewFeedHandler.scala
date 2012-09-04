@@ -9,6 +9,8 @@ import org.linkerz.crawler.core.worker.CrawlWorker
 import org.linkerz.crawler.core.factory.{ParserFactory, DownloadFactory}
 import org.linkerz.crawler.core.model.WebUrl
 import org.linkerz.crawler.bot.fetcher.NewFetcher
+import org.linkerz.job.queue.core.Job
+import org.linkerz.crawler.bot.job.NewFeedJob
 
 /**
  * The Class NewFeedHandler.
@@ -31,4 +33,6 @@ class NewFeedHandler extends CrawlerHandler {
   override protected def shouldCrawl(webUrl: WebUrl) = {
     dbService.find(webUrl) == null && super.shouldCrawl(webUrl)
   }
+
+  override def accept(job: Job) = job.isInstanceOf[NewFeedJob]
 }
