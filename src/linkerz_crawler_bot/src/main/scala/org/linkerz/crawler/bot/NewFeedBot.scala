@@ -100,6 +100,7 @@ class NewFeedQuartZJob extends Job {
       if (newFeed.urlRegex != null) {
         job.urlRegex = newFeed.urlRegex.toList
       }
+      job.numberOfWorker = 5
       channel.basicPublish("", "jobQueue", MessageProperties.PERSISTENT_BASIC, Marshal.dump(job))
     }
   }

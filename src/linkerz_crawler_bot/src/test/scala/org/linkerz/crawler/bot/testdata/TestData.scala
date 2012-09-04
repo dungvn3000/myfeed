@@ -14,6 +14,7 @@ import org.linkerz.crawler.bot.factory.ParserPluginFactory
 import org.linkerz.crawler.bot.plugin.vnexpress.VnExpressPlugin
 import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
+import org.junit.Test
 
 /**
  * The Class TestData.
@@ -23,12 +24,13 @@ import org.junit.experimental.categories.Category
  *
  */
 @Category(Array(classOf[ManualTest]))
-class TestData extends FunSuite with SpringContext {
+class TestData extends SpringContext {
 
   val mongoOperations = context.getBean("mongoTemplate", classOf[MongoOperations])
   val parserFactory = context.getBean("parserFactory", classOf[ParserPluginFactory])
 
-  test("testAddVNExpress") {
+  @Test
+  def testAddVNExpress() {
     val vnExpressFeed = new NewFeed
     vnExpressFeed.name = "VnExpress.net"
     vnExpressFeed.group = "vnexpress.net"
@@ -45,7 +47,8 @@ class TestData extends FunSuite with SpringContext {
     parserFactory.install(classOf[VnExpressPlugin].getName)
   }
 
-  test("testAddZing") {
+  @Test
+  def testAddZing() {
     val zingFeed = new NewFeed
     zingFeed.name = "Zing News"
     zingFeed.group = "zing.vn"
