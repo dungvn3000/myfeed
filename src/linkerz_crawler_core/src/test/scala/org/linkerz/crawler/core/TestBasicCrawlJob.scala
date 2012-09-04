@@ -4,17 +4,13 @@
 
 package org.linkerz.crawler.core
 
-import controller.CrawlerController
 import factory.{DefaultParserFactory, DefaultDownloadFactory}
 import handler.CrawlerHandler
 import job.CrawlJob
-import org.scalatest.FunSuite
 import grizzled.slf4j.Logging
-import org.linkerz.test.categories.ManualTest
-import org.junit.experimental.categories.Category
 import org.junit.{Assert, Test}
 import org.linkerz.job.queue.core.JobStatus
-import com.rabbitmq.client.ConnectionFactory
+import org.linkerz.job.queue.controller.BaseController
 
 /**
  * The Class TestBasicCrawlJob.
@@ -27,10 +23,7 @@ class TestBasicCrawlJob extends Logging {
 
   @Test
   def testBasicJob {
-    val controller = new CrawlerController
-    val connectionFactory = new ConnectionFactory()
-    connectionFactory.setHost("127.0.0.1")
-    controller.connectionFactory = connectionFactory
+    val controller = new BaseController
     val handler = new CrawlerHandler
     handler.downloadFactory = new DefaultDownloadFactory
     handler.parserFactory = new DefaultParserFactory

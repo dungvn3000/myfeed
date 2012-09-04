@@ -2,31 +2,30 @@
  * Copyright (C) 2012 - 2013 LinkerZ
  */
 
-package org.linkerz.crawler.bot.controller
+package org.linkerz.crawler.bot
 
 import reflect.BeanProperty
 import org.springframework.data.mongodb.core.MongoOperations
 import org.quartz._
-import org.linkerz.crawler.core.job.CrawlJob
 import org.linkerz.mongodb.model.NewFeed
 import org.quartz.JobBuilder._
 import org.quartz.TriggerBuilder._
 import org.quartz.SimpleScheduleBuilder._
 import collection.JavaConversions._
-import NewFeedController._
+import NewFeedBot._
 import com.rabbitmq.client.{MessageProperties, Channel, Connection, ConnectionFactory}
 import util.Marshal
 import org.linkerz.crawler.bot.job.NewFeedJob
 
 /**
- * The Class NewFeedController.
+ * The Class NewFeedBot.
  *
  * @author Nguyen Duc Dung
  * @since 8/13/12, 3:56 AM
  *
  */
 
-class NewFeedController {
+class NewFeedBot {
 
   @BeanProperty
   var connectionFactory: ConnectionFactory = _
@@ -75,7 +74,7 @@ class NewFeedController {
 
 }
 
-object NewFeedController {
+object NewFeedBot {
   val CHANNEL = "channel"
   val NEW_FEED = "newFeed"
 }
