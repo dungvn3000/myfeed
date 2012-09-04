@@ -16,7 +16,6 @@ import util.Marshal
  *
  */
 object Client extends App {
-
   val factory = new ConnectionFactory
   factory.setHost("localhost")
   val connection = factory.newConnection()
@@ -27,10 +26,8 @@ object Client extends App {
   val job2 = new CrawlJob("http://vnexpress.net/")
 
   channel.basicPublish("", "jobQueue", MessageProperties.PERSISTENT_BASIC, Marshal.dump(job1))
-  channel.basicPublish("", "jobQueue", MessageProperties.PERSISTENT_BASIC, Marshal.dump(job2))
-
+//  channel.basicPublish("", "jobQueue", MessageProperties.PERSISTENT_BASIC, Marshal.dump(job2))
 
   channel.close()
   connection.close()
-
 }
