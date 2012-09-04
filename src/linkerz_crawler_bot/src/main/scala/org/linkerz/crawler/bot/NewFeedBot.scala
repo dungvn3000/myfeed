@@ -16,6 +16,7 @@ import NewFeedBot._
 import com.rabbitmq.client.{MessageProperties, Channel, Connection, ConnectionFactory}
 import util.Marshal
 import org.linkerz.crawler.bot.job.NewFeedJob
+import actors.Actor
 
 /**
  * The Class NewFeedBot.
@@ -26,6 +27,9 @@ import org.linkerz.crawler.bot.job.NewFeedJob
  */
 
 class NewFeedBot {
+
+  private var _connection: Connection = _
+  private var _channel: Channel = _
 
   @BeanProperty
   var connectionFactory: ConnectionFactory = _
@@ -43,27 +47,29 @@ class NewFeedBot {
   @BeanProperty
   var politenessDelay = 1000 * 60 * 5
 
-  private var _connection: Connection = _
-  private var _channel: Channel = _
+  private val botActor = new Actor {
+    def act() {
+      val newFeeds = mongoOperations.findAll(classOf[NewFeed])
+      newFeeds.foreach(newFeed => {
+        val jobDetail = newJob(classOf[NewFeedQuartZJob]).build()
+        jobDetail.getJobDataMap.put(CHANNEL, _channel)
+        jobDetail.getJobDataMap.put(NEW_FEED, newFeed)
+
+        val trigger = newTrigger().startNow()
+          .withSchedule(repeatMinutelyForever(newFeed.time)).build()
+        NewFeedBot.this.scheduler.scheduleJob(jobDetail, trigger)
+
+        //Sleep 5 minute before start another feed.
+        Thread.sleep(politenessDelay)
+      })
+    }
+  }
 
   def start() {
     _connection = connectionFactory.newConnection()
     _channel = _connection.createChannel()
     _channel.queueDeclare("jobQueue", true, false, false, null)
-
-    val newFeeds = mongoOperations.findAll(classOf[NewFeed])
-    newFeeds.foreach(newFeed => {
-      val jobDetail = newJob(classOf[NewFeedQuartZJob]).build()
-      jobDetail.getJobDataMap.put(CHANNEL, _channel)
-      jobDetail.getJobDataMap.put(NEW_FEED, newFeed)
-
-      val trigger = newTrigger().startNow()
-        .withSchedule(repeatMinutelyForever(newFeed.time)).build()
-      scheduler.scheduleJob(jobDetail, trigger)
-
-      //Sleep 5 minute before start another feed.
-      Thread.sleep(politenessDelay)
-    })
+    botActor.start()
   }
 
   def stop() {

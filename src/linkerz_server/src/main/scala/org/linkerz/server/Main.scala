@@ -5,8 +5,6 @@
 package org.linkerz.server
 
 import org.springframework.context.support.GenericXmlApplicationContext
-import com.hazelcast.core.HazelcastInstance
-import org.linkerz.crawler.bot.controller.NewFeedController
 
 /**
  * The Class Main.

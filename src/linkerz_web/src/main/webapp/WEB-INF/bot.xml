@@ -7,7 +7,7 @@
         <property name="host" value="127.0.0.1"/>
     </bean>
 
-    <bean id="newFeedBot" class="org.linkerz.crawler.bot.NewFeedBot">
+    <bean id="newFeedBot" class="org.linkerz.crawler.bot.NewFeedBot" init-method="start" destroy-method="stop">
         <property name="connectionFactory" ref="connectionFactory"/>
         <property name="mongoOperations" ref="mongoTemplate"/>
         <property name="scheduler" ref="schedulerFactoryBean"/>
