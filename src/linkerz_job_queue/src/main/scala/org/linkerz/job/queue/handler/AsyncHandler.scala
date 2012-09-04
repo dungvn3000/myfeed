@@ -10,7 +10,7 @@ import util.control.Breaks._
 import grizzled.slf4j.Logging
 import scalaz.Scalaz._
 import java.util.concurrent.{TimeUnit, Executors}
-import scalaz.concurrent.Strategy
+import scalaz.concurrent.{Actor, Strategy}
 
 /**
  * The Class AsyncHandler.
@@ -46,20 +46,7 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
   protected var currentJob: J = _
 
   //The manager of all workers.
-  var workerManager = actor {
-    (job: J) => {
-      if (!isStop) {
-        try {
-          doSubJob(job)
-        } catch {
-          case ex: Exception => {
-            error(ex.getMessage, ex)
-            currentJob.error(ex.getMessage, ex)
-          }
-        }
-      }
-    }
-  }
+  var workerManager: Actor[J] = _
 
   protected def doHandle(job: J, session: S) {
     currentSession = session
@@ -72,6 +59,22 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
     //Create worker and create actor for it.
     createWorker(currentJob.numberOfWorker)
     workers.foreach(worker => worker.createActor(strategy))
+
+    //Create Worker Manager
+    workerManager = actor {
+      (job: J) => {
+        if (!isStop) {
+          try {
+            doSubJob(job)
+          } catch {
+            case ex: Exception => {
+              error(ex.getMessage, ex)
+              currentJob.error(ex.getMessage, ex)
+            }
+          }
+        }
+      }
+    } (strategy)
 
     //Make sure the handler at least has one worker.
     assert(workers.size > 0)
@@ -97,6 +100,7 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
     _retryCount = 0
     _subJobCount = 0
     isStop = false
+    onFinished()
   }
 
   private def waitForFinish() {
@@ -155,6 +159,11 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
    * This method will be called before the hander finish and reset everything.
    */
   protected def onFinish() {}
+
+  /**
+   * This method will be called after the handler finished everything.
+   */
+  protected def onFinished() {}
 
   /**
    * Create worker for handler.

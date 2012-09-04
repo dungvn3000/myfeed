@@ -67,6 +67,7 @@ class NewFeedController {
   }
 
   def stop() {
+    scheduler.shutdown()
     _channel.close()
     _connection.close()
   }
