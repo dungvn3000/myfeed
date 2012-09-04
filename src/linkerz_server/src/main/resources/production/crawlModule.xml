@@ -14,16 +14,9 @@
     </bean>
 
     <bean id="newFeedHandler" class="org.linkerz.crawler.bot.handler.NewFeedHandler">
-        <!--Number of worker-->
-        <constructor-arg value="5"/>
-        <constructor-arg ref="downloadFactory"/>
-        <constructor-arg ref="parserFactory"/>
+        <property name="downloadFactory" ref="downloadFactory"/>
+        <property name="parserFactory" ref="parserFactory"/>
         <property name="dbService" ref="dBService"/>
-        <property name="ideTime" value="5000"/>
-        <property name="maxRetry" value="10"/>
-        <property name="maxDepth" value="1"/>
-        <property name="onlyCrawlInSameDomain" value="true"/>
-        <property name="politenessDelay" value="5000"/>
     </bean>
 
     <bean id="dBService" class="org.linkerz.crawler.db.DBServiceImpl">
@@ -35,11 +28,5 @@
     </bean>
 
     <bean id="downloadFactory" class="org.linkerz.crawler.core.factory.DefaultDownloadFactory"/>
-
-    <bean id="newFeedController" class="org.linkerz.crawler.bot.controller.NewFeedController">
-        <property name="mongoOperations" ref="mongoTemplate"/>
-        <property name="crawlerController" ref="crawlerController"/>
-        <property name="scheduler" ref="schedulerFactoryBean"/>
-    </bean>
 
 </beans>

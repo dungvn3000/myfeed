@@ -20,10 +20,8 @@
     </bean>
 
     <bean id="newFeedHandler" class="org.linkerz.crawler.bot.handler.NewFeedHandler">
-        <!--Number of worker-->
-        <constructor-arg value="5"/>
-        <constructor-arg ref="downloadFactory"/>
-        <constructor-arg ref="parserFactory"/>
+        <property name="downloadFactory" ref="downloadFactory"/>
+        <property name="parserFactory" ref="parserFactory"/>
         <property name="dbService" ref="dBService"/>
     </bean>
 
@@ -37,9 +35,10 @@
 
     <bean id="downloadFactory" class="org.linkerz.crawler.core.factory.DefaultDownloadFactory"/>
 
-    <bean id="newFeedController" class="org.linkerz.crawler.bot.controller.NewFeedController" init-method="start">
-        <property name="mongoOperations" ref="mongoTemplate"/>
-        <property name="crawlerController" ref="crawlerController"/>
-    </bean>
+    <!--<bean id="newFeedController" class="org.linkerz.crawler.bot.controller.NewFeedController" init-method="start" destroy-method="stop">-->
+        <!--<property name="mongoOperations" ref="mongoTemplate"/>-->
+        <!--<property name="connectionFactory" ref="connectionFactory"/>-->
+        <!--<property name="scheduler" ref="schedulerFactoryBean"/>-->
+    <!--</bean>-->
 
 </beans>

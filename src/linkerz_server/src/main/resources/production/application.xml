@@ -11,7 +11,6 @@
     <import resource="db.xml"/>
     <import resource="jobController.xml"/>
     <import resource="crawlModule.xml"/>
-    <import resource="quartz.xml"/>
 
     <hz:hazelcast id="instance">
         <hz:config>

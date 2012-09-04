@@ -4,10 +4,10 @@
 
 package org.linkerz.crawler.bot.controller
 
-import org.scalatest.FunSuite
 import org.linkerz.test.spring.SpringContext
 import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
+import org.junit.Test
 
 /**
  * The Class TestNewFeedController.
@@ -17,9 +17,10 @@ import org.junit.experimental.categories.Category
  *
  */
 @Category(Array(classOf[ManualTest]))
-class TestNewFeedController extends FunSuite with SpringContext {
+class TestNewFeedController extends SpringContext {
 
-  test("testController") {
+  @Test
+  def testController() {
     val controller = context.getBean("newFeedController", classOf[NewFeedController])
     controller.start()
     Thread.sleep(1000 * 60 * 2)
