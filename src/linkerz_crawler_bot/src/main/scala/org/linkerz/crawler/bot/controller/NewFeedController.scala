@@ -16,6 +16,7 @@ import collection.JavaConversions._
 import NewFeedController._
 import com.rabbitmq.client.{MessageProperties, Channel, Connection, ConnectionFactory}
 import util.Marshal
+import org.linkerz.crawler.bot.job.NewFeedJob
 
 /**
  * The Class NewFeedController.
@@ -53,7 +54,7 @@ class NewFeedController {
 
     val newFeeds = mongoOperations.findAll(classOf[NewFeed])
     newFeeds.foreach(newFeed => {
-      val jobDetail = newJob(classOf[NewFeedJob]).build()
+      val jobDetail = newJob(classOf[NewFeedQuartZJob]).build()
       jobDetail.getJobDataMap.put(CHANNEL, _channel)
       jobDetail.getJobDataMap.put(NEW_FEED, newFeed)
 
@@ -82,12 +83,12 @@ object NewFeedController {
 /**
  * This job using quartz job to warp the real job, for scheduling the job.
  */
-class NewFeedJob extends Job {
+class NewFeedQuartZJob extends Job {
   def execute(context: JobExecutionContext) {
     val channel = context.getJobDetail.getJobDataMap.get(CHANNEL).asInstanceOf[Channel]
     val newFeed = context.getJobDetail.getJobDataMap.get(NEW_FEED).asInstanceOf[NewFeed]
     if (channel != null) {
-      val job = new CrawlJob(newFeed.url)
+      val job = new NewFeedJob(newFeed.url)
       if (newFeed.excludeUrl != null) {
         job.excludeUrl = newFeed.excludeUrl.toList
       }

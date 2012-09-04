@@ -33,9 +33,9 @@ trait Job {
   var maxDepth: Int = 1
 
   /**
-   * Time out for working on the job, default is 10s
+   * Time out for working on the job, default is unlimted.
    */
-  var timeOut = 10000
+  var timeOut = -1
 
   /**
    * Politeness delay in milliseconds (delay between sending two requests to

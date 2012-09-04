@@ -125,12 +125,14 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
       }
 
       //Checking working time.
-      val time = System.currentTimeMillis - startTime
-      if (time > currentJob.timeOut) {
-        info("Stop because the time is out")
-        //marking the job is error
-        currentJob.error("Time Out")
-        isStop = true
+      if (currentJob.timeOut > 0) {
+        val time = System.currentTimeMillis - startTime
+        if (time > currentJob.timeOut) {
+          info("Stop because the time is out")
+          //marking the job is error
+          currentJob.error("Time Out")
+          isStop = true
+        }
       }
     }
   }
