@@ -4,16 +4,11 @@
 
 package org.linkerz.crawler.core.parser
 
-import org.scalatest.FunSuite
 import edu.uci.ics.crawler4j.url.URLCanonicalizer
-import java.net.{URLDecoder, URL, URLEncoder, URI}
+import java.net.URI
 import org.apache.http.client.utils.URIUtils
 import org.linkerz.crawler.core.util.UrlUtils
-import org.springframework.web.util.UriComponentsBuilder
-import com.ning.http.util.UTF8UrlEncoder
-import org.apache.commons.codec.net.URLCodec
-import org.linkerz.test.categories.ManualTest
-import org.junit.experimental.categories.Category
+import org.junit.Test
 
 /**
  * The Class TestUrlUtil.
@@ -22,10 +17,10 @@ import org.junit.experimental.categories.Category
  * @since 8/5/12, 7:58 PM
  *
  */
-@Category(Array(classOf[ManualTest]))
-class TestUrlUtil extends FunSuite {
+class TestUrlUtil {
 
-  test("testUrlUtil") {
+  @Test
+  def testUrlUtil() {
 
     val url1 = "http://vnexpress.net/"
     val url2 = "http://vnexpress.net/gl/xa-hoi/giao-duc/2012/08/tu-choi-tuyen-thang-nu-sinh-thi-do-thu-khoa-bao-chi/"
@@ -40,7 +35,8 @@ class TestUrlUtil extends FunSuite {
     assert(domainName3.getHostName == "search.vnexpress.net")
   }
 
-  test("testURLCanonicalizer") {
+  @Test
+  def testURLCanonicalizer() {
     assert(URLCanonicalizer
       .getCanonicalURL("http://www.example.com/display?category=foo/bar+baz") ==
       "http://www.example.com/display?category=foo%2Fbar%2Bbaz")
@@ -64,7 +60,8 @@ class TestUrlUtil extends FunSuite {
     assert(url8 == "http://abc.net/abc/bcd")
   }
 
-  test("testParse") {
+  @Test
+  def testParse() {
     val url1 = "http://vnexpress.net/gl/xa-hoi/giao-duc/2012/08/tu-choi-tuyen-thang-nu-sinh-thi-do-thu-khoa-bao-chi"
     val url2 = "http://vnexpress.net/gl/xa-hoi/giao-duc/2012/08/tu-choi-tuyen-thang-nu-sinh-thi-do-thu-khoa-bao-chi/"
     assert(UrlUtils.normalize(url1).equals(url2))

@@ -4,7 +4,6 @@
 
 package org.linkerz.ai
 
-import org.scalatest.FunSuite
 import opennlp.tools.sentdetect.{SentenceDetectorME, SentenceModel}
 import java.io.{FileOutputStream, BufferedOutputStream, File, FileInputStream}
 import com.google.common.io.Resources
@@ -23,7 +22,7 @@ import org.linkerz.test.categories.ManualTest
  *
  */
 @Category(Array(classOf[ManualTest]))
-class TestSentenceDetector extends FunSuite {
+class TestSentenceDetector {
 
   val testData = "Pierre Vinken, 61 years old," +
     " will join the board as a nonexecutive director Nov. 29. Mr. Vinken is chairman of " +
@@ -31,7 +30,7 @@ class TestSentenceDetector extends FunSuite {
     "chairman of Consolidated Gold Fields PLC, was named a director of this " +
     "British industrial conglomerate."
 
-  test("testSentenceDetect") {
+  def testSentenceDetect() {
     val file = new File(Resources.getResource("en-sent.bin").toURI)
     val input = new FileInputStream(file)
     val model = new SentenceModel(input)
@@ -41,7 +40,7 @@ class TestSentenceDetector extends FunSuite {
     input.close()
   }
 
-  test("testTokenDetect") {
+  def testTokenDetect() {
     val file = new File(Resources.getResource("en-token.bin").toURI)
     val input = new FileInputStream(file)
     val model = new TokenizerModel(input)
@@ -51,7 +50,7 @@ class TestSentenceDetector extends FunSuite {
     input.close()
   }
 
-  test("testNameFinder") {
+  def testNameFinder() {
     val file = new File(Resources.getResource("en-token.bin").toURI)
     val input = new FileInputStream(file)
     val model = new TokenizerModel(input)
@@ -71,7 +70,7 @@ class TestSentenceDetector extends FunSuite {
     inputNameModel.close()
   }
 
-  test("trainNameModel") {
+  def trainNameModel() {
     val charset = Charset.forName("UTF-8")
     val trainFile = new File(Resources.getResource("en-name.train").toURI)
     val lineStream =
@@ -88,7 +87,7 @@ class TestSentenceDetector extends FunSuite {
     modelOut.close()
   }
 
-  test("testEvaluate") {
+  def testEvaluate() {
     val fileNameModel = new File(Resources.getResource("en-ner-person.bin").toURI)
     val inputNameModel = new FileInputStream(fileNameModel)
     val nameModel = new TokenNameFinderModel(inputNameModel)

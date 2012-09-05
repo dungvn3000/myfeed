@@ -4,16 +4,15 @@
 
 package org.linkerz.crawler.bot
 
-import org.scalatest.FunSuite
-import de.l3s.boilerpipe.extractors.{ExtractorBase, CommonExtractors}
+import de.l3s.boilerpipe.extractors.ExtractorBase
 import de.l3s.boilerpipe.sax.HTMLHighlighter
-import java.io.PrintWriter
 import java.net.URL
 import de.l3s.boilerpipe.document.TextDocument
 
 import collection.JavaConversions._
 import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
+import org.junit.Test
 
 /**
  * The Class TestExtractPageContent.
@@ -23,9 +22,10 @@ import org.junit.experimental.categories.Category
  *
  */
 @Category(Array(classOf[ManualTest]))
-class TestExtractPageContent extends FunSuite {
+class TestExtractPageContent {
 
-  test("testExtractDescription") {
+  @Test
+  def testExtractDescription() {
 
     val extractor = new MyExtractor
     val hh = HTMLHighlighter.newExtractingInstance

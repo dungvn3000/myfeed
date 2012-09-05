@@ -4,12 +4,10 @@
 
 package org.linkerz.example.scalaz
 
-import org.scalatest.FunSuite
 import java.util.concurrent.Executors._
 import scalaz.concurrent.{Actor, Strategy}
 import scalaz.Scalaz._
-import org.junit.experimental.categories.Category
-import org.linkerz.test.categories.ManualTest
+import org.junit.Test
 
 /**
  * The Class HammerTimeExample.
@@ -18,12 +16,11 @@ import org.linkerz.test.categories.ManualTest
  * @since 7/12/12, 12:18 AM
  *
  */
-@Category(Array(classOf[ManualTest]))
-class HammerTimeExample extends FunSuite {
+class HammerTimeExample {
 
-  test("testHammerTime") {
+  @Test
+  def testHammerTime() {
     run()
-
     Thread.sleep(10000)
   }
 

@@ -4,9 +4,7 @@
 
 package org.linkerz.language.vietnamese
 
-import org.scalatest.FunSuite
 import org.linkerz.test.spring.SpringContext
-
 import org.linkerz.language.detect.vietnamese.WordExtractor
 import org.springframework.data.mongodb.core.MongoOperations
 import org.linkerz.mongodb.model.{WordTuple2, Link}
@@ -19,6 +17,7 @@ import org.springframework.data.mongodb.core.query.{Criteria, Query}
 import collection.mutable.ListBuffer
 import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
+import org.junit.Test
 
 
 /**
@@ -28,10 +27,10 @@ import org.junit.experimental.categories.Category
  * @since 8/8/12, 2:28 PM
  *
  */
-@Category(Array(classOf[ManualTest]))
-class TestWordExtractor extends FunSuite with SpringContext {
+class TestWordExtractor extends SpringContext {
 
-  test("testExtractor") {
+  @Test
+  def testExtractor() {
     val st1 = "Lực sĩ Hàn trật khuỷu tay vì nâng tạ quá nặng 1854 03082012"
     val result1 = WordExtractor.extract(st1)
     assert(result1.length == 11)
@@ -41,8 +40,8 @@ class TestWordExtractor extends FunSuite with SpringContext {
     assert(result2.length == 24)
   }
 
-
-  test("testPageExtractor") {
+  @Test
+  def testPageExtractor() {
     val mongoOperations = context.getBean("mongoTemplate", classOf[MongoOperations])
     val links = mongoOperations.findAll(classOf[Link])
     assert(links.size > 0)
@@ -104,7 +103,7 @@ class TestWordExtractor extends FunSuite with SpringContext {
     println(time + " ms")
   }
 
-  test("testRemoveDuplicate") {
+  def testRemoveDuplicate() {
 //    var word = List(("dung", "dung"), ("dung", "dung"), ("dung", "ne"))
 //    word = WordExtractor.removeDuplicate(word)
 //    assert(word.size == 2)

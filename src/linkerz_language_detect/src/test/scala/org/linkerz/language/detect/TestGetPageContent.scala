@@ -4,7 +4,6 @@
 
 package org.linkerz.language.detect
 
-import org.scalatest.FunSuite
 import org.linkerz.test.spring.SpringContext
 import org.springframework.data.mongodb.core.MongoOperations
 import org.linkerz.mongodb.model.Link
@@ -16,6 +15,7 @@ import collection.JavaConversions._
 import vietnamese.WordClean
 import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
+import org.junit.Test
 
 /**
  * The Class TestGetPageContent.
@@ -25,9 +25,10 @@ import org.junit.experimental.categories.Category
  *
  */
 @Category(Array(classOf[ManualTest]))
-class TestGetPageContent extends FunSuite with SpringContext {
+class TestGetPageContent extends SpringContext {
 
-  test("testGetPageContentInDB") {
+  @Test
+  def testGetPageContentInDB() {
     val mongoOperations = context.getBean("mongoTemplate", classOf[MongoOperations])
     val links = mongoOperations.findAll(classOf[Link])
     assert(links.size > 0)

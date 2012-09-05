@@ -4,13 +4,11 @@
 
 package org.linkerz.example.scalaz
 
-import org.junit.runner.RunWith
-import org.scalatest.junit.JUnitRunner
-import org.scalatest.FunSuite
 import java.util.concurrent.Executors
 import scalaz.concurrent.Strategy
 import scalaz.Scalaz._
 import scalaz.concurrent.Actor
+import org.junit.Test
 
 /**
  * The Class PingPongExample.
@@ -21,8 +19,7 @@ import scalaz.concurrent.Actor
  * @since 7/11/12, 4:43 PM
  *
  */
-@RunWith(classOf[JUnitRunner])
-class PingPongExample extends FunSuite {
+class PingPongExample {
 
   val actors = 10000
   val pings = 3
@@ -62,7 +59,8 @@ class PingPongExample extends FunSuite {
       } else ()
   }
 
-  test("testPingPong") {
+  @Test
+  def testPingPong() {
     (1 to actors).foreach {
       i =>
         val pong = new Pong

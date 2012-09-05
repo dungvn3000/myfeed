@@ -5,7 +5,6 @@
 package org.linkerz.crawler.bot
 
 import factory.ParserPluginFactory
-import org.scalatest.FunSuite
 import org.linkerz.test.spring.SpringContext
 import plugin.vnexpress.VnExpressPlugin
 import org.linkerz.crawler.core.fetcher.DefaultFetcher
@@ -14,6 +13,7 @@ import org.linkerz.crawler.core.job.CrawlJob
 import plugin.zing.ZingPlugin
 import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
+import org.junit.Test
 
 /**
  * The Class TestLinkerZParser.
@@ -23,9 +23,10 @@ import org.junit.experimental.categories.Category
  *
  */
 @Category(Array(classOf[ManualTest]))
-class TestLinkerZParser extends FunSuite with SpringContext {
+class TestLinkerZParser extends SpringContext {
 
-  test("testParser") {
+  @Test
+  def testParser() {
     //Install the plugin first
     val parserFactory = context.getBean("parserFactory", classOf[ParserPluginFactory])
     parserFactory.install(classOf[VnExpressPlugin].getName)

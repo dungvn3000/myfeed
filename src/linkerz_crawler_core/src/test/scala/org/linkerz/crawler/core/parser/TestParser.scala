@@ -4,21 +4,19 @@
 
 package org.linkerz.crawler.core.parser
 
-import org.scalatest.FunSuite
 import grizzled.slf4j.Logging
-import org.linkerz.crawler.core.downloader.{DefaultDownload, Downloader}
 import org.apache.tika.Tika
 import java.net.URL
 import org.apache.tika.sax.{BodyContentHandler, TeeContentHandler, LinkContentHandler}
-import java.io.{PrintWriter, ByteArrayInputStream}
-import org.linkerz.crawler.core.model.WebUrl
-import org.apache.tika.parser.html.{DefaultHtmlMapper, IdentityHtmlMapper, HtmlMapper, HtmlParser}
+import java.io.PrintWriter
+import org.apache.tika.parser.html.{DefaultHtmlMapper, HtmlMapper, HtmlParser}
 import org.apache.tika.parser.ParseContext
 import org.apache.tika.metadata.Metadata
 import org.linkerz.crawler.core.factory.DefaultDownloadFactory
 import com.ning.http.client.AsyncHttpClient
 import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
+import org.junit.Test
 
 /**
  * The Class TestParser.
@@ -28,11 +26,12 @@ import org.junit.experimental.categories.Category
  *
  */
 @Category(Array(classOf[ManualTest]))
-class TestParser extends FunSuite with Logging {
+class TestParser extends Logging {
 
   val downloader = new DefaultDownloadFactory().createDownloader()
 
-  test("testSimpleParser") {
+  @Test
+  def testSimpleParser() {
     val tika = new Tika
     val mine = tika.detect(new URL("http://localhost/vnexpress/vnexpress.net/"))
     println(mine)
@@ -41,7 +40,8 @@ class TestParser extends FunSuite with Logging {
     println(content)
   }
 
-  test("testPdfParser") {
+  @Test
+  def testPdfParser() {
     val tika = new Tika
     val mine = tika.detect(new URL("http://localhost/linkerz_test_data/pdf/fw4.pdf"))
     println(mine)
@@ -50,7 +50,7 @@ class TestParser extends FunSuite with Logging {
     println(content)
   }
 
-  test("testHtmlParser") {
+  def testHtmlParser() {
     val httpClient = new AsyncHttpClient
     val response = httpClient.prepareGet("http://localhost/vnexpress/vnexpress.net/").execute().get()
     val linkCollector = new LinkContentHandler

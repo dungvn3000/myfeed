@@ -4,15 +4,11 @@
 
 package org.linkerz.crawler.bot
 
-import org.scalatest.FunSuite
 import org.jsoup.Jsoup
 import org.linkerz.test.spring.SpringContext
-import org.springframework.data.mongodb.core.MongoOperations
-import org.linkerz.mongodb.model.Link
-import java.io.ByteArrayInputStream
-import collection.JavaConversions._
 import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
+import org.junit.Test
 
 
 /**
@@ -23,9 +19,10 @@ import org.junit.experimental.categories.Category
  *
  */
 @Category(Array(classOf[ManualTest]))
-class TestJSoup extends FunSuite with SpringContext {
+class TestJSoup extends SpringContext {
 
-  test("testJSoup1") {
+  @Test
+  def testJSoup1() {
     val doc = Jsoup.
       connect("http://localhost/vnexpress/vnexpress.net/gl/van-hoa/2012/08/trong-tan-anh-tho-nhan-quyet-dinh-canh-cao-1/index.html").get()
     val title = doc.select(".content .Title")
@@ -38,7 +35,8 @@ class TestJSoup extends FunSuite with SpringContext {
     println(img.attr("src"))
   }
 
-  test("testJSoup2") {
+  @Test
+  def testJSoup2() {
     val doc = Jsoup.connect("http://java.dzone.com/articles/thursday-code-puzzler-ray").get()
     val title = doc.select("#articleHead h1")
     val description = doc.select(".content p:eq(2)")

@@ -4,13 +4,13 @@
 
 package org.linkerz.crawler.core.parser
 
-import org.scalatest.FunSuite
 import de.l3s.boilerpipe.extractors.CommonExtractors
 import de.l3s.boilerpipe.sax.HTMLHighlighter
 import java.io.PrintWriter
 import java.net.URL
 import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
+import org.junit.Test
 
 /**
  * The Class TestBoilerpipe.
@@ -20,9 +20,10 @@ import org.junit.experimental.categories.Category
  *
  */
 @Category(Array(classOf[ManualTest]))
-class TestBoilerpipe extends FunSuite {
+class TestBoilerpipe {
 
-  test("testExtractorFormAmazon") {
+  @Test
+  def testExtractorFormAmazon() {
 
     val extractor = CommonExtractors.ARTICLE_EXTRACTOR
     val hh = HTMLHighlighter.newExtractingInstance

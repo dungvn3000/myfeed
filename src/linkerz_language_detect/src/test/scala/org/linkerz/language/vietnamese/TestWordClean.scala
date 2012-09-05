@@ -4,10 +4,10 @@
 
 package org.linkerz.language.vietnamese
 
-import org.scalatest.FunSuite
 import org.linkerz.language.detect.vietnamese.WordClean
 import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
+import org.junit.Test
 
 /**
  * The Class TestWordClean.
@@ -17,9 +17,10 @@ import org.junit.experimental.categories.Category
  *
  */
 @Category(Array(classOf[ManualTest]))
-class TestWordClean extends FunSuite {
+class TestWordClean {
 
-  test("testWordClean") {
+  @Test
+  def testWordClean() {
     val st1 = WordClean.clean(" Đè bẹp Italy 4-0, Tây Ban Nha giữ ngai vàng Euro ")
     assert(st1 == "Đè bẹp Italy 40 Tây Ban Nha giữ ngai vàng Euro")
 
