@@ -64,14 +64,17 @@ trait ParserPlugin extends DefaultParser with Logging {
       return
     }
 
-    val title = doc.select(pluginData.titleSelection)
-    val description = doc.select(pluginData.descriptionSelection)
-    val img = doc.select(pluginData.imgSelection)
+    val title = doc.select(pluginData.titleSelection).first()
+    val description = doc.select(pluginData.descriptionSelection).first()
+    val img = doc.select(pluginData.imgSelection).first()
 
-    var titleText = title.text()
-    if (pluginData.titleAttName != null
-      && pluginData.titleAttName.trim.length > 0) {
-      titleText = title.attr(pluginData.titleAttName)
+    var titleText = ""
+    if (title != null) {
+      titleText = title.text()
+      if (pluginData.titleAttName != null
+        && pluginData.titleAttName.trim.length > 0) {
+        titleText = title.attr(pluginData.titleAttName)
+      }
     }
 
     if (titleText.length > pluginData.titleMaxLength
@@ -79,7 +82,7 @@ trait ParserPlugin extends DefaultParser with Logging {
       titleText = titleText.substring(0, pluginData.titleMaxLength)
     }
 
-    //To make sure the title will be never null
+    //To make sure the title will be never empty
     if (titleText == null || titleText.trim.isEmpty) {
       titleText = doc.title()
     }
@@ -89,10 +92,13 @@ trait ParserPlugin extends DefaultParser with Logging {
       titleText = webPage.webUrl.url
     }
 
-    var descriptionText = description.text()
-    if (pluginData.descriptionAttName != null
-      && pluginData.descriptionAttName.trim.length > 0) {
-      descriptionText = description.attr(pluginData.descriptionAttName)
+    var descriptionText = ""
+    if (description != null) {
+      descriptionText = description.text()
+      if (pluginData.descriptionAttName != null
+        && pluginData.descriptionAttName.trim.length > 0) {
+        descriptionText = description.attr(pluginData.descriptionAttName)
+      }
     }
 
     if (descriptionText.length > pluginData.descriptionMaxLength
@@ -107,9 +113,12 @@ trait ParserPlugin extends DefaultParser with Logging {
     webPage.title = titleText
     webPage.description = descriptionText
 
-    val imgSrc = img.attr("src")
-    if (StringUtils.isNotBlank(imgSrc)) {
-      webPage.featureImageUrl = URLCanonicalizer.getCanonicalURL(imgSrc, webPage.webUrl.baseUrl)
+    var imgSrc = ""
+    if (img != null) {
+      imgSrc = img.attr("src")
+      if (StringUtils.isNotBlank(imgSrc)) {
+        webPage.featureImageUrl = URLCanonicalizer.getCanonicalURL(imgSrc, webPage.webUrl.baseUrl)
+      }
     }
 
     afterParse(crawlJob, doc)
