@@ -37,6 +37,15 @@ trait Worker[J <: Job, S <: Session[J]] extends CallBackable[J] with Logging {
         try {
           //Analyze the job
           analyze(next.job, next.session)
+          if (!next.job.parent.isEmpty) {
+            //If this is a subJob, copy error and info from subJob to the first job.
+            val session = next.session
+            val job = session.job
+            val subJob = next.job
+
+            subJob.error.foreach(error => job.error += error)
+            subJob.info.foreach(info => job.info += info)
+          }
           if (callback != null) callback.onSuccess(Worker.this, new Some(next.job))
         } catch {
           case e: Exception => if (callback != null) callback.onFailed(Worker.this, e)
