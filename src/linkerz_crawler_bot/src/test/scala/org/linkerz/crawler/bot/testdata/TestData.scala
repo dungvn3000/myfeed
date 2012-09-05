@@ -15,6 +15,7 @@ import org.linkerz.crawler.bot.plugin.vnexpress.VnExpressPlugin
 import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
 import org.junit.Test
+import org.linkerz.crawler.bot.plugin.genk.GenKPlugin
 
 /**
  * The Class TestData.
@@ -60,5 +61,20 @@ class TestData extends SpringContext {
     assert(zingFeed.id != null)
 
     parserFactory.install(classOf[ZingPlugin].getName)
+  }
+
+  @Test
+  def testAddGenK() {
+    val genKFeed = new NewFeed
+    genKFeed.name = "GenK"
+    genKFeed.group = "genk.vn"
+    genKFeed.time = 15
+    genKFeed.url = "http://genk.vn/"
+    genKFeed.urlRegex = List("*/genk.vn/*").asJava
+    genKFeed.enable = true
+    mongoOperations.save(genKFeed)
+    assert(genKFeed.id != null)
+
+    parserFactory.install(classOf[GenKPlugin].getName)
   }
 }
