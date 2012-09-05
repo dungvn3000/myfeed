@@ -6,6 +6,8 @@ package org.linkerz.crawler.bot.plugin.genk
 
 import org.linkerz.crawler.bot.plugin.ParserPlugin
 import org.linkerz.mongodb.model.ParserPluginData
+import org.linkerz.crawler.core.job.CrawlJob
+import org.jsoup.nodes.Document
 
 /**
  * The Class GenKPlugin.
@@ -29,5 +31,15 @@ class GenKPlugin extends ParserPlugin {
     pluginData.imgSelection = ".news-show .assessment-main1 img"
     pluginData.urlTest = "http://genk.vn/"
     pluginData
+  }
+
+  override def beforeParse(crawlJob: CrawlJob, doc: Document): Boolean = {
+    if (doc.select(".assessment-main1").isEmpty) {
+      crawlJob.code = CrawlJob.SKIP
+      crawlJob.info("Skip it, cause it is not a new detail page " + crawlJob.webUrl.url)
+      info("Skip it, cause it is not a new detail page " + crawlJob.webUrl.url)
+      return false
+    }
+    true
   }
 }

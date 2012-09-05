@@ -71,6 +71,7 @@ class TestData extends SpringContext {
     genKFeed.time = 15
     genKFeed.url = "http://genk.vn/"
     genKFeed.urlRegex = List("*/genk.vn/*").asJava
+    genKFeed.excludeUrl = List("*/genk.vn/hoi-dap*").asJava
     genKFeed.enable = true
     mongoOperations.save(genKFeed)
     assert(genKFeed.id != null)
