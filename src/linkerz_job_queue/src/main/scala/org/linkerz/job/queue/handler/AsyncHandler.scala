@@ -140,12 +140,14 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
         isStop = true
         return false
       }
+
       if (job.depth > currentSession.currentDepth) {
         currentSession.currentDepth = job.depth
       }
 
       if (currentSession.currentDepth > currentJob.maxDepth && currentJob.maxDepth > 0) {
         info("Stop because the number of sub job reached maximum depth")
+        currentSession.currentDepth -= 1
         isStop = true
         return false
       }
