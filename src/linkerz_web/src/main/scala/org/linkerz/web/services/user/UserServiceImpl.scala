@@ -8,8 +8,7 @@ import reflect.BeanProperty
 import org.springframework.data.mongodb.core.MongoOperations
 import org.springframework.data.mongodb.core.query.Query._
 import org.springframework.data.mongodb.core.query.Criteria._
-import org.linkerz.mongodb.model.{Link, User}
-import java.util
+import org.linkerz.mongodb.model.{UserClick, User}
 
 /**
  * The Class UserServiceImpl.
@@ -28,11 +27,11 @@ class UserServiceImpl extends UserService {
     mongoOperations.findOne(query(where("userName").is(userName)), classOf[User])
   }
 
-  def getUserWebPages(userName: String): java.util.List[Link] = {
-    val user = mongoOperations.findOne(query(where("userName").is(userName)), classOf[User])
-    if (user != null) {
-      return mongoOperations.find(query(where("userId").is(user.id)), classOf[Link])
-    }
-    util.Collections.emptyList()
+  def userClick(userName: String, linkId: String) {
+    val userClick = new UserClick
+    userClick.userName = userName
+    userClick.linkId = linkId
+
+    mongoOperations.save(userClick)
   }
 }

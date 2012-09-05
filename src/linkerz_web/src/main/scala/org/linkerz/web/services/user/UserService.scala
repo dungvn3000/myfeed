@@ -17,6 +17,6 @@ import org.linkerz.mongodb.model.{User, Link}
 trait UserService {
 
   def getUser(userName: String): User
-  def getUserWebPages(userName: String): java.util.List[Link]
 
+  def userClick(userName: String, linkId: String)
 }

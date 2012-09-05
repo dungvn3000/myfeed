@@ -38,4 +38,7 @@ class Index {
     links = newFeedService.linkList
   }
 
+  def onLinkClick(id: String) {
+    userService.userClick("dungvn3000", id)
+  }
 }

@@ -1,28 +1,35 @@
 <html t:type="layout" title="LinkerZ Index"
-      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
-        >
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
 
-    <section class="row-fluid">
+<script>
+    function onLinkClick($id) {
+        $.ajax({
+            url:"http://localhost:8080/linkerz_web/home/index:linkclick/" + $id
+        })
+    }
+</script>
 
-        <t:loop source="links" value="link">
-            <div class="row-fluid">
-                <div class="span2">
-                    <a href="${link.url}" target="_blank">
-                        <img src="http://localhost:8080/linkerz_web/images/${link.id}" alt="" width="80" height="80" style="padding-left:20px;"/>
-                    </a>
-                </div>
-                <div class="span8">
-                    <h5>
-                        <a href="${link.url}" target="_blank">
-                            ${link.title}
-                        </a>
-                    </h5>
-                    <p>${link.description}</p>
-                </div>
+<section class="row-fluid">
+    <t:loop source="links" value="link">
+        <div class="row-fluid">
+            <div class="span2">
+                <a href="${link.url}" target="_blank" onclick="alert('dungne');">
+                    <img src="http://localhost:8080/linkerz_web/images/${link.id}" alt="" width="80" height="80"
+                         style="padding-left:20px;"/>
+                </a>
             </div>
-            <br/>
-        </t:loop>
+            <div class="span8">
+                <h5>
+                    <a href="${link.url}" target="#" onclick="onLinkClick('${link.id}');">
+                        ${link.title}
+                    </a>
+                </h5>
 
-    </section>
+                <p>${link.description}</p>
+            </div>
+        </div>
+        <br/>
+    </t:loop>
+</section>
 
 </html>
