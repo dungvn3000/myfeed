@@ -19,7 +19,7 @@ import org.linkerz.job.queue.worker.LazyWorker
 class AsyncTestHandler extends AsyncHandler[EmptyJob, SimpleSession] {
 
   override protected def onFinished() {
-    currentJob.count = subJobCount
+    currentJob.count = currentSession.subJobCount
   }
 
   protected def createWorker(numberOfWorker: Int) {

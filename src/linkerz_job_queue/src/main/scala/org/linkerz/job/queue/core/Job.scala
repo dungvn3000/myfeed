@@ -28,9 +28,9 @@ trait Job {
   private var _depth: Int = 0
 
   /**
-   * Max depth for a crawl job.
+   * Max depth for a crawl job, default is umlimted.
    */
-  var maxDepth: Int = 1
+  var maxDepth: Int = -1
 
   /**
    * Time out for working on the job, default is unlimted.

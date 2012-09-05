@@ -79,7 +79,8 @@ trait ParserPlugin extends DefaultParser with Logging {
 
     if (titleText.length > pluginData.titleMaxLength
       && pluginData.titleMaxLength > 0) {
-      titleText = titleText.substring(0, pluginData.titleMaxLength)
+      titleText = titleText.substring(0, pluginData.titleMaxLength) + "..."
+
     }
 
     //To make sure the title will be never empty
@@ -103,7 +104,7 @@ trait ParserPlugin extends DefaultParser with Logging {
 
     if (descriptionText.length > pluginData.descriptionMaxLength
       && pluginData.descriptionMaxLength > 0) {
-      descriptionText = descriptionText.substring(0, pluginData.descriptionMaxLength)
+      descriptionText = descriptionText.substring(0, pluginData.descriptionMaxLength) + "..."
     }
 
     if (descriptionText == null || descriptionText.trim.isEmpty) {

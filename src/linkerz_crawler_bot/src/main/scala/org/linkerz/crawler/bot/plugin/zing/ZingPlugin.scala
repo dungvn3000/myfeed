@@ -17,7 +17,7 @@ import org.jsoup.nodes.Document
  * @since 8/21/12, 3:11 AM
  *
  */
-class ZingPlugin extends ParserPlugin with Logging {
+class ZingPlugin extends ParserPlugin {
 
   def defaultData = {
     val pluginData = new ParserPluginData

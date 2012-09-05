@@ -12,7 +12,6 @@ import org.linkerz.crawler.core.worker.CrawlWorker
 import org.linkerz.crawler.db.DBService
 import reflect.BeanProperty
 import org.linkerz.crawler.core.factory.{ParserFactory, DownloadFactory}
-import java.util.regex.Pattern
 import org.linkerz.crawler.core.model.WebUrl
 import org.apache.commons.lang.StringUtils
 import org.linkerz.core.matcher.SimpleRegexMatcher
@@ -52,11 +51,10 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
   }
 
   override protected def onFinished() {
-    currentSession.crawlTime = System.currentTimeMillis - startTime
     info(currentSession.countUrl + " links found")
     info(currentSession.fetchedUrls.size + " links downloaded")
     info(currentSession.currentDepth + " level")
-    info(currentSession.crawlTime + " ms")
+    info(currentSession.jobTime + " ms")
     info(currentSession.job.error.length + " error found")
     currentSession.job.error.foreach(error => info("error = " + error))
   }
@@ -80,18 +78,13 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
         dbService.save(webPage)
       }
 
-      if (job.depth > currentSession.currentDepth) {
-        currentSession.currentDepth = job.depth
-      }
+      webUrls.foreach(webUrl => {
+        if (shouldCrawl(webUrl)) {
+          workerManager ! new CrawlJob(webUrl, job)
+          currentSession.queueUrls += webUrl
+        }
+      })
 
-      if (currentSession.currentDepth < currentJob.maxDepth) {
-        webUrls.foreach(webUrl => {
-          if (shouldCrawl(webUrl)) {
-            workerManager ! new CrawlJob(webUrl, job)
-            currentSession.queueUrls += webUrl
-          }
-        })
-      }
     } else if (!jobResult.isEmpty && jobResult.get.isRedirect) {
       val movedUrl = jobResult.get.webUrl.movedToUrl
       if (StringUtils.isNotBlank(movedUrl)) {

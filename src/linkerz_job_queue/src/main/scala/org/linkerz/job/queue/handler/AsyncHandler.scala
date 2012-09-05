@@ -25,14 +25,6 @@ import scalaz.concurrent.{Actor, Strategy}
 
 abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[J, S] with CallBack[J] with Logging {
 
-  //Counting child jobs was done by the current job.
-  private var _subJobCount: Int = _
-
-  def subJobCount = _subJobCount
-
-  //Starting time on current job.
-  protected var startTime: Long = _
-
   //The flag will turn on when the worker manager is free.
   protected var isManagerFree: Boolean = _
 
@@ -72,14 +64,10 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
   }
 
   protected def doHandle(job: J, session: S) {
-    //Start counting time.
-    startTime = System.currentTimeMillis
-
     //Reset to start
     isStop = false
     isManagerFree = true
     workers.clear()
-    _subJobCount = 0
 
     currentSession = session
     currentJob = job
@@ -133,8 +121,7 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
 
       //Checking working time.
       if (currentJob.timeOut > 0) {
-        val time = System.currentTimeMillis - startTime
-        if (time > currentJob.timeOut) {
+        if (currentSession.jobTime > currentJob.timeOut) {
           info("Stop because the time is out")
           //marking the job is error
           currentJob.error("Time Out")
@@ -147,15 +134,27 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
   private def doSubJob(job: J): Boolean = {
     var isWorking = false
     breakable {
-      if (currentJob.maxSubJob >= 0 && _subJobCount >= currentJob.maxSubJob) {
+      //Step 1: Checking should go for the job or not
+      if (currentJob.maxSubJob >= 0 && currentSession.subJobCount >= currentJob.maxSubJob) {
         info("Stop because the number of sub job reached maximum")
         isStop = true
         return false
       }
+      if (job.depth > currentSession.currentDepth) {
+        currentSession.currentDepth = job.depth
+      }
+
+      if (currentSession.currentDepth > currentJob.maxDepth && currentJob.maxDepth > 0) {
+        info("Stop because the number of sub job reached maximum depth")
+        isStop = true
+        return false
+      }
+
+      //Step 2: Find a free worker for the job.
       workers.foreach(worker => if (worker.isFree) {
         worker.work(job, currentSession)
         isWorking = true
-        _subJobCount += 1
+        currentSession.subJobCount += 1
         //Delay time for each job.
         if (currentJob.politenessDelay > 0) Thread.sleep(currentJob.politenessDelay)
         break()
