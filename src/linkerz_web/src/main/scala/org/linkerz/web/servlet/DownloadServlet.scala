@@ -27,7 +27,7 @@ class DownloadServlet extends HttpServlet {
       val springContext = WebApplicationContextUtils.getWebApplicationContext(getServletContext)
       val mongoOperations = springContext.getBean("mongoTemplate", classOf[MongoOperations])
       val link = mongoOperations.findOne(Query.query(Criteria.where("id").is(fileId)), classOf[Link])
-      if (link != null) {
+      if (link != null & link.featureImage != null) {
         resp.setContentType("image/jpeg")
         resp.getOutputStream.write(link.featureImage)
       } else {

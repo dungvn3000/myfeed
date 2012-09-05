@@ -29,7 +29,7 @@ class NewFeedServiceImpl extends NewFeedService {
   }
 
   def linkList = {
-    val query = Query.query(Criteria.where("title").exists(true)).limit(20)
+    val query = Query.query(Criteria.where("title").exists(true)).limit(50)
     query.sort().on("indexDate", Order.DESCENDING)
     val links = mongoOperations.find(query, classOf[Link])
     links.filter(link => StringUtils.isNotBlank(link.title) && StringUtils.isNotBlank(link.description))
