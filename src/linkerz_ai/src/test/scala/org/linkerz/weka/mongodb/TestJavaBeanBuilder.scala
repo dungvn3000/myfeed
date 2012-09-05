@@ -4,12 +4,10 @@
 
 package org.linkerz.weka.mongodb
 
-import org.scalatest.FunSuite
 import collection.mutable.ListBuffer
 import weka.classifiers.trees.J48
 import weka.classifiers.Evaluation
-import org.linkerz.test.categories.ManualTest
-import org.junit.experimental.categories.Category
+import org.junit.Test
 
 /**
  * The Class TestJavaBeanBuilder.
@@ -18,10 +16,10 @@ import org.junit.experimental.categories.Category
  * @since 8/7/12, 3:47 AM
  *
  */
-@Category(Array(classOf[ManualTest]))
-class TestJavaBeanBuilder extends FunSuite {
+class TestJavaBeanBuilder {
 
-  test("testBuilder") {
+  @Test
+  def testBuilder() {
     val weathers = new ListBuffer[Weather]
     for (i <- 1 to 10) {
       val weather = new Weather
@@ -57,8 +55,8 @@ class TestJavaBeanBuilder extends FunSuite {
     println(evaluation.toSummaryString)
   }
 
-
-  test("testPredic") {
+  @Test
+  def testPredic() {
     val weathers = new ListBuffer[Weather]
     for (i <- 1 to 10) {
       val weather = new Weather
