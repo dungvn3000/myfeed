@@ -49,7 +49,11 @@ trait ParserPlugin extends DefaultParser with Logging {
     if (StringUtils.isBlank(webPage.featureImageUrl)) {
       crawlJob.error("Can not parse the image for " + webPage.webUrl.url)
     }
+
+    onFinished(crawlJob)
   }
+
+  def onFinished(crawlJob: CrawlJob) {}
 
 
   override def parse(crawlJob: CrawlJob) {

@@ -6,11 +6,10 @@ package org.linkerz.crawler.bot.plugin
 
 import genk.GenKPlugin
 import org.junit.{Assert, Test}
-import org.linkerz.crawler.core.factory.{ParserFactory, DefaultParserFactory, DefaultDownloadFactory}
+import org.linkerz.crawler.core.factory.{ParserFactory, DefaultDownloadFactory}
 import org.linkerz.crawler.core.job.CrawlJob
 import org.linkerz.job.queue.controller.BaseController
 import org.linkerz.crawler.core.handler.CrawlerHandler
-import org.linkerz.job.queue.core.JobStatus
 
 /**
  * The Class TestGenKPlugin.
@@ -42,19 +41,18 @@ class TestGenKPlugin {
     val controller = new BaseController
     val handler = new CrawlerHandler
     handler.downloadFactory = new DefaultDownloadFactory
-    handler.parserFactory = new DefaultParserFactory
+    handler.parserFactory = new ParserFactory {
+      def createParser() = new GenKPlugin with ParserDebugger
+    }
     controller.handlers = List(handler)
     controller.start()
 
     val job = new CrawlJob(plugin.defaultData.urlTest)
     job.numberOfWorker = 10
-    job.maxSubJob = 100
-    job.maxDepth = 1
+    job.maxSubJob = 10
 
     controller ! job
     controller.stop()
-
-    Assert.assertEquals(JobStatus.DONE, job.status)
   }
 
 }
