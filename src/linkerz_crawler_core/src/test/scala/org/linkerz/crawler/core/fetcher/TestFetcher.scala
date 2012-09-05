@@ -4,12 +4,9 @@
 
 package org.linkerz.crawler.core.fetcher
 
-import org.scalatest.FunSuite
 import grizzled.slf4j.Logging
 import org.linkerz.crawler.core.factory.{DefaultParserFactory, DefaultDownloadFactory}
 import org.linkerz.crawler.core.job.CrawlJob
-import org.linkerz.test.categories.ManualTest
-import org.junit.experimental.categories.Category
 import org.junit.Test
 
 /**

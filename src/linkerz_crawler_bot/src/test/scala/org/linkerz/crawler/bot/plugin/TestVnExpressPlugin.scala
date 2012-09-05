@@ -4,20 +4,10 @@
 
 package org.linkerz.crawler.bot.plugin
 
-import org.scalatest.FunSuite
-import org.springframework.data.mongodb.core.MongoOperations
-import org.linkerz.mongodb.model.{ParserPluginData, Link}
-import org.linkerz.test.spring.SpringContext
 
-import collection.JavaConversions._
 import vnexpress.VnExpressPlugin
-import org.linkerz.crawler.core.parser.ParserResult
-import org.linkerz.crawler.core.downloader.DefaultDownload
-import org.linkerz.crawler.core.model.WebUrl
 import org.linkerz.crawler.core.factory.DefaultDownloadFactory
 import org.linkerz.crawler.core.job.CrawlJob
-import org.linkerz.test.categories.ManualTest
-import org.junit.experimental.categories.Category
 import org.junit.{Assert, Test}
 
 /**

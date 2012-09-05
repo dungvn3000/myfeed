@@ -4,7 +4,6 @@
 
 package org.linkerz.crawler.bot.testdata
 
-import org.scalatest.FunSuite
 import org.linkerz.test.spring.SpringContext
 import org.springframework.data.mongodb.core.MongoOperations
 import org.linkerz.mongodb.model.{User, NewFeed}

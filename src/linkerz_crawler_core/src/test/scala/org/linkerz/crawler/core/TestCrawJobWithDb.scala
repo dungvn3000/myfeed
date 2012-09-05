@@ -5,8 +5,6 @@
 package org.linkerz.crawler.core
 
 import job.CrawlJob
-import model.WebUrl
-import org.scalatest.FunSuite
 import grizzled.slf4j.Logging
 import org.linkerz.test.spring.SpringContext
 import org.linkerz.job.queue.core.Controller
