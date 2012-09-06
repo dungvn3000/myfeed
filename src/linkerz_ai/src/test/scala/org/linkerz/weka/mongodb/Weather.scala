@@ -6,8 +6,6 @@ package org.linkerz.weka.mongodb
 
 import org.linkerz.weka.mongodb.annotation.Attribute
 import org.linkerz.weka.mongodb.annotation.Attribute.TYPE._
-import org.linkerz.test.categories.ManualTest
-import org.junit.experimental.categories.Category
 
 /**
  * The Class Weather.
@@ -16,7 +14,6 @@ import org.junit.experimental.categories.Category
  * @since 8/7/12, 3:33 AM
  *
  */
-@Category(Array(classOf[ManualTest]))
 class Weather {
 
   @Attribute(name = "outlook", attType = NOMINAL, values = Array("sunny", "overcast", "rainy"))
