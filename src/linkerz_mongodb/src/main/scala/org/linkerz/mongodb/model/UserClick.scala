@@ -14,4 +14,5 @@ package org.linkerz.mongodb.model
 class UserClick extends LinkerZEntity {
   var userName: String = _
   var linkId: String = _
+  var clicked: Boolean = _
 }

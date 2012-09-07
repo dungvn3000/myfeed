@@ -18,5 +18,5 @@ trait UserService {
 
   def getUser(userName: String): User
 
-  def userClick(userName: String, linkId: String)
+  def userClick(userName: String, linkId: String, links: List[Link])
 }

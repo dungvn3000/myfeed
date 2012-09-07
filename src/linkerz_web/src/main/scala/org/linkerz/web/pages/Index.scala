@@ -8,8 +8,8 @@ import org.apache.tapestry5.annotations._
 import org.apache.tapestry5.ioc.annotations.Inject
 import org.linkerz.web.services.user.UserService
 import org.linkerz.mongodb.model.Link
-import org.linkerz.web.services.db.DBStore
 import org.linkerz.web.services.newfeed.NewFeedService
+import collection.JavaConversions._
 
 /**
  * The Class Index.
@@ -21,6 +21,7 @@ import org.linkerz.web.services.newfeed.NewFeedService
 
 class Index {
 
+  @Persist
   @Property
   private var links: java.util.List[Link] = _
 
@@ -39,6 +40,6 @@ class Index {
   }
 
   def onLinkClick(id: String) {
-    userService.userClick("dungvn3000", id)
+    userService.userClick("dungvn3000", id, links.toList)
   }
 }

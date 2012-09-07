@@ -23,6 +23,12 @@
 
         <dependency>
             <groupId>org.linkerz</groupId>
+            <artifactId>linkerz_ai</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.linkerz</groupId>
             <artifactId>linkerz_mongodb</artifactId>
             <version>${project.version}</version>
         </dependency>
