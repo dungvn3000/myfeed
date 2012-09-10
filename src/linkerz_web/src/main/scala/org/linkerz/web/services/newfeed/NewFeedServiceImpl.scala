@@ -34,55 +34,9 @@ class NewFeedServiceImpl extends NewFeedService {
   }
 
   def linkList = {
-    val userClicks = mongoOperations.findAll(classOf[UserClick])
-    val userLikes = new ListBuffer[UserLike]
-    userClicks.foreach(userClick => {
-      val link = mongoOperations.findById(userClick.linkId, classOf[Link])
-      val userLike = new UserLike
-      userLike.title = link.title
-      userLike.like = "no"
-      if (userClick.clicked) {
-        userLike.like = "yes"
-      }
-      userLikes += userLike
-    })
-
-    val train = JavaBeanBuilder.build(classOf[UserLike], userLikes.toList)
-
-    val filter = new StringToWordVector
-    filter.setInputFormat(train)
-
-    val dataFiltered = Filter.useFilter(train, filter)
-    dataFiltered.setClassIndex(0)
-
-    val cls = new J48()
-    cls.buildClassifier(dataFiltered)
-
     val query = Query.query(Criteria.where("title").exists(true)).limit(50)
     query.sort().on("indexDate", Order.DESCENDING)
-    var links = mongoOperations.find(query, classOf[Link])
-    links = links.filter(link => StringUtils.isNotBlank(link.title) && StringUtils.isNotBlank(link.description))
-
-    val recommendLinks = new ListBuffer[Link]
-    links.foreach(link => {
-      val userLike = new UserLike
-      userLike.title = link.title
-
-      val test = JavaBeanBuilder.build(classOf[UserLike], List(userLike))
-      filter.setInputFormat(test)
-
-      val dataTestFiltered = Filter.useFilter(test, filter)
-      dataTestFiltered.setClassIndex(0)
-
-      val instance = dataTestFiltered.instance(0)
-      val pred = cls.classifyInstance(instance)
-      val like = instance.classAttribute().value(pred.toInt)
-
-      if (like == "yes") {
-        recommendLinks += link
-      }
-    })
-
-    recommendLinks
+    val links = mongoOperations.find(query, classOf[Link])
+    links.filter(link => StringUtils.isNotBlank(link.title) && StringUtils.isNotBlank(link.description))
   }
 }
