@@ -12,31 +12,31 @@
     <import resource="jobController.xml"/>
     <import resource="crawlModule.xml"/>
 
-    <hz:hazelcast id="instance">
-        <hz:config>
-            <hz:group name="dev" password="dev"/>
+    <!--<hz:hazelcast id="instance">-->
+        <!--<hz:config>-->
+            <!--<hz:group name="dev" password="dev"/>-->
 
-            <!--<hz:management-center enabled="true" url="http://localhost:8080/mancenter/" update-interval="1"/>-->
+            <!--&lt;!&ndash;<hz:management-center enabled="true" url="http://localhost:8080/mancenter/" update-interval="1"/>&ndash;&gt;-->
 
-            <hz:properties>
-                <hz:property name="hazelcast.merge.first.run.delay.seconds">5</hz:property>
-                <hz:property name="hazelcast.merge.next.run.delay.seconds">5</hz:property>
-            </hz:properties>
+            <!--<hz:properties>-->
+                <!--<hz:property name="hazelcast.merge.first.run.delay.seconds">5</hz:property>-->
+                <!--<hz:property name="hazelcast.merge.next.run.delay.seconds">5</hz:property>-->
+            <!--</hz:properties>-->
 
-            <hz:network port="5701" port-auto-increment="true">
-                <hz:join>
-                    <hz:multicast enabled="false"/>
-                    <hz:tcp-ip enabled="true">
-                        <hz:member>127.0.0.1</hz:member>
-                    </hz:tcp-ip>
-                </hz:join>
-            </hz:network>
+            <!--<hz:network port="5701" port-auto-increment="true">-->
+                <!--<hz:join>-->
+                    <!--<hz:multicast enabled="false"/>-->
+                    <!--<hz:tcp-ip enabled="true">-->
+                        <!--<hz:member>127.0.0.1</hz:member>-->
+                    <!--</hz:tcp-ip>-->
+                <!--</hz:join>-->
+            <!--</hz:network>-->
 
-            <hz:queue name="jobQueue" max-size-per-jvm="1000"/>
+            <!--<hz:queue name="jobQueue" max-size-per-jvm="1000"/>-->
 
-        </hz:config>
-    </hz:hazelcast>
+        <!--</hz:config>-->
+    <!--</hz:hazelcast>-->
 
-    <hz:queue instance-ref="instance" name="jobQueue" id="jobQueue"/>
+    <!--<hz:queue instance-ref="instance" name="jobQueue" id="jobQueue"/>-->
 
 </beans>
