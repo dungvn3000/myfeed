@@ -1,2 +1,2 @@
 cd linkerz_web/
-mvn jetty:run
+mvn jetty:run -o
