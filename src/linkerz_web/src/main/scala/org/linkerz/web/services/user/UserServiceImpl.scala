@@ -29,22 +29,29 @@ class UserServiceImpl extends UserService {
   }
 
   def userClick(userName: String, linkId: String, links: List[Link]) {
+
+    val index = links.indexWhere(link => link.id == linkId)
+
     links.foreach(link => {
-      var userClick = mongoOperations.findOne(Query.query(Criteria.where("linkId").is(link.id).and("userName").is(userName)),
-        classOf[UserClick])
+      val currentIndex = links.indexOf(link)
+      if (currentIndex <= index + 1 && currentIndex >= index - 1) {
+        var userClick = mongoOperations.findOne(Query.query(Criteria.where("linkId").
+          is(link.id).and("userName").is(userName)),classOf[UserClick])
 
-      if (userClick == null) {
-        userClick = new UserClick
-        userClick.userName = userName
-        userClick.linkId = link.id
-        userClick.clicked = false
+        if (userClick == null) {
+          userClick = new UserClick
+          userClick.userName = userName
+          userClick.linkId = link.id
+          userClick.title = link.title
+          userClick.clicked = false
+        }
+
+        if (linkId == link.id) {
+          userClick.clicked = true
+        }
+
+        mongoOperations.save(userClick)
       }
-
-      if (linkId == link.id) {
-        userClick.clicked = true
-      }
-
-      mongoOperations.save(userClick)
     })
   }
 }
