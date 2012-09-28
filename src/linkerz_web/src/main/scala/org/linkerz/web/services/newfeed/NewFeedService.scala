@@ -20,4 +20,6 @@ trait NewFeedService {
 
   def linkList: java.util.List[Link]
 
+  def recommend(linkList: java.util.List[Link]): java.util.List[Link]
+
 }
