@@ -19,7 +19,6 @@ import java.net.URLDecoder
 
 object UrlUtils {
 
-
   /**
    * make http://abc.net => http://abc.net/
    * make http://abc.net/bcd => http://abc.net/bcd/

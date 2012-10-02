@@ -80,7 +80,9 @@ class DefaultParser extends Parser {
           if (href.startsWith("http://")) {
             hrefWithoutProtocol = href.substring(7)
           }
-          if (!hrefWithoutProtocol.contains("javascript:") && !hrefWithoutProtocol.contains("@")) {
+          if (!hrefWithoutProtocol.contains("javascript:")
+            && !hrefWithoutProtocol.contains("@")
+            && !hrefWithoutProtocol.contains("mailto:")) {
             val url = URLCanonicalizer.getCanonicalURL(href, contextURL)
             if (url != null) {
               webUrls += new WebUrl(url)
