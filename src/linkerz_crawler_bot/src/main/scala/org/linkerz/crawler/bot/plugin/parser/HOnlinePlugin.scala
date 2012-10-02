@@ -6,6 +6,8 @@ package org.linkerz.crawler.bot.plugin.parser
 
 import org.linkerz.mongodb.model.ParserPluginData
 import org.linkerz.crawler.bot.plugin.ParserPlugin
+import org.linkerz.crawler.core.job.CrawlJob
+import org.jsoup.nodes.Document
 
 /**
  * The Class HOnlinePlugin.
@@ -24,12 +26,22 @@ class HOnlinePlugin extends ParserPlugin {
     pluginData.pluginClass = this.getClass.getName
     pluginData.enable = true
     pluginData.urlRegex = "*/h-online.com/*/*"
-    pluginData.titleSelection = ".content .item h1"
-    pluginData.descriptionSelection = ".content .item .item_wrapper p"
+    pluginData.titleSelection = "#content #item h1"
+    pluginData.descriptionSelection = "#content #item .item_wrapper p"
     pluginData.descriptionMaxLength = 150
-    pluginData.imgSelection = ".content .item .item_wrapper .pic_right img"
+    pluginData.imgSelection = "#content #item .item_wrapper .pic_right img"
     pluginData.urlTest = "http://www.h-online.com/"
     pluginData
+  }
+
+  override def beforeParse(crawlJob: CrawlJob, doc: Document): Boolean = {
+    if (doc.select("#content #item").isEmpty) {
+      crawlJob.code = CrawlJob.SKIP
+      crawlJob.info("Skip it, cause it is not a new detail page " + crawlJob.webUrl.url)
+      info("Skip it, cause it is not a new detail page " + crawlJob.webUrl.url)
+      return false
+    }
+    true
   }
 
 }

@@ -5,9 +5,11 @@
 package org.linkerz.crawler.bot.plugin
 
 import org.junit.Test
-import org.linkerz.crawler.core.factory.DefaultDownloadFactory
+import org.linkerz.crawler.core.factory.{ParserFactory, DefaultDownloadFactory}
 import parser.HOnlinePlugin
 import org.linkerz.crawler.core.job.CrawlJob
+import org.linkerz.job.queue.controller.BaseController
+import org.linkerz.crawler.core.handler.CrawlerHandler
 
 /**
  * The Class TestHOnlinePlugin.
@@ -31,6 +33,25 @@ class TestHOnlinePlugin {
     println("webPage = " + webPage.title)
     println("webPage = " + webPage.description)
     println("webPage = " + webPage.featureImageUrl)
+  }
+
+  @Test
+  def testWith50Links() {
+    val controller = new BaseController
+    val handler = new CrawlerHandler
+    handler.downloadFactory = new DefaultDownloadFactory
+    handler.parserFactory = new ParserFactory {
+      def createParser() = new HOnlinePlugin with ParserDebugger
+    }
+    controller.handlers = List(handler)
+    controller.start()
+
+    val job = new CrawlJob(plugin.defaultData.urlTest)
+    job.numberOfWorker = 10
+    job.maxSubJob = 50
+
+    controller ! job
+    controller.stop()
   }
 
 }
