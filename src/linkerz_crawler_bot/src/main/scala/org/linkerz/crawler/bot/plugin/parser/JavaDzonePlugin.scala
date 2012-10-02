@@ -8,6 +8,7 @@ import org.linkerz.crawler.bot.plugin.ParserPlugin
 import org.linkerz.mongodb.model.ParserPluginData
 import org.linkerz.crawler.core.job.CrawlJob
 import org.jsoup.nodes.Document
+import org.apache.commons.lang.StringUtils
 
 /**
  * The Class JavaDzonePlugin.
@@ -44,4 +45,12 @@ class JavaDzonePlugin extends ParserPlugin {
     true
   }
 
+  override def afterParse(crawlJob: CrawlJob, doc: Document) {
+    val webPage = crawlJob.result.get
+    if (StringUtils.isBlank(webPage.featureImageUrl)) {
+      //Set default image if the article has no image.
+      webPage.featureImageUrl = "http://java.dzone.com/sites/all/themes/dzone2012/images/mh_dzone_logo.jpg"
+    }
+    super.afterParse(crawlJob, doc)
+  }
 }
