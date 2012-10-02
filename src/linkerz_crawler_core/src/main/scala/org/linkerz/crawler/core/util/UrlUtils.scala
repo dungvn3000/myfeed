@@ -7,7 +7,7 @@ package org.linkerz.crawler.core.util
 import org.springframework.web.util.UriComponentsBuilder
 import org.apache.commons.lang.StringUtils
 import edu.uci.ics.crawler4j.url.URLCanonicalizer
-import java.net.{URLEncoder, URLDecoder}
+import java.net.URLDecoder
 
 /**
  * The Class UrlUtils.
@@ -28,7 +28,7 @@ object UrlUtils {
    */
   def normalize(url: String): String = {
     assert(StringUtils.isNotBlank(url))
-    val decodeUrl = URLDecoder.decode(url.trim.toLowerCase, "UTF-8")
+    val decodeUrl = URLDecoder.decode(url.trim, "UTF-8")
     val newURl = URLCanonicalizer.getCanonicalURL(decodeUrl)
     if (StringUtils.isBlank(newURl)) {
       return url

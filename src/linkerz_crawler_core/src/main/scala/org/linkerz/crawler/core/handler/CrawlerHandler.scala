@@ -123,7 +123,7 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
     //Only crawl in same domain.
     if (!currentJob.onlyCrawlInSameDomain
       || (currentJob.onlyCrawlInSameDomain && webUrl.domainName == currentSession.domainName)) {
-      //Make sure we not fetch a link we did already.
+      //Make sure we not fetch a link what we did already.
       if (currentSession.fetchedUrls.findEntry(webUrl).isEmpty) {
         //And make sure the url is not in the queue
         val result = currentSession.queueUrls.find(queueUrl => queueUrl == webUrl)

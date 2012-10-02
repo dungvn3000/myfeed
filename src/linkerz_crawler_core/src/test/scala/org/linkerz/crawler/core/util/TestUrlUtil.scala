@@ -2,12 +2,11 @@
  * Copyright (C) 2012 - 2013 LinkerZ
  */
 
-package org.linkerz.crawler.core.parser
+package org.linkerz.crawler.core.util
 
 import edu.uci.ics.crawler4j.url.URLCanonicalizer
 import java.net.URI
 import org.apache.http.client.utils.URIUtils
-import org.linkerz.crawler.core.util.UrlUtils
 import org.junit.Test
 
 /**
@@ -67,7 +66,7 @@ class TestUrlUtil {
     assert(UrlUtils.normalize(url1).equals(url2))
 
     val url3 = "http://search.vnexpress.net/news?s=%C4%91&g=66FD8EC7-FA76-4A7C-8FE3-DB605B4C9CE0&butS=yes"
-    val url4 = "http://search.vnexpress.net/news?buts=yes&g=66fd8ec7-fa76-4a7c-8fe3-db605b4c9ce0&s=%C4%91"
+    val url4 = "http://search.vnexpress.net/news?butS=yes&g=66FD8EC7-FA76-4A7C-8FE3-DB605B4C9CE0&s=%C4%91"
 
     assert(UrlUtils.normalize(url3).equals(url4))
 
