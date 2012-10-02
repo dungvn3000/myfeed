@@ -12,7 +12,7 @@ import org.linkerz.crawler.bot.factory.ParserPluginFactory
 import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
 import org.junit.{Assert, Test}
-import org.linkerz.crawler.bot.plugin.parser.{ZingPlugin, VnExpressPlugin, GenKPlugin}
+import org.linkerz.crawler.bot.plugin.parser._
 
 /**
  * The Class TestData.
@@ -74,6 +74,36 @@ class TestData extends SpringContext {
     assert(genKFeed.id != null)
 
     parserFactory.install(classOf[GenKPlugin].getName)
+  }
+
+  @Test
+  def testAddHOnline() {
+    val hOnline = new NewFeed
+    hOnline.name = "H-Online"
+    hOnline.group = "h-online.com"
+    hOnline.time = 15
+    hOnline.url = "http://www.h-online.com/"
+    hOnline.urlRegex = List("*/www.h-online.com/*").asJava
+    hOnline.enable = true
+    mongoOperations.save(hOnline)
+    assert(hOnline.id != null)
+
+    parserFactory.install(classOf[HOnlinePlugin].getName)
+  }
+
+  @Test
+  def testAddJavaDZone() {
+    val javaDZone = new NewFeed
+    javaDZone.name = "Java - DZone"
+    javaDZone.group = "dzone.com"
+    javaDZone.time = 15
+    javaDZone.url = "http://java.dzone.com/"
+    javaDZone.urlRegex = List("*/java.dzone.com/*").asJava
+    javaDZone.enable = true
+    mongoOperations.save(javaDZone)
+    assert(javaDZone.id != null)
+
+    parserFactory.install(classOf[JavaDzonePlugin].getName)
   }
 
   @Test
