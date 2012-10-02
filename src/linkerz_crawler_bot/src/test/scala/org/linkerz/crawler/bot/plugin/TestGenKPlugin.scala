@@ -4,12 +4,12 @@
 
 package org.linkerz.crawler.bot.plugin
 
-import genk.GenKPlugin
 import org.junit.{Assert, Test}
 import org.linkerz.crawler.core.factory.{ParserFactory, DefaultDownloadFactory}
 import org.linkerz.crawler.core.job.CrawlJob
 import org.linkerz.job.queue.controller.BaseController
 import org.linkerz.crawler.core.handler.CrawlerHandler
+import parser.GenKPlugin
 
 /**
  * The Class TestGenKPlugin.

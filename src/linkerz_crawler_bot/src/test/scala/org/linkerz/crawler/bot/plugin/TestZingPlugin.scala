@@ -6,8 +6,8 @@ package org.linkerz.crawler.bot.plugin
 
 import org.linkerz.crawler.core.factory.DefaultDownloadFactory
 import org.linkerz.crawler.core.job.CrawlJob
-import zing.ZingPlugin
 import org.junit.{Assert, Test}
+import parser.ZingPlugin
 
 /**
  * The Class TestZingPlugin.

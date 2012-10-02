@@ -2,7 +2,7 @@
  * Copyright (C) 2012 - 2013 LinkerZ
  */
 
-package org.linkerz.crawler.bot.plugin.genk
+package org.linkerz.crawler.bot.plugin.parser
 
 import org.linkerz.crawler.bot.plugin.ParserPlugin
 import org.linkerz.mongodb.model.ParserPluginData

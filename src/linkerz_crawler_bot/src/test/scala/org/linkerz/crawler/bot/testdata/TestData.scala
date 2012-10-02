@@ -8,13 +8,11 @@ import org.linkerz.test.spring.SpringContext
 import org.springframework.data.mongodb.core.MongoOperations
 import org.linkerz.mongodb.model.{User, NewFeed}
 import collection.JavaConverters._
-import org.linkerz.crawler.bot.plugin.zing.ZingPlugin
 import org.linkerz.crawler.bot.factory.ParserPluginFactory
-import org.linkerz.crawler.bot.plugin.vnexpress.VnExpressPlugin
 import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
 import org.junit.{Assert, Test}
-import org.linkerz.crawler.bot.plugin.genk.GenKPlugin
+import org.linkerz.crawler.bot.plugin.parser.{ZingPlugin, VnExpressPlugin, GenKPlugin}
 
 /**
  * The Class TestData.

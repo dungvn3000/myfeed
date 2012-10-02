@@ -6,11 +6,10 @@ package org.linkerz.crawler.bot
 
 import factory.ParserPluginFactory
 import org.linkerz.test.spring.SpringContext
-import plugin.vnexpress.VnExpressPlugin
 import org.linkerz.crawler.core.fetcher.DefaultFetcher
 import org.linkerz.crawler.core.factory.DownloadFactory
 import org.linkerz.crawler.core.job.CrawlJob
-import plugin.zing.ZingPlugin
+import plugin.parser.{ZingPlugin, VnExpressPlugin}
 import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
 import org.junit.Test

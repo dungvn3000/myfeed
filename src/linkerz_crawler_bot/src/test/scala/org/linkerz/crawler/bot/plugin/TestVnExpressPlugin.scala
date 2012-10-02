@@ -5,10 +5,10 @@
 package org.linkerz.crawler.bot.plugin
 
 
-import vnexpress.VnExpressPlugin
 import org.linkerz.crawler.core.factory.DefaultDownloadFactory
 import org.linkerz.crawler.core.job.CrawlJob
 import org.junit.{Assert, Test}
+import parser.VnExpressPlugin
 
 /**
  * The Class TestVnExpressPlugin.

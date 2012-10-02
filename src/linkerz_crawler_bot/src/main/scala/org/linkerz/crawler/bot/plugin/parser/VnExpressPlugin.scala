@@ -2,9 +2,8 @@
  * Copyright (C) 2012 - 2013 LinkerZ
  */
 
-package org.linkerz.crawler.bot.plugin.vnexpress
+package org.linkerz.crawler.bot.plugin.parser
 
-import grizzled.slf4j.Logging
 import org.linkerz.mongodb.model.ParserPluginData
 import org.jsoup.nodes.Document
 import org.linkerz.crawler.bot.plugin.ParserPlugin

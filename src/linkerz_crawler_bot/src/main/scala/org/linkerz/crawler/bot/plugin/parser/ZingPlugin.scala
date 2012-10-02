@@ -2,11 +2,10 @@
  * Copyright (C) 2012 - 2013 LinkerZ
  */
 
-package org.linkerz.crawler.bot.plugin.zing
+package org.linkerz.crawler.bot.plugin.parser
 
 import org.linkerz.crawler.bot.plugin.ParserPlugin
 import org.linkerz.mongodb.model.ParserPluginData
-import grizzled.slf4j.Logging
 import org.linkerz.crawler.core.job.CrawlJob
 import org.jsoup.nodes.Document
 
