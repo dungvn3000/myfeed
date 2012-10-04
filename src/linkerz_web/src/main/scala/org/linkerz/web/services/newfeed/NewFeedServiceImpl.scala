@@ -6,17 +6,10 @@ package org.linkerz.web.services.newfeed
 
 import reflect.BeanProperty
 import org.springframework.data.mongodb.core.MongoOperations
-import org.linkerz.mongodb.model.{UserClick, Link, NewFeed}
+import org.linkerz.mongodb.model.{UserRead, Link, NewFeed}
 import collection.JavaConversions._
 import org.apache.commons.lang.StringUtils
 import org.springframework.data.mongodb.core.query.{Order, Criteria, Query}
-import org.linkerz.weka.mongodb.JavaBeanBuilder
-import weka.classifiers.trees.J48
-import weka.filters.unsupervised.attribute.StringToWordVector
-import weka.filters.Filter
-import collection.mutable.ListBuffer
-import weka.classifiers.bayes.NaiveBayes
-import weka.classifiers.meta.Vote
 
 /**
  * The Class NewFeedServiceImpl.
@@ -36,10 +29,29 @@ class NewFeedServiceImpl extends NewFeedService {
   }
 
   def linkList = {
-    val query = Query.query(Criteria.where("title").exists(true)).limit(50)
-    query.sort().on("indexDate", Order.DESCENDING)
-    val links = mongoOperations.find(query, classOf[Link])
-    links.filter(link => StringUtils.isNotBlank(link.title) && StringUtils.isNotBlank(link.description))
+    val query = Query.query(Criteria.where("title").exists(true))
+    val userReads = mongoOperations.findAll(classOf[UserRead])
+    var links = mongoOperations.find(query, classOf[Link])
+    links = links.filter(link => {
+      StringUtils.isNotBlank(link.title) &&
+        StringUtils.isNotBlank(link.description) &&
+        userReads.find(userRead => userRead.linkId == link.id).isEmpty
+    })
+
+    links.sortWith((link1 , link2) => link1.indexDate.before(link2.indexDate))
+
+    if (links.size() > 20) {
+      links = links.subList(0, 20)
+    }
+
+    links.foreach(link => {
+      val userRead = new UserRead
+      userRead.linkId = link.id
+      userRead.userName = "dungvn3000"
+      mongoOperations.save(userRead)
+    })
+
+    links
   }
 
 }
