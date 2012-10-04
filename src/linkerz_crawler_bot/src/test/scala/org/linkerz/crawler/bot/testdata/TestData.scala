@@ -107,6 +107,21 @@ class TestData extends SpringContext {
   }
 
   @Test
+  def testAdd24h() {
+    val twentyFour = new NewFeed
+    twentyFour.name = "24H"
+    twentyFour.group = "24h.com.vn"
+    twentyFour.time = 15
+    twentyFour.url = "http://hcm.24h.com.vn/"
+    twentyFour.urlRegex = List("*/*.24h.com.vn/*").asJava
+    twentyFour.enable = true
+    mongoOperations.save(twentyFour)
+    assert(twentyFour.id != null)
+
+    parserFactory.install(classOf[TwentyFourHourPlugin].getName)
+  }
+
+  @Test
   def testAddUser() {
     val user = new User
     user.userName = "dungvn3000"
