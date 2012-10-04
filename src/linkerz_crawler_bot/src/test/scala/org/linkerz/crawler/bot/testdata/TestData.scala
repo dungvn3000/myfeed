@@ -103,7 +103,7 @@ class TestData extends SpringContext {
     mongoOperations.save(javaDZone)
     assert(javaDZone.id != null)
 
-    parserFactory.install(classOf[JavaDzonePlugin].getName)
+    parserFactory.install(classOf[JavaDZonePlugin].getName)
   }
 
   @Test

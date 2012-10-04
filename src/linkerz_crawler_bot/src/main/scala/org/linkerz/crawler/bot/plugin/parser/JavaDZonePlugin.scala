@@ -11,13 +11,13 @@ import org.jsoup.nodes.Document
 import org.apache.commons.lang.StringUtils
 
 /**
- * The Class JavaDzonePlugin.
+ * The Class JavaDZonePlugin.
  *
  * @author Nguyen Duc Dung
  * @since 10/2/12 9:10 PM
  *
  */
-class JavaDzonePlugin extends ParserPlugin {
+class JavaDZonePlugin extends ParserPlugin {
 
   def defaultData = {
     val pluginData = new ParserPluginData
