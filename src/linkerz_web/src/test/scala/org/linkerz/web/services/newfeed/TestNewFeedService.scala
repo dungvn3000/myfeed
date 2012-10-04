@@ -20,7 +20,6 @@ class TestNewFeedService extends SpringContext {
   @Test
   def testRecommend() {
     val newFeedService = context.getBean(classOf[NewFeedService])
-    newFeedService.recommend(newFeedService.linkList).foreach(link => println(link.title))
   }
 
 }
