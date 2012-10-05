@@ -14,6 +14,7 @@ import java.io.ByteArrayInputStream
 import edu.uci.ics.crawler4j.url.URLCanonicalizer
 import collection.JavaConversions._
 import org.linkerz.crawler.core.job.CrawlJob
+import org.apache.commons.validator.routines.UrlValidator
 
 /**
  * The Class DefaultParser.
@@ -84,7 +85,8 @@ class DefaultParser extends Parser {
             && !hrefWithoutProtocol.contains("@")
             && !hrefWithoutProtocol.contains("mailto:")) {
             val url = URLCanonicalizer.getCanonicalURL(href, contextURL)
-            if (url != null) {
+            val urlValidator = new UrlValidator(Array("http","https"))
+            if (url != null && urlValidator.isValid(url)) {
               webUrls += new WebUrl(url)
             }
           }
