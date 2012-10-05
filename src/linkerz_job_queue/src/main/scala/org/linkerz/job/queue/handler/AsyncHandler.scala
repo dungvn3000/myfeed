@@ -172,7 +172,7 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
   }
 
   /**
-   * This method will be called before the hander finish everything.
+   * This method will be called before the hander is going to finish everything.
    */
   protected def onFinish() {}
 

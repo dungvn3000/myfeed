@@ -58,7 +58,7 @@ trait Worker[J <: Job, S <: Session[J]] extends CallBackable[J] with Logging {
 
 
   /**
-   * The handler will check the worker is free or not, if he free, he has to work
+   * The handler will check the worker is free or not, if he is free, he has to work
    * @return
    */
   def isFree: Boolean = _isFree
