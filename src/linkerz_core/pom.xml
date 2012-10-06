@@ -97,20 +97,6 @@
         </dependency>
         <!--end-->
 
-        <!-- Lambdaj -->
-        <dependency>
-            <groupId>com.googlecode.lambdaj</groupId>
-            <artifactId>lambdaj</artifactId>
-            <version>${lambdaj.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <!--End-->
-
         <!--Google Collection-->
         <dependency>
             <groupId>com.google.guava</groupId>

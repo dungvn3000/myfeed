@@ -26,6 +26,12 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.linkerz</groupId>
+            <artifactId>linkerz_job_queue</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!--Test-->
         <dependency>
             <groupId>org.linkerz</groupId>

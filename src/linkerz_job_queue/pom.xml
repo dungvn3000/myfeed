@@ -27,6 +27,12 @@
             <version>${amqp.client.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.typesafe.akka</groupId>
+            <artifactId>akka-actor</artifactId>
+            <version>${akka.version}</version>
+        </dependency>
+
         <!--Test-->
         <dependency>
             <groupId>org.linkerz</groupId>
