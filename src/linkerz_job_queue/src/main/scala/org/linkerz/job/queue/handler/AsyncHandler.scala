@@ -11,6 +11,7 @@ import grizzled.slf4j.Logging
 import scalaz.Scalaz._
 import java.util.concurrent.{TimeUnit, Executors}
 import scalaz.concurrent.{Actor, Strategy}
+import org.linkerz.job.queue.worker.Worker
 
 /**
  * The Class AsyncHandler.

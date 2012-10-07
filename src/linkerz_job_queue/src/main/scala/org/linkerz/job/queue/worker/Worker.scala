@@ -2,11 +2,12 @@
  * Copyright (C) 2012 - 2013 LinkerZ
  */
 
-package org.linkerz.job.queue.core
+package org.linkerz.job.queue.worker
 
 import grizzled.slf4j.Logging
 import scalaz.Scalaz._
 import scalaz.concurrent.{Actor, Strategy}
+import org.linkerz.job.queue.core.{CallBack, CallBackable, Session, Job}
 
 
 /**

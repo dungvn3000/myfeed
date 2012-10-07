@@ -4,7 +4,6 @@
 
 package org.linkerz.job.queue.worker
 
-import org.linkerz.job.queue.core.Worker
 import org.linkerz.job.queue.job.{EmptyJob, SumJob}
 import org.linkerz.job.queue.session.SimpleSession
 

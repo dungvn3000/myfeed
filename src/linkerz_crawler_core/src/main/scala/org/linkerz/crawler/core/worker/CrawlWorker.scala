@@ -4,10 +4,10 @@
 
 package org.linkerz.crawler.core.worker
 
-import org.linkerz.job.queue.core.Worker
 import org.linkerz.crawler.core.job.CrawlJob
 import org.linkerz.crawler.core.session.CrawlSession
 import org.linkerz.crawler.core.fetcher.Fetcher
+import org.linkerz.job.queue.worker.Worker
 
 /**
  * The Class CrawlWorker.
