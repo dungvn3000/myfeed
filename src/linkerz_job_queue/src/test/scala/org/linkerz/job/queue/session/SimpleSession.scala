@@ -25,6 +25,6 @@ class SimpleSession extends Session[EmptyJob] with Logging {
 
 
   override def endSession() {
-    info("Ending Session")
+    info("Ending Session " + jobTime + " ms")
   }
 }

@@ -7,10 +7,6 @@ package org.linkerz.job.queue.handler
 import org.linkerz.job.queue.core._
 import grizzled.slf4j.Logging
 import akka.actor._
-import akka.pattern.ask
-import org.linkerz.job.queue.handler.AsyncHandler.Stop
-import akka.util.Timeout
-import akka.util.duration._
 import org.linkerz.job.queue.handler.AsyncHandler.Success
 import org.linkerz.job.queue.handler.AsyncHandler.Fail
 import org.linkerz.job.queue.handler.AsyncHandler.Next
@@ -59,7 +55,7 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
     override protected def receive = {
       case job: J => {
         try {
-          doJob(job, worker)
+          doJob(job)
         } catch {
           case ex: Exception => {
             error(ex.getMessage, ex)
@@ -67,16 +63,53 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
           }
         }
       }
-      case s: Success[J] => onSuccess(s.job)
       case f: Fail[J] => {
         error(f.ex.getMessage, f.ex)
         currentJob.error(f.ex.getMessage, f.ex)
       }
-      case Stop => {
-        context.stop(worker)
-        context.stop(self)
-      }
+      case s: Success[J] => onSuccess(s.job)
     }
+
+    private def doJob(job: J) {
+      //Step 1: Checking whether go for the job or not
+      if (currentJob.maxSubJob >= 0 && currentSession.subJobCount >= currentJob.maxSubJob) {
+        stop("Stop because the number of sub job reached maximum")
+        return
+      }
+
+      if (currentSession.currentDepth > currentJob.maxDepth && currentJob.maxDepth > 0) {
+        currentSession.currentDepth -= 1
+        stop("Stop because the number of sub job reached maximum depth")
+        return
+      }
+
+      //Checking working time.
+      if (currentJob.timeOut > 0 && currentSession.jobTime > currentJob.timeOut) {
+        //marking the job is error
+        currentJob.error("Time Out")
+        stop("Stop because the time is out")
+        return
+      }
+
+      //Step 2: Find a free worker for the job.
+      worker ! Next(job, currentSession)
+
+      //Counting.
+      currentSession.subJobCount += 1
+
+      if (job.depth > currentSession.currentDepth) {
+        currentSession.currentDepth = job.depth
+      }
+
+      //Delay time for each job.
+      if (currentJob.politenessDelay > 0) Thread.sleep(currentJob.politenessDelay)
+    }
+
+    private def stop(reason: String) {
+      info(reason)
+      context.stop(self)
+    }
+
   }), "workerManager")
 
   protected def doHandle(job: J, session: S) {
@@ -94,47 +127,12 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
     onFinish()
   }
 
+
   private def waitingForFinish() {
     while (!workerManager.isTerminated) {
-      //Checking working time.
-      if (currentJob.timeOut > 0) {
-        if (currentSession.jobTime > currentJob.timeOut) {
-          info("Stop because the time is out")
-          //marking the job is error
-          currentJob.error("Time Out")
-          workerManager ! Stop
-        }
-      }
       //Sleep 1s for next checking.
       Thread.sleep(1000)
     }
-  }
-
-  private def doJob(job: J, worker: ActorRef) {
-    //Step 1: Checking whether go for the job or not
-    if (currentJob.maxSubJob >= 0 && currentSession.subJobCount >= currentJob.maxSubJob) {
-      workerManager ! Stop
-      return
-    }
-
-    if (currentSession.currentDepth > currentJob.maxDepth && currentJob.maxDepth > 0) {
-      currentSession.currentDepth -= 1
-      workerManager ! Stop
-      return
-    }
-
-    //Step 2: Find a free worker for the job.
-    worker ! Next(job, currentSession)
-
-    //Counting.
-    currentSession.subJobCount += 1
-
-    if (job.depth > currentSession.currentDepth) {
-      currentSession.currentDepth = job.depth
-    }
-
-    //Delay time for each job.
-    if (currentJob.politenessDelay > 0) Thread.sleep(currentJob.politenessDelay)
   }
 
   /**
