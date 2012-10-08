@@ -40,17 +40,17 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
 
   def accept(job: Job) = job.isInstanceOf[CrawlJob]
 
-  protected def createWorker(numberOfWorker: Int) {
-    assert(numberOfWorker > 0, "Number of worker of a handler must more than one")
-    assert(downloadFactory != null)
-    assert(parserFactory != null)
-    for (i <- 1 to numberOfWorker) {
-      val worker = new CrawlWorker(i, new DefaultFetcher(downloadFactory, parserFactory))
-      workers += worker
-    }
-  }
+ // override protected def createWorker() {
+//    assert(numberOfWorker > 0, "Number of worker of a handler must more than one")
+//    assert(downloadFactory != null)
+//    assert(parserFactory != null)
+//    for (i <- 1 to numberOfWorker) {
+//      val worker = new CrawlWorker(i, new DefaultFetcher(downloadFactory, parserFactory))
+//      workers += worker
+//    }
+ // }
 
-  override protected def onFinished() {
+  override protected def onFinish() {
     info(currentSession.countUrl + " links found")
     info(currentSession.fetchedUrls.size + " links downloaded")
     info(currentSession.currentDepth + " level")

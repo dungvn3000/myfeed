@@ -22,13 +22,13 @@ import org.linkerz.crawler.bot.job.NewFeedJob
 
 class NewFeedHandler extends CrawlerHandler {
 
-  override protected def createWorker(numberOfWorker: Int) {
-    assert(numberOfWorker > 0, "Number of worker of a handler must more than one")
-    for (i <- 1 to numberOfWorker) {
-      val worker = new CrawlWorker(i, new NewFetcher(downloadFactory, parserFactory))
-      workers += worker
-    }
-  }
+ // override protected def createWorker() {
+//    assert(numberOfWorker > 0, "Number of worker of a handler must more than one")
+//    for (i <- 1 to numberOfWorker) {
+//      val worker = new CrawlWorker(i, new NewFetcher(downloadFactory, parserFactory))
+//      workers += worker
+//    }
+ // }
 
   override protected def shouldCrawl(webUrl: WebUrl) = {
     dbService.find(webUrl) == null && super.shouldCrawl(webUrl)

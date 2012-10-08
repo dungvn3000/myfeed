@@ -8,6 +8,7 @@ import org.linkerz.job.queue.job.EmptyJob
 import org.linkerz.job.queue.session.SimpleSession
 import org.linkerz.job.queue.core.Job
 import org.linkerz.job.queue.worker.LazyWorker
+import akka.actor.Props
 
 /**
  * The Class AsyncTestHandler.
@@ -18,14 +19,10 @@ import org.linkerz.job.queue.worker.LazyWorker
  */
 class AsyncTestHandler extends AsyncHandler[EmptyJob, SimpleSession] {
 
-  override protected def onFinished() {
-    currentJob.count = currentSession.subJobCount
-  }
+  override protected val worker = system.actorOf(Props[LazyWorker], "lazyWorker")
 
-  protected def createWorker(numberOfWorker: Int) {
-    for (i <- 0 to numberOfWorker - 1) {
-      workers += LazyWorker(i)
-    }
+  override protected def onFinish() {
+    currentJob.count = currentSession.subJobCount
   }
 
   protected def createSubJobs(job: EmptyJob) {
