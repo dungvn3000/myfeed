@@ -16,7 +16,7 @@ import akka.event.Logging
  */
 
 object AkkaActorExample extends App {
-  val system = ActorSystem("MySystem")
+  val system = ActorSystem("mySystem")
   val manager = system.actorOf(Props[Manager], name = "manager")
 
   for (i <- 1 to 100000) {
@@ -51,6 +51,7 @@ class Worker extends Actor {
 
   protected def receive = {
     case msg: Int => {
+      log.info(msg.toString)
       sender ! "done"
     }
   }

@@ -81,7 +81,11 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
           isManagerFree = true
         }
       }
-      case s: Success[J] => onSuccess(s.job)
+      case s: Success[J] => {
+        //Counting jobs have done.
+        currentSession.subJobCount += 1
+        onSuccess(s.job)
+      }
       case f: Fail[J] => {
         error(f.ex.getMessage, f.ex)
         currentJob.error(f.ex.getMessage, f.ex)
@@ -147,7 +151,7 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
 
     //Step 2: Find a free worker for the job.
     worker ! Next(job, currentSession)
-    currentSession.subJobCount += 1
+
     //Delay time for each job.
     if (currentJob.politenessDelay > 0) Thread.sleep(currentJob.politenessDelay)
   }
