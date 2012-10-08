@@ -59,7 +59,7 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
     currentSession.job.error.foreach(error => info("error = " + error))
   }
 
-  protected def createSubJobs(job: CrawlJob) {
+  protected def onSuccess(job: CrawlJob) {
     val jobResult = job.result
     if (!jobResult.isEmpty && !jobResult.get.isError) {
       val webPage = jobResult.get

@@ -24,7 +24,7 @@ trait Worker[J <: Job, S <: Session[J]] extends Actor with Logging {
     case next: Next[J, S] => {
       try {
         //Analyze the job
-        analyze(next.job, next.session)
+        work(next.job, next.session)
         if (!next.job.parent.isEmpty) {
           //If this is a subJob, copy error and info from subJob to the first job.
           val session = next.session
@@ -52,5 +52,5 @@ trait Worker[J <: Job, S <: Session[J]] extends Actor with Logging {
    * @param session
    */
   @throws(classOf[Exception])
-  def analyze(job: J, session: S)
+  def work(job: J, session: S)
 }

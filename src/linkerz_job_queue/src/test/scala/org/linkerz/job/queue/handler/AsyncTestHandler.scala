@@ -25,7 +25,7 @@ class AsyncTestHandler extends AsyncHandler[EmptyJob, SimpleSession] {
     currentJob.count = currentSession.subJobCount
   }
 
-  protected def createSubJobs(job: EmptyJob) {
+  protected def onSuccess(job: EmptyJob) {
     //Making 1000 sub job for testing
     for (i <- 0 to 999) {
       workerManager ! new EmptyJob

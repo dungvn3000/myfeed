@@ -19,7 +19,7 @@ import org.linkerz.job.queue.worker.Worker
 
 class CrawlWorker(_id: Int, fetcher: Fetcher) extends Worker[CrawlJob, CrawlSession] {
 
-  def analyze(job: CrawlJob, session: CrawlSession) {
+  def work(job: CrawlJob, session: CrawlSession) {
     fetcher.fetch(job)
   }
 

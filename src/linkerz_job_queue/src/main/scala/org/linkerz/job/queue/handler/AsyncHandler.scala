@@ -23,6 +23,7 @@ object AsyncHandler {
   case class Fail[J <: Job](job: J, ex: Exception) extends Event
 
   object Stop extends Event
+
 }
 
 /**
@@ -80,7 +81,7 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
           isManagerFree = true
         }
       }
-      case s: Success[J] => createSubJobs(s.job)
+      case s: Success[J] => onSuccess(s.job)
       case f: Fail[J] => {
         error(f.ex.getMessage, f.ex)
         currentJob.error(f.ex.getMessage, f.ex)
@@ -102,37 +103,26 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
     workerManager ! job
 
     //Step 3: Waiting for all worker finished their job
-    waitForFinish()
+    waitingForFinish()
 
     //Step 4: Finish.
     onFinish()
   }
 
-  private def waitForFinish() {
+  private def waitingForFinish() {
     while (!workerManager.isTerminated) {
-      //Check all worker if they are free, finish the job.
-      //      if (isManagerFree && workers.filter(worker => !worker.isFree).size == 0) {
-      //        //waiting for 3s and recheck again
-      //        info("All worker are free, waiting for 5s and recheck")
-      //        Thread.sleep(1000 * 5)
-      //        if (isManagerFree && workers.filter(worker => !worker.isFree).size == 0) {
-      //          logger.info("It seem is no more job and all workers is free. Finish....")
-      //          isStop = true
-      //        }
-      //      } else {
-      //        //Worker is doing, sleep 1s waiting for them.
-      //        Thread.sleep(1000)
-      //      }
-
       //Checking working time.
       if (currentJob.timeOut > 0) {
         if (currentSession.jobTime > currentJob.timeOut) {
           info("Stop because the time is out")
           //marking the job is error
           currentJob.error("Time Out")
-          isStop = true
+          workerManager ? Stop
         }
       }
+
+      //Sleep 1s for next checking.
+      Thread.sleep(1000)
     }
   }
 
@@ -156,15 +146,6 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
     }
 
     //Step 2: Find a free worker for the job.
-    //      workers.foreach(worker => if (worker.isFree) {
-    //        worker ! Next(job, currentSession)
-    //        isWorking = true
-    //        currentSession.subJobCount += 1
-    //        //Delay time for each job.
-    //        if (currentJob.politenessDelay > 0) Thread.sleep(currentJob.politenessDelay)
-    //        break()
-    //      })
-
     worker ! Next(job, currentSession)
     currentSession.subJobCount += 1
     //Delay time for each job.
@@ -180,5 +161,5 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
    * Create a sub job base the result of a job.
    * @param job
    */
-  protected def createSubJobs(job: J)
+  protected def onSuccess(job: J)
 }

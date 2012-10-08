@@ -15,9 +15,9 @@ import org.linkerz.job.queue.session.SimpleSession
  * 
  */
 class LazyWorker extends Worker[EmptyJob, SimpleSession] {
-  def analyze(job: EmptyJob, session: SimpleSession) {
+  def work(job: EmptyJob, session: SimpleSession) {
     info("LazyWorker is going to sleep")
     //Sleep first, and done nothing.
-//    Thread.sleep(1000)
+    Thread.sleep(1000)
   }
 }
