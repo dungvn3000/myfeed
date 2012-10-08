@@ -44,11 +44,6 @@ trait Job {
   var politenessDelay: Int = 0
 
   /**
-   * This setting only for async handler.
-   */
-  var numberOfWorker: Int = 1
-
-  /**
    * The status of the job.
    */
   var status: String = JobStatus.NEW

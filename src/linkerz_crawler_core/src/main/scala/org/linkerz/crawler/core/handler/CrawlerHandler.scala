@@ -16,6 +16,7 @@ import org.linkerz.crawler.core.model.WebUrl
 import org.apache.commons.lang.StringUtils
 import org.linkerz.core.matcher.SimpleRegexMatcher
 import org.linkerz.crawler.core.fetcher.DefaultFetcher
+import akka.actor.{Props, ActorContext}
 
 /**
  * The Class CrawlerHandler.
@@ -40,15 +41,11 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
 
   def accept(job: Job) = job.isInstanceOf[CrawlJob]
 
- // override protected def createWorker() {
-//    assert(numberOfWorker > 0, "Number of worker of a handler must more than one")
-//    assert(downloadFactory != null)
-//    assert(parserFactory != null)
-//    for (i <- 1 to numberOfWorker) {
-//      val worker = new CrawlWorker(i, new DefaultFetcher(downloadFactory, parserFactory))
-//      workers += worker
-//    }
- // }
+  override protected def createWorker(context: ActorContext) = {
+    assert(downloadFactory != null)
+    assert(parserFactory != null)
+    context.actorOf(Props(new CrawlWorker(new DefaultFetcher(downloadFactory, parserFactory))), "crawlWorker")
+  }
 
   override protected def onFinish() {
     info(currentSession.countUrl + " links found")

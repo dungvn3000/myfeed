@@ -39,10 +39,6 @@ trait Worker[J <: Job, S <: Session[J]] extends Actor with Logging {
         case ex: Exception => sender ! Fail(next.job, ex)
       }
     }
-    case Stop => {
-      sender ! "stop"
-      context.stop(self)
-    }
   }
 
   /**

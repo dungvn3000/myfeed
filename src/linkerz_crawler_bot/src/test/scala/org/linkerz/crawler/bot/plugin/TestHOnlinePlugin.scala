@@ -47,7 +47,6 @@ class TestHOnlinePlugin {
     controller.start()
 
     val job = new CrawlJob(plugin.defaultData.urlTest)
-    job.numberOfWorker = 10
     job.maxSubJob = 50
 
     controller ! job

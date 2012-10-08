@@ -8,7 +8,8 @@ import org.linkerz.job.queue.job.EmptyJob
 import org.linkerz.job.queue.session.SimpleSession
 import org.linkerz.job.queue.core.Job
 import org.linkerz.job.queue.worker.LazyWorker
-import akka.actor.Props
+import akka.actor.{ActorContext, Props}
+import akka.routing.RoundRobinRouter
 
 /**
  * The Class AsyncTestHandler.
@@ -19,7 +20,8 @@ import akka.actor.Props
  */
 class AsyncTestHandler extends AsyncHandler[EmptyJob, SimpleSession] {
 
-  override protected val worker = system.actorOf(Props[LazyWorker], "lazyWorker")
+  override protected def createWorker(context: ActorContext) = context.actorOf(Props[LazyWorker].
+    withRouter(RoundRobinRouter(1000)), "lazyWorker")
 
   override protected def onFinish() {
     currentJob.count = currentSession.subJobCount

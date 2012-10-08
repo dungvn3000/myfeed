@@ -48,7 +48,6 @@ class TestGenKPlugin {
     controller.start()
 
     val job = new CrawlJob(plugin.defaultData.urlTest)
-    job.numberOfWorker = 10
     job.maxSubJob = 10
 
     controller ! job

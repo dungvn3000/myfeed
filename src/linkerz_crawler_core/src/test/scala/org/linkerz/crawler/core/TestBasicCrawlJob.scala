@@ -31,7 +31,6 @@ class TestBasicCrawlJob extends Logging {
     controller.start()
 
     val job = new CrawlJob("http://vnexpress.net")
-    job.numberOfWorker = 10
     job.maxSubJob = 100
 
     controller ! job

@@ -74,7 +74,6 @@ class TestBaseController {
     controller.handlers = List(handler)
     controller.start()
     val job = new EmptyJob
-    job.numberOfWorker = 1000
     job.maxSubJob = 1000
 
     controller ! job
@@ -91,7 +90,6 @@ class TestBaseController {
     controller.handlers = List(new AsyncTestHandler)
     controller.start()
     val job = new EmptyJob
-    job.numberOfWorker = 3
     job.timeOut = 5000
 
     controller ! job
@@ -112,7 +110,6 @@ class TestBaseController {
     var time = System.currentTimeMillis()
     for (i <- 0 to 99) {
       val job = new EmptyJob
-      job.numberOfWorker = 1000
       job.maxSubJob = 1000
       controller !? job
 
@@ -135,7 +132,6 @@ class TestBaseController {
     val echoJob = EchoJob("Hello")
     val sumJob = SumJob(4, 5)
     val emptyJob = new EmptyJob
-    emptyJob.numberOfWorker = 10
     emptyJob.maxSubJob = 20
 
     controller ! echoJob

@@ -6,11 +6,14 @@ package org.linkerz.job.queue.handler
 
 import org.linkerz.job.queue.core._
 import grizzled.slf4j.Logging
-import akka.actor.{ActorRef, Props, ActorSystem, Actor}
+import akka.actor._
 import akka.pattern.ask
-import org.linkerz.job.queue.handler.AsyncHandler.{Stop, Fail, Success, Next}
+import org.linkerz.job.queue.handler.AsyncHandler.Stop
 import akka.util.Timeout
 import akka.util.duration._
+import org.linkerz.job.queue.handler.AsyncHandler.Success
+import org.linkerz.job.queue.handler.AsyncHandler.Fail
+import org.linkerz.job.queue.handler.AsyncHandler.Next
 
 object AsyncHandler {
 
@@ -38,14 +41,6 @@ object AsyncHandler {
  */
 abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[J, S] with Logging {
 
-  //The flag will turn on when the worker manager is free.
-  protected var isManagerFree: Boolean = _
-
-  /**
-   * The handler will stop when it turn on.
-   */
-  protected var isStop: Boolean = _
-
   /**
    * The current session.
    */
@@ -56,54 +51,40 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
    */
   protected var currentJob: J = _
 
-  /**
-   * Local worker.
-   */
-  protected val worker: ActorRef = null
-
   val system = ActorSystem("system")
 
-  private implicit val timeout = Timeout(5 seconds)
-
-  //The boss of all workers.
   protected implicit val workerManager = system.actorOf(Props(new Actor {
+    private val worker: ActorRef = createWorker(context)
+
     override protected def receive = {
       case job: J => {
         try {
-          isManagerFree = false
-          doJob(job)
+          doJob(job, worker)
         } catch {
           case ex: Exception => {
             error(ex.getMessage, ex)
             currentJob.error(ex.getMessage, ex)
           }
-        } finally {
-          isManagerFree = true
         }
       }
-      case s: Success[J] => {
-        //Counting jobs have done.
-        currentSession.subJobCount += 1
-        onSuccess(s.job)
-      }
+      case s: Success[J] => onSuccess(s.job)
       case f: Fail[J] => {
         error(f.ex.getMessage, f.ex)
         currentJob.error(f.ex.getMessage, f.ex)
       }
       case Stop => {
-        worker ? Stop
+        context.stop(worker)
         context.stop(self)
       }
     }
   }), "workerManager")
 
   protected def doHandle(job: J, session: S) {
-    //Reset to start
-    isStop = false
-    isManagerFree = true
+    //Step 1: Reset to start
     currentSession = session
     currentJob = job
 
+    //Step 2: Send to the worker manager.
     workerManager ! job
 
     //Step 3: Waiting for all worker finished their job
@@ -121,40 +102,47 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
           info("Stop because the time is out")
           //marking the job is error
           currentJob.error("Time Out")
-          workerManager ? Stop
+          workerManager ! Stop
         }
       }
-
       //Sleep 1s for next checking.
       Thread.sleep(1000)
     }
   }
 
-  private def doJob(job: J) {
-    //Step 1: Checking should go for the job or not
+  private def doJob(job: J, worker: ActorRef) {
+    //Step 1: Checking whether go for the job or not
     if (currentJob.maxSubJob >= 0 && currentSession.subJobCount >= currentJob.maxSubJob) {
-      info("Stop because the number of sub job reached maximum")
-      workerManager ? Stop
+      workerManager ! Stop
       return
     }
 
-    if (job.depth > currentSession.currentDepth) {
-      currentSession.currentDepth = job.depth
-    }
-
     if (currentSession.currentDepth > currentJob.maxDepth && currentJob.maxDepth > 0) {
-      info("Stop because the number of sub job reached maximum depth")
       currentSession.currentDepth -= 1
-      workerManager ? Stop
+      workerManager ! Stop
       return
     }
 
     //Step 2: Find a free worker for the job.
     worker ! Next(job, currentSession)
 
+    //Counting.
+    currentSession.subJobCount += 1
+
+    if (job.depth > currentSession.currentDepth) {
+      currentSession.currentDepth = job.depth
+    }
+
     //Delay time for each job.
     if (currentJob.politenessDelay > 0) Thread.sleep(currentJob.politenessDelay)
   }
+
+  /**
+   * Creating worker.
+   * @param context
+   * @return
+   */
+  protected def createWorker(context: ActorContext): ActorRef
 
   /**
    * This method will be called before the hander is going to finish everything.
