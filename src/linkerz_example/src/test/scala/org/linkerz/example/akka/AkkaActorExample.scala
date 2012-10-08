@@ -6,6 +6,7 @@ package org.linkerz.example.akka
 
 import akka.actor.{Actor, Props, ActorSystem}
 import akka.event.Logging
+import akka.routing.RoundRobinRouter
 
 /**
  * The Class AkkaActorExample.
@@ -19,13 +20,13 @@ object AkkaActorExample extends App {
   val system = ActorSystem("mySystem")
   val manager = system.actorOf(Props[Manager], name = "manager")
 
-  for (i <- 1 to 100000) {
+  for (i <- 1 to 10000) {
     manager ! i
   }
 }
 
 class Manager extends Actor {
-  val worker = context.system.actorOf(Props[Worker], name = "worker")
+  val worker = context.actorOf(Props[Worker].withRouter(RoundRobinRouter(1000)), name = "worker")
   val log = Logging(context.system, this)
   var done = 0
   var count = 0
@@ -51,7 +52,8 @@ class Worker extends Actor {
 
   protected def receive = {
     case msg: Int => {
-      log.info(msg.toString)
+      log.info("sleep")
+      Thread.sleep(1000)
       sender ! "done"
     }
   }
