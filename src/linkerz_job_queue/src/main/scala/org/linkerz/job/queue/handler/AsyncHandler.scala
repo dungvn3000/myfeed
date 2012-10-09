@@ -5,6 +5,7 @@
 package org.linkerz.job.queue.handler
 
 import org.linkerz.job.queue.core._
+import org.linkerz.job.queue.core.Controller._
 import grizzled.slf4j.Logging
 import akka.actor._
 import org.linkerz.job.queue.handler.AsyncHandler.Success
@@ -13,15 +14,13 @@ import org.linkerz.job.queue.handler.AsyncHandler.Next
 
 object AsyncHandler {
 
-  class Event
+  sealed trait Event
 
   case class Next[J <: Job, S <: Session[J]](job: J, session: S) extends Event
 
   case class Success[J <: Job](job: J) extends Event
 
   case class Fail[J <: Job](job: J, ex: Exception) extends Event
-
-  object Stop extends Event
 
 }
 
@@ -47,9 +46,7 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
    */
   protected var currentJob: J = _
 
-  val system = ActorSystem("system")
-
-  protected implicit val workerManager = system.actorOf(Props(new Actor {
+  protected implicit val workerManager = systemActor.actorOf(Props(new Actor {
     private val worker: ActorRef = createWorker(context)
 
     override protected def receive = {

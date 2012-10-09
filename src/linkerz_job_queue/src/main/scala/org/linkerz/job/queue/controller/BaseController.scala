@@ -5,9 +5,10 @@
 package org.linkerz.job.queue.controller
 
 import org.linkerz.job.queue.core._
+import org.linkerz.job.queue.core.Controller._
 import grizzled.slf4j.Logging
-import actors.DaemonActor
 import collection.JavaConversions._
+import akka.actor.{Actor, Props}
 
 /**
  * The Class BaseController.
@@ -20,11 +21,6 @@ import collection.JavaConversions._
  */
 class BaseController extends Controller with Logging {
 
-  sealed trait Event
-  case object STOP extends Event
-  case object START extends Event
-  case class NEXT(job: Job) extends Event
-
   var handlers: List[Handler[_ <: Job]] = Nil
 
   /**
@@ -35,57 +31,64 @@ class BaseController extends Controller with Logging {
   }
 
   //The handler actor to handle all the handler
-  val handlerActor = new DaemonActor {
-    def act() {
-      loop {
-        react {
-          case NEXT(job) => {
-            try {
-              if (handleJob(job)) {
-                //Change Job Status.
-                if (!job.isError) {
-                  job.status = JobStatus.DONE
-                }
-              }
-            } catch {
-              case ex: Exception => handleError(job, ex)
-            } finally {
-              reply("DONE")
+  val handlerActor = systemActor.actorOf(Props(new Actor {
+    protected def receive = {
+      case job: Job => {
+        try {
+          if (handleJob(job)) {
+            //Change Job Status.
+            if (!job.isError) {
+              job.status = JobStatus.DONE
             }
           }
-          case STOP => {
-            info("Stoping...")
-            reply("Stoping...")
-            exit()
-          }
+        } catch {
+          case ex: Exception => handleError(job, ex)
         }
       }
     }
-  }
+
+    private def handleJob(job: Job): Boolean = {
+      var isDone = false
+      handlers.foreach(handler => if (handler accept job) {
+        handler match {
+          case handler: HandlerInSession[Job, Session[Job]] => {
+            //Start handling with session.
+            val session = handler.sessionClass.newInstance()
+            session.openSession(job)
+            handler.handle(job, session)
+            session.endSession()
+          }
+          case _ => handler.handle(job)
+        }
+        //Mark the job was done.
+        isDone = true
+      })
+      isDone
+    }
+
+    private def handleError(job: Job, ex: Exception) {
+      error(ex.getMessage, ex)
+      if (job != null) {
+        //marking the error job
+        job.error(ex.getMessage, ex)
+      }
+    }
+
+  }), "handlerActor")
 
   /**
    * Start the controller
    */
-  def start() {
-    handlerActor.start()
-  }
+  def start() {}
 
 
   /**
    * Stop the controller.
    */
   def stop() {
-    handlerActor !? STOP
+    handlerActor ! "stop"
+    while(!handlerActor.isTerminated) Thread.sleep(1000)
     info("Stoped.")
-  }
-
-
-  /**
-   * Add and waiting for finishing the job.
-   * @param job
-   */
-  def !?(job: Job) {
-    handlerActor !? NEXT(job)
   }
 
   /**
@@ -93,38 +96,6 @@ class BaseController extends Controller with Logging {
    * @param job
    */
   def !(job: Job) {
-    handlerActor ! NEXT(job)
-  }
-
-  protected def handleJob(job: Job): Boolean = {
-    var isDone = false
-    handlers.foreach(handler => if (handler accept job) {
-      handler match {
-        case handler: HandlerInSession[Job, Session[Job]] => {
-          //Start handling with session.
-          val session = handler.sessionClass.newInstance()
-          session.openSession(job)
-          handler.handle(job, session)
-          session.endSession()
-        }
-        case _ => handler.handle(job)
-      }
-      //Mark the job was done.
-      isDone = true
-    })
-    isDone
-  }
-
-  /**
-   * Handle error for the job
-   * @param job
-   * @param ex
-   */
-  protected def handleError(job: Job, ex: Exception) {
-    error(ex.getMessage, ex)
-    if (job != null) {
-      //marking the error job
-      job.error(ex.getMessage, ex)
-    }
+    handlerActor ! job
   }
 }

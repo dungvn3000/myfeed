@@ -43,36 +43,36 @@ class RabbitMQController extends BaseController {
   private implicit val _threadPool = Executors.newSingleThreadExecutor()
   private implicit val _strategy = Strategy.Executor
 
-  val consumerActor = actor {
-    (event: Event) => {
-      event match {
-        case START => {
-          _connection = connectionFactory.newConnection()
-          _channel = _connection.createChannel()
-          _channel.basicQos(prefetchCount)
-          val consumer = new QueueingConsumer(_channel)
-          _channel.basicConsume(queueName, false, consumer)
-          var job: Job = null
-          try {
-            while (!_isStop) {
-              val delivery = consumer.nextDelivery(deliverTimeOut)
-              if (delivery != null && delivery.getBody != null) {
-                job = Marshal.load[Job](delivery.getBody)
-                handlerActor !? NEXT(job)
-                _channel.basicAck(delivery.getEnvelope.getDeliveryTag, false)
-              }
-            }
-          } catch {
-            case ex: Exception => handleError(job, ex)
-          }
-        }
-      }
-    }
-  }
+//  val consumerActor = actor {
+//    (event: Event) => {
+//      event match {
+//        case START => {
+//          _connection = connectionFactory.newConnection()
+//          _channel = _connection.createChannel()
+//          _channel.basicQos(prefetchCount)
+//          val consumer = new QueueingConsumer(_channel)
+//          _channel.basicConsume(queueName, false, consumer)
+//          var job: Job = null
+//          try {
+//            while (!_isStop) {
+//              val delivery = consumer.nextDelivery(deliverTimeOut)
+//              if (delivery != null && delivery.getBody != null) {
+//                job = Marshal.load[Job](delivery.getBody)
+//                handlerActor !? NEXT(job)
+//                _channel.basicAck(delivery.getEnvelope.getDeliveryTag, false)
+//              }
+//            }
+//          } catch {
+//            case ex: Exception => handleError(job, ex)
+//          }
+//        }
+//      }
+//    }
+//  }
 
   override def start() {
     super.start()
-    consumerActor ! START
+//    consumerActor ! START
   }
 
   override def stop() {
