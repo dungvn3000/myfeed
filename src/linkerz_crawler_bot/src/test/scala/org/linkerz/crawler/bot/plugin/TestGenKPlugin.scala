@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 - 2013 LinkerZ
+ * Copyright (C) 2012 - 2013 LinkerZ (Searching and Sharing)
  */
 
 package org.linkerz.crawler.bot.plugin

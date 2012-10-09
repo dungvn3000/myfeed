@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 - 2013 LinkerZ
+ * Copyright (C) 2012 - 2013 LinkerZ (Searching and Sharing)
  */
 
 package org.linkerz.job.queue.handler
@@ -66,7 +66,6 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
     //Step 4: Finish.
     onFinish()
   }
-
 
   private def waitingForFinish() {
     while (!workerManager.isTerminated) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 - 2013 LinkerZ
+ * Copyright (C) 2012 - 2013 LinkerZ (Searching and Sharing)
  */
 
 package org.linkerz.job.queue.handler
@@ -30,7 +30,7 @@ class AsyncTestHandler extends AsyncHandler[EmptyJob, SimpleSession] {
   protected def onSuccess(job: EmptyJob) {
     //Making 1000 sub job for testing
     for (i <- 0 to 999) {
-      workerManager ! new EmptyJob
+      workerManager ! new EmptyJob(job)
     }
   }
 

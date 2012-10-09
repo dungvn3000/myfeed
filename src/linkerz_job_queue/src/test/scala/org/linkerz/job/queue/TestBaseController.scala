@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 - 2013 LinkerZ
+ * Copyright (C) 2012 - 2013 LinkerZ (Searching and Sharing)
  */
 
 package org.linkerz.job.queue
@@ -96,6 +96,21 @@ class TestBaseController {
     controller.stop()
 
     Assert.assertEquals(JobStatus.ERROR, job.status)
+  }
+
+  @Test
+  def testMaxDepth() {
+    val controller = new BaseController
+    controller.handlers = List(new AsyncTestHandler)
+    controller.start()
+    val job = new EmptyJob
+    job.maxDepth = 1
+
+    controller ! job
+    controller.stop()
+
+    Assert.assertEquals(JobStatus.DONE, job.status)
+    println("job.result.get = " + job.result.get)
   }
 
   //This test case is too slow, only run it by manually.
