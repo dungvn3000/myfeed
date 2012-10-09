@@ -13,6 +13,7 @@ import org.junit.{Ignore, Test}
 import junit.framework.Assert
 import org.junit.experimental.categories.Category
 import org.linkerz.test.categories.ManualTest
+import collection.mutable.ListBuffer
 
 /**
  * The Class TestBaseController.
@@ -115,24 +116,23 @@ class TestBaseController {
 
   //This test case is too slow, only run it by manually.
   @Test
-  @Ignore
-  @Category(Array(classOf[ManualTest]))
-  def testWithAsyncHandlerAnd100Job() {
+  def testWithAsyncHandlerAnd10Job() {
     val controller = new BaseController
     controller.handlers = List(new AsyncTestHandler)
     controller.start()
-
-    var time = System.currentTimeMillis()
-    for (i <- 0 to 99) {
+    val jobs = new ListBuffer[EmptyJob]
+    for (i <- 0 to 9) {
       val job = new EmptyJob
       job.maxSubJob = 1000
       controller ! job
+      jobs += job
     }
-
     controller.stop()
-    time = System.currentTimeMillis() - time
 
-    println("time = " + time)
+    jobs.foreach(job => {
+      Assert.assertEquals(JobStatus.DONE, job.status)
+      Assert.assertEquals(1000, job.result.get)
+    })
   }
 
 
