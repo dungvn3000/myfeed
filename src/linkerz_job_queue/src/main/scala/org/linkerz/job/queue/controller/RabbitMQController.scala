@@ -7,10 +7,9 @@ package org.linkerz.job.queue.controller
 import com.rabbitmq.client._
 import util.Marshal
 import org.linkerz.job.queue.core.Job
-import scalaz.Scalaz._
-import java.util.concurrent.{TimeUnit, Executors}
-import scalaz.concurrent.Strategy
 import reflect.BeanProperty
+import akka.actor.{Props, Actor}
+import org.linkerz.job.queue.core.Controller._
 
 /**
  * This controller will reivce job from RabbitMQ server.
@@ -40,46 +39,42 @@ class RabbitMQController extends BaseController {
 
   private var _isStop = false
 
-  private implicit val _threadPool = Executors.newSingleThreadExecutor()
-  private implicit val _strategy = Strategy.Executor
-
-//  val consumerActor = actor {
-//    (event: Event) => {
-//      event match {
-//        case START => {
-//          _connection = connectionFactory.newConnection()
-//          _channel = _connection.createChannel()
-//          _channel.basicQos(prefetchCount)
-//          val consumer = new QueueingConsumer(_channel)
-//          _channel.basicConsume(queueName, false, consumer)
-//          var job: Job = null
-//          try {
-//            while (!_isStop) {
-//              val delivery = consumer.nextDelivery(deliverTimeOut)
-//              if (delivery != null && delivery.getBody != null) {
-//                job = Marshal.load[Job](delivery.getBody)
-//                handlerActor !? NEXT(job)
-//                _channel.basicAck(delivery.getEnvelope.getDeliveryTag, false)
-//              }
-//            }
-//          } catch {
-//            case ex: Exception => handleError(job, ex)
-//          }
-//        }
-//      }
-//    }
-//  }
+  val consumerActor = systemActor.actorOf(Props(new Actor {
+    protected def receive = {
+      case "start" => {
+        _connection = connectionFactory.newConnection()
+        _channel = _connection.createChannel()
+        _channel.basicQos(prefetchCount)
+        val consumer = new QueueingConsumer(_channel)
+        _channel.basicConsume(queueName, false, consumer)
+        var job: Job = null
+        try {
+          while (!_isStop) {
+            val delivery = consumer.nextDelivery(deliverTimeOut)
+            if (delivery != null && delivery.getBody != null) {
+              job = Marshal.load[Job](delivery.getBody)
+              RabbitMQController.this ? job
+              _channel.basicAck(delivery.getEnvelope.getDeliveryTag, false)
+            }
+          }
+        } catch {
+          case ex: Exception => handleError(job, ex)
+        }
+      }
+      case "stop" => context.stop(self)
+    }
+  }))
 
   override def start() {
     super.start()
-//    consumerActor ! START
+    consumerActor ! "start"
   }
 
   override def stop() {
     super.stop()
     _isStop = true
-    _threadPool.shutdown()
-    _threadPool.awaitTermination(60, TimeUnit.SECONDS)
+    consumerActor ! "stop"
+    while (!consumerActor.isTerminated) Thread.sleep(1000)
     if (_channel.isOpen) {
       _channel.close()
     }

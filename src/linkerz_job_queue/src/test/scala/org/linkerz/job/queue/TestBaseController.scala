@@ -114,25 +114,21 @@ class TestBaseController {
     Assert.assertEquals(1001, job.result.get)
   }
 
-  //This test case is too slow, only run it by manually.
   @Test
   def testWithAsyncHandlerAnd10Job() {
     val controller = new BaseController
     controller.handlers = List(new AsyncTestHandler)
     controller.start()
-    val jobs = new ListBuffer[EmptyJob]
+
     for (i <- 0 to 9) {
       val job = new EmptyJob
       job.maxSubJob = 1000
-      controller ! job
-      jobs += job
-    }
-    controller.stop()
-
-    jobs.foreach(job => {
+      controller ? job
       Assert.assertEquals(JobStatus.DONE, job.status)
       Assert.assertEquals(1000, job.result.get)
-    })
+    }
+
+    controller.stop()
   }
 
 
@@ -166,15 +162,16 @@ class TestBaseController {
     controller.start()
     val sumJob1 = SumJob(1, 2)
     val sumJob2 = SumJob(3, 4)
-    controller ! sumJob1
-    controller ! sumJob2
 
-    controller.stop()
-
+    controller ? sumJob1
     Assert.assertEquals(3, sumJob1.result.get)
     Assert.assertEquals(JobStatus.DONE, sumJob1.status)
+
+    controller ? sumJob2
+
     Assert.assertEquals(7, sumJob2.result.get)
     Assert.assertEquals(JobStatus.DONE, sumJob2.status)
+    controller.stop()
   }
 
 }

@@ -5,7 +5,7 @@
 package org.linkerz.job.queue
 
 import controller.RabbitMQController
-import handler.EchoHandler
+import handler.{EchoHandler2, EchoHandler}
 import job.EchoJob
 import org.junit.Test
 import com.rabbitmq.client.{MessageProperties, ConnectionFactory}
@@ -79,7 +79,7 @@ class TestRabbitMQController {
     //Controller 2
     val controller2 = new RabbitMQController
     controller2.connectionFactory = factory
-    controller2.handlers = List(new EchoHandler)
+    controller2.handlers = List(new EchoHandler2)
     controller2.start()
 
     //Send a job to server.

@@ -20,8 +20,7 @@ import akka.routing.RoundRobinRouter
  */
 class AsyncTestHandler extends AsyncHandler[EmptyJob, SimpleSession] {
 
-  override protected def createWorker(context: ActorContext) = context.actorOf(Props[LazyWorker].
-    withRouter(RoundRobinRouter(1000)), "lazyWorker")
+  override protected def createWorker(context: ActorContext) = context.actorOf(Props[LazyWorker].withRouter(RoundRobinRouter(1000)))
 
   override protected def onFinish() {
     currentJob.count = currentSession.subJobCount

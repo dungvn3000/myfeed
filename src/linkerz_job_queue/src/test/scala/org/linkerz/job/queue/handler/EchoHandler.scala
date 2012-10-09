@@ -6,6 +6,7 @@ package org.linkerz.job.queue.handler
 
 import org.linkerz.job.queue.core.{Job, Handler}
 import org.linkerz.job.queue.job.EchoJob
+import grizzled.slf4j.Logging
 
 /**
  * The Class EchoHandler.
@@ -14,11 +15,20 @@ import org.linkerz.job.queue.job.EchoJob
  * @since 9/2/12 12:17 PM
  *
  */
-class EchoHandler extends Handler[EchoJob] {
+class EchoHandler extends Handler[EchoJob] with Logging {
 
   def accept(job: Job) = job.isInstanceOf[EchoJob]
 
   protected def doHandle(job: EchoJob) {
-    println("echo job =" + job.msg)
+    info("echo1 =" + job.msg)
+  }
+}
+
+class EchoHandler2 extends Handler[EchoJob] with Logging {
+
+  def accept(job: Job) = job.isInstanceOf[EchoJob]
+
+  protected def doHandle(job: EchoJob) {
+    info("echo2  =" + job.msg)
   }
 }

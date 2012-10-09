@@ -55,7 +55,7 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
     //Step 1: Reset to start
     currentSession = session
     currentJob = job
-    workerManager = systemActor.actorOf(Props(createManager()), "workerManager")
+    workerManager = systemActor.actorOf(Props(createManager()))
 
     //Step 2: Send to the worker manager.
     workerManager ! job

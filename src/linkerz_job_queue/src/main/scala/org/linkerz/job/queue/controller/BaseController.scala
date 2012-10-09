@@ -33,23 +33,14 @@ class BaseController extends Controller with Logging {
   //The handler actor to handle all the handler
   val handlerActor = systemActor.actorOf(Props(new Actor {
     protected def receive = {
-      case job: Job => {
-        try {
-          if (handleJob(job)) {
-            //Change Job Status.
-            if (!job.isError) {
-              job.status = JobStatus.DONE
-            }
-          }
-        } catch {
-          case ex: Exception => handleError(job, ex)
-        }
-      }
+      case job: Job => handleJob(job)
       case "stop" => context.stop(self)
     }
+  }))
 
-    private def handleJob(job: Job): Boolean = {
-      var isDone = false
+  private def handleJob(job: Job) {
+    var isDone = false
+    try {
       handlers.foreach(handler => if (handler accept job) {
         handler match {
           case handler: HandlerInSession[Job, Session[Job]] => {
@@ -64,18 +55,19 @@ class BaseController extends Controller with Logging {
         //Mark the job was done.
         isDone = true
       })
-      isDone
+      if (isDone && !job.isError) job.status = JobStatus.DONE
+    } catch {
+      case ex: Exception => handleError(job, ex)
     }
+  }
 
-    private def handleError(job: Job, ex: Exception) {
-      error(ex.getMessage, ex)
-      if (job != null) {
-        //marking the error job
-        job.error(ex.getMessage, ex)
-      }
+  protected def handleError(job: Job, ex: Exception) {
+    error(ex.getMessage, ex)
+    if (job != null) {
+      //marking the error job
+      job.error(ex.getMessage, ex)
     }
-
-  }), "handlerActor")
+  }
 
   /**
    * Start the controller
@@ -98,5 +90,13 @@ class BaseController extends Controller with Logging {
    */
   def !(job: Job) {
     handlerActor ! job
+  }
+
+  /**
+   * Sync doing the job.
+   * @param job
+   */
+  def ?(job: Job) {
+    handleJob(job)
   }
 }

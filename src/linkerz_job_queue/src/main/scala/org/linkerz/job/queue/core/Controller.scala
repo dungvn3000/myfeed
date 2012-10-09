@@ -26,10 +26,16 @@ trait Controller {
   def stop()
 
   /**
-   * Add a job to the queue
+   * Add a job to the queue.
    * @param job
    */
   def !(job: Job)
+
+  /**
+   * Sync doing the job.
+   * @param job
+   */
+  def ?(job: Job)
 }
 
 object Controller{
