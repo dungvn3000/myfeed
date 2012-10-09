@@ -106,6 +106,10 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
           return
         }
 
+        if (job.depth > currentSession.currentDepth) {
+          currentSession.currentDepth = job.depth
+        }
+
         if (currentSession.currentDepth > currentJob.maxDepth && currentJob.maxDepth > 0) {
           currentSession.currentDepth -= 1
           stop("Stop because the number of sub job reached maximum depth")
@@ -125,10 +129,6 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
 
         //Counting.
         currentSession.subJobCount += 1
-
-        if (job.depth > currentSession.currentDepth) {
-          currentSession.currentDepth = job.depth
-        }
 
         //Delay time for each job.
         if (currentJob.politenessDelay > 0) Thread.sleep(currentJob.politenessDelay)

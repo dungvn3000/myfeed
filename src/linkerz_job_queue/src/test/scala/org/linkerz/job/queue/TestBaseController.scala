@@ -110,7 +110,7 @@ class TestBaseController {
     controller.stop()
 
     Assert.assertEquals(JobStatus.DONE, job.status)
-    println("job.result.get = " + job.result.get)
+    Assert.assertEquals(1001, job.result.get)
   }
 
   //This test case is too slow, only run it by manually.
