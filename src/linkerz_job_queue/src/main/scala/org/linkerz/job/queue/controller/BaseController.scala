@@ -45,6 +45,7 @@ class BaseController extends Controller with Logging {
           case ex: Exception => handleError(job, ex)
         }
       }
+      case "stop" => context.stop(self)
     }
 
     private def handleJob(job: Job): Boolean = {
@@ -87,7 +88,7 @@ class BaseController extends Controller with Logging {
    */
   def stop() {
     handlerActor ! "stop"
-    while(!handlerActor.isTerminated) Thread.sleep(1000)
+    while (!handlerActor.isTerminated) Thread.sleep(1000)
     info("Stoped.")
   }
 

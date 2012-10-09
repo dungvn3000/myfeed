@@ -111,9 +111,7 @@ class TestBaseController {
     for (i <- 0 to 99) {
       val job = new EmptyJob
       job.maxSubJob = 1000
-      controller !? job
-
-      Assert.assertEquals(JobStatus.DONE, job.status)
+      controller ! job
     }
 
     controller.stop()
@@ -153,17 +151,15 @@ class TestBaseController {
     controller.start()
     val sumJob1 = SumJob(1, 2)
     val sumJob2 = SumJob(3, 4)
-    controller !? sumJob1
+    controller ! sumJob1
+    controller ! sumJob2
+
+    controller.stop()
 
     Assert.assertEquals(3, sumJob1.result.get)
     Assert.assertEquals(JobStatus.DONE, sumJob1.status)
-
-    controller !? sumJob2
-
     Assert.assertEquals(7, sumJob2.result.get)
     Assert.assertEquals(JobStatus.DONE, sumJob2.status)
-
-    controller.stop()
   }
 
 }
