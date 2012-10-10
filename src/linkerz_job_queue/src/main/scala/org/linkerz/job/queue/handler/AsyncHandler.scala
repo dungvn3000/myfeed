@@ -8,9 +8,8 @@ import org.linkerz.job.queue.core._
 import org.linkerz.job.queue.core.Controller._
 import grizzled.slf4j.Logging
 import akka.actor._
-import org.linkerz.job.queue.handler.AsyncHandler.Success
-import org.linkerz.job.queue.handler.AsyncHandler.Fail
-import org.linkerz.job.queue.handler.AsyncHandler.Next
+import org.linkerz.job.queue.handler.AsyncHandler.{Stop, Success, Fail, Next}
+import akka.routing.Broadcast
 
 object AsyncHandler {
 
@@ -22,6 +21,7 @@ object AsyncHandler {
 
   case class Fail[J <: Job](job: J, ex: Exception) extends Event
 
+  case class Stop(reason: String) extends Event
 }
 
 /**
@@ -80,11 +80,12 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
   protected def createManager() = {
     new Actor {
       private val worker: ActorRef = createWorker(context)
+      private var isStop = false
 
       override protected def receive = {
         case job: J => {
           try {
-            doJob(job)
+            if (!isStop) doJob(job)
           } catch {
             case ex: Exception => {
               error(ex.getMessage, ex)
@@ -97,6 +98,10 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
           currentJob.error(f.ex.getMessage, f.ex)
         }
         case s: Success[J] => onSuccess(s.job)
+        case Stop(reason) => {
+          info(reason)
+          context.stop(self)
+        }
       }
 
       private def doJob(job: J) {
@@ -135,8 +140,10 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
       }
 
       private def stop(reason: String) {
-        info(reason)
-        context.stop(self)
+        isStop = true
+        worker ! Broadcast(Stop(reason))
+        while (!worker.isTerminated) Thread.sleep(1000)
+        self ! Stop(reason)
       }
     }
   }

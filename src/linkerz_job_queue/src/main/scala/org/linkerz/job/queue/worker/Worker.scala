@@ -7,7 +7,7 @@ package org.linkerz.job.queue.worker
 import grizzled.slf4j.Logging
 import org.linkerz.job.queue.core.{Session, Job}
 import akka.actor.Actor
-import org.linkerz.job.queue.handler.AsyncHandler.{Fail, Success, Next}
+import org.linkerz.job.queue.handler.AsyncHandler.{Stop, Fail, Success, Next}
 
 /**
  * The Class Worker.
@@ -39,6 +39,7 @@ trait Worker[J <: Job, S <: Session[J]] extends Actor with Logging {
         case ex: Exception => sender ! Fail(next.job, ex)
       }
     }
+    case Stop(reason) => context.stop(self)
   }
 
   /**

@@ -17,6 +17,7 @@ import org.apache.commons.lang.StringUtils
 import org.linkerz.core.matcher.SimpleRegexMatcher
 import org.linkerz.crawler.core.fetcher.DefaultFetcher
 import akka.actor.{Props, ActorContext}
+import akka.routing.RoundRobinRouter
 
 /**
  * The Class CrawlerHandler.
@@ -44,7 +45,8 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
   override protected def createWorker(context: ActorContext) = {
     assert(downloadFactory != null)
     assert(parserFactory != null)
-    context.actorOf(Props(new CrawlWorker(new DefaultFetcher(downloadFactory, parserFactory))), "crawlWorker")
+    context.actorOf(Props(new CrawlWorker(new DefaultFetcher(downloadFactory, parserFactory))).
+      withRouter(RoundRobinRouter(10)))
   }
 
   override protected def onFinish() {
@@ -58,11 +60,12 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
 
   protected def onSuccess(job: CrawlJob) {
     val jobResult = job.result
+    currentSession.fetchedUrls += job.webUrl
+
     if (!jobResult.isEmpty && !jobResult.get.isError) {
       val webPage = jobResult.get
       val webUrls = webPage.webUrls
       currentSession.countUrl += webUrls.size
-      currentSession.fetchedUrls += job.webUrl
 
       //Set the parent for the website.
       if (!job.parent.isEmpty) {
@@ -78,7 +81,7 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
       webUrls.foreach(webUrl => {
         if (shouldCrawl(webUrl)) {
           workerManager ! new CrawlJob(webUrl, job)
-          currentSession.queueUrls += webUrl
+//          currentSession.queueUrls += webUrl
         }
       })
 
@@ -88,7 +91,7 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
         val newWebUrl = new WebUrl(movedUrl)
         if (shouldCrawl(newWebUrl)) {
           workerManager ! new CrawlJob(newWebUrl, job)
-          currentSession.queueUrls += newWebUrl
+//          currentSession.queueUrls += newWebUrl
         }
       }
     }
