@@ -71,7 +71,6 @@ class RabbitMQController extends BaseController {
   }
 
   override def stop() {
-    super.stop()
     _isStop = true
     consumerActor ! "stop"
     while (!consumerActor.isTerminated) Thread.sleep(1000)
@@ -79,5 +78,6 @@ class RabbitMQController extends BaseController {
       _channel.close()
     }
     _connection.close()
+    super.stop()
   }
 }
