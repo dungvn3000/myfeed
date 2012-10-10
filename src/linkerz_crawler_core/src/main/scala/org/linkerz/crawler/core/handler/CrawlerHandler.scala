@@ -26,7 +26,6 @@ import akka.routing.RoundRobinRouter
  * @since 7/29/12, 12:54 AM
  *
  */
-
 class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
 
   @BeanProperty
@@ -60,7 +59,7 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
 
   protected def onSuccess(job: CrawlJob) {
     val jobResult = job.result
-    currentSession.fetchedUrls += job.webUrl
+    currentSession.fetchedUrls.add(job.webUrl)
 
     if (!jobResult.isEmpty && !jobResult.get.isError) {
       val webPage = jobResult.get
@@ -81,7 +80,7 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
       webUrls.foreach(webUrl => {
         if (shouldCrawl(webUrl)) {
           workerManager ! new CrawlJob(webUrl, job)
-//          currentSession.queueUrls += webUrl
+          currentSession.queueUrls.add(webUrl)
         }
       })
 
@@ -91,7 +90,7 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
         val newWebUrl = new WebUrl(movedUrl)
         if (shouldCrawl(newWebUrl)) {
           workerManager ! new CrawlJob(newWebUrl, job)
-//          currentSession.queueUrls += newWebUrl
+          currentSession.queueUrls.add(newWebUrl)
         }
       }
     }
@@ -124,10 +123,10 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
     if (!currentJob.onlyCrawlInSameDomain
       || (currentJob.onlyCrawlInSameDomain && webUrl.domainName == currentSession.domainName)) {
       //Make sure we not fetch a link what we did already.
-      if (currentSession.fetchedUrls.findEntry(webUrl).isEmpty) {
+      if (!currentSession.fetchedUrls.contains(webUrl)) {
         //And make sure the url is not in the queue
-        val result = currentSession.queueUrls.find(queueUrl => queueUrl == webUrl)
-        if (result.isEmpty) {
+        val result = currentSession.queueUrls.contains(webUrl)
+        if (!result) {
           return true
         }
       }

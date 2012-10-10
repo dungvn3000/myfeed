@@ -6,8 +6,8 @@ package org.linkerz.crawler.core.session
 
 import org.linkerz.job.queue.core.Session
 import org.linkerz.crawler.core.job.CrawlJob
-import collection.mutable
 import org.linkerz.crawler.core.model.WebUrl
+import gnu.trove.set.hash.THashSet
 
 /**
  * The Class CrawlSession.
@@ -24,13 +24,13 @@ class CrawlSession extends Session[CrawlJob] {
   /**
    * Store fetched urls list
    */
-  var fetchedUrls = mutable.HashSet.empty[WebUrl]
+  var fetchedUrls = new THashSet[WebUrl]()
 
   /**
    * Store queue urls list, It is not using for queue url,
    * it is using for mark the url already queue then we won't queue again.
    */
-  var queueUrls = mutable.HashSet.empty[WebUrl]
+  var queueUrls = new THashSet[WebUrl]()
 
   var domainName: String = _
 
