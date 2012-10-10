@@ -19,7 +19,8 @@ import org.apache.http.HttpStatus
 class WebPage {
 
   var webUrl: WebUrl = _
-  var webUrls: List[WebUrl] = _
+  //Using java list for better performance.
+  var webUrls: java.util.List[WebUrl] = _
   var content: Array[Byte] = _
 
   var responseCode: Int = _

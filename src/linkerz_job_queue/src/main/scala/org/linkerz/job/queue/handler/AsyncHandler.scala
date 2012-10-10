@@ -37,6 +37,12 @@ object AsyncHandler {
 abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[J, S] with Logging {
 
   /**
+   * This flag will be turn on when the manager is going to stop.
+   * Please don't modify it outside the manager actor.
+   */
+  protected var isStop = false
+
+  /**
    * The current session.
    */
   protected var currentSession: S = _
@@ -73,14 +79,12 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
       Thread.sleep(1000)
     }
   }
-
   /**
-   * Create the manager actor.
+    * Create the manager actor.
    */
   protected def createManager() = {
     new Actor {
       private val worker: ActorRef = createWorker(context)
-      private var isStop = false
 
       override protected def receive = {
         case job: J => {

@@ -18,6 +18,7 @@ import org.linkerz.core.matcher.SimpleRegexMatcher
 import org.linkerz.crawler.core.fetcher.DefaultFetcher
 import akka.actor.{Props, ActorContext}
 import akka.routing.RoundRobinRouter
+import collection.JavaConversions._
 
 /**
  * The Class CrawlerHandler.
@@ -77,14 +78,17 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
         dbService.save(webPage)
       }
 
-      webUrls.foreach(webUrl => {
-        if (shouldCrawl(webUrl)) {
-          workerManager ! new CrawlJob(webUrl, job)
-          currentSession.queueUrls.add(webUrl)
-        }
-      })
+      //If the manager is going to stop, we will not add any job to the queue.
+      if(!isStop) {
+        webUrls.foreach(webUrl => {
+          if (shouldCrawl(webUrl)) {
+            workerManager ! new CrawlJob(webUrl, job)
+            currentSession.queueUrls.add(webUrl)
+          }
+        })
+      }
 
-    } else if (!jobResult.isEmpty && jobResult.get.isRedirect) {
+    } else if (!jobResult.isEmpty && jobResult.get.isRedirect && !isStop) {
       val movedUrl = jobResult.get.webUrl.movedToUrl
       if (StringUtils.isNotBlank(movedUrl)) {
         val newWebUrl = new WebUrl(movedUrl)
@@ -125,8 +129,7 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
       //Make sure we not fetch a link what we did already.
       if (!currentSession.fetchedUrls.contains(webUrl)) {
         //And make sure the url is not in the queue
-        val result = currentSession.queueUrls.contains(webUrl)
-        if (!result) {
+        if (!currentSession.queueUrls.contains(webUrl)) {
           return true
         }
       }

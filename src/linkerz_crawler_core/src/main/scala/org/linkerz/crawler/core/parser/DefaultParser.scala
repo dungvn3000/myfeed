@@ -15,6 +15,7 @@ import edu.uci.ics.crawler4j.url.URLCanonicalizer
 import collection.JavaConversions._
 import org.linkerz.crawler.core.job.CrawlJob
 import org.apache.commons.validator.routines.UrlValidator
+import java.util
 
 /**
  * The Class DefaultParser.
@@ -36,7 +37,8 @@ class DefaultParser extends Parser {
 
     info("Parse: " + webUrl.url)
 
-    var webUrls = new ListBuffer[WebUrl]
+    //Using java list for better performance.
+    var webUrls = new util.ArrayList[WebUrl]
 
     if (webPage.content != null) {
       val metadata = new Metadata
@@ -94,7 +96,7 @@ class DefaultParser extends Parser {
       })
     }
 
-    webPage.webUrls = webUrls.toList
+    webPage.webUrls = webUrls
   }
 
 }
