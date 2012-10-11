@@ -46,7 +46,7 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
     assert(downloadFactory != null)
     assert(parserFactory != null)
     context.actorOf(Props(new CrawlWorker(new DefaultFetcher(downloadFactory, parserFactory))).
-      withRouter(RoundRobinRouter(10)))
+      withRouter(RoundRobinRouter(5)))
   }
 
   override protected def onFinish() {

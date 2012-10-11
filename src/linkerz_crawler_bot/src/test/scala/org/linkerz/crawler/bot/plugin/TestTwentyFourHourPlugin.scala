@@ -34,7 +34,7 @@ class TestTwentyFourHourPlugin {
     Assert.assertEquals("(Tin tuc) - Người ở đây gọi nơi họ đang sống là thôn ung thư. " +
       "Trong thôn ung thư lại có ngõ ung thư. Chỉ một con ngõ chừng hơn 10 gia đình sinh sống mà có " +
       "đến 5-6 nhà có người chết vì bệnh ung thư.", webPage.description)
-    Assert.assertEquals("http://img-hcm.24hstatic.com:8008/upload/4-2012/images/2012-10-04/1349338673_lang-ung-thu-200.jpg", webPage.featureImageUrl)
+    Assert.assertEquals("http://img-hcm.24hstatic.com/upload/4-2012/images/2012-10-04/1349338673_lang-ung-thu-200.jpg", webPage.featureImageUrl)
   }
 
   @Test
