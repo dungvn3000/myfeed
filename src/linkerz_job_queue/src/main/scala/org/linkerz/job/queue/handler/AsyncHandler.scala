@@ -22,6 +22,7 @@ object AsyncHandler {
   case class Fail[J <: Job](job: J, ex: Exception) extends Event
 
   case class Stop(reason: String) extends Event
+
 }
 
 /**
@@ -55,7 +56,12 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
   /**
    * The worker manager.
    */
-  protected var workerManager: ActorRef = _
+  private var workerManager: ActorRef = _
+
+  /**
+   * Hard working worker.
+   */
+  private var worker: ActorRef = _
 
   protected def doHandle(job: J, session: S) {
     //Step 1: Reset to start
@@ -65,7 +71,7 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
     workerManager = systemActor.actorOf(Props(createManager()))
 
     //Step 2: Send to the worker manager.
-    workerManager ! job
+    this ! job
 
     //Step 3: Waiting for all worker finished their job
     waitingForFinish()
@@ -80,17 +86,87 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
       Thread.sleep(1000)
     }
   }
+
   /**
-    * Create the manager actor.
+   * Send a job to the manager
+   * @param job
+   */
+  protected def !(job: J) {
+    if (!isStop && shouldDo(job)) workerManager ! job
+  }
+
+  /**
+   * Considering should we go for it or not.
+   * @param job
+   * @return
+   */
+  protected def shouldDo(job: J): Boolean = {
+    //Step 1: Checking whether go for the job or not
+    if (currentJob.maxSubJob >= 0 && currentSession.subJobCount >= currentJob.maxSubJob) {
+      stop("Stop because the number of sub job reached maximum")
+      return false
+    }
+
+    if (currentSession.currentDepth > currentJob.maxDepth && currentJob.maxDepth > 0) {
+      currentSession.currentDepth -= 1
+      stop("Stop because the number of sub job reached maximum depth")
+      return false
+    }
+
+    //Checking working time.
+    if (currentJob.timeOut > 0 && currentSession.jobTime > currentJob.timeOut) {
+      //marking the job is error
+      currentJob.error("Time Out")
+      stop("Stop because the time is out")
+      return false
+    }
+
+    true
+  }
+
+  /**
+   * Send the job to the worker.
+   * @param job
+   */
+  protected def doJob(job: J) {
+
+    worker.tell(Next(job, currentSession), workerManager)
+
+    //Counting.
+    currentSession.subJobCount += 1
+
+    //Store the maximum depth level.
+    if (job.depth > currentSession.currentDepth) {
+      currentSession.currentDepth = job.depth
+    }
+
+    //Delay time for each job.
+    if (currentJob.politenessDelay > 0) Thread.sleep(currentJob.politenessDelay)
+  }
+
+  /**
+   * Stop the handler with a reason.
+   * @param reason
+   */
+  protected def stop(reason: String) {
+    isStop = true
+    worker ! Broadcast(Stop(reason))
+    while (!worker.isTerminated) Thread.sleep(1000)
+    workerManager ! Stop(reason)
+  }
+
+  /**
+   * Create the manager actor.
    */
   protected def createManager() = {
     new Actor {
-      private val worker: ActorRef = createWorker(context)
+
+      worker = createWorker(context)
 
       override protected def receive = {
         case job: J => {
           try {
-            if (!isStop) doJob(job)
+            doJob(job)
           } catch {
             case ex: Exception => {
               error(ex.getMessage, ex)
@@ -107,48 +183,6 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
           info(reason)
           context.stop(self)
         }
-      }
-
-      private def doJob(job: J) {
-        //Step 1: Checking whether go for the job or not
-        if (currentJob.maxSubJob >= 0 && currentSession.subJobCount >= currentJob.maxSubJob) {
-          stop("Stop because the number of sub job reached maximum")
-          return
-        }
-
-        if (job.depth > currentSession.currentDepth) {
-          currentSession.currentDepth = job.depth
-        }
-
-        if (currentSession.currentDepth > currentJob.maxDepth && currentJob.maxDepth > 0) {
-          currentSession.currentDepth -= 1
-          stop("Stop because the number of sub job reached maximum depth")
-          return
-        }
-
-        //Checking working time.
-        if (currentJob.timeOut > 0 && currentSession.jobTime > currentJob.timeOut) {
-          //marking the job is error
-          currentJob.error("Time Out")
-          stop("Stop because the time is out")
-          return
-        }
-
-        //Step 2: Find a free worker for the job.
-        worker ! Next(job, currentSession)
-
-        //Counting.
-        currentSession.subJobCount += 1
-
-        //Delay time for each job.
-        if (currentJob.politenessDelay > 0) Thread.sleep(currentJob.politenessDelay)
-      }
-
-      private def stop(reason: String) {
-        isStop = true
-        worker ! Broadcast(Stop(reason))
-        while (!worker.isTerminated) Thread.sleep(1000)
-        self ! Stop(reason)
       }
     }
   }

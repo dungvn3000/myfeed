@@ -82,7 +82,7 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
       if(!isStop) {
         webUrls.foreach(webUrl => {
           if (shouldCrawl(webUrl)) {
-            workerManager ! new CrawlJob(webUrl, job)
+            this ! new CrawlJob(webUrl, job)
             currentSession.queueUrls.add(webUrl)
           }
         })
@@ -93,7 +93,7 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
       if (StringUtils.isNotBlank(movedUrl)) {
         val newWebUrl = new WebUrl(movedUrl)
         if (shouldCrawl(newWebUrl)) {
-          workerManager ! new CrawlJob(newWebUrl, job)
+          this ! new CrawlJob(newWebUrl, job)
           currentSession.queueUrls.add(newWebUrl)
         }
       }

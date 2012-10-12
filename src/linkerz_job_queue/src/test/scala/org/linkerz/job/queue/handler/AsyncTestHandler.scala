@@ -26,7 +26,7 @@ class AsyncTestHandler extends AsyncHandler[EmptyJob, SimpleSession] {
     currentJob.count += 1
     //Making 1000 sub job for testing
     for (i <- 0 to 999) {
-      workerManager ! new EmptyJob(job)
+      this ! new EmptyJob(job)
     }
   }
 
