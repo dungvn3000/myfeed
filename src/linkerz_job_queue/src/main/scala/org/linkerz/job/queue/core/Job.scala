@@ -17,7 +17,7 @@ import collection.mutable.ListBuffer
 /**
  * The trait job represent for a job. It can be add to a Job Queue.
  */
-trait Job {
+trait Job extends Serializable {
 
   private var _error = new ListBuffer[(String, Throwable)]
   private var _info = new ListBuffer[String]

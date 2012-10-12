@@ -75,7 +75,7 @@ class TestBaseController {
     controller.handlers = List(handler)
     controller.start()
     val job = new EmptyJob
-    job.maxSubJob = 1000
+    job.maxSubJob = 10000
 
     controller ! job
 

@@ -21,8 +21,8 @@ trait Session[J <: Job] {
   //Counting child jobs was done by the current job.
   var subJobCount = 0
 
-  //Starting time on current job.
-  var startTime = System.currentTimeMillis
+  //Starting count the time on current job.
+  val startTime = System.currentTimeMillis
 
   /**
    * Time for done the job.

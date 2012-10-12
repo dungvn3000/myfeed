@@ -15,11 +15,11 @@ import grizzled.slf4j.Logging
  * @since 9/2/12 12:17 PM
  *
  */
-class EchoHandler(name: String = "EchoHandler") extends Handler[EchoJob] {
+class EchoHandler extends Handler[EchoJob] with Logging {
 
   def accept(job: Job) = job.isInstanceOf[EchoJob]
 
   protected def doHandle(job: EchoJob) {
-    println(name + " " + job.msg)
+    info("Echo handler " + job.msg)
   }
 }

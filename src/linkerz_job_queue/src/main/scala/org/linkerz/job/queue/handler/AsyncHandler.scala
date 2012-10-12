@@ -59,6 +59,7 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
 
   protected def doHandle(job: J, session: S) {
     //Step 1: Reset to start
+    isStop = false
     currentSession = session
     currentJob = job
     workerManager = systemActor.actorOf(Props(createManager()))
