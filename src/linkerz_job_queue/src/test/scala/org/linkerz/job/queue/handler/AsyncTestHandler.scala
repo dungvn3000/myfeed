@@ -7,7 +7,7 @@ package org.linkerz.job.queue.handler
 import org.linkerz.job.queue.job.EmptyJob
 import org.linkerz.job.queue.session.SimpleSession
 import org.linkerz.job.queue.core.Job
-import org.linkerz.job.queue.worker.LazyWorker
+import org.linkerz.job.queue.actor.LazyWorker
 import akka.actor.{ActorContext, Props}
 import akka.routing.RoundRobinRouter
 

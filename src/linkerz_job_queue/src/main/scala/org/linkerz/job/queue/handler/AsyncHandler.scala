@@ -8,27 +8,31 @@ import org.linkerz.job.queue.core._
 import org.linkerz.job.queue.core.Controller._
 import grizzled.slf4j.Logging
 import akka.actor._
-import org.linkerz.job.queue.handler.AsyncHandler.{Stop, Success, Fail, Next}
-import akka.routing.Broadcast
+import org.linkerz.job.queue.handler.AsyncHandler.{StartSupervisor, Stop, Next}
+import org.linkerz.job.queue.actor.{Supervisor, Manager}
 
 object AsyncHandler {
 
   sealed trait Event
 
+  case class StartSupervisor[J <: Job](job: J, manager: ActorRef) extends Event
+
   case class Next[J <: Job, S <: Session[J]](job: J, session: S) extends Event
+
+  case class Progress(jobDone: Int) extends Event
 
   case class Success[J <: Job](job: J) extends Event
 
   case class Fail[J <: Job](job: J, ex: Exception) extends Event
 
-  case class Stop(reason: String) extends Event
+  case class Stop(reason: String, expectedJobNumber: Int) extends Event
 
 }
 
 /**
  * The Class AsyncHandler.
  * The Handler with workers, the job will be do async in here.
- * Make sure the handler always has at least one worker.
+ * Make sure the handler always has at least one actor.
  * The Worker will be created before handle a job.
  *
  * @author Nguyen Duc Dung
@@ -54,26 +58,30 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
   protected var currentJob: J = _
 
   /**
-   * The worker manager.
+   * The actor manager.
    */
   private var workerManager: ActorRef = _
 
   /**
-   * Hard working worker.
+   * Using for monitor work progress between manager and worker.
    */
-  private var worker: ActorRef = _
+  private var supervisor: ActorRef = _
+
 
   protected def doHandle(job: J, session: S) {
     //Step 1: Reset to start
     isStop = false
     currentSession = session
     currentJob = job
-    workerManager = systemActor.actorOf(Props(createManager()))
+    supervisor = systemActor.actorOf(Props(new Supervisor))
+    workerManager = systemActor.actorOf(Props(new Manager(supervisor, createWorker, doJob, onError, onSuccess)))
 
-    //Step 2: Send to the worker manager.
+    supervisor ! StartSupervisor(job, workerManager)
+
+    //Step 2: Send to the actor manager.
     this ! job
 
-    //Step 3: Waiting for all worker finished their job
+    //Step 3: Waiting for all actor finished their job
     waitingForFinish()
 
     //Step 4: Finish.
@@ -81,7 +89,7 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
   }
 
   private def waitingForFinish() {
-    while (!workerManager.isTerminated) {
+    while (!supervisor.isTerminated) {
       //Sleep 1s for next checking.
       Thread.sleep(1000)
     }
@@ -92,7 +100,19 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
    * @param job
    */
   protected def !(job: J) {
-    if (!isStop && shouldDo(job)) workerManager ! job
+    if (!isStop) {
+
+      //Store the maximum depth level.
+      if (job.depth > currentSession.currentDepth) {
+        currentSession.currentDepth = job.depth
+      }
+
+      if (shouldDo(job)) {
+        workerManager ! job
+        //Counting.
+        currentSession.subJobCount += 1
+      }
+    }
   }
 
   /**
@@ -113,32 +133,17 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
       return false
     }
 
-    //Checking working time.
-    if (currentJob.timeOut > 0 && currentSession.jobTime > currentJob.timeOut) {
-      //marking the job is error
-      currentJob.error("Time Out")
-      stop("Stop because the time is out")
-      return false
-    }
-
     true
   }
 
   /**
-   * Send the job to the worker.
+   * Send the job to the actor.
    * @param job
+   * @param worker
    */
-  protected def doJob(job: J) {
+  protected def doJob(job: J, worker: ActorRef) {
 
     worker.tell(Next(job, currentSession), workerManager)
-
-    //Counting.
-    currentSession.subJobCount += 1
-
-    //Store the maximum depth level.
-    if (job.depth > currentSession.currentDepth) {
-      currentSession.currentDepth = job.depth
-    }
 
     //Delay time for each job.
     if (currentJob.politenessDelay > 0) Thread.sleep(currentJob.politenessDelay)
@@ -150,45 +155,12 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
    */
   protected def stop(reason: String) {
     isStop = true
-    worker ! Broadcast(Stop(reason))
-    while (!worker.isTerminated) Thread.sleep(1000)
-    workerManager ! Stop(reason)
+    //Tell supervisor we are going to stop.
+    supervisor ! Stop(reason, currentSession.subJobCount)
   }
 
   /**
-   * Create the manager actor.
-   */
-  protected def createManager() = {
-    new Actor {
-
-      worker = createWorker(context)
-
-      override protected def receive = {
-        case job: J => {
-          try {
-            doJob(job)
-          } catch {
-            case ex: Exception => {
-              error(ex.getMessage, ex)
-              currentJob.error(ex.getMessage, ex)
-            }
-          }
-        }
-        case f: Fail[J] => {
-          error(f.ex.getMessage, f.ex)
-          currentJob.error(f.ex.getMessage, f.ex)
-        }
-        case s: Success[J] => onSuccess(s.job)
-        case Stop(reason) => {
-          info(reason)
-          context.stop(self)
-        }
-      }
-    }
-  }
-
-  /**
-   * Creating worker.
+   * Creating actor.
    * @param context
    * @return
    */
@@ -198,6 +170,16 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
    * This method will be called before the hander is going to finish everything.
    */
   protected def onFinish() {}
+
+  /**
+   * Call when a error happen.
+   * @param message
+   * @param ex
+   */
+  protected def onError(message: String, ex: Exception) {
+    error(ex.getMessage, ex)
+    currentJob.error(ex.getMessage, ex)
+  }
 
   /**
    * Create a sub job base the result of a job.

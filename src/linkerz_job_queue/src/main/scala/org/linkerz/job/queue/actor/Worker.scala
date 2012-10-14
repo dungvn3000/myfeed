@@ -2,18 +2,21 @@
  * Copyright (C) 2012 - 2013 LinkerZ (Searching and Sharing)
  */
 
-package org.linkerz.job.queue.worker
+package org.linkerz.job.queue.actor
 
 import grizzled.slf4j.Logging
 import org.linkerz.job.queue.core.{Session, Job}
 import akka.actor.Actor
-import org.linkerz.job.queue.handler.AsyncHandler.{Stop, Fail, Success, Next}
+import org.linkerz.job.queue.handler.AsyncHandler._
+import org.linkerz.job.queue.handler.AsyncHandler.Success
+import org.linkerz.job.queue.handler.AsyncHandler.Fail
+import org.linkerz.job.queue.handler.AsyncHandler.Next
 
 /**
  * The Class Worker.
  *
  * Worker will do the job in async.
- * At the same time the worker hold only one job. After finish that job it's gonna take another job.
+ * At the same time the actor hold only one job. After finish that job it's gonna take another job.
  * @author Nguyen Duc Dung
  * @since 7/9/12, 1:53 AM
  *
@@ -39,7 +42,6 @@ trait Worker[J <: Job, S <: Session[J]] extends Actor with Logging {
         case ex: Exception => sender ! Fail(next.job, ex)
       }
     }
-    case Stop(reason) => context.stop(self)
   }
 
   /**
