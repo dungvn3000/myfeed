@@ -9,7 +9,7 @@ import handler.{AsyncTestHandler, EchoHandler}
 import job.{EmptyJob, EchoJob}
 import org.junit.Test
 import com.rabbitmq.client.{MessageProperties, ConnectionFactory}
-import util.Marshal
+import util.{Random, Marshal}
 
 /**
  * The Class TestRabbitMQController.
@@ -88,21 +88,18 @@ class TestRabbitMQController {
     val queue = channel.queueDeclare("jobQueue", false, false, true, null)
 
     for (i <- 0 to 999) {
-      if (i % 2 == 0) {
-        channel.basicPublish("", "jobQueue", MessageProperties.PERSISTENT_BASIC,
-          Marshal.dump(new EchoJob("Hello Rabbit " + i)))
-      } else {
-        val emptyJob = new EmptyJob()
-        emptyJob.maxSubJob = 100
-        channel.basicPublish("", "jobQueue", MessageProperties.PERSISTENT_BASIC,
-          Marshal.dump(emptyJob))
-      }
+      channel.basicPublish("", "jobQueue", MessageProperties.PERSISTENT_BASIC,
+        Marshal.dump(new EchoJob("Hello Rabbit " + i)))
+      val emptyJob = new EmptyJob()
+      emptyJob.maxSubJob = 10
+      channel.basicPublish("", "jobQueue", MessageProperties.PERSISTENT_BASIC,
+        Marshal.dump(emptyJob))
     }
 
     channel.close()
     connection.close()
 
-    Thread.sleep(3000)
+    Thread.sleep(30000)
 
     controller1.stop()
     controller2.stop()
