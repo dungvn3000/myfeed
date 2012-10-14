@@ -22,7 +22,7 @@ import org.linkerz.job.queue.controller.BaseController
 class TestBasicCrawlJob extends Logging {
 
   @Test
-  def testBasicJob {
+  def testWith100Links {
     val controller = new BaseController
     val handler = new CrawlerHandler
     handler.downloadFactory = new DefaultDownloadFactory
@@ -32,6 +32,42 @@ class TestBasicCrawlJob extends Logging {
 
     val job = new CrawlJob("http://vnexpress.net")
     job.maxSubJob = 100
+
+    controller ! job
+    controller.stop()
+
+    Assert.assertEquals(JobStatus.DONE, job.status)
+  }
+
+  @Test
+  def testTimeOut {
+    val controller = new BaseController
+    val handler = new CrawlerHandler
+    handler.downloadFactory = new DefaultDownloadFactory
+    handler.parserFactory = new DefaultParserFactory
+    controller.handlers = List(handler)
+    controller.start()
+
+    val job = new CrawlJob("http://vnexpress.net")
+    job.timeOut = 5000
+
+    controller ! job
+    controller.stop()
+
+    Assert.assertEquals(JobStatus.ERROR, job.status)
+  }
+
+  @Test
+  def testWithMaxDepth() {
+    val controller = new BaseController
+    val handler = new CrawlerHandler
+    handler.downloadFactory = new DefaultDownloadFactory
+    handler.parserFactory = new DefaultParserFactory
+    controller.handlers = List(handler)
+    controller.start()
+
+    val job = new CrawlJob("http://vnexpress.net")
+    job.maxDepth = 1
 
     controller ! job
     controller.stop()
