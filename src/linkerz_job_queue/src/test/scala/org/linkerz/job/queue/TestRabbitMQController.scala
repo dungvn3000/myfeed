@@ -73,13 +73,13 @@ class TestRabbitMQController {
     //Controller 1
     val controller1 = new RabbitMQController
     controller1.connectionFactory = factory
-    controller1.handlers = List(new EchoHandler)
+    controller1.handlers = List(new EchoHandler, new AsyncTestHandler)
     controller1.start()
 
     //Controller 2
     val controller2 = new RabbitMQController
     controller2.connectionFactory = factory
-    controller2.handlers = List(new AsyncTestHandler)
+    controller2.handlers = List(new EchoHandler, new AsyncTestHandler)
     controller2.start()
 
     //Send a job to server.
@@ -87,7 +87,7 @@ class TestRabbitMQController {
     val channel = connection.createChannel()
     val queue = channel.queueDeclare("jobQueue", false, false, true, null)
 
-    for (i <- 0 to 999) {
+    for (i <- 0 to 9) {
       channel.basicPublish("", "jobQueue", MessageProperties.PERSISTENT_BASIC,
         Marshal.dump(new EchoJob("Hello Rabbit " + i)))
       val emptyJob = new EmptyJob()
