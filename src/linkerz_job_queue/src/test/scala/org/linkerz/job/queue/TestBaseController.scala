@@ -25,6 +25,22 @@ import collection.mutable.ListBuffer
 class TestBaseController {
 
   @Test
+  def testWithJobHas10SubJob() {
+    val controller = new BaseController
+    val handler = new AsyncTestHandler(10)
+    controller.handlers = List(handler)
+    controller.start()
+    val job = new EmptyJob
+
+    controller ! job
+
+    controller.stop()
+
+    Assert.assertEquals(JobStatus.DONE, job.status)
+    Assert.assertEquals(11, job.result.get)
+  }
+
+  @Test
   def testWithNoHandler() {
     val controller = new BaseController
     controller.start()

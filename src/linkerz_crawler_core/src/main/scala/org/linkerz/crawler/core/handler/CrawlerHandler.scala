@@ -58,7 +58,7 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
     currentSession.job.error.foreach(error => info("error = " + error))
   }
 
-  protected def onSuccess(job: CrawlJob) {
+  override protected def onSuccess(job: CrawlJob) {
     val jobResult = job.result
     currentSession.fetchedUrls.add(job.webUrl)
 

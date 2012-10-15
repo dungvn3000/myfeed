@@ -18,15 +18,20 @@ import akka.routing.RoundRobinRouter
  * @since 8/23/12, 6:29 AM
  *
  */
-class AsyncTestHandler extends AsyncHandler[EmptyJob, SimpleSession] {
+class AsyncTestHandler(jobLimit: Int = -1) extends AsyncHandler[EmptyJob, SimpleSession] {
+
+  var count = 0
 
   override protected def createWorker(context: ActorContext) = context.actorOf(Props[LazyWorker].withRouter(RoundRobinRouter(500)))
 
-  protected def onSuccess(job: EmptyJob) {
+  override protected def onSuccess(job: EmptyJob) {
     currentJob.count += 1
     //Making 1000 sub job for testing
     for (i <- 0 to 999) {
-      this ! new EmptyJob(job)
+      if (count < jobLimit || jobLimit < 0) {
+        this ! new EmptyJob(job)
+        count += 1
+      }
     }
   }
 

@@ -8,24 +8,22 @@ import org.linkerz.job.queue.core._
 import org.linkerz.job.queue.core.Controller._
 import grizzled.slf4j.Logging
 import akka.actor._
-import org.linkerz.job.queue.handler.AsyncHandler.{StartSupervisor, Stop, Next}
+import org.linkerz.job.queue.handler.AsyncHandler.{StartWatching, Next}
 import org.linkerz.job.queue.actor.{Supervisor, Manager}
 
 object AsyncHandler {
 
   sealed trait Event
 
-  case class StartSupervisor[J <: Job](job: J, manager: ActorRef) extends Event
+  case class StartWatching[J <: Job](job: J, manager: ActorRef) extends Event
 
   case class Next[J <: Job, S <: Session[J]](job: J, session: S) extends Event
 
-  case class Progress(jobDone: Int) extends Event
+  case class Progress(percent: Int) extends Event
 
   case class Success[J <: Job](job: J) extends Event
 
   case class Fail[J <: Job](job: J, ex: Exception) extends Event
-
-  case class Stop(reason: String, expectedJobNumber: Int) extends Event
 
 }
 
@@ -76,12 +74,12 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
     supervisor = systemActor.actorOf(Props(new Supervisor))
     workerManager = systemActor.actorOf(Props(new Manager(supervisor, createWorker, doJob, onError, onSuccess)))
 
-    supervisor ! StartSupervisor(job, workerManager)
+    supervisor ! StartWatching(job, workerManager)
 
     //Step 2: Send to the actor manager.
     this ! job
 
-    //Step 3: Waiting for all actor finished their job
+    //Step 3: Waiting for all actor finished their job.
     waitingForFinish()
 
     //Step 4: Finish.
@@ -123,13 +121,13 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
   protected def shouldDo(job: J): Boolean = {
     //Step 1: Checking whether go for the job or not
     if (currentJob.maxSubJob >= 0 && currentSession.subJobCount >= currentJob.maxSubJob) {
-      stop("Stop because the number of sub job reached maximum")
+      isStop = true
       return false
     }
 
     if (currentSession.currentDepth > currentJob.maxDepth && currentJob.maxDepth > 0) {
       currentSession.currentDepth -= 1
-      stop("Stop because the number of sub job reached maximum depth")
+      isStop = true
       return false
     }
 
@@ -147,16 +145,6 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
 
     //Delay time for each job.
     if (currentJob.politenessDelay > 0) Thread.sleep(currentJob.politenessDelay)
-  }
-
-  /**
-   * Stop the handler with a reason.
-   * @param reason
-   */
-  protected def stop(reason: String) {
-    isStop = true
-    //Tell supervisor we are going to stop.
-    supervisor ! Stop(reason, currentSession.subJobCount)
   }
 
   /**
@@ -185,5 +173,5 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
    * Create a sub job base the result of a job.
    * @param job
    */
-  protected def onSuccess(job: J)
+  protected def onSuccess(job: J) {}
 }
