@@ -15,7 +15,6 @@
         <module>linkerz_ai</module>
         <module>linkerz_crawler_core</module>
         <module>linkerz_language_detect</module>
-        <module>linkerz_database_core</module>
         <module>linkerz_server</module>
         <module>linkerz_example</module>
         <module>linkerz_web</module>
