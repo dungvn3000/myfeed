@@ -12,12 +12,8 @@
         <module>linkerz_core</module>
         <module>linkerz_job_queue</module>
         <module>linkerz_mongodb</module>
-        <module>linkerz_ai</module>
         <module>linkerz_crawler_core</module>
-        <module>linkerz_language_detect</module>
         <module>linkerz_server</module>
-        <module>linkerz_example</module>
-        <module>linkerz_web</module>
         <module>linkerz_test</module>
         <module>linkerz_crawler_bot</module>
     </modules>
@@ -28,16 +24,12 @@
         <amqp.client.version>2.8.6</amqp.client.version>
         <thumbnailator.version>0.4.2</thumbnailator.version>
         <quartz.version>2.1.5</quartz.version>
-        <weka.version>3.6.8</weka.version>
-        <opennlp.maxent.version>3.0.2-incubating</opennlp.maxent.version>
-        <opennlp.version>1.5.2-incubating</opennlp.version>
         <boilerpipe.version>0.0.1</boilerpipe.version>
         <tapestry.jquery.version>3.3.0</tapestry.jquery.version>
         <tapestry.version>5.3.5</tapestry.version>
         <servlet.api.version>2.5</servlet.api.version>
         <testng.version>5.14.10</testng.version>
         <easymock.version>3.0</easymock.version>
-        <langdetect.version>1.1-20120112</langdetect.version>
         <async.http.client.version>1.7.5</async.http.client.version>
         <tika.version>1.2</tika.version>
         <flaxcrawler.version>1.1</flaxcrawler.version>
@@ -49,8 +41,6 @@
         <commons.lang.version>2.6</commons.lang.version>
         <commons.collection.version>3.2</commons.collection.version>
         <spring.data.version>1.0.2.RELEASE</spring.data.version>
-        <hazelcast.verion>2.2</hazelcast.verion>
-        <guava.verion>12.0</guava.verion>
         <jsoup.version>1.6.3</jsoup.version>
         <junit.version>4.10</junit.version>
         <slf4j.version>1.6.4</slf4j.version>

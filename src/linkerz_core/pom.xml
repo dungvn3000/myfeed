@@ -97,14 +97,6 @@
         </dependency>
         <!--end-->
 
-        <!--Google Collection-->
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.verion}</version>
-        </dependency>
-        <!--End-->
-
         <!--Trove-->
         <dependency>
             <groupId>net.sf.trove4j</groupId>
@@ -144,26 +136,6 @@
         	<version>${commons.validator.version}</version>
         </dependency>
         <!--end-->
-
-        <!--HazelCast-->
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast</artifactId>
-            <version>${hazelcast.verion}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-client</artifactId>
-            <version>${hazelcast.verion}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-spring</artifactId>
-            <version>${hazelcast.verion}</version>
-        </dependency>
-        <!--End-->
 
         <!--Scala library-->
         <dependency>

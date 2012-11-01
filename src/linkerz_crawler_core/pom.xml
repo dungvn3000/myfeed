@@ -82,14 +82,6 @@
         </dependency>
         <!--End-->
 
-        <!--Language Detect-->
-        <dependency>
-            <groupId>com.cybozu.labs</groupId>
-            <artifactId>langdetect</artifactId>
-            <version>${langdetect.version}</version>
-        </dependency>
-        <!--End-->
-
         <dependency>
             <groupId>de.l3s.boilerpipe</groupId>
             <artifactId>boilerpipe-core</artifactId>
