@@ -5,7 +5,7 @@ import Project._
 object LinkerZBuild extends Build {
 
   lazy val linkerZ = Project("linkerz", file("."), settings = defaultSettings).aggregate(
-    linkerZCore, linkerzModel, linkerZTest, linkerZJobQueue, linkerZCrawlerCore
+    linkerZCore, linkerzModel, linkerZTest, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot, linkerZServer
   )
 
   lazy val linkerZCore = Project("linkerz_core", file("linkerz_core"), settings = defaultSettings).settings(
@@ -28,6 +28,13 @@ object LinkerZBuild extends Build {
   lazy val linkerZCrawlerCore = Project("linkerz_crawler_core", file("linkerz_crawler_core"), settings = defaultSettings).settings(
     libraryDependencies ++= crawlerCoreDependencies ++ testDependencies
   ).dependsOn(linkerZCore, linkerZTest, linkerZJobQueue, linkerzModel)
+
+  lazy val linkerZCrawlerBot = Project("linkerz_crawler_bot", file("linkerz_crawler_bot"), settings = defaultSettings).settings(
+    libraryDependencies ++= crawlerBotDependencies ++ testDependencies
+  ).dependsOn(linkerZCore, linkerZTest, linkerZJobQueue, linkerzModel, linkerZCrawlerCore)
+
+  lazy val linkerZServer = Project("linkerz_server", file("linkerz_server"), settings = defaultSettings).
+    dependsOn(linkerZCore, linkerZTest, linkerZJobQueue, linkerzModel, linkerZCrawlerCore, linkerZCrawlerBot)
 
   val coreDependencies = Seq(
     "org.clapper" %% "grizzled-slf4j" % "0.6.9",
@@ -62,6 +69,10 @@ object LinkerZBuild extends Build {
     "net.coobird" % "thumbnailator" % "0.4.2",
     "net.sf.trove4j" % "trove4j" % "3.0.3",
     "org.springframework" % "spring-web" % "3.1.2.RELEASE"
+  )
+
+  val crawlerBotDependencies = Seq(
+    "org.quartz-scheduler" % "quartz" % "2.1.6"
   )
 }
 
