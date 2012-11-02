@@ -30,6 +30,8 @@ object LinkerZBuild extends Build {
   ).dependsOn(linkerZCore, linkerZJobQueue, linkerzModel, linkerZCrawlerCore)
 
   val coreDependencies = Seq(
+    "org.slf4j" % "slf4j-simple" % "1.6.6",
+    "org.slf4j" % "slf4j-api" % "1.6.6",
     "org.clapper" %% "grizzled-slf4j" % "0.6.9",
     "commons-collections" % "commons-collections" % "3.2.1",
     "commons-digester" % "commons-digester" % "2.1",

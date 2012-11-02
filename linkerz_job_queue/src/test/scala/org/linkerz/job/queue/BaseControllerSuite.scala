@@ -9,22 +9,20 @@ import core.JobStatus
 import exception.TestException
 import handler.{AsyncTestHandler, ErrorSyncHandler, SyncHandler}
 import job.{EmptyJob, EchoJob, SumJob}
-import org.junit.{Ignore, Test}
+import org.junit.Test
 import junit.framework.Assert
-import org.junit.experimental.categories.Category
-import collection.mutable.ListBuffer
+import org.scalatest.FunSuite
 
 /**
- * The Class TestBaseController.
+ * The Class BaseControllerSuite.
  *
  * @author Nguyen Duc Dung
  * @since 8/23/12, 3:27 AM
  *
  */
-class TestBaseController {
+class BaseControllerSuite extends FunSuite {
 
-  @Test
-  def testWithJobHas10SubJob() {
+  test("test a job has 10 subjobs") {
     val controller = new BaseController
     val handler = new AsyncTestHandler(10)
     controller.handlers = List(handler)
@@ -39,8 +37,7 @@ class TestBaseController {
     Assert.assertEquals(11, job.result.get)
   }
 
-  @Test
-  def testWithNoHandler() {
+  test("test controller with no handler") {
     val controller = new BaseController
     controller.start()
 
@@ -51,8 +48,7 @@ class TestBaseController {
     Assert.assertEquals(JobStatus.NEW, sumJob.status)
   }
 
-  @Test
-  def testWithSyncHandler() {
+  test("test with sync handler") {
     val controller = new BaseController
     controller.handlers = List(new SyncHandler)
     controller.start()
@@ -69,8 +65,7 @@ class TestBaseController {
     Assert.assertEquals(JobStatus.DONE, sumJob2.status)
   }
 
-  @Test
-  def testWithErrorSyncHandler() {
+  test("test with sync error handler") {
     val controller = new BaseController
     controller.handlers = List(new ErrorSyncHandler)
     controller.start()
@@ -82,9 +77,7 @@ class TestBaseController {
     Assert.assertEquals(classOf[TestException], echo.error.head._2.getClass)
   }
 
-
-  @Test
-  def testWithAsyncHandler() {
+  ignore("test async handler with 10000 jobs") {
     val controller = new BaseController
     val handler = new AsyncTestHandler
     controller.handlers = List(handler)
@@ -100,8 +93,7 @@ class TestBaseController {
     Assert.assertEquals(job.maxSubJob, job.result.get)
   }
 
-  @Test
-  def testTimeOutJob() {
+  test("test time out") {
     val controller = new BaseController
     controller.handlers = List(new AsyncTestHandler)
     controller.start()
@@ -114,8 +106,7 @@ class TestBaseController {
     Assert.assertEquals(JobStatus.ERROR, job.status)
   }
 
-  @Test
-  def testMaxDepth() {
+  test("test max depth") {
     val controller = new BaseController
     controller.handlers = List(new AsyncTestHandler)
     controller.start()
@@ -129,8 +120,7 @@ class TestBaseController {
     Assert.assertEquals(1001, job.result.get)
   }
 
-  @Test
-  def testWithAsyncHandlerAnd10Job() {
+  ignore("test async handler with 10 jobs") {
     val controller = new BaseController
     controller.handlers = List(new AsyncTestHandler)
     controller.start()
@@ -146,9 +136,7 @@ class TestBaseController {
     controller.stop()
   }
 
-
-  @Test
-  def testMultiHandler() {
+  test("test multi handler") {
     val controller = new BaseController
     controller.handlers = List(new AsyncTestHandler, new SyncHandler, new ErrorSyncHandler)
     controller.start()
@@ -170,8 +158,7 @@ class TestBaseController {
     Assert.assertEquals(emptyJob.maxSubJob, emptyJob.count)
   }
 
-  @Test
-  def testSyncHandleController() {
+  test("test sync handler controller") {
     val controller = new BaseController
     controller.handlers = List(new SyncHandler)
     controller.start()

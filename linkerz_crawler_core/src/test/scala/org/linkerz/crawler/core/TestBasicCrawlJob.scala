@@ -7,10 +7,10 @@ package org.linkerz.crawler.core
 import factory.{DefaultParserFactory, DefaultDownloadFactory}
 import handler.CrawlerHandler
 import job.CrawlJob
-import grizzled.slf4j.Logging
-import org.junit.{Assert, Test}
+import org.junit.Assert
 import org.linkerz.job.queue.core.JobStatus
 import org.linkerz.job.queue.controller.BaseController
+import org.scalatest.FunSuite
 
 /**
  * The Class TestBasicCrawlJob.
@@ -19,10 +19,9 @@ import org.linkerz.job.queue.controller.BaseController
  * @since 7/29/12, 2:47 AM
  *
  */
-class TestBasicCrawlJob extends Logging {
+class TestBasicCrawlJob extends FunSuite {
 
-  @Test
-  def testWith100Links {
+  test("test with 100 links") {
     val controller = new BaseController
     val handler = new CrawlerHandler
     handler.downloadFactory = new DefaultDownloadFactory
@@ -39,8 +38,7 @@ class TestBasicCrawlJob extends Logging {
     Assert.assertEquals(JobStatus.DONE, job.status)
   }
 
-  @Test
-  def testTimeOut {
+  test("test time out") {
     val controller = new BaseController
     val handler = new CrawlerHandler
     handler.downloadFactory = new DefaultDownloadFactory
@@ -57,8 +55,7 @@ class TestBasicCrawlJob extends Logging {
     Assert.assertEquals(JobStatus.ERROR, job.status)
   }
 
-  @Test
-  def testWithMaxDepth() {
+  test("test max depth") {
     val controller = new BaseController
     val handler = new CrawlerHandler
     handler.downloadFactory = new DefaultDownloadFactory
