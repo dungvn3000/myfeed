@@ -4,7 +4,6 @@
 
 package org.linkerz.crawler.bot
 
-import org.linkerz.test.spring.SpringContext
 import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
 import org.junit.Test
@@ -17,14 +16,14 @@ import org.junit.Test
  *
  */
 @Category(Array(classOf[ManualTest]))
-class TestNewFeedBot extends SpringContext {
+class TestNewFeedBot {
 
   @Test
   def testController() {
-    val controller = context.getBean("newFeedBot", classOf[NewFeedBot])
-    controller.start()
-    Thread.sleep(1000 * 60 * 2)
-    controller.stop()
+    //    val controller = context.getBean("newFeedBot", classOf[NewFeedBot])
+    //    controller.start()
+    //    Thread.sleep(1000 * 60 * 2)
+    //    controller.stop()
   }
 
 }

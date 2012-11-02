@@ -6,7 +6,6 @@ package org.linkerz.crawler.core
 
 import job.CrawlJob
 import grizzled.slf4j.Logging
-import org.linkerz.test.spring.SpringContext
 import org.linkerz.job.queue.core.Controller
 import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
@@ -20,16 +19,16 @@ import org.junit.Test
  *
  */
 @Category(Array(classOf[ManualTest]))
-class TestCrawJobWithDb extends Logging with SpringContext {
+class TestCrawJobWithDb extends Logging {
 
   @Test
   def testCrawJobWithDb {
-    val controller = context.getBean("crawlerController", classOf[Controller])
-    val job = new CrawlJob("http://vnexpress.net/")
-    job.maxSubJob = 100
-
-    controller ! job
-    controller.stop()
+//    val controller = context.getBean("crawlerController", classOf[Controller])
+//    val job = new CrawlJob("http://vnexpress.net/")
+//    job.maxSubJob = 100
+//
+//    controller ! job
+//    controller.stop()
   }
 
 }

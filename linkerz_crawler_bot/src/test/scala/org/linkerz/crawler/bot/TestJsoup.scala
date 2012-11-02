@@ -5,7 +5,6 @@
 package org.linkerz.crawler.bot
 
 import org.jsoup.Jsoup
-import org.linkerz.test.spring.SpringContext
 import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
 import org.junit.Test
@@ -19,7 +18,7 @@ import org.junit.Test
  *
  */
 @Category(Array(classOf[ManualTest]))
-class TestJSoup extends SpringContext {
+class TestJSoup {
 
   @Test
   def testJSoup1() {
