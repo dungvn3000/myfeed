@@ -8,6 +8,7 @@ import com.ning.http.client._
 import net.coobird.thumbnailator.Thumbnails
 import org.junit.experimental.categories.Category
 import org.junit.Test
+import org.scalatest.FunSuite
 
 /**
  * The Class TestFinagle.
@@ -16,15 +17,14 @@ import org.junit.Test
  * @since 7/10/12, 1:03 AM
  *
  */
-class TestHttpClient {
+class HttpClientSuite extends FunSuite {
 
   val cf = new AsyncHttpClientConfig.Builder()
     .setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:10.0.2) Gecko/20100101 Firefox/10.0.2")
     .setCompressionEnabled(true)
     .build()
 
-  @Test
-  def testAsyncHttpClient {
+  test("test connect to vnexpress") {
     val asyncHttpClient = new AsyncHttpClient(cf)
     val f = asyncHttpClient.prepareGet("http://vnexpress.net/").execute()
     val time = System.currentTimeMillis()
@@ -33,8 +33,7 @@ class TestHttpClient {
     r.getHeaders.values().toArray.foreach(println)
   }
 
-  @Test
-  def testDownloadAndResizeImage {
+  test("test download an image and resize") {
     val asyncHttpClient = new AsyncHttpClient(cf)
     val time = System.currentTimeMillis()
     val response = asyncHttpClient

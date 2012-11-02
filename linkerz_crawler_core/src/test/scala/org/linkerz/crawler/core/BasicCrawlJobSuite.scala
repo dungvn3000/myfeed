@@ -13,13 +13,13 @@ import org.linkerz.job.queue.controller.BaseController
 import org.scalatest.FunSuite
 
 /**
- * The Class TestBasicCrawlJob.
+ * The Class BasicCrawlJobSuite.
  *
  * @author Nguyen Duc Dung
  * @since 7/29/12, 2:47 AM
  *
  */
-class TestBasicCrawlJob extends FunSuite {
+class BasicCrawlJobSuite extends FunSuite {
 
   test("test with 100 links") {
     val controller = new BaseController
