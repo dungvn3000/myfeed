@@ -5,7 +5,7 @@ import Project._
 object LinkerZBuild extends Build {
 
   lazy val linkerZ = Project("linkerz", file("."), settings = defaultSettings).aggregate(
-    linkerZCore, linkerzModel, linkerZTest, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot, linkerZServer
+    linkerZCore, linkerzModel, linkerZTest, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot
   )
 
   lazy val linkerZCore = Project("linkerz_core", file("linkerz_core"), settings = defaultSettings).settings(
@@ -32,9 +32,6 @@ object LinkerZBuild extends Build {
   lazy val linkerZCrawlerBot = Project("linkerz_crawler_bot", file("linkerz_crawler_bot"), settings = defaultSettings).settings(
     libraryDependencies ++= crawlerBotDependencies ++ testDependencies
   ).dependsOn(linkerZCore, linkerZTest, linkerZJobQueue, linkerzModel, linkerZCrawlerCore)
-
-  lazy val linkerZServer = Project("linkerz_server", file("linkerz_server"), settings = defaultSettings).
-    dependsOn(linkerZCore, linkerZTest, linkerZJobQueue, linkerzModel, linkerZCrawlerCore, linkerZCrawlerBot)
 
   val coreDependencies = Seq(
     "org.clapper" %% "grizzled-slf4j" % "0.6.9",
