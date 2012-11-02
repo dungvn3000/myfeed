@@ -5,7 +5,6 @@
 package org.linkerz.crawler.bot
 
 import org.jsoup.Jsoup
-import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
 import org.junit.Test
 
@@ -17,7 +16,6 @@ import org.junit.Test
  * @since 8/9/12, 10:55 PM
  *
  */
-@Category(Array(classOf[ManualTest]))
 class TestJSoup {
 
   @Test

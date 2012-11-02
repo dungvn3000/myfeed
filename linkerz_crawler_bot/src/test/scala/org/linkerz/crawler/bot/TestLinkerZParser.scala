@@ -9,7 +9,6 @@ import org.linkerz.crawler.core.fetcher.DefaultFetcher
 import org.linkerz.crawler.core.factory.DownloadFactory
 import org.linkerz.crawler.core.job.CrawlJob
 import plugin.parser.{ZingPlugin, VnExpressPlugin}
-import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
 import org.junit.Test
 
@@ -20,7 +19,6 @@ import org.junit.Test
  * @since 8/11/12, 4:34 PM
  *
  */
-@Category(Array(classOf[ManualTest]))
 class TestLinkerZParser {
 
   @Test

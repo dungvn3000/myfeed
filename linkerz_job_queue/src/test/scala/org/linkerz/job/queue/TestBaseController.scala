@@ -12,7 +12,6 @@ import job.{EmptyJob, EchoJob, SumJob}
 import org.junit.{Ignore, Test}
 import junit.framework.Assert
 import org.junit.experimental.categories.Category
-import org.linkerz.test.categories.ManualTest
 import collection.mutable.ListBuffer
 
 /**

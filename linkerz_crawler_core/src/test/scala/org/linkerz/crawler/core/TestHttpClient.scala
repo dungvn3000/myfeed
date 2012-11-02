@@ -6,7 +6,6 @@ package org.linkerz.crawler.core
 
 import com.ning.http.client._
 import net.coobird.thumbnailator.Thumbnails
-import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
 import org.junit.Test
 
@@ -17,7 +16,6 @@ import org.junit.Test
  * @since 7/10/12, 1:03 AM
  *
  */
-@Category(Array(classOf[ManualTest]))
 class TestHttpClient {
 
   val cf = new AsyncHttpClientConfig.Builder()

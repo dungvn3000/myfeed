@@ -7,7 +7,6 @@ package org.linkerz.crawler.core
 import job.CrawlJob
 import grizzled.slf4j.Logging
 import org.linkerz.job.queue.core.Controller
-import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
 import org.junit.Test
 
@@ -18,7 +17,6 @@ import org.junit.Test
  * @since 8/5/12, 9:46 PM
  *
  */
-@Category(Array(classOf[ManualTest]))
 class TestCrawJobWithDb extends Logging {
 
   @Test

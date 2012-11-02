@@ -8,7 +8,6 @@ import org.springframework.data.mongodb.core.MongoOperations
 import org.linkerz.mongodb.model.{User, NewFeed}
 import collection.JavaConverters._
 import org.linkerz.crawler.bot.factory.ParserPluginFactory
-import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
 import org.junit.{Assert, Test}
 import org.linkerz.crawler.bot.plugin.parser._
@@ -20,7 +19,6 @@ import org.linkerz.crawler.bot.plugin.parser._
  * @since 8/18/12, 5:22 AM
  *
  */
-@Category(Array(classOf[ManualTest]))
 class TestData {
 
 //  val mongoOperations = context.getBean("mongoTemplate", classOf[MongoOperations])

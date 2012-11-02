@@ -4,7 +4,6 @@
 
 package org.linkerz.crawler.bot
 
-import org.linkerz.test.categories.ManualTest
 import org.junit.experimental.categories.Category
 import org.junit.Test
 
@@ -15,7 +14,6 @@ import org.junit.Test
  * @since 8/13/12, 4:04 AM
  *
  */
-@Category(Array(classOf[ManualTest]))
 class TestNewFeedBot {
 
   @Test
