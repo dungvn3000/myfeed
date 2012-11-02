@@ -14,6 +14,10 @@ object LinkerZBuild extends Build {
     libraryDependencies ++= testDependencies
   ).dependsOn(linkerZCore)
 
+  lazy val linkerzModel = Project("linkerz_model", file("src/linkerz_model"), settings = defaultSettings).settings(
+    libraryDependencies ++= modelDependencies
+  ).dependsOn(linkerZCore, linkerZTest)
+
   val coreDependencies = Seq(
     "commons-collections" % "commons-collections" % "3.2.1",
     "commons-digester" % "commons-digester" % "2.1"
@@ -23,6 +27,9 @@ object LinkerZBuild extends Build {
     "junit" % "junit" % "4.10"
   )
 
+  val modelDependencies = Seq(
+    "org.springframework.data" % "spring-data-mongodb" % "1.0.3.RELEASE"
+  )
 }
 
 
