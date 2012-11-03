@@ -6,7 +6,7 @@ package linkerz.mongodb
 
 import org.scalatest.FunSuite
 import com.mongodb.casbah.MongoConnection
-import org.linkerz.mongodb.model.{UserDao, User}
+import org.linkerz.model.model.{UserDao, User}
 
 /**
  * The Class ConnectionSuite.

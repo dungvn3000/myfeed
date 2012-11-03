@@ -7,7 +7,7 @@ package org.linkerz.crawler.bot
 import reflect.BeanProperty
 import org.springframework.data.mongodb.core.MongoOperations
 import org.quartz._
-import org.linkerz.mongodb.model.NewFeed
+import org.linkerz.model.model.NewFeed
 import org.quartz.JobBuilder._
 import org.quartz.TriggerBuilder._
 import org.quartz.SimpleScheduleBuilder._

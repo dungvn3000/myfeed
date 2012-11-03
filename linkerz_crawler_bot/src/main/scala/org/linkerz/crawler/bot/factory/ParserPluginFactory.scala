@@ -6,7 +6,7 @@ package org.linkerz.crawler.bot.factory
 
 import reflect.BeanProperty
 import org.springframework.data.mongodb.core.MongoOperations
-import org.linkerz.mongodb.model.ParserPluginData
+import org.linkerz.model.model.ParserPluginData
 import org.linkerz.crawler.bot.plugin.ParserPlugin
 import org.springframework.data.mongodb.core.query.{Criteria, Query}
 import collection.mutable.ListBuffer

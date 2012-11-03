@@ -1,4 +1,4 @@
-package org.linkerz.mongodb
+package org.linkerz.model
 
 import com.novus.salat.dao.SalatDAO
 import org.bson.types.ObjectId

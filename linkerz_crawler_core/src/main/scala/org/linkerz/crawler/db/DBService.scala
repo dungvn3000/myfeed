@@ -4,7 +4,7 @@
 
 package org.linkerz.crawler.db
 
-import org.linkerz.mongodb.model.Link
+import org.linkerz.model.model.Link
 import org.linkerz.crawler.core.model.{WebUrl, WebPage}
 
 /**

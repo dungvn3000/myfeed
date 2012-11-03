@@ -4,7 +4,7 @@
 
 package org.linkerz.crawler.bot.plugin.parser
 
-import org.linkerz.mongodb.model.ParserPluginData
+import org.linkerz.model.model.ParserPluginData
 import org.linkerz.crawler.bot.plugin.ParserPlugin
 import org.linkerz.crawler.core.job.CrawlJob
 import org.jsoup.nodes.Document

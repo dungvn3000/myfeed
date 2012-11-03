@@ -2,7 +2,7 @@
  * Copyright (C) 2012 - 2013 LinkerZ (Searching and Sharing)
  */
 
-package org.linkerz.mongodb
+package org.linkerz.model
 
 import org.bson.types.ObjectId
 import com.novus.salat.annotations.raw.Key

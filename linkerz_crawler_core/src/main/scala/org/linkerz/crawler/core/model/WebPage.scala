@@ -4,7 +4,7 @@
 
 package org.linkerz.crawler.core.model
 
-import org.linkerz.mongodb.model.Link
+import org.linkerz.model.model.Link
 import java.util
 import org.apache.http.HttpStatus
 

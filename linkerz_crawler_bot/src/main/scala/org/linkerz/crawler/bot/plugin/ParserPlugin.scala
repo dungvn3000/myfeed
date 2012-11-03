@@ -4,7 +4,7 @@
 
 package org.linkerz.crawler.bot.plugin
 
-import org.linkerz.mongodb.model.ParserPluginData
+import org.linkerz.model.model.ParserPluginData
 import java.io.ByteArrayInputStream
 import org.jsoup.Jsoup
 import grizzled.slf4j.Logging

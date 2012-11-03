@@ -5,7 +5,7 @@
 package org.linkerz.crawler.bot.testdata
 
 import org.springframework.data.mongodb.core.MongoOperations
-import org.linkerz.mongodb.model.{User, NewFeed}
+import org.linkerz.model.model.{User, NewFeed}
 import collection.JavaConverters._
 import org.linkerz.crawler.bot.factory.ParserPluginFactory
 import org.junit.experimental.categories.Category
