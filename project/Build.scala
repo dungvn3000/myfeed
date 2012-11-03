@@ -1,18 +1,20 @@
 import sbt._
 import Keys._
 import Project._
+import com.github.retronym.SbtOneJar._
 
 object LinkerZBuild extends Build {
 
   val sharedSetting = Seq(
     version := "0.1-SNAPSHOT",
     organization := "org.linkerz",
-    scalaVersion := "2.9.1"
+    scalaVersion := "2.9.1",
+    exportJars := true
   )
 
-  lazy val linkerZ = Project("linkerz", file("."), settings = defaultSettings ++ sharedSetting).aggregate(
+  lazy val linkerZ = Project("linkerz", file("."), settings = defaultSettings ++ sharedSetting ++ oneJarSettings).aggregate(
     linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot
-  ). dependsOn(
+  ).dependsOn(
     linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot
   )
 
