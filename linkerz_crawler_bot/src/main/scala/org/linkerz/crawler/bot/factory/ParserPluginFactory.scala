@@ -6,7 +6,6 @@ package org.linkerz.crawler.bot.factory
 
 import reflect.BeanProperty
 import org.springframework.data.mongodb.core.MongoOperations
-import org.linkerz.model.model.ParserPluginData
 import org.linkerz.crawler.bot.plugin.ParserPlugin
 import org.springframework.data.mongodb.core.query.{Criteria, Query}
 import collection.mutable.ListBuffer
@@ -14,6 +13,7 @@ import collection.JavaConversions._
 import org.linkerz.crawler.bot.parser.LinkerZParser
 import org.linkerz.crawler.core.parser.Parser
 import org.linkerz.crawler.core.factory.ParserFactory
+import org.linkerz.model.ParserPluginData
 
 /**
  * The Class ParserFactory.

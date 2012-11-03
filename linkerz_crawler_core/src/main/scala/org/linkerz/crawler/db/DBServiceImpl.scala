@@ -7,10 +7,10 @@ package org.linkerz.crawler.db
 import org.linkerz.crawler.core.model.{WebUrl, WebPage}
 import reflect.BeanProperty
 import org.springframework.data.mongodb.core.MongoOperations
-import org.linkerz.model.model.{LinkConnection, Link}
 import org.springframework.data.mongodb.core.query.Criteria._
 import org.springframework.data.mongodb.core.query.Query._
 import java.util
+import org.linkerz.model.Link
 
 /**
  * The Class DBServiceImpl.

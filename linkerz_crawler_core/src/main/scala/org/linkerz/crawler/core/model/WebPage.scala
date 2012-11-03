@@ -4,9 +4,9 @@
 
 package org.linkerz.crawler.core.model
 
-import org.linkerz.model.model.Link
 import java.util
 import org.apache.http.HttpStatus
+import org.linkerz.model.Link
 
 /**
  * The Class WebPage.

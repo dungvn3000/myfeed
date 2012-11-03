@@ -4,7 +4,6 @@
 
 package org.linkerz.crawler.bot.plugin
 
-import org.linkerz.model.model.ParserPluginData
 import java.io.ByteArrayInputStream
 import org.jsoup.Jsoup
 import grizzled.slf4j.Logging
@@ -14,6 +13,7 @@ import org.linkerz.crawler.core.parser.DefaultParser
 import org.apache.commons.lang.StringUtils
 import org.linkerz.crawler.core.job.CrawlJob
 import edu.uci.ics.crawler4j.url.URLCanonicalizer
+import org.linkerz.model.ParserPluginData
 
 /**
  * The Class ParserPlugin.

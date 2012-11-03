@@ -4,8 +4,8 @@
 
 package org.linkerz.crawler.db
 
-import org.linkerz.model.model.Link
 import org.linkerz.crawler.core.model.{WebUrl, WebPage}
+import org.linkerz.model.Link
 
 /**
  * The Class DBService.

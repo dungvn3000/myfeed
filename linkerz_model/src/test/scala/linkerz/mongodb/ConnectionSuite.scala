@@ -6,7 +6,6 @@ package linkerz.mongodb
 
 import org.scalatest.FunSuite
 import com.mongodb.casbah.MongoConnection
-import org.linkerz.model.model.{UserDao, User}
 
 /**
  * The Class ConnectionSuite.
@@ -20,10 +19,6 @@ class ConnectionSuite extends FunSuite {
   test("test mongo db connection") {
     val connection = MongoConnection()
     connection.databaseNames.foreach(println)
-
-    val _id = UserDao.insert(User(userName = "dung", passWord = "dung"))
-
-    println(_id)
   }
 
 }

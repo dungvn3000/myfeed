@@ -4,12 +4,12 @@
 
 package org.linkerz.crawler.bot.plugin.parser
 
-import org.linkerz.model.model.ParserPluginData
 import org.jsoup.nodes.Document
 import org.linkerz.crawler.bot.plugin.ParserPlugin
 import org.apache.commons.lang.StringUtils
 import org.linkerz.crawler.core.job.CrawlJob
 import edu.uci.ics.crawler4j.url.URLCanonicalizer
+import org.linkerz.model.ParserPluginData
 
 /**
  * The Class VnExpress.net Plugin.
