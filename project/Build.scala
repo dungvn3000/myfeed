@@ -4,28 +4,34 @@ import Project._
 
 object LinkerZBuild extends Build {
 
-  lazy val linkerZ = Project("linkerz", file("."), settings = defaultSettings).aggregate(
+  val sharedSetting = Seq(
+    version := "0.1-SNAPSHOT",
+    organization := "org.linkerz",
+    scalaVersion := "2.9.1"
+  )
+
+  lazy val linkerZ = Project("linkerz", file("."), settings = defaultSettings ++ sharedSetting).aggregate(
     linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot
   )
 
-  lazy val linkerZCore = Project("linkerz_core", file("linkerz_core"), settings = defaultSettings).settings(
+  lazy val linkerZCore = Project("linkerz_core", file("linkerz_core"), settings = defaultSettings ++ sharedSetting).settings(
     libraryDependencies ++= coreDependencies
   )
 
-  lazy val linkerzModel = Project("linkerz_model", file("linkerz_model"), settings = defaultSettings).settings(
+  lazy val linkerzModel = Project("linkerz_model", file("linkerz_model"), settings = defaultSettings ++ sharedSetting).settings(
     libraryDependencies ++= modelDependencies ++ testDependencies
   ).dependsOn(linkerZCore)
 
-  lazy val linkerZJobQueue = Project("linkerz_job_queue", file("linkerz_job_queue"), settings = defaultSettings).settings(
+  lazy val linkerZJobQueue = Project("linkerz_job_queue", file("linkerz_job_queue"), settings = defaultSettings ++ sharedSetting).settings(
     libraryDependencies ++= jobQueueDependencies ++ testDependencies,
     resolvers += "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/"
   ).dependsOn(linkerZCore)
 
-  lazy val linkerZCrawlerCore = Project("linkerz_crawler_core", file("linkerz_crawler_core"), settings = defaultSettings).settings(
+  lazy val linkerZCrawlerCore = Project("linkerz_crawler_core", file("linkerz_crawler_core"), settings = defaultSettings ++ sharedSetting).settings(
     libraryDependencies ++= crawlerCoreDependencies ++ testDependencies
   ).dependsOn(linkerZCore, linkerZJobQueue, linkerzModel)
 
-  lazy val linkerZCrawlerBot = Project("linkerz_crawler_bot", file("linkerz_crawler_bot"), settings = defaultSettings).settings(
+  lazy val linkerZCrawlerBot = Project("linkerz_crawler_bot", file("linkerz_crawler_bot"), settings = defaultSettings ++ sharedSetting).settings(
     libraryDependencies ++= crawlerBotDependencies ++ testDependencies
   ).dependsOn(linkerZCore, linkerZJobQueue, linkerzModel, linkerZCrawlerCore)
 
@@ -46,7 +52,8 @@ object LinkerZBuild extends Build {
   )
 
   val modelDependencies = Seq(
-    "org.springframework.data" % "spring-data-mongodb" % "1.0.3.RELEASE"
+    "org.springframework.data" % "spring-data-mongodb" % "1.0.3.RELEASE",
+    "com.novus" %% "salat" % "1.9.1"
   )
 
   val jobQueueDependencies = Seq(

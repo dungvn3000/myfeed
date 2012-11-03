@@ -2,9 +2,11 @@
  * Copyright (C) 2012 - 2013 LinkerZ (Searching and Sharing)
  */
 
-package org.linkerz.mongodb.model
+package org.linkerz.mongodb
 
-import org.springframework.data.annotation.Id
+import org.bson.types.ObjectId
+import com.novus.salat.annotations.raw.Key
+
 
 /**
  * The Class LinkerZEntity.
@@ -16,7 +18,7 @@ import org.springframework.data.annotation.Id
 
 trait LinkerZEntity {
 
-  @Id
-  var id: String = _
+  @Key("_id")
+  var id: ObjectId = _
 
 }

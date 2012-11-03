@@ -2,7 +2,7 @@
  * Copyright (C) 2012 - 2013 LinkerZ (Searching and Sharing)
  */
 
-package org.linkerz.mongodb.model
+package org.linkerz.mongodb
 
 /**
  * This class using for store link user clicked on it.

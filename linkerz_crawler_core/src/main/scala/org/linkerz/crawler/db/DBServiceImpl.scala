@@ -39,8 +39,8 @@ class DBServiceImpl extends DBService {
         val parent = find(webPage.parent.webUrl)
         assert(parent != null, "Can not find the website " + webPage.parent.webUrl.url)
 
-        val connection = new LinkConnection(parent.id, link.id)
-        mongoOperations.save(connection)
+//        val connection = new LinkConnection(parent.id, link.id)
+//        mongoOperations.save(connection)
       }
     } else {
       //If the web page already exist in the database, then update the content
