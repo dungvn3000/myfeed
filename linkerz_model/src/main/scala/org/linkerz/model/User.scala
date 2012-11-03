@@ -15,4 +15,4 @@ import com.novus.salat.global._
 
 case class User(_id: ObjectId = new ObjectId(), userName: String, passWord: String)
 
-object UserDao extends SalatDAO[User, ObjectId](collection = MongoConnection()("mydb")("users"))
+object UserDao extends SalatDAO[User, ObjectId](collection = mongo("user"))
