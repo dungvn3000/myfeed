@@ -46,7 +46,7 @@ class TestJavaDzonePlugin {
     controller.handlers = List(handler)
     controller.start()
 
-    val job = new CrawlJob(plugin.defaultData.urlTest)
+    val job = new CrawlJob(plugin.pluginData.urlTest)
     job.maxSubJob = 50
 
     controller ! job

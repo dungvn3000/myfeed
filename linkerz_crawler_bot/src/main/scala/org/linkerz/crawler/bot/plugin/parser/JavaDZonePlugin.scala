@@ -18,7 +18,7 @@ import org.apache.commons.lang.StringUtils
  */
 class JavaDZonePlugin extends ParserPlugin {
 
-  def defaultData = {
+  def pluginData = {
     val pluginData = new ParserPluginData
     pluginData.name = "java dzone"
     pluginData.version = "0.0.1"

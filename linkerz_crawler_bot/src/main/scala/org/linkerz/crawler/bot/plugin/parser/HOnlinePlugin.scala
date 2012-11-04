@@ -17,7 +17,7 @@ import org.jsoup.nodes.Document
  */
 class HOnlinePlugin extends ParserPlugin {
 
-  def defaultData = {
+  def pluginData = {
     val pluginData = new ParserPluginData
     pluginData.name = "h-online"
     pluginData.version = "0.0.1"

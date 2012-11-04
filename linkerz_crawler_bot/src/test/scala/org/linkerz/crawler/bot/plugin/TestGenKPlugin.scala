@@ -47,8 +47,8 @@ class TestGenKPlugin {
     controller.handlers = List(handler)
     controller.start()
 
-    val job = new CrawlJob(plugin.defaultData.urlTest)
-    job.maxSubJob = 10
+    val job = new CrawlJob(plugin.pluginData.urlTest)
+    job.maxSubJob = 100
 
     controller ! job
     controller.stop()

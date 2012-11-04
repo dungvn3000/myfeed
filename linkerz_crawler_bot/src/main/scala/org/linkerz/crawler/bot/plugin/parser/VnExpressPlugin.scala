@@ -20,7 +20,7 @@ import edu.uci.ics.crawler4j.url.URLCanonicalizer
 
 class VnExpressPlugin extends ParserPlugin {
 
-  def defaultData = {
+  def pluginData = {
     val pluginData = new ParserPluginData
     pluginData.name = "VnExpress"
     pluginData.version = "0.0.1"

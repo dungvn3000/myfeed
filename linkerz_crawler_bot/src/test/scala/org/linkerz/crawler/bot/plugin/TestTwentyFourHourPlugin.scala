@@ -48,7 +48,7 @@ class TestTwentyFourHourPlugin {
     controller.handlers = List(handler)
     controller.start()
 
-    val job = new CrawlJob(plugin.defaultData.urlTest)
+    val job = new CrawlJob(plugin.pluginData.urlTest)
     job.maxSubJob = 100
 
     controller ! job

@@ -24,8 +24,6 @@ import edu.uci.ics.crawler4j.url.URLCanonicalizer
 
 trait ParserPlugin extends DefaultParser with Logging {
 
-  var _pluginData: ParserPluginData = _
-
   def isMatch(url: String): Boolean = {
     assert(url != null)
     SimpleRegexMatcher.matcher(url, pluginData.urlRegex)
@@ -129,27 +127,8 @@ trait ParserPlugin extends DefaultParser with Logging {
   }
 
   /**
-   * Data for the plugin
+   * Plugin data.
    * @return
    */
-  def pluginData: ParserPluginData = {
-    if (_pluginData == null) {
-      return defaultData
-    }
-    _pluginData
-  }
-
-  /**
-   * Setter for the data
-   * @param pluginData
-   */
-  def pluginData_=(pluginData: ParserPluginData) {
-    _pluginData = pluginData
-  }
-
-  /**
-   * Default data.
-   * @return
-   */
-  def defaultData: ParserPluginData
+  def pluginData: ParserPluginData
 }

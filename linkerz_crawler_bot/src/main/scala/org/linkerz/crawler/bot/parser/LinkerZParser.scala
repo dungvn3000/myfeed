@@ -27,7 +27,10 @@ class LinkerZParser(plugins: List[ParserPlugin]) extends Parser {
    */
   def parse(crawlJob: CrawlJob) {
     plugins.foreach(plugin => {
-      if (plugin.isMatch(crawlJob.webUrl.url)) return plugin.parse(crawlJob)
+      if (plugin.isMatch(crawlJob.webUrl.url)) {
+        plugin.parse(crawlJob)
+        return
+      }
     })
     defaultParser.parse(crawlJob)
   }

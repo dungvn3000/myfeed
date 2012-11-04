@@ -17,7 +17,7 @@ import org.jsoup.nodes.Document
  */
 class TwentyFourHourPlugin extends ParserPlugin {
 
-  def defaultData = {
+  def pluginData = {
     val pluginData = new ParserPluginData
     pluginData.name = "24H"
     pluginData.version = "0.0.1"

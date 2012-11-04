@@ -21,7 +21,7 @@ import org.scalatest.FunSuite
  */
 class BasicCrawlJobSuite extends FunSuite {
 
-  test("test with 100 links") {
+  test("test with 100 vnexpress links") {
     val controller = new BaseController
     val handler = new CrawlerHandler
     handler.downloadFactory = new DefaultDownloadFactory
@@ -55,7 +55,7 @@ class BasicCrawlJobSuite extends FunSuite {
     Assert.assertEquals(JobStatus.ERROR, job.status)
   }
 
-  test("test max depth") {
+  test("test max depth on 24h.com.vn") {
     val controller = new BaseController
     val handler = new CrawlerHandler
     handler.downloadFactory = new DefaultDownloadFactory

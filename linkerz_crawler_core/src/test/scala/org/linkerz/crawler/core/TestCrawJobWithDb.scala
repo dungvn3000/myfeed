@@ -4,10 +4,7 @@
 
 package org.linkerz.crawler.core
 
-import job.CrawlJob
 import grizzled.slf4j.Logging
-import org.linkerz.job.queue.core.Controller
-import org.junit.experimental.categories.Category
 import org.junit.Test
 
 /**

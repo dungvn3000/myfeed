@@ -4,12 +4,10 @@
 
 package org.linkerz.crawler.bot.factory
 
-import org.linkerz.crawler.bot.plugin.{ParserPluginData, ParserPlugin}
-import collection.mutable.ListBuffer
-import collection.JavaConversions._
 import org.linkerz.crawler.bot.parser.LinkerZParser
 import org.linkerz.crawler.core.parser.Parser
 import org.linkerz.crawler.core.factory.ParserFactory
+import org.linkerz.crawler.bot.plugin.parser._
 
 /**
  * The Class ParserFactory.
@@ -21,28 +19,13 @@ import org.linkerz.crawler.core.factory.ParserFactory
 
 class ParserPluginFactory extends ParserFactory {
 
-
-  /**
-   * Install a plugin
-   * @param pluginClass
-   * @return
-   */
-  def install(pluginClass: String): Boolean = {
-    true
-  }
-
-  /**
-   * Delete a plugin
-   * @param pluginClass
-   */
-  def delete(pluginClass: String) {
-  }
-
-  override def createParser: Parser = {
-    var plugins = new ListBuffer[ParserPlugin]
-
-
-    new LinkerZParser(plugins.toList)
-  }
+  override def createParser: Parser = new LinkerZParser(List(
+    new GenKPlugin,
+    new HOnlinePlugin,
+    new JavaDZonePlugin,
+    new TwentyFourHourPlugin,
+    new VnExpressPlugin,
+    new ZingPlugin
+  ))
 
 }

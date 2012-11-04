@@ -16,7 +16,7 @@ import org.jsoup.nodes.Document
  *
  */
 class GenKPlugin extends ParserPlugin {
-  def defaultData = {
+  def pluginData = {
     val pluginData = new ParserPluginData
     pluginData.name = "Genk"
     pluginData.version = "0.0.1"
