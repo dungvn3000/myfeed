@@ -14,7 +14,7 @@ import java.util
  *
  */
 
-class NewFeed extends LinkerZEntity {
+class NewFeed {
 
   var name: String = _
   var group: String = _

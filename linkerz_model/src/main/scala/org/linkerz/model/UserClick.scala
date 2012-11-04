@@ -11,7 +11,7 @@ package org.linkerz.model
  * @since 9/5/12 3:21 PM
  *
  */
-class UserClick extends LinkerZEntity {
+class UserClick {
   var userName: String = _
   var linkId: String = _
   var title: String = _

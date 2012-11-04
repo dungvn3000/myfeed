@@ -14,7 +14,7 @@ import java.util
  *
  */
 
-class Link extends LinkerZEntity {
+class Link {
 
   var url: String = _
   var content: Array[Byte] = _

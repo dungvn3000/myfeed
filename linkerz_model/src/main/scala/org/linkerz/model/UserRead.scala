@@ -11,7 +11,7 @@ package org.linkerz.model
  * @since 10/4/12 1:57 PM
  *
  */
-class UserRead extends LinkerZEntity {
+class UserRead {
   var userName: String = _
   var linkId: String = _
 }
