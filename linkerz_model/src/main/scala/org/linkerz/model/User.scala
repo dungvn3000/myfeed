@@ -1,9 +1,9 @@
 package org.linkerz.model
 
-import com.novus.salat.dao.SalatDAO
-import org.bson.types.ObjectId
-import com.mongodb.casbah.MongoConnection
-import com.novus.salat.global._
+import org.springframework.data.annotation.Id
+import org.springframework.data.mongodb.core.query.Query._
+import org.springframework.data.mongodb.core.query.Criteria._
+import org.linkerz.model.mongodb.MongoOperation.mongo
 
 /**
  * The Class User.
@@ -13,6 +13,15 @@ import com.novus.salat.global._
  *
  */
 
-case class User(_id: ObjectId = new ObjectId(), userName: String, passWord: String)
+class User {
+  @Id
+  var id: String = _
+  var userName: String = _
+  var passWord: String = _
+}
 
-object UserDao extends SalatDAO[User, ObjectId](collection = mongo("user"))
+object UserDao {
+  def findByUserName(userName: String) = {
+    mongo.findOne(query(where("userName").is(userName)), classOf[User])
+  }
+}
