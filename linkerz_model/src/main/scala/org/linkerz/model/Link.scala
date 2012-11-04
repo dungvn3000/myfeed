@@ -7,6 +7,7 @@ package org.linkerz.model
 import org.bson.types.ObjectId
 import com.novus.salat.dao.SalatDAO
 import java.util.Date
+import com.mongodb.casbah.commons.MongoDBObject
 
 /**
  * The Class Linker.
@@ -43,6 +44,9 @@ case class Link(
   override def hashCode() = url.hashCode
 }
 
-object Link extends SalatDAO[Link, ObjectId](collection = mongo("link")) {
-
+object LinkDao extends SalatDAO[Link, ObjectId](collection = mongo("link")) {
+  override def save(link: Link) {
+    val result = findOne(MongoDBObject("url" -> link.url))
+    if(result.isEmpty) super.save(link)
+  }
 }

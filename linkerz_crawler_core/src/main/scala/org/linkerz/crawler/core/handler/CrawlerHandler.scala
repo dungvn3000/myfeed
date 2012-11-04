@@ -17,16 +17,17 @@ import org.linkerz.crawler.core.fetcher.DefaultFetcher
 import akka.actor.{Props, ActorContext}
 import akka.routing.RoundRobinRouter
 import collection.JavaConversions._
+import org.linkerz.model.LinkDao
 
 /**
- * The Class CrawlerHandler.
- *
- * @author Nguyen Duc Dung
- * @since 7/29/12, 12:54 AM
- *
+ * CrawlHandler using for crawling data form the internet.
+ * @param downloadFactory DefaultDownloadFactory
+ * @param parserFactory DefaultParserFactory
+ * @param usingDB If it is true the link will store into the database.
  */
 class CrawlerHandler(downloadFactory: DownloadFactory = new DefaultDownloadFactory,
-                     parserFactory: ParserFactory = new DefaultParserFactory) extends AsyncHandler[CrawlJob, CrawlSession] {
+                     parserFactory: ParserFactory = new DefaultParserFactory,
+                     usingDB: Boolean = false) extends AsyncHandler[CrawlJob, CrawlSession] {
 
   def sessionClass = classOf[CrawlSession]
 
@@ -61,10 +62,8 @@ class CrawlerHandler(downloadFactory: DownloadFactory = new DefaultDownloadFacto
         webPage.parent = parentWebPage
       }
 
-      //      if (dbService != null) {
-      //        //Store the website into the database
-      //        dbService.save(webPage)
-      //      }
+      //Store result to the database.
+      if (usingDB) LinkDao.save(webPage.toLink)
 
       //If the manager is going to stop, we will not add any job to the queue.
       if (!isStop) {

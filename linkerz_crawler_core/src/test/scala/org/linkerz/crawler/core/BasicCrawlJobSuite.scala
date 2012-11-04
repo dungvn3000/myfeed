@@ -66,4 +66,19 @@ class BasicCrawlJobSuite extends FunSuite {
     Assert.assertEquals(JobStatus.DONE, job.status)
   }
 
+  test("test store crawling result into database") {
+    val controller = new BaseController
+    val handler = new CrawlerHandler(usingDB = true)
+    controller.handlers = List(handler)
+    controller.start()
+
+    val job = new CrawlJob("http://genk.vn/")
+    job.maxSubJob = 100
+
+    controller ! job
+    controller.stop()
+
+    Assert.assertEquals(JobStatus.DONE, job.status)
+  }
+
 }
