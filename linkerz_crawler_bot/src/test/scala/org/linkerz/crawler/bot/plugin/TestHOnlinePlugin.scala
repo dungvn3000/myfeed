@@ -38,11 +38,11 @@ class TestHOnlinePlugin {
   @Test
   def testWith50Links() {
     val controller = new BaseController
-    val handler = new CrawlerHandler
-    handler.downloadFactory = new DefaultDownloadFactory
-    handler.parserFactory = new ParserFactory {
-      def createParser() = new HOnlinePlugin with ParserDebugger
-    }
+    val handler = new CrawlerHandler(
+      parserFactory = new ParserFactory {
+        def createParser() = new HOnlinePlugin with ParserDebugger
+      }
+    )
     controller.handlers = List(handler)
     controller.start()
 

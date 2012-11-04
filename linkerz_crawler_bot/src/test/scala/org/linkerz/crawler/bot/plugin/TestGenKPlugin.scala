@@ -39,11 +39,11 @@ class TestGenKPlugin {
   @Test
   def testWith100Links() {
     val controller = new BaseController
-    val handler = new CrawlerHandler
-    handler.downloadFactory = new DefaultDownloadFactory
-    handler.parserFactory = new ParserFactory {
-      def createParser() = new GenKPlugin with ParserDebugger
-    }
+    val handler = new CrawlerHandler(
+      parserFactory = new ParserFactory {
+        def createParser() = new GenKPlugin with ParserDebugger
+      }
+    )
     controller.handlers = List(handler)
     controller.start()
 

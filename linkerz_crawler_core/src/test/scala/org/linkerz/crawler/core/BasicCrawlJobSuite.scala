@@ -24,8 +24,6 @@ class BasicCrawlJobSuite extends FunSuite {
   test("test with 100 vnexpress links") {
     val controller = new BaseController
     val handler = new CrawlerHandler
-    handler.downloadFactory = new DefaultDownloadFactory
-    handler.parserFactory = new DefaultParserFactory
     controller.handlers = List(handler)
     controller.start()
 
@@ -41,8 +39,6 @@ class BasicCrawlJobSuite extends FunSuite {
   test("test time out") {
     val controller = new BaseController
     val handler = new CrawlerHandler
-    handler.downloadFactory = new DefaultDownloadFactory
-    handler.parserFactory = new DefaultParserFactory
     controller.handlers = List(handler)
     controller.start()
 
@@ -58,8 +54,6 @@ class BasicCrawlJobSuite extends FunSuite {
   test("test max depth on 24h.com.vn") {
     val controller = new BaseController
     val handler = new CrawlerHandler
-    handler.downloadFactory = new DefaultDownloadFactory
-    handler.parserFactory = new DefaultParserFactory
     controller.handlers = List(handler)
     controller.start()
 

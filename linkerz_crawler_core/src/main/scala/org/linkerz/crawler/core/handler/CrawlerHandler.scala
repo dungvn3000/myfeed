@@ -9,8 +9,7 @@ import org.linkerz.crawler.core.job.CrawlJob
 import org.linkerz.crawler.core.session.CrawlSession
 import org.linkerz.job.queue.core.Job
 import org.linkerz.crawler.core.worker.CrawlWorker
-import reflect.BeanProperty
-import org.linkerz.crawler.core.factory.{ParserFactory, DownloadFactory}
+import org.linkerz.crawler.core.factory.{DefaultParserFactory, DefaultDownloadFactory, ParserFactory, DownloadFactory}
 import org.linkerz.crawler.core.model.WebUrl
 import org.apache.commons.lang.StringUtils
 import org.linkerz.core.matcher.SimpleRegexMatcher
@@ -26,21 +25,14 @@ import collection.JavaConversions._
  * @since 7/29/12, 12:54 AM
  *
  */
-class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
-
-  @BeanProperty
-  var downloadFactory: DownloadFactory = _
-
-  @BeanProperty
-  var parserFactory: ParserFactory = _
+class CrawlerHandler(downloadFactory: DownloadFactory = new DefaultDownloadFactory,
+                     parserFactory: ParserFactory = new DefaultParserFactory) extends AsyncHandler[CrawlJob, CrawlSession] {
 
   def sessionClass = classOf[CrawlSession]
 
   def accept(job: Job) = job.isInstanceOf[CrawlJob]
 
   override protected def createWorker(context: ActorContext) = {
-    assert(downloadFactory != null)
-    assert(parserFactory != null)
     context.actorOf(Props(new CrawlWorker(new DefaultFetcher(downloadFactory, parserFactory))).
       withRouter(RoundRobinRouter(5)))
   }
@@ -69,13 +61,13 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
         webPage.parent = parentWebPage
       }
 
-//      if (dbService != null) {
+      //      if (dbService != null) {
       //        //Store the website into the database
       //        dbService.save(webPage)
       //      }
 
       //If the manager is going to stop, we will not add any job to the queue.
-      if(!isStop) {
+      if (!isStop) {
         webUrls.foreach(webUrl => {
           if (shouldCrawl(webUrl)) {
             this ! new CrawlJob(webUrl, job)

@@ -40,11 +40,11 @@ class TestTwentyFourHourPlugin {
   @Test
   def testWith100Links() {
     val controller = new BaseController
-    val handler = new CrawlerHandler
-    handler.downloadFactory = new DefaultDownloadFactory
-    handler.parserFactory = new ParserFactory {
-      def createParser() = new TwentyFourHourPlugin with ParserDebugger
-    }
+    val handler = new CrawlerHandler(
+      parserFactory = new ParserFactory {
+        def createParser() = new TwentyFourHourPlugin with ParserDebugger
+      }
+    )
     controller.handlers = List(handler)
     controller.start()
 
