@@ -46,27 +46,9 @@ class DefaultParser extends Parser {
       htmlParser.parse(inputStream, htmlHandler, metadata, parseContext)
 
       webPage.title = metadata.get(Metadata.TITLE)
+      if (webPage.title == null) webPage.title = webUrl.url
+
       webPage.contentEncoding = metadata.get("Content-Encoding")
-
-      //Get web page content
-      //      val title = metadata.get(Metadata.TITLE)
-      //      val subTitle = metadata.get(Metadata.DESCRIPTION)
-      //      val html = htmlHandler.getBodyText
-
-      //      if (DetectorFactory.getLangList.isEmpty) {
-      //        DetectorFactory.loadProfile(new File(Resources.getResource("profiles").toURI))
-      //      }
-      //
-      //      val detector = DetectorFactory.create
-      //      detector.setMaxTextLength(1000)
-      //      detector.append(html)
-      //
-      //      try {
-      //        val language = detector.detect
-      //        webPage.language = language
-      //      } catch {
-      //        case ex: Exception => error(ex.getMessage, ex)
-      //      }
 
       //Extract links in side a website
       val baseURL = htmlHandler.getBaseUrl

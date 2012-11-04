@@ -11,6 +11,8 @@ import org.junit.Assert
 import org.linkerz.job.queue.core.JobStatus
 import org.linkerz.job.queue.controller.BaseController
 import org.scalatest.FunSuite
+import org.linkerz.model.LinkDao
+import com.mongodb.casbah.commons.MongoDBObject
 
 /**
  * The Class BasicCrawlJobSuite.
@@ -79,6 +81,11 @@ class BasicCrawlJobSuite extends FunSuite {
     controller.stop()
 
     Assert.assertEquals(JobStatus.DONE, job.status)
+
+    val count = LinkDao.count()
+    assert(count == 100)
+
+    LinkDao.remove(MongoDBObject.empty)
   }
 
 }

@@ -21,17 +21,17 @@ class WebPage {
   var webUrl: WebUrl = _
   //Using java list for better performance.
   var webUrls: java.util.List[WebUrl] = _
-  var content: Array[Byte] = _
+  var content: Array[Byte] = Array.empty[Byte]
 
   var responseCode: Int = _
 
   //Meta data
-  var contentType: String = _
-  var contentEncoding: String = _
-  var title: String = _
-  var description: String = _
-  var featureImageUrl: String = _
-  var featureImage: Array[Byte] = _
+  var contentType: String = ""
+  var contentEncoding: String = ""
+  var title: String = ""
+  var description: String = ""
+  var featureImageUrl: String = ""
+  var featureImage: Array[Byte] = Array.empty[Byte]
 
   var parent: WebPage = _
 
