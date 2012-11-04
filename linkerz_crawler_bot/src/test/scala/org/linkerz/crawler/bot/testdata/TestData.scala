@@ -4,7 +4,6 @@
 
 package org.linkerz.crawler.bot.testdata
 
-import org.springframework.data.mongodb.core.MongoOperations
 import collection.JavaConverters._
 import org.linkerz.crawler.bot.factory.ParserPluginFactory
 import org.junit.experimental.categories.Category

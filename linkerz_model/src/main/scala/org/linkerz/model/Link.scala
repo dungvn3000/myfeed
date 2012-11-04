@@ -4,8 +4,9 @@
 
 package org.linkerz.model
 
-import java.util
-import org.springframework.data.annotation.Id
+import org.bson.types.ObjectId
+import com.novus.salat.dao.SalatDAO
+import java.util.Date
 
 /**
  * The Class Linker.
@@ -15,32 +16,33 @@ import org.springframework.data.annotation.Id
  *
  */
 
-class Link {
+case class Link(
 
-  @Id
-  var id: String = _
+   _id: ObjectId = new ObjectId,
 
-  var url: String = _
-  var content: Array[Byte] = _
-  var responseCode: Int = _
+   url: String,
+   content: Array[Byte],
+   responseCode: Int,
 
-  //Metadata
-  var contentEncoding: String = _
-  var html: String = _
-  var text: String = _
-  var title: String = _
-  var description: String = _
-  var featureImageUrl: String = _
-  var language: String = _
+   //Metadata
+   contentEncoding: String,
+   title: String,
+   description: String,
+   featureImageUrl: String,
 
-  //Feature Image
-  var featureImage: Array[Byte] = _
+   //Feature Image
+   featureImage: Array[Byte],
 
-  var indexDate: util.Date = _
+   indexDate: Date = new Date
 
+) {
   override def equals(obj: Any) = {
     obj.isInstanceOf[Link] && obj.asInstanceOf[Link].url == url
   }
 
   override def hashCode() = url.hashCode
+}
+
+object Link extends SalatDAO[Link, ObjectId](collection = mongo("link")) {
+
 }

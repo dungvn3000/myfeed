@@ -31,7 +31,8 @@ class NewFeedHandler extends CrawlerHandler {
  // }
 
   override protected def shouldCrawl(webUrl: WebUrl) = {
-    dbService.find(webUrl) == null && super.shouldCrawl(webUrl)
+    true
+//    dbService.find(webUrl) == null && super.shouldCrawl(webUrl)
   }
 
   override def accept(job: Job) = job.isInstanceOf[NewFeedJob]

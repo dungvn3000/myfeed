@@ -5,7 +5,8 @@
 package org.linkerz.model
 
 import java.util
-import org.springframework.data.annotation.Id
+import org.bson.types.ObjectId
+import com.novus.salat.dao.SalatDAO
 
 /**
  * The Class Feeds.
@@ -15,19 +16,22 @@ import org.springframework.data.annotation.Id
  *
  */
 
-class NewFeed {
+case class NewFeed (
 
-  @Id
-  var id: String = _
+  id: ObjectId = new ObjectId,
 
-  var name: String = _
-  var group: String = _
-  var url: String = _
-  var time: Int = _
-  var enable: Boolean = _
+  name: String,
+  group: String,
+  url: String,
+  time: Int,
+  enable: Boolean,
 
-  var urlRegex: java.util.List[String] = _
-  var excludeUrl: java.util.List[String] = _
+  urlRegex: java.util.List[String],
+  excludeUrl: java.util.List[String],
 
-  var indexTime: util.Date = _
+  indexTime: util.Date
+)
+
+object NewFeed extends SalatDAO[NewFeed, ObjectId](collection = mongo("newfeed")) {
+
 }

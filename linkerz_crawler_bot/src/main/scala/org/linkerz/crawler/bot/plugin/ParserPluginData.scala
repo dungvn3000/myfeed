@@ -2,9 +2,7 @@
  * Copyright (C) 2012 - 2013 LinkerZ (Searching and Sharing)
  */
 
-package org.linkerz.model
-
-import org.springframework.data.annotation.Id
+package org.linkerz.crawler.bot.plugin
 
 /**
  * The Class ParserPlugin.
@@ -15,9 +13,6 @@ import org.springframework.data.annotation.Id
  */
 
 class ParserPluginData {
-
-  @Id
-  var id: String = _
 
   var name: String = _
   var group: String = _

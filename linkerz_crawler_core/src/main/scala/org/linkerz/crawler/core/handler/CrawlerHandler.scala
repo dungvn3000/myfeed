@@ -9,7 +9,6 @@ import org.linkerz.crawler.core.job.CrawlJob
 import org.linkerz.crawler.core.session.CrawlSession
 import org.linkerz.job.queue.core.Job
 import org.linkerz.crawler.core.worker.CrawlWorker
-import org.linkerz.crawler.db.DBService
 import reflect.BeanProperty
 import org.linkerz.crawler.core.factory.{ParserFactory, DownloadFactory}
 import org.linkerz.crawler.core.model.WebUrl
@@ -34,9 +33,6 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
 
   @BeanProperty
   var parserFactory: ParserFactory = _
-
-  @BeanProperty
-  var dbService: DBService = _
 
   def sessionClass = classOf[CrawlSession]
 
@@ -73,10 +69,10 @@ class CrawlerHandler extends AsyncHandler[CrawlJob, CrawlSession] {
         webPage.parent = parentWebPage
       }
 
-      if (dbService != null) {
-        //Store the website into the database
-        dbService.save(webPage)
-      }
+//      if (dbService != null) {
+      //        //Store the website into the database
+      //        dbService.save(webPage)
+      //      }
 
       //If the manager is going to stop, we will not add any job to the queue.
       if(!isStop) {

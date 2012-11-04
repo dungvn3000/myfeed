@@ -4,10 +4,9 @@
 
 package org.linkerz.crawler.bot.plugin.parser
 
-import org.linkerz.crawler.bot.plugin.ParserPlugin
+import org.linkerz.crawler.bot.plugin.{ParserPluginData, ParserPlugin}
 import org.linkerz.crawler.core.job.CrawlJob
 import org.jsoup.nodes.Document
-import org.linkerz.model.ParserPluginData
 
 /**
  * The Class ZingPlugin.
