@@ -5,6 +5,7 @@
 package org.linkerz.model
 
 import java.util
+import org.springframework.data.annotation.Id
 
 /**
  * The Class Feeds.
@@ -15,6 +16,9 @@ import java.util
  */
 
 class NewFeed {
+
+  @Id
+  var id: String = _
 
   var name: String = _
   var group: String = _

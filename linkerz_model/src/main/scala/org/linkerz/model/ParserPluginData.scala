@@ -4,6 +4,8 @@
 
 package org.linkerz.model
 
+import org.springframework.data.annotation.Id
+
 /**
  * The Class ParserPlugin.
  *
@@ -13,6 +15,9 @@ package org.linkerz.model
  */
 
 class ParserPluginData {
+
+  @Id
+  var id: String = _
 
   var name: String = _
   var group: String = _

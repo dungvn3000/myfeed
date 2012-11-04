@@ -5,6 +5,7 @@
 package org.linkerz.model
 
 import java.util
+import org.springframework.data.annotation.Id
 
 /**
  * The Class Linker.
@@ -15,6 +16,9 @@ import java.util
  */
 
 class Link {
+
+  @Id
+  var id: String = _
 
   var url: String = _
   var content: Array[Byte] = _
