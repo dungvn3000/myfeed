@@ -6,11 +6,14 @@ package org.linkerz.crawler.bot.handler
 
 import org.linkerz.crawler.core.handler.CrawlerHandler
 import org.linkerz.crawler.core.worker.CrawlWorker
-import org.linkerz.crawler.core.factory.{ParserFactory, DownloadFactory}
 import org.linkerz.crawler.core.model.WebUrl
-import org.linkerz.crawler.bot.fetcher.NewFetcher
 import org.linkerz.job.queue.core.Job
 import org.linkerz.crawler.bot.job.NewFeedJob
+import akka.actor.{Props, ActorContext}
+import akka.routing.RoundRobinRouter
+import org.linkerz.crawler.core.factory.{ParserFactory, DownloadFactory}
+import org.linkerz.crawler.bot.fetcher.NewFetcher
+import org.linkerz.model.LinkDao
 
 /**
  * The Class NewFeedHandler.
@@ -20,20 +23,16 @@ import org.linkerz.crawler.bot.job.NewFeedJob
  *
  */
 
-class NewFeedHandler extends CrawlerHandler {
+class NewFeedHandler(downloadFactory: DownloadFactory, parserFactory: ParserFactory)
+  extends CrawlerHandler(downloadFactory, parserFactory, true) {
 
- // override protected def createWorker() {
-//    assert(numberOfWorker > 0, "Number of actor of a handler must more than one")
-//    for (i <- 1 to numberOfWorker) {
-//      val actor = new CrawlWorker(i, new NewFetcher(downloadFactory, parserFactory))
-//      workers += actor
-//    }
- // }
-
-  override protected def shouldCrawl(webUrl: WebUrl) = {
-    true
-//    dbService.find(webUrl) == null && super.shouldCrawl(webUrl)
+  override protected def createWorker(context: ActorContext) = {
+    context.actorOf(Props(new CrawlWorker(new NewFetcher(downloadFactory, parserFactory))).
+      withRouter(RoundRobinRouter(5)))
   }
+
+  override protected def shouldCrawl(webUrl: WebUrl) = LinkDao.findByUrl(webUrl.url).isEmpty && super.shouldCrawl(webUrl)
+
 
   override def accept(job: Job) = job.isInstanceOf[NewFeedJob]
 }

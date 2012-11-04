@@ -14,5 +14,4 @@ import org.linkerz.crawler.core.model.WebUrl
  * @since 9/4/12 10:41 AM
  *
  */
-class NewFeedJob(url: String) extends CrawlJob(new WebUrl(url)) {
-}
+case class NewFeedJob(url: String) extends CrawlJob(new WebUrl(url))

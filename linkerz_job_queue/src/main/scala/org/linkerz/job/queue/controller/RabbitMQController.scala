@@ -20,18 +20,14 @@ import org.linkerz.job.queue.core.Controller._
  */
 class RabbitMQController extends BaseController {
 
-  @BeanProperty
   var connectionFactory: ConnectionFactory = _
 
-  @BeanProperty
   var queueName = "jobQueue"
 
   //The number of job the controller will take at a time.
-  @BeanProperty
   var prefetchCount = 10
 
   //Time out for waiting a delivery.
-  @BeanProperty
   var deliverTimeOut = 1000
 
   private var _connection: Connection = _

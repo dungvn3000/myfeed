@@ -45,6 +45,9 @@ case class Link(
 }
 
 object LinkDao extends SalatDAO[Link, ObjectId](collection = mongo("link")) {
+
+  def findByUrl(url: String) = findOne(MongoDBObject("url" -> url))
+
   override def save(link: Link) {
     val result = findOne(MongoDBObject("url" -> link.url))
     if(result.isEmpty) super.save(link)

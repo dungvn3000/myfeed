@@ -9,6 +9,6 @@ package org.linkerz
  */
 object Main extends App {
 
-  println("dung ne")
+
 
 }

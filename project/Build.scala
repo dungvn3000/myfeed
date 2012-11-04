@@ -65,7 +65,7 @@ object LinkerZBuild extends Build {
   )
 
   val crawlerCoreDependencies = Seq(
-    "org.jsoup" % "jsoup" % "1.6.3",
+    "org.jsoup" % "jsoup" % "1.7.1",
     "commons-httpclient" % "commons-httpclient" % "3.1",
     "org.apache.httpcomponents" % "httpclient" % "4.2.1",
     "com.ning" % "async-http-client" % "1.7.6",

@@ -7,9 +7,9 @@ package org.linkerz.job.queue
 import controller.RabbitMQController
 import handler.{AsyncTestHandler, EchoHandler}
 import job.{EmptyJob, EchoJob}
-import org.junit.Test
 import com.rabbitmq.client.{MessageProperties, ConnectionFactory}
-import util.{Random, Marshal}
+import util.Marshal
+import org.scalatest.FunSuite
 
 /**
  * The Class TestRabbitMQController.
@@ -18,13 +18,12 @@ import util.{Random, Marshal}
  * @since 9/2/12 10:57 AM
  *
  */
-class TestRabbitMQController {
+class RabbitMQControllerSuite extends FunSuite {
 
   val factory = new ConnectionFactory
   factory.setHost("localhost")
 
-  @Test
-  def testBasicJob() {
+  test("test basic job") {
     val controller = new RabbitMQController
     controller.connectionFactory = factory
     controller.handlers = List(new EchoHandler)
@@ -43,8 +42,7 @@ class TestRabbitMQController {
     controller.stop()
   }
 
-  @Test
-  def testWith1000Job() {
+  test("test with 1000 job") {
     val controller = new RabbitMQController
     controller.connectionFactory = factory
     controller.handlers = List(new EchoHandler)
@@ -68,8 +66,7 @@ class TestRabbitMQController {
     controller.stop()
   }
 
-  @Test
-  def testWith1000JobAndTwoController() {
+  test("test with 2 controllers") {
     //Controller 1
     val controller1 = new RabbitMQController
     controller1.connectionFactory = factory
