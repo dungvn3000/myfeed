@@ -18,9 +18,7 @@ import org.linkerz.job.queue.core.Controller._
  * @since 9/2/12 10:35 AM
  *
  */
-class RabbitMQController extends BaseController {
-
-  var connectionFactory: ConnectionFactory = _
+class RabbitMQController(connectionFactory: ConnectionFactory) extends BaseController {
 
   var queueName = "jobQueue"
 

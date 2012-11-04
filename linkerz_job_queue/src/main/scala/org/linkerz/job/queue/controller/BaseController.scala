@@ -23,13 +23,6 @@ class BaseController extends Controller with Logging {
 
   var handlers: List[Handler[_ <: Job]] = Nil
 
-  /**
-   * Only using for spring bean. Hopefully the spring framework is gonna support scala.
-   */
-  def setHandlers(springHandlers: java.util.List[Handler[_ <: Job]]) {
-    handlers = springHandlers.toList
-  }
-
   //The handler actor to handle all the handler
   val handlerActor = systemActor.actorOf(Props(new Actor {
     protected def receive = {

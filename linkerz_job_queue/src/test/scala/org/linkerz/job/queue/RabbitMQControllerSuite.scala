@@ -24,8 +24,7 @@ class RabbitMQControllerSuite extends FunSuite {
   factory.setHost("localhost")
 
   test("test basic job") {
-    val controller = new RabbitMQController
-    controller.connectionFactory = factory
+    val controller = new RabbitMQController(factory)
     controller.handlers = List(new EchoHandler)
     controller.start()
 
@@ -43,8 +42,7 @@ class RabbitMQControllerSuite extends FunSuite {
   }
 
   test("test with 1000 job") {
-    val controller = new RabbitMQController
-    controller.connectionFactory = factory
+    val controller = new RabbitMQController(factory)
     controller.handlers = List(new EchoHandler)
     controller.start()
 
@@ -68,14 +66,12 @@ class RabbitMQControllerSuite extends FunSuite {
 
   test("test with 2 controllers") {
     //Controller 1
-    val controller1 = new RabbitMQController
-    controller1.connectionFactory = factory
+    val controller1 = new RabbitMQController(factory)
     controller1.handlers = List(new EchoHandler, new AsyncTestHandler)
     controller1.start()
 
     //Controller 2
-    val controller2 = new RabbitMQController
-    controller2.connectionFactory = factory
+    val controller2 = new RabbitMQController(factory)
     controller2.handlers = List(new EchoHandler, new AsyncTestHandler)
     controller2.start()
 
