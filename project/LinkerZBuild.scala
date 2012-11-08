@@ -13,9 +13,9 @@ object LinkerZBuild extends Build {
   )
 
   lazy val linkerZ = Project("linkerz", file("."), settings = defaultSettings ++ sharedSetting ++ oneJarSettings).aggregate(
-    linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot
+    linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot, linkerRecommendation
   ).dependsOn(
-    linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot
+    linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot, linkerRecommendation
   )
 
   lazy val linkerZCore = Project("linkerz_core", file("linkerz_core"), settings = defaultSettings ++ sharedSetting).settings(
@@ -38,6 +38,10 @@ object LinkerZBuild extends Build {
   lazy val linkerZCrawlerBot = Project("linkerz_crawler_bot", file("linkerz_crawler_bot"), settings = defaultSettings ++ sharedSetting).settings(
     libraryDependencies ++= crawlerBotDependencies ++ testDependencies
   ).dependsOn(linkerZCore, linkerZJobQueue, linkerzModel, linkerZCrawlerCore)
+
+  lazy val linkerRecommendation = Project("linkerz_recommendation", file("linkerz_recommendation"), settings = defaultSettings ++ sharedSetting).settings(
+    libraryDependencies ++= recommendationDependencies ++ testDependencies
+  ).dependsOn(linkerZCore)
 
   val coreDependencies = Seq(
     "org.slf4j" % "slf4j-simple" % "1.6.6",
@@ -85,6 +89,15 @@ object LinkerZBuild extends Build {
 
   val crawlerBotDependencies = Seq(
     "org.quartz-scheduler" % "quartz" % "2.1.6"
+  )
+
+  val recommendationDependencies = Seq(
+    "org.scalanlp" % "breeze-math_2.9.2" % "0.1",
+    "org.scalanlp" % "breeze-learn_2.9.2" % "0.1",
+    "org.scalanlp" % "breeze-process_2.9.2" % "0.1",
+    "org.scalanlp" % "breeze-viz_2.9.2" % "0.1",
+    "org.apache.commons" % "commons-math3" % "3.0",
+    "net.debasishg" %% "redisclient" % "2.7"
   )
 }
 
