@@ -50,4 +50,35 @@ object Main extends App with StopWatch {
       info(link.get.url + " " + t._2)
     })
   }
+
+  stopWatch("Get Recommnendation") {
+    val m = redis.hgetAll("score:" + links(200).id)
+    info(links(200).title + " " + links(200).url)
+    m.foreach(t => {
+      val link = LinkDao.findOneById(new ObjectId(t._1))
+      info(link.get.url + " " + t._2)
+    })
+  }
+
+  stopWatch("Get best match") {
+    var bestMatch = (-1.0, "", "")
+    links.foreach(link => {
+      val map = redis.hgetAll("score:" + link.id)
+
+      map.foreach(m => m match{
+        case (key, value) => if(value.toDouble > bestMatch._1) {
+          bestMatch = (value.toDouble, link.id, key)
+        }
+      })
+
+    })
+
+    val link1 = LinkDao.findOneById(new ObjectId(bestMatch._2))
+    val link2 = LinkDao.findOneById(new ObjectId(bestMatch._3))
+
+    info(link1.get.url)
+    info(link2.get.url)
+    info("bestMatch = " + bestMatch._1)
+  }
+
 }
