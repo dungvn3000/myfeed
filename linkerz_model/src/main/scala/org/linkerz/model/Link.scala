@@ -37,6 +37,9 @@ case class Link(
    indexDate: Date = new Date
 
 ) {
+  //Convenience method to convert _id to String.
+  def id = _id.toString
+
   override def equals(obj: Any) = {
     obj.isInstanceOf[Link] && obj.asInstanceOf[Link].url == url
   }

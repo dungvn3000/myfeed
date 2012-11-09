@@ -97,7 +97,7 @@ object LinkerZBuild extends Build {
     "org.scalanlp" % "breeze-process_2.9.2" % "0.1",
     "org.scalanlp" % "breeze-viz_2.9.2" % "0.1",
     "org.apache.commons" % "commons-math3" % "3.0",
-    "net.debasishg" %% "redisclient" % "2.7"
+    "redis.clients" % "jedis" % "2.1.0"
   )
 }
 
