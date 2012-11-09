@@ -41,7 +41,7 @@ object LinkerZBuild extends Build {
 
   lazy val linkerRecommendation = Project("linkerz_recommendation", file("linkerz_recommendation"), settings = defaultSettings ++ sharedSetting).settings(
     libraryDependencies ++= recommendationDependencies ++ testDependencies
-  ).dependsOn(linkerZCore)
+  ).dependsOn(linkerZCore, linkerzModel)
 
   val coreDependencies = Seq(
     "org.slf4j" % "slf4j-simple" % "1.6.6",
