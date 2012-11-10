@@ -18,8 +18,12 @@ object Main extends App with StopWatch {
 
   val links = LinkDao.find(MongoDBObject.empty).filter(_.featureImage.size > 0).toList
 
-  stopWatch("Update Score") {
-    Recommendation ++ links
+  stopWatch("Buil Score Table") {
+    Recommendation ! links.drop(200)
+  }
+
+  stopWatch("Update a link to score table") {
+    Recommendation <~ links.take(200)
   }
 
   val redis = new Jedis("localhost")
@@ -34,8 +38,8 @@ object Main extends App with StopWatch {
   }
 
   stopWatch("Get Recommnendation") {
-    val m = redis.hgetAll("score:" + links(44).id)
-    info(links(44).title)
+    val m = redis.hgetAll("score:" + links(1).id)
+    info(links(1).title)
     m.foreach(t => {
       val link = LinkDao.findOneById(new ObjectId(t._1))
       info(link.get.url + " " + t._2)
@@ -65,8 +69,8 @@ object Main extends App with StopWatch {
     links.foreach(link => {
       val map = redis.hgetAll("score:" + link.id)
 
-      map.foreach(m => m match{
-        case (key, value) => if(value.toDouble > bestMatch._1) {
+      map.foreach(m => m match {
+        case (key, value) => if (value.toDouble > bestMatch._1) {
           bestMatch = (value.toDouble, link.id, key)
         }
       })

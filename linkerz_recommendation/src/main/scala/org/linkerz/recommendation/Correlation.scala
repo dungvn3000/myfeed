@@ -25,15 +25,15 @@ object Correlation {
   val tokenizer = JavaWordTokenizer ~> StopWordFilter("vi")
 
   /**
-   * Calculate similar score between two links by using @see PearsonsCorrelation.
-   * @param link1
-   * @param link2
+   * Calculate similar score between two texts by using @see PearsonsCorrelation.
+   * @param s1
+   * @param s2
    * @return
    */
-  def sim_pearson(link1: Link, link2: Link) = {
+  def sim_pearson(s1: String, s2: String) = {
     //Step 1: Tokenize
-    val words1 = tokenizer(CaseFolder(link1.title + " " + link1.description)).filter(word => word.trim.length > 1)
-    val words2 = tokenizer(CaseFolder(link2.title + " " + link2.description)).filter(word => word.trim.length > 1)
+    val words1 = tokenizer(CaseFolder(s1)).filter(word => word.trim.length > 1)
+    val words2 = tokenizer(CaseFolder(s2)).filter(word => word.trim.length > 1)
 
     var keys = new HashSet[String]
     //Step 2: Counting.
