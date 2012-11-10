@@ -17,26 +17,28 @@ import com.mongodb.casbah.commons.MongoDBObject
  *
  */
 
-case class Link(
+case class Link
+(
+  _id: ObjectId = new ObjectId,
 
-   _id: ObjectId = new ObjectId,
+  url: String,
+  content: Array[Byte],
+  responseCode: Int,
 
-   url: String,
-   content: Array[Byte],
-   responseCode: Int,
+  //Metadata
+  text: Option[String] = None,
+  contentEncoding: String,
+  title: String,
+  description: String,
+  featureImageUrl: String,
+  //Feature Image
+  featureImage: Array[Byte],
 
-   //Metadata
-   contentEncoding: String,
-   title: String,
-   description: String,
-   featureImageUrl: String,
+  parsed: Boolean = false,
 
-   //Feature Image
-   featureImage: Array[Byte],
+  indexDate: Date = new Date
 
-   indexDate: Date = new Date
-
-) {
+  ) {
   //Convenience method to convert _id to String.
   def id = _id.toString
 
@@ -53,6 +55,6 @@ object LinkDao extends SalatDAO[Link, ObjectId](collection = mongo("link")) {
 
   override def save(link: Link) {
     val result = findOne(MongoDBObject("url" -> link.url))
-    if(result.isEmpty) super.save(link)
+    if (result.isEmpty) super.save(link)
   }
 }

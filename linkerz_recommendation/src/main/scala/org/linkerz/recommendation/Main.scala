@@ -25,7 +25,7 @@ object Main extends App with StopWatch {
   val newestLink = links.takeRight(250)
 
   stopWatch("Build Score Table") {
-    val scores = Recommendation.buildScoreTable(userClickLinks, newestLink)
+    val scores = Recommendation.buildScoreTable(userClickLinks, newestLink, 3)
     scores.foreach(s => s match {
       case (id1, id2, score) => {
         val link1 = LinkDao.findOneById(new ObjectId(id1)).get
