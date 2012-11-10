@@ -47,6 +47,8 @@ trait ParserPlugin extends DefaultParser with Logging {
       crawlJob.error("Can not parse the image for " + webPage.webUrl.url)
     }
 
+    webPage.parsed = !crawlJob.isError
+
     onFinished(crawlJob)
   }
 

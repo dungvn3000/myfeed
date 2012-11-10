@@ -33,6 +33,8 @@ class WebPage {
   var featureImageUrl: String = ""
   var featureImage: Array[Byte] = Array.empty[Byte]
 
+  var parsed: Boolean = false
+
   var parent: WebPage = _
 
   /**
@@ -61,6 +63,7 @@ class WebPage {
     contentEncoding = contentEncoding,
     responseCode = responseCode,
     featureImage = featureImage,
+    parsed = parsed,
     indexDate = new util.Date
   )
 }
