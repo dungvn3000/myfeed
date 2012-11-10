@@ -1,10 +1,11 @@
 package org.linkerz.recommendation
 
-import org.linkerz.model.Link
+import org.linkerz.model.{LinkDao, Link}
 import redis.clients.jedis.{Pipeline, Jedis}
 import Correlation._
 import collection.mutable.ListBuffer
 import collection.JavaConversions._
+import org.bson.types.ObjectId
 
 /**
  * This object is using for make a recommendation to user.
@@ -58,6 +59,11 @@ object Recommendation {
         })
       }
     }
+  }
+
+  def ?(link: Link) = {
+    val scores = redis.hgetAll(scorePrefix + link.id).toList
+    scores.sortWith(_._2.toDouble > _._2.toDouble).take(5)
   }
 
   private def updateScoreTable(link1: Link, keys: java.util.Set[String], text: java.util.Map[String, String])(implicit pipelined: Pipeline) {

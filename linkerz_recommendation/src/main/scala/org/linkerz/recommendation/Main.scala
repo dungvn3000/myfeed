@@ -19,48 +19,52 @@ object Main extends App with StopWatch {
   val links = LinkDao.find(MongoDBObject.empty).filter(_.featureImage.size > 0).toList
 
   stopWatch("Buil Score Table") {
-    Recommendation ! links.drop(200)
+    Recommendation ! links.drop(201)
   }
 
   stopWatch("Update a link to score table") {
+    Recommendation <~ links(200)
+  }
+
+  stopWatch("Update 200 links to score table") {
     Recommendation <~ links.take(200)
   }
 
   val redis = new Jedis("localhost")
 
   stopWatch("Get Recommendation") {
-    val m = redis.hgetAll("score:" + links(0).id)
     info(links(0).title)
-    m.foreach(t => {
-      val link = LinkDao.findOneById(new ObjectId(t._1))
-      info(link.get.url + " " + t._2)
+    val recommendLinkIds = Recommendation ? links(0)
+    recommendLinkIds.foreach(linkId => {
+      val link = LinkDao.findOneById(new ObjectId(linkId._1)).get
+      info(link.url + " " + linkId._2)
     })
   }
 
   stopWatch("Get Recommnendation") {
-    val m = redis.hgetAll("score:" + links(1).id)
     info(links(1).title)
-    m.foreach(t => {
-      val link = LinkDao.findOneById(new ObjectId(t._1))
-      info(link.get.url + " " + t._2)
+    val recommendLinkIds = Recommendation ? links(1)
+    recommendLinkIds.foreach(linkId => {
+      val link = LinkDao.findOneById(new ObjectId(linkId._1)).get
+      info(link.url + " " + linkId._2)
     })
   }
 
   stopWatch("Get Recommnendation") {
-    val m = redis.hgetAll("score:" + links(99).id)
-    info(links(99).title + " " + links(99).url)
-    m.foreach(t => {
-      val link = LinkDao.findOneById(new ObjectId(t._1))
-      info(link.get.url + " " + t._2)
+    info(links(99).title)
+    val recommendLinkIds = Recommendation ? links(99)
+    recommendLinkIds.foreach(linkId => {
+      val link = LinkDao.findOneById(new ObjectId(linkId._1)).get
+      info(link.url + " " + linkId._2)
     })
   }
 
   stopWatch("Get Recommnendation") {
-    val m = redis.hgetAll("score:" + links(200).id)
-    info(links(200).title + " " + links(200).url)
-    m.foreach(t => {
-      val link = LinkDao.findOneById(new ObjectId(t._1))
-      info(link.get.url + " " + t._2)
+    info(links(200).title)
+    val recommendLinkIds = Recommendation ? links(200)
+    recommendLinkIds.foreach(linkId => {
+      val link = LinkDao.findOneById(new ObjectId(linkId._1)).get
+      info(link.url + " " + linkId._2)
     })
   }
 
