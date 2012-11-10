@@ -18,8 +18,8 @@ object Main extends App with StopWatch {
 
   val links = LinkDao.find(MongoDBObject.empty).filter(_.featureImage.size > 0).toList
 
-  stopWatch("Build DataSet with " + links.size + " links") {
-    Recommendation ++= links
+  stopWatch("Update Score") {
+    Recommendation ++ links
   }
 
   val redis = new Jedis("localhost")

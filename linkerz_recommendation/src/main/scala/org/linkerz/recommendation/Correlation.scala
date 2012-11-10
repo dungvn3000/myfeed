@@ -1,9 +1,18 @@
 package org.linkerz.recommendation
 
 import org.apache.commons.math3.stat.correlation.{SpearmansCorrelation, PearsonsCorrelation}
+import org.linkerz.model.Link
+import breeze.text.tokenize.JavaWordTokenizer
+import breeze.text.transform.StopWordFilter
+import breeze.text.analyze.CaseFolder
+import org.apache.commons.math3.stat.Frequency
+import collection.immutable.HashSet
+import java.util
+import collection.JavaConversions._
+import collection.mutable.ListBuffer
 
 /**
- * The Class PearsonsCorrelation.
+  * The Class PearsonsCorrelation.
  *
  * @author Nguyen Duc Dung
  * @since 11/9/12 7:40 PM
@@ -13,29 +22,41 @@ object Correlation {
 
   val pearsonsCorrelation = new PearsonsCorrelation
   val spearmansCorrelation = new SpearmansCorrelation()
+  val tokenizer = JavaWordTokenizer ~> StopWordFilter("vi")
 
-  def sim_pearson(v1: Map[String, String], v2: Map[String, String]): Double = {
-    //Step 1: Combine keys of two maps.
-    val keys = v1.keys ++ v2.keys
+  /**
+   * Calculate similar score between two links by using @see PearsonsCorrelation.
+   * @param link1
+   * @param link2
+   * @return
+   */
+  def sim_pearson(link1: Link, link2: Link) = {
+    //Step 1: Tokenize
+    val words1 = tokenizer(CaseFolder(link1.title + " " + link1.description)).filter(word => word.trim.length > 1)
+    val words2 = tokenizer(CaseFolder(link2.title + " " + link2.description)).filter(word => word.trim.length > 1)
 
-    if (keys.size == 0) return 0
-
-    //Step 2: Build data
-    val data1 = keys.toArray.map(key => {
-      v1.isDefinedAt(key) match {
-        case true => v1(key).toDouble
-        case false => 0.0
-      }
+    var keys = new HashSet[String]
+    //Step 2: Counting.
+    val frequency1 = new Frequency()
+    words1.foreach(word => {
+      frequency1.addValue(word)
+      keys += word
     })
 
-    val data2 = keys.toArray.map(key => {
-      v2.isDefinedAt(key) match {
-        case true => v2(key).toDouble
-        case false => 0.0
-      }
+    val frequency2 = new Frequency()
+    words2.foreach(word => {
+      frequency2.addValue(word)
+      keys += word
     })
 
-    pearsonsCorrelation.correlation(data1, data2)
+    val data1 = new ListBuffer[Double]()
+    val data2 = new ListBuffer[Double]()
+    keys.foreach(word => {
+      data1 += frequency1.getCount(word)
+      data2 += frequency2.getCount(word)
+    })
+
+    pearsonsCorrelation.correlation(data1.toArray, data2.toArray)
   }
 
 }
