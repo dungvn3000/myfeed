@@ -18,75 +18,22 @@ object Main extends App with StopWatch {
 
   val links = LinkDao.find(MongoDBObject.empty).filter(_.featureImage.size > 0).toList
 
-  stopWatch("Buil Score Table") {
-    Recommendation ! links.drop(201)
-  }
+  //Assumption the user click on 10 links
+  val userClickLinks = links.take(10)
 
-  stopWatch("Update a link to score table") {
-    Recommendation <~ links(200)
-  }
+  //And we got 250 news from the robot.
+  val newestLink = links.takeRight(250)
 
-  stopWatch("Update 200 links to score table") {
-    Recommendation <~ links.take(200)
-  }
-
-  val redis = new Jedis("localhost")
-
-  stopWatch("Get Recommendation") {
-    info(links(0).title)
-    val recommendLinkIds = Recommendation ? links(0)
-    recommendLinkIds.foreach(linkId => {
-      val link = LinkDao.findOneById(new ObjectId(linkId._1)).get
-      info(link.url + " " + linkId._2)
+  stopWatch("Build Score Table") {
+    val scores = Recommendation.buildScoreTable(userClickLinks, newestLink)
+    scores.foreach(s => s match {
+      case (id1, id2, score) => {
+        val link1 = LinkDao.findOneById(new ObjectId(id1)).get
+        val link2 = LinkDao.findOneById(new ObjectId(id2)).get
+        info(link1.title + " - " + link2.title + " - " + score)
+      }
     })
   }
 
-  stopWatch("Get Recommnendation") {
-    info(links(1).title)
-    val recommendLinkIds = Recommendation ? links(1)
-    recommendLinkIds.foreach(linkId => {
-      val link = LinkDao.findOneById(new ObjectId(linkId._1)).get
-      info(link.url + " " + linkId._2)
-    })
-  }
-
-  stopWatch("Get Recommnendation") {
-    info(links(99).title)
-    val recommendLinkIds = Recommendation ? links(99)
-    recommendLinkIds.foreach(linkId => {
-      val link = LinkDao.findOneById(new ObjectId(linkId._1)).get
-      info(link.url + " " + linkId._2)
-    })
-  }
-
-  stopWatch("Get Recommnendation") {
-    info(links(200).title)
-    val recommendLinkIds = Recommendation ? links(200)
-    recommendLinkIds.foreach(linkId => {
-      val link = LinkDao.findOneById(new ObjectId(linkId._1)).get
-      info(link.url + " " + linkId._2)
-    })
-  }
-
-  stopWatch("Get best match") {
-    var bestMatch = (-1.0, "", "")
-    links.foreach(link => {
-      val map = redis.hgetAll("score:" + link.id)
-
-      map.foreach(m => m match {
-        case (key, value) => if (value.toDouble > bestMatch._1) {
-          bestMatch = (value.toDouble, link.id, key)
-        }
-      })
-
-    })
-
-    val link1 = LinkDao.findOneById(new ObjectId(bestMatch._2))
-    val link2 = LinkDao.findOneById(new ObjectId(bestMatch._3))
-
-    info(link1.get.url)
-    info(link2.get.url)
-    info("bestMatch = " + bestMatch._1)
-  }
 
 }
