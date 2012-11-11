@@ -54,7 +54,7 @@ class WebPage {
    * Convenient method to convert a webpage to link model to store the database.
    * @return
    */
-  def toLink = Link(
+  def asLink = Link(
     url = webUrl.url,
     content = content,
     title = title,

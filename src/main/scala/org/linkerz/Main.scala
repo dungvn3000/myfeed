@@ -19,6 +19,7 @@ object Main extends App {
   factory.setHost("localhost")
 
   val controller = new RabbitMQController(factory)
+  controller.prefetchCount = 1
 
   controller.handlers = List(
     new NewFeedHandler(new DefaultDownloadFactory, new ParserPluginFactory)

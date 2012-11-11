@@ -2,6 +2,8 @@ package org.linkerz.model
 
 import org.bson.types.ObjectId
 import com.novus.salat.dao.SalatDAO
+import com.mongodb.casbah.commons.MongoDBObject
+import collection.mutable.ListBuffer
 
 /**
  * The Class NewBox.
@@ -18,6 +20,16 @@ case class NewBox
   click: Boolean = false
   )
 
-class NewBoxDao extends SalatDAO[NewBox, ObjectId](collection = mongo("newbox")) {
+object NewBoxDao extends SalatDAO[NewBox, ObjectId](collection = mongo("newbox")) {
+
+  def getUserClicked(userId: ObjectId) = {
+    val clicks = find(MongoDBObject("userId" -> userId)).filter(_.click)
+    val links = new ListBuffer[Link]
+    clicks.foreach(click => {
+      val link = LinkDao.findOneById(click.linkId).getOrElse(throw new Exception("Some thing goes worng, can't find the link id"))
+      links += link
+    })
+    links.toList
+  }
 
 }
