@@ -4,6 +4,7 @@ import org.bson.types.ObjectId
 import com.novus.salat.dao.SalatDAO
 import com.mongodb.casbah.commons.MongoDBObject
 import collection.mutable.ListBuffer
+import java.util.Date
 
 /**
  * The Class NewBox.
@@ -17,7 +18,8 @@ case class NewBox
   _id: ObjectId = new ObjectId(),
   userId: ObjectId,
   linkId: ObjectId,
-  click: Boolean = false
+  click: Boolean = false,
+  createdDate: Date = new Date()
   )
 
 object NewBoxDao extends SalatDAO[NewBox, ObjectId](collection = mongo("newbox")) {
