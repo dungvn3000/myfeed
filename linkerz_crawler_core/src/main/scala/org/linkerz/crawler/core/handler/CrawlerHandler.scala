@@ -63,7 +63,7 @@ class CrawlerHandler(downloadFactory: DownloadFactory = new DefaultDownloadFacto
       }
 
       //Store result to the database.
-      if (usingDB) LinkDao.save(webPage.toLink)
+      if (usingDB) LinkDao.save(webPage.asLink)
 
       //If the manager is going to stop, we will not add any job to the queue.
       if (!isStop) {

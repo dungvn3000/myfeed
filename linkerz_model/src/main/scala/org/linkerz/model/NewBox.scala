@@ -22,6 +22,16 @@ case class NewBox
 
 object NewBoxDao extends SalatDAO[NewBox, ObjectId](collection = mongo("newbox")) {
 
+  def findByUserId(userId: ObjectId): List[Link] = {
+    val newBox = find(MongoDBObject("userId" -> userId)).toList
+    if (!newBox.isEmpty) {
+      val linkIds = newBox.map(_.linkId)
+      val links = LinkDao.find(MongoDBObject("_id" -> MongoDBObject("$in" -> linkIds))).toList
+      return links
+    }
+    Nil
+  }
+
   def getUserClicked(userId: ObjectId) = {
     val clicks = find(MongoDBObject("userId" -> userId)).filter(_.click)
     val links = new ListBuffer[Link]
