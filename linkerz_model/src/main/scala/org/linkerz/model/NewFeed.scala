@@ -7,6 +7,7 @@ package org.linkerz.model
 import java.util
 import org.bson.types.ObjectId
 import com.novus.salat.dao.SalatDAO
+import util.Collections
 
 /**
  * The Class Feeds.
@@ -16,8 +17,8 @@ import com.novus.salat.dao.SalatDAO
  *
  */
 
-case class NewFeed (
-
+case class NewFeed
+(
   id: ObjectId = new ObjectId,
 
   name: String,
@@ -26,11 +27,9 @@ case class NewFeed (
   time: Int,
   enable: Boolean,
 
-  urlRegex: java.util.List[String],
-  excludeUrl: java.util.List[String],
-
-  indexTime: util.Date
-)
+  urlRegex: java.util.List[String] = Collections.emptyList(),
+  excludeUrl: java.util.List[String] = Collections.emptyList()
+  )
 
 object NewFeed extends SalatDAO[NewFeed, ObjectId](collection = mongo("newfeed")) {
 
