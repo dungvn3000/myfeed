@@ -39,11 +39,11 @@ trait ParserPlugin extends DefaultParser with Logging {
       crawlJob.error("Can not parse the title for " + webPage.webUrl.url)
     }
 
-    if (StringUtils.isBlank(webPage.description)) {
+    if (webPage.description.isEmpty || StringUtils.isBlank(webPage.description.get)) {
       crawlJob.error("Can not parse the description for " + webPage.webUrl.url)
     }
 
-    if (StringUtils.isBlank(webPage.featureImageUrl)) {
+    if (webPage.featureImageUrl.isEmpty || StringUtils.isBlank(webPage.featureImageUrl.get)) {
       crawlJob.error("Can not parse the image for " + webPage.webUrl.url)
     }
 
@@ -115,13 +115,14 @@ trait ParserPlugin extends DefaultParser with Logging {
     }
 
     webPage.title = titleText
-    webPage.description = descriptionText
+    webPage.description = Some(descriptionText)
 
     var imgSrc = ""
     if (img != null) {
       imgSrc = img.attr("src")
       if (StringUtils.isNotBlank(imgSrc)) {
-        webPage.featureImageUrl = URLCanonicalizer.getCanonicalURL(imgSrc, webPage.webUrl.baseUrl)
+        val url = URLCanonicalizer.getCanonicalURL(imgSrc, webPage.webUrl.baseUrl)
+        if(StringUtils.isNotBlank(url)) webPage.featureImageUrl = Some(url)
       }
     }
 

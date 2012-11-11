@@ -29,10 +29,10 @@ case class Link
   text: Option[String] = None,
   contentEncoding: String,
   title: String,
-  description: String,
-  featureImageUrl: String,
+  description: Option[String] = None,
+  featureImageUrl: Option[String] = None,
   //Feature Image
-  featureImage: Array[Byte],
+  featureImage: Option[Array[Byte]] = None,
 
   parsed: Boolean = false,
 

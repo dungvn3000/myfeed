@@ -29,9 +29,9 @@ class WebPage {
   var contentType: String = ""
   var contentEncoding: String = ""
   var title: String = ""
-  var description: String = ""
-  var featureImageUrl: String = ""
-  var featureImage: Array[Byte] = Array.empty[Byte]
+  var description: Option[String] = None
+  var featureImageUrl: Option[String] = None
+  var featureImage: Option[Array[Byte]] = None
 
   var parsed: Boolean = false
 

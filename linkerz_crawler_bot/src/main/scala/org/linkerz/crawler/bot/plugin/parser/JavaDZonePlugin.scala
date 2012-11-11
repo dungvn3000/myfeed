@@ -46,9 +46,9 @@ class JavaDZonePlugin extends ParserPlugin {
 
   override def afterParse(crawlJob: CrawlJob, doc: Document) {
     val webPage = crawlJob.result.get
-    if (StringUtils.isBlank(webPage.featureImageUrl)) {
+    if (webPage.featureImageUrl.isEmpty || StringUtils.isBlank(webPage.featureImageUrl.get)) {
       //Set default image if the article has no image.
-      webPage.featureImageUrl = "http://java.dzone.com/sites/all/themes/dzone2012/images/mh_dzone_logo.jpg"
+      webPage.featureImageUrl = Some("http://java.dzone.com/sites/all/themes/dzone2012/images/mh_dzone_logo.jpg")
     }
     super.afterParse(crawlJob, doc)
   }

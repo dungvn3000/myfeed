@@ -24,7 +24,7 @@ object Recommendation {
     pipelined.sync()
   }
 
-  def buildScoreTable(userLinks: List[Link], newestLinks: List[Link], n: Int = 10, minScore:Double = 0.0) = {
+  def buildScoreTable(userLinks: List[Link], newestLinks: List[Link], n: Int = 10, minScore: Double = 0.0): ListBuffer[(String, String, Double)] = {
     val scores = new ListBuffer[(String, String, Double)]
     userLinks.foreach(userLink => {
       val text1 = userLink.title + " " + userLink.description
@@ -33,7 +33,12 @@ object Recommendation {
         scores += Tuple3(userLink.id, newestLink.id, sim_pearson(text1, text2))
       })
     })
-    scores.sortWith(_._3 > _._3).filter(_._3 > minScore).take(n)
+
+    if (scores.size > 2) {
+      return scores.sortWith(_._3 > _._3).filter(_._3 > minScore).take(n)
+    }
+
+    scores.filter(_._3 > minScore)
   }
 
 }
