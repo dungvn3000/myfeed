@@ -20,6 +20,7 @@ class RecommendHandler extends Handler[RecommendJob] with Logging {
   def accept(job: Job) = job.isInstanceOf[RecommendJob]
 
   protected def doHandle(job: RecommendJob) {
+    info("Doing recommendation")
     val users = UserDao.find(MongoDBObject.empty)
     val links = LinkDao.find(MongoDBObject("parsed" -> true)).toList.sortWith((link1, link2) => {
       link1.indexDate.compareTo(link2.indexDate) > 0
