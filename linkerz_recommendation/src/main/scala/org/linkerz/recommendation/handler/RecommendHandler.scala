@@ -31,7 +31,7 @@ class RecommendHandler extends Handler[RecommendJob] with Logging {
         val clickedLinks = NewBoxDao.getUserClicked(user._id)
         if (!clickedLinks.isEmpty) {
           val newLinks = links.filter(!userBox.contains(_)).toList
-          Recommendation.buildScoreTable(clickedLinks, newLinks, minScore = 0.0).foreach(r => r match {
+          Recommendation.buildScoreTable(clickedLinks, newLinks, minScore = 0.4).foreach(r => r match {
             case (link1Id, link2Id, score) => {
               NewBoxDao.save(NewBox(
                 userId = user._id,
