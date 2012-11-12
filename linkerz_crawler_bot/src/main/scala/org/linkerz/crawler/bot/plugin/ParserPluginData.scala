@@ -38,6 +38,8 @@ class ParserPluginData {
   var descriptionAttName: String = _
   var descriptionMaxLength: Int = _
 
+  var contentSelection: String = _
+
   var imgSelection: String = _
 
   var urlTest: String = _

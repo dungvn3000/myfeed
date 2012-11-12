@@ -30,6 +30,7 @@ class VnExpressPlugin extends ParserPlugin {
     pluginData.urlRegex = "*/vnexpress.net/*/*/2012/*"
     pluginData.titleSelection = ".content h1.Title"
     pluginData.descriptionSelection = ".content .Lead"
+    pluginData.contentSelection = ".content"
     pluginData.imgSelection = ".content td img"
     pluginData.urlTest = "http://vnexpress.net/"
     pluginData

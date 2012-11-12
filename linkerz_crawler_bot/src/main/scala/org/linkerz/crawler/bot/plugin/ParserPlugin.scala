@@ -69,6 +69,7 @@ trait ParserPlugin extends DefaultParser with Logging {
 
     val title = doc.select(pluginData.titleSelection).first()
     val description = doc.select(pluginData.descriptionSelection).first()
+    val content = doc.select(pluginData.contentSelection)
     val img = doc.select(pluginData.imgSelection).first()
 
     var titleText = ""
@@ -112,6 +113,12 @@ trait ParserPlugin extends DefaultParser with Logging {
 
     if (descriptionText == null || descriptionText.trim.isEmpty) {
       descriptionText = titleText
+    }
+
+    var text = ""
+    if (content != null) {
+      text = content.text()
+      if (StringUtils.isNotBlank(text)) webPage.text = Some(text)
     }
 
     webPage.title = titleText

@@ -26,9 +26,10 @@ class WebPage {
   var responseCode: Int = _
 
   //Meta data
-  var contentType: String = ""
-  var contentEncoding: String = ""
-  var title: String = ""
+  var text: Option[String] = None
+  var contentType: String = _
+  var contentEncoding: String = _
+  var title: String = _
   var description: Option[String] = None
   var featureImageUrl: Option[String] = None
   var featureImage: Option[Array[Byte]] = None
@@ -58,6 +59,7 @@ class WebPage {
     url = webUrl.url,
     content = content,
     title = title,
+    text = text,
     description = description,
     featureImageUrl = featureImageUrl,
     contentEncoding = contentEncoding,
