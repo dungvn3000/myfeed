@@ -27,6 +27,7 @@ class TwentyFourHourPlugin extends ParserPlugin {
     pluginData.urlRegex = "*/*.24h.com.vn/*/*"
     pluginData.titleSelection = ".boxBaiViet-c h1.baiviet-title"
     pluginData.descriptionSelection = ".boxBaiViet-c .baiviet-head-noidung"
+    pluginData.contentSelection = ".boxBaiViet-c"
     pluginData.imgSelection = ".boxBaiViet-c .baivietMainBox-img200 img"
     pluginData.urlTest = "http://hcm.24h.com.vn/"
     pluginData

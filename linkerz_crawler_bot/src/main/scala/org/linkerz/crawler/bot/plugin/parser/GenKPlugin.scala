@@ -27,6 +27,7 @@ class GenKPlugin extends ParserPlugin {
     pluginData.titleSelection = ".news-show .news-showtitle h1 a"
     pluginData.descriptionSelection = ".news-show .assessment-main1"
     pluginData.descriptionMaxLength = 150
+    pluginData.contentSelection = ".news-show .assessment-main1"
     pluginData.imgSelection = ".news-show .assessment-main1 img"
     pluginData.urlTest = "http://genk.vn/"
     pluginData

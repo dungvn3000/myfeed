@@ -25,15 +25,15 @@ class TestGenKPlugin {
 
   @Test
   def testPlugin() {
-    val crawlJob = new CrawlJob("http://genk.vn/c188n2012090401511183/macbook-air-gia-tu-679-usd-tren-apple-store.chn")
+    val crawlJob = new CrawlJob("http://genk.vn/pc-do-choi-so/macbook-air-gia-tu-679-usd-tren-apple-store-2012090401511183.chn")
     downloader.download(crawlJob)
     plugin.parse(crawlJob)
     val webPage = crawlJob.result.get
 
     Assert.assertEquals("MacBook Air giá từ 679 USD trên Apple Store", webPage.title)
     Assert.assertEquals("Các mẫu laptop siêu mỏng của Apple thế hệ ra mắt năm 2010 được bán dưới dạng hàng tân trang lại " +
-      "(refurbished) có cấu hình khá với chip Core 2 Duo, RAM...", webPage.description)
-    Assert.assertEquals("http://genk2.vcmedia.vn/Hx5Pawrt3sWkCXFccccccccccccOU/Image/2012/08/apple-macbook-jpg-1346730695_480x0-8dc3f.jpg", webPage.featureImageUrl)
+      "(refurbished) có cấu hình khá với chip Core 2 Duo, RAM...", webPage.description.get)
+    Assert.assertEquals("http://genk2.vcmedia.vn/Hx5Pawrt3sWkCXFccccccccccccOU/Image/2012/08/apple-macbook-jpg-1346730695_480x0-8dc3f.jpg", webPage.featureImageUrl.get)
   }
 
   @Test
