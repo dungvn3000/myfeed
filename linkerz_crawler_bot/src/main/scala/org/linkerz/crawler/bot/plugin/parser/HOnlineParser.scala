@@ -15,10 +15,10 @@ import org.jsoup.nodes.Document
  * @since 9/29/12 10:08 AM
  *
  */
-class HOnlineParser extends ParserPlugin {
+class HOnlineParser extends NewsParser {
 
   def pluginData = {
-    val pluginData = new ParserPluginData
+    val pluginData = new ParserData
     pluginData.name = "h-online"
     pluginData.version = "0.0.1"
     pluginData.group = "h-online.com"

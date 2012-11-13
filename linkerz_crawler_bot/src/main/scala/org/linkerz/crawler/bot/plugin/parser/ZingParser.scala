@@ -15,10 +15,10 @@ import org.jsoup.nodes.Document
  * @since 8/21/12, 3:11 AM
  *
  */
-class ZingParser extends ParserPlugin {
+class ZingParser extends NewsParser {
 
   def pluginData = {
-    val pluginData = new ParserPluginData
+    val pluginData = new ParserData
     pluginData.name = "ZingNews"
     pluginData.version = "0.0.1"
     pluginData.group = "zing.vn"

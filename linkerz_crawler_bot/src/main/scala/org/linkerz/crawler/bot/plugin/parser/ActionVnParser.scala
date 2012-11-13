@@ -9,10 +9,10 @@ import org.linkerz.crawler.bot.plugin.{ParserData, NewsParser}
  * @since 11/13/12 8:10 PM
  *
  */
-class ActionVnParser extends ParserPlugin {
+class ActionVnParser extends NewsParser {
 
   def pluginData = {
-    val pluginData = new ParserPluginData
+    val pluginData = new ParserData
     pluginData.name = "action.vn"
     pluginData.version = "0.0.1"
     pluginData.group = "startup"

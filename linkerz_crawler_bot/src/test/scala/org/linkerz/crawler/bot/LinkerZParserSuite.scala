@@ -4,7 +4,7 @@
 
 package org.linkerz.crawler.bot
 
-import factory.ParserPluginFactory
+import factory.NewsParserFactory
 import org.linkerz.crawler.core.fetcher.DefaultFetcher
 import org.linkerz.crawler.core.factory.DefaultDownloadFactory
 import org.linkerz.crawler.core.job.CrawlJob
@@ -20,7 +20,7 @@ import org.scalatest.FunSuite
 class LinkerZParserSuite extends FunSuite {
 
   test("test linkerz parser") {
-    val fetcher = new DefaultFetcher(new DefaultDownloadFactory, new ParserPluginFactory)
+    val fetcher = new DefaultFetcher(new DefaultDownloadFactory, new NewsParserFactory)
     val crawlJob1 = new CrawlJob("http://vnexpress.net/gl/phap-luat/2012/08/dai-gia-dat-cang-bi-dieu-tra-lua-dao-1-000-ty-dong/")
     fetcher.fetch(crawlJob1)
     val webPage1 = crawlJob1.result.get

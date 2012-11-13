@@ -17,9 +17,9 @@ import org.linkerz.crawler.bot.plugin.parser._
  *
  */
 
-class ParserPluginFactory extends ParserFactory {
+class NewsParserFactory extends ParserFactory {
 
-  override def createParser: Parser = new LinkerZParser(List(
+  override def createParser(): Parser = new LinkerZParser(List(
     new GenKParser,
     new HOnlineParser,
     new JavaDZoneParser,

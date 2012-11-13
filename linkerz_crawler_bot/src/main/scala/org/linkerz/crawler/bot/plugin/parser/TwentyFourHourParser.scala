@@ -15,10 +15,10 @@ import org.jsoup.nodes.Document
  * @since 10/4/12 10:28 PM
  *
  */
-class TwentyFourHourParser extends ParserPlugin {
+class TwentyFourHourParser extends NewsParser {
 
   def pluginData = {
-    val pluginData = new ParserPluginData
+    val pluginData = new ParserData
     pluginData.name = "24H"
     pluginData.version = "0.0.1"
     pluginData.group = "24h.com.vn"

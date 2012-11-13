@@ -16,10 +16,10 @@ import org.apache.commons.lang.StringUtils
  * @since 10/2/12 9:10 PM
  *
  */
-class JavaDZoneParser extends ParserPlugin {
+class JavaDZoneParser extends NewsParser {
 
   def pluginData = {
-    val pluginData = new ParserPluginData
+    val pluginData = new ParserData
     pluginData.name = "java dzone"
     pluginData.version = "0.0.1"
     pluginData.group = "dzone.com"

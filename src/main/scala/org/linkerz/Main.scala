@@ -1,7 +1,7 @@
 package org.linkerz
 
 import com.rabbitmq.client.ConnectionFactory
-import crawler.bot.factory.ParserPluginFactory
+import crawler.bot.factory.NewsParserFactory
 import crawler.bot.handler.NewFeedHandler
 import crawler.core.factory.DefaultDownloadFactory
 import job.queue.controller.RabbitMQController
@@ -23,7 +23,7 @@ object Main extends App {
   controller.prefetchCount = 1
 
   controller.handlers = List(
-    new NewFeedHandler(new DefaultDownloadFactory, new ParserPluginFactory),
+    new NewFeedHandler(new DefaultDownloadFactory, new NewsParserFactory),
     new RecommendHandler
   )
 
