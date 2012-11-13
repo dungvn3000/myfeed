@@ -1,6 +1,6 @@
-package org.linkerz.crawler.bot.plugin.parser
+package org.linkerz.crawler.bot.parser
 
-import org.linkerz.crawler.bot.plugin.{ParserData, NewsParser}
+import org.linkerz.crawler.bot.parser.core.{ParserData, NewsParser}
 
 /**
  * The Class GikVnParser.

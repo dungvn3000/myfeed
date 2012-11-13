@@ -4,10 +4,11 @@
 
 package org.linkerz.crawler.bot.factory
 
-import org.linkerz.crawler.bot.parser.LinkerZParser
 import org.linkerz.crawler.core.parser.Parser
 import org.linkerz.crawler.core.factory.ParserFactory
 import org.linkerz.crawler.bot.plugin.parser._
+import org.linkerz.crawler.bot.parser.core.LinkerZParser
+import org.linkerz.crawler.bot.parser._
 
 /**
  * The Class ParserFactory.

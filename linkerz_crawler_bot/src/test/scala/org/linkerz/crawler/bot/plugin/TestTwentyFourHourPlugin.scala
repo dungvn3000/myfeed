@@ -5,11 +5,11 @@
 package org.linkerz.crawler.bot.plugin
 
 import org.linkerz.crawler.core.factory.{ParserFactory, DefaultDownloadFactory}
-import parser.TwentyFourHourParser
 import org.junit.{Assert, Test}
 import org.linkerz.crawler.core.job.CrawlJob
 import org.linkerz.job.queue.controller.BaseController
 import org.linkerz.crawler.core.handler.CrawlerHandler
+import org.linkerz.crawler.bot.parser.TwentyFourHourParser
 
 /**
  * The Class TestTwentyFourHourPlugin.

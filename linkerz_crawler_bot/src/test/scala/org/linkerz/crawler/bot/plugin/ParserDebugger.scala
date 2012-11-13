@@ -6,6 +6,7 @@ package org.linkerz.crawler.bot.plugin
 
 import org.linkerz.crawler.core.job.CrawlJob
 import grizzled.slf4j.Logging
+import org.linkerz.crawler.bot.parser.core.NewsParser
 
 /**
  * The Class ParserDebugger.

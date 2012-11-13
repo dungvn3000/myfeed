@@ -4,7 +4,7 @@
 
 package org.linkerz.crawler.bot.plugin
 
-import parser.GenKParser
+import org.linkerz.crawler.bot.parser.GenKParser
 
 /**
  * The Class TestGenKPlugin.

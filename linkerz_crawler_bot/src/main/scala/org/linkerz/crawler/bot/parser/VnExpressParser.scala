@@ -2,13 +2,13 @@
  * Copyright (C) 2012 - 2013 LinkerZ (Searching and Sharing)
  */
 
-package org.linkerz.crawler.bot.plugin.parser
+package org.linkerz.crawler.bot.parser
 
 import org.jsoup.nodes.Document
-import org.linkerz.crawler.bot.plugin.{ParserData, NewsParser}
 import org.apache.commons.lang.StringUtils
 import org.linkerz.crawler.core.job.CrawlJob
 import edu.uci.ics.crawler4j.url.URLCanonicalizer
+import org.linkerz.crawler.bot.parser.core.{ParserData, NewsParser}
 
 /**
  * The Class VnExpress.net Plugin.
