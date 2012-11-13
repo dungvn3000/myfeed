@@ -1,7 +1,5 @@
 package org.linkerz.crawler.bot.parser
 
-import org.linkerz.crawler.bot.parser.ActionVnParser
-
 /**
  * The Class TestActionVnPlugin.
  *

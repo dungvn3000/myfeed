@@ -4,11 +4,9 @@
 
 package org.linkerz.crawler.bot.parser
 
-
 import org.linkerz.crawler.core.factory.DefaultDownloadFactory
 import org.linkerz.crawler.core.job.CrawlJob
 import org.junit.{Assert, Test}
-import org.linkerz.crawler.bot.parser.VnExpressParser
 
 /**
  * The Class TestVnExpressPlugin.

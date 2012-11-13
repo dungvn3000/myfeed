@@ -5,11 +5,8 @@
 package org.linkerz.crawler.bot.parser
 
 import org.junit.Test
-import org.linkerz.crawler.core.factory.{ParserFactory, DefaultDownloadFactory}
+import org.linkerz.crawler.core.factory.DefaultDownloadFactory
 import org.linkerz.crawler.core.job.CrawlJob
-import org.linkerz.job.queue.controller.BaseController
-import org.linkerz.crawler.core.handler.CrawlerHandler
-import org.linkerz.crawler.bot.parser.HOnlineParser
 
 /**
  * The Class TestHOnlinePlugin.

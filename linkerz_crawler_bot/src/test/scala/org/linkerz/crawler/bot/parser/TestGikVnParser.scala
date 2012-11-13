@@ -1,7 +1,5 @@
 package org.linkerz.crawler.bot.parser
 
-import org.linkerz.crawler.bot.parser.GikVnParser
-
 /**
  * The Class TestGikVnParser.
  *

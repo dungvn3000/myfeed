@@ -24,7 +24,6 @@ case class NewFeed
   name: String,
   group: String,
   url: String,
-  time: Int,
   enable: Boolean,
 
   urlRegex: java.util.List[String] = Collections.emptyList(),
