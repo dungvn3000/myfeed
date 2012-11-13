@@ -41,7 +41,4 @@ class ParserPluginData {
   var contentSelection: String = _
 
   var imgSelection: String = _
-
-  var urlTest: String = _
-
 }

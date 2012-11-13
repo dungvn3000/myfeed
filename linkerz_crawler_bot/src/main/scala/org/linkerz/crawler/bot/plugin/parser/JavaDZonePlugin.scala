@@ -30,18 +30,7 @@ class JavaDZonePlugin extends ParserPlugin {
 //    pluginData.descriptionSelection = "#article .content"
 //    pluginData.descriptionMaxLength = 150
     pluginData.imgSelection = "#article .content img"
-    pluginData.urlTest = "http://java.dzone.com/"
     pluginData
-  }
-
-  override def beforeParse(crawlJob: CrawlJob, doc: Document): Boolean = {
-    if (doc.select("#article .content").isEmpty) {
-      crawlJob.code = CrawlJob.SKIP
-      crawlJob.info("Skip it, cause it is not a new detail page " + crawlJob.webUrl.url)
-      info("Skip it, cause it is not a new detail page " + crawlJob.webUrl.url)
-      return false
-    }
-    true
   }
 
   override def afterParse(crawlJob: CrawlJob, doc: Document) {

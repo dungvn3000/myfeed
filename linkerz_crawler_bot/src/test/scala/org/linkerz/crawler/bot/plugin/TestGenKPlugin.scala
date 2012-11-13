@@ -13,7 +13,7 @@ import parser.GenKPlugin
  * @since 9/5/12 11:21 AM
  *
  */
-class TestGenKPlugin extends PluginParserTest[GenKPlugin] {
+class TestGenKPlugin extends ParserPluginTest[GenKPlugin] {
 
   withParser(new GenKPlugin)
 

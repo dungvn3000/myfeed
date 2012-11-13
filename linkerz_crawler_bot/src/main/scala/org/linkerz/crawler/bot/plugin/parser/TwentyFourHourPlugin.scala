@@ -29,18 +29,7 @@ class TwentyFourHourPlugin extends ParserPlugin {
 //    pluginData.descriptionSelection = ".boxBaiViet-c .baiviet-head-noidung"
     pluginData.contentSelection = ".boxBaiViet-c"
     pluginData.imgSelection = ".boxBaiViet-c .baivietMainBox-img200 img"
-    pluginData.urlTest = "http://hcm.24h.com.vn/"
     pluginData
-  }
-
-  override def beforeParse(crawlJob: CrawlJob, doc: Document): Boolean = {
-    if (doc.select(".boxBaiViet-c").isEmpty) {
-      crawlJob.code = CrawlJob.SKIP
-      crawlJob.info("Skip it, cause it is not a new detail page " + crawlJob.webUrl.url)
-      info("Skip it, cause it is not a new detail page " + crawlJob.webUrl.url)
-      return false
-    }
-    true
   }
 
 }

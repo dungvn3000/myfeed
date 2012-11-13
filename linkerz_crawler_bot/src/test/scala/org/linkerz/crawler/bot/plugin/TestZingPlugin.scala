@@ -16,7 +16,7 @@ import parser.ZingPlugin
  * @since 8/21/12, 3:14 AM
  *
  */
-class TestZingPlugin extends PluginParserTest[ZingPlugin] {
+class TestZingPlugin extends ParserPluginTest[ZingPlugin] {
 
   withParser(new ZingPlugin)
 

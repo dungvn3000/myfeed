@@ -29,18 +29,7 @@ class HOnlinePlugin extends ParserPlugin {
 //    pluginData.descriptionSelection = "#content #item .item_wrapper"
 //    pluginData.descriptionMaxLength = 150
     pluginData.imgSelection = "#content #item .item_wrapper .pic_right img"
-    pluginData.urlTest = "http://www.h-online.com/"
     pluginData
-  }
-
-  override def beforeParse(crawlJob: CrawlJob, doc: Document): Boolean = {
-    if (doc.select("#content #item").isEmpty) {
-      crawlJob.code = CrawlJob.SKIP
-      crawlJob.info("Skip it, cause it is not a new detail page " + crawlJob.webUrl.url)
-      info("Skip it, cause it is not a new detail page " + crawlJob.webUrl.url)
-      return false
-    }
-    true
   }
 
 }

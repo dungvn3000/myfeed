@@ -18,7 +18,7 @@ import org.linkerz.crawler.core.handler.CrawlerHandler
  * @since 10/4/12 10:35 PM
  *
  */
-class TestTwentyFourHourPlugin extends PluginParserTest[TwentyFourHourPlugin] {
+class TestTwentyFourHourPlugin extends ParserPluginTest[TwentyFourHourPlugin] {
 
   withParser(new TwentyFourHourPlugin)
 

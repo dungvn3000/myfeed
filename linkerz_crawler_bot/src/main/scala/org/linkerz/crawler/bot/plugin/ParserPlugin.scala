@@ -29,7 +29,15 @@ trait ParserPlugin extends DefaultParser with Logging {
     SimpleRegexMatcher.matcher(url, pluginData.urlRegex)
   }
 
-  def beforeParse(crawlJob: CrawlJob, doc: Document): Boolean = true
+  def beforeParse(crawlJob: CrawlJob, doc: Document): Boolean = {
+    if (doc.select(pluginData.contentSelection).isEmpty) {
+      crawlJob.code = CrawlJob.SKIP
+      crawlJob.info("Skip it, cause it is not a new detail page " + crawlJob.webUrl.url)
+      info("Skip it, cause it is not a new detail page " + crawlJob.webUrl.url)
+      return false
+    }
+    true
+  }
 
   def afterParse(crawlJob: CrawlJob, doc: Document) {
     val webPage = crawlJob.result.get

@@ -29,17 +29,6 @@ class ZingPlugin extends ParserPlugin {
 //    pluginData.descriptionSelection = "h2.pHead"
     pluginData.contentSelection = "#content_document"
     pluginData.imgSelection = "#content_document img"
-    pluginData.urlTest = "http://news.zing.vn/"
     pluginData
-  }
-
-  override def beforeParse(crawlJob: CrawlJob, doc: Document): Boolean = {
-    if (doc.select("#content_document").isEmpty) {
-      crawlJob.code = CrawlJob.SKIP
-      crawlJob.info("Skip it, cause it is not a new detail page " + crawlJob.webUrl.url)
-      info("Skip it, cause it is not a new detail page " + crawlJob.webUrl.url)
-      return false
-    }
-    true
   }
 }

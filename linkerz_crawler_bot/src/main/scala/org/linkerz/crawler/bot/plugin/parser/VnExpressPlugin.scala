@@ -32,7 +32,6 @@ class VnExpressPlugin extends ParserPlugin {
 //    pluginData.descriptionSelection = ".content .Lead"
     pluginData.contentSelection = ".content"
     pluginData.imgSelection = ".content td img"
-    pluginData.urlTest = "http://vnexpress.net/"
     pluginData
   }
 

@@ -30,7 +30,7 @@ class LinkerZParserSuite extends FunSuite {
     println("img = " + webPage1.featureImageUrl)
 
 
-    val crawlJob2 = new CrawlJob("http://genk.vn/c187n20121103063935579/cam-nhan-ipad-mini-tai-vn-may-dep-man-hinh-xau.chn")
+    val crawlJob2 = new CrawlJob("http://genk.vn/dien-thoai/cam-nhan-ipad-mini-tai-vn-may-dep-man-hinh-xau-20121103063935579.chn")
     fetcher.fetch(crawlJob2)
     val webPage2 = crawlJob2.result.get
     println("link = " + webPage2.webUrl.url)
