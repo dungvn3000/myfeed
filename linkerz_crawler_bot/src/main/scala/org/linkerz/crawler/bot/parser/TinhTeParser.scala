@@ -12,9 +12,9 @@ import core.{ParserData, NewsParser}
 class TinhTeParser extends NewsParser {
   def pluginData = {
     val pluginData = new ParserData
-    pluginData.name = "TinhTe"
+    pluginData.name = "tinhte.vn"
     pluginData.version = "0.0.1"
-    pluginData.group = "tinhte.vn"
+    pluginData.group = "technology"
     pluginData.pluginClass = this.getClass.getName
     pluginData.enable = true
     pluginData.urlRegex = "*/tinhte.vn/*"
