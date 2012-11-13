@@ -4,18 +4,18 @@
 
 package org.linkerz.crawler.bot.plugin.parser
 
-import org.linkerz.crawler.bot.plugin.{ParserPluginData, ParserPlugin}
+import org.linkerz.crawler.bot.plugin.{ParserData, NewsParser}
 import org.linkerz.crawler.core.job.CrawlJob
 import org.jsoup.nodes.Document
 
 /**
- * The Class HOnlinePlugin.
+ * The Class HOnlineParser.
  *
  * @author Nguyen Duc Dung
  * @since 9/29/12 10:08 AM
  *
  */
-class HOnlinePlugin extends ParserPlugin {
+class HOnlineParser extends ParserPlugin {
 
   def pluginData = {
     val pluginData = new ParserPluginData

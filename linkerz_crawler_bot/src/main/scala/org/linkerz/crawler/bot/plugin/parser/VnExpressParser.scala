@@ -5,7 +5,7 @@
 package org.linkerz.crawler.bot.plugin.parser
 
 import org.jsoup.nodes.Document
-import org.linkerz.crawler.bot.plugin.{ParserPluginData, ParserPlugin}
+import org.linkerz.crawler.bot.plugin.{ParserData, NewsParser}
 import org.apache.commons.lang.StringUtils
 import org.linkerz.crawler.core.job.CrawlJob
 import edu.uci.ics.crawler4j.url.URLCanonicalizer
@@ -18,7 +18,7 @@ import edu.uci.ics.crawler4j.url.URLCanonicalizer
  *
  */
 
-class VnExpressPlugin extends ParserPlugin {
+class VnExpressParser extends ParserPlugin {
 
   def pluginData = {
     val pluginData = new ParserPluginData

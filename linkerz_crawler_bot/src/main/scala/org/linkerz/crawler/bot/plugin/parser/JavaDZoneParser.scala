@@ -4,19 +4,19 @@
 
 package org.linkerz.crawler.bot.plugin.parser
 
-import org.linkerz.crawler.bot.plugin.{ParserPluginData, ParserPlugin}
+import org.linkerz.crawler.bot.plugin.{ParserData, NewsParser}
 import org.linkerz.crawler.core.job.CrawlJob
 import org.jsoup.nodes.Document
 import org.apache.commons.lang.StringUtils
 
 /**
- * The Class JavaDZonePlugin.
+ * The Class JavaDZoneParser.
  *
  * @author Nguyen Duc Dung
  * @since 10/2/12 9:10 PM
  *
  */
-class JavaDZonePlugin extends ParserPlugin {
+class JavaDZoneParser extends ParserPlugin {
 
   def pluginData = {
     val pluginData = new ParserPluginData

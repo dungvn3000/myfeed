@@ -6,7 +6,7 @@ package org.linkerz.crawler.bot.plugin
 
 import org.junit.Test
 import org.linkerz.crawler.core.factory.{ParserFactory, DefaultDownloadFactory}
-import parser.HOnlinePlugin
+import parser.HOnlineParser
 import org.linkerz.crawler.core.job.CrawlJob
 import org.linkerz.job.queue.controller.BaseController
 import org.linkerz.crawler.core.handler.CrawlerHandler
@@ -21,7 +21,7 @@ import org.linkerz.crawler.core.handler.CrawlerHandler
 class TestHOnlinePlugin {
 
   val downloader = new DefaultDownloadFactory().createDownloader()
-  val plugin = new HOnlinePlugin
+  val plugin = new HOnlineParser
 
   @Test
   def testPlugin() {

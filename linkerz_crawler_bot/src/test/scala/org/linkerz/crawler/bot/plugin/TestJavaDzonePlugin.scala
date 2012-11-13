@@ -5,7 +5,7 @@
 package org.linkerz.crawler.bot.plugin
 
 import org.linkerz.crawler.core.factory.{ParserFactory, DefaultDownloadFactory}
-import parser.JavaDZonePlugin
+import parser.JavaDZoneParser
 import org.junit.Test
 import org.linkerz.crawler.core.job.CrawlJob
 import org.linkerz.job.queue.controller.BaseController
@@ -21,7 +21,7 @@ import org.linkerz.crawler.core.handler.CrawlerHandler
 class TestJavaDzonePlugin {
 
   val downloader = new DefaultDownloadFactory().createDownloader()
-  val plugin = new JavaDZonePlugin
+  val plugin = new JavaDZoneParser
 
   @Test
   def testPlugin() {

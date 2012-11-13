@@ -5,7 +5,7 @@
 package org.linkerz.crawler.bot.plugin
 
 import org.linkerz.crawler.core.factory.{ParserFactory, DefaultDownloadFactory}
-import parser.TwentyFourHourPlugin
+import parser.TwentyFourHourParser
 import org.junit.{Assert, Test}
 import org.linkerz.crawler.core.job.CrawlJob
 import org.linkerz.job.queue.controller.BaseController
@@ -18,9 +18,9 @@ import org.linkerz.crawler.core.handler.CrawlerHandler
  * @since 10/4/12 10:35 PM
  *
  */
-class TestTwentyFourHourPlugin extends ParserPluginTest[TwentyFourHourPlugin] {
+class TestTwentyFourHourPlugin extends NewsParserTest[TwentyFourHourParser] {
 
-  withParser(new TwentyFourHourPlugin)
+  withParser(new TwentyFourHourParser)
 
   test("Test 1 TestTwentyFourHourPlugin"){
     withUrl("http://hcm.24h.com.vn/tin-tuc-trong-ngay/lang-ung-thu-o-ha-noi-c46a488328.html")

@@ -15,14 +15,14 @@ import org.linkerz.crawler.core.job.CrawlJob
 import edu.uci.ics.crawler4j.url.URLCanonicalizer
 
 /**
- * The Class ParserPlugin.
+ * The Class NewsParser.
  *
  * @author Nguyen Duc Dung
  * @since 8/11/12, 1:52 PM
  *
  */
 
-trait ParserPlugin extends DefaultParser with Logging {
+trait NewsParser extends DefaultParser with Logging {
 
   def isMatch(url: String): Boolean = {
     assert(url != null)
@@ -148,5 +148,5 @@ trait ParserPlugin extends DefaultParser with Logging {
    * Plugin data.
    * @return
    */
-  def pluginData: ParserPluginData
+  def pluginData: ParserData
 }

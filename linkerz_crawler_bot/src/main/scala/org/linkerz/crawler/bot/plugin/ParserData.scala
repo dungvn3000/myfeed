@@ -5,14 +5,14 @@
 package org.linkerz.crawler.bot.plugin
 
 /**
- * The Class ParserPlugin.
+ * The Class NewsParser.
  *
  * @author Nguyen Duc Dung
  * @since 8/11/12, 4:49 PM
  *
  */
 
-class ParserPluginData {
+class ParserData {
 
   var name: String = _
   var group: String = _

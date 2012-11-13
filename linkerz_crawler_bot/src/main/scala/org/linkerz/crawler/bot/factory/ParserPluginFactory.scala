@@ -20,12 +20,12 @@ import org.linkerz.crawler.bot.plugin.parser._
 class ParserPluginFactory extends ParserFactory {
 
   override def createParser: Parser = new LinkerZParser(List(
-    new GenKPlugin,
-    new HOnlinePlugin,
-    new JavaDZonePlugin,
-    new TwentyFourHourPlugin,
-    new VnExpressPlugin,
-    new ZingPlugin
+    new GenKParser,
+    new HOnlineParser,
+    new JavaDZoneParser,
+    new TwentyFourHourParser,
+    new VnExpressParser,
+    new ZingParser
   ))
 
 }

@@ -4,7 +4,7 @@
 
 package org.linkerz.crawler.bot.parser
 
-import org.linkerz.crawler.bot.plugin.ParserPlugin
+import org.linkerz.crawler.bot.plugin.NewsParser
 import org.linkerz.crawler.core.parser.{DefaultParser, Parser}
 import org.linkerz.crawler.core.job.CrawlJob
 
@@ -16,7 +16,7 @@ import org.linkerz.crawler.core.job.CrawlJob
  *
  */
 
-class LinkerZParser(plugins: List[ParserPlugin]) extends Parser {
+class LinkerZParser(plugins: List[NewsParser]) extends Parser {
 
   val defaultParser = new DefaultParser
 

@@ -1,15 +1,15 @@
 package org.linkerz.crawler.bot.plugin.parser
 
-import org.linkerz.crawler.bot.plugin.{ParserPluginData, ParserPlugin}
+import org.linkerz.crawler.bot.plugin.{ParserData, NewsParser}
 
 /**
- * The Class ActionVnPlugin.
+ * The Class ActionVnParser.
  *
  * @author Nguyen Duc Dung
  * @since 11/13/12 8:10 PM
  *
  */
-class ActionVnPlugin extends ParserPlugin {
+class ActionVnParser extends ParserPlugin {
 
   def pluginData = {
     val pluginData = new ParserPluginData

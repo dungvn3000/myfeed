@@ -8,7 +8,7 @@ package org.linkerz.crawler.bot.plugin
 import org.linkerz.crawler.core.factory.DefaultDownloadFactory
 import org.linkerz.crawler.core.job.CrawlJob
 import org.junit.{Assert, Test}
-import parser.VnExpressPlugin
+import parser.VnExpressParser
 
 /**
  * The Class TestVnExpressPlugin.
@@ -20,7 +20,7 @@ import parser.VnExpressPlugin
 class TestVnExpressPlugin {
 
   val downloader = new DefaultDownloadFactory().createDownloader()
-  val plugin = new VnExpressPlugin
+  val plugin = new VnExpressParser
 
   @Test
   def testPlugin() {

@@ -4,18 +4,18 @@
 
 package org.linkerz.crawler.bot.plugin.parser
 
-import org.linkerz.crawler.bot.plugin.{ParserPluginData, ParserPlugin}
+import org.linkerz.crawler.bot.plugin.{ParserData, NewsParser}
 import org.linkerz.crawler.core.job.CrawlJob
 import org.jsoup.nodes.Document
 
 /**
- * The Class GenKPlugin.
+ * The Class GenKParser.
  *
  * @author Nguyen Duc Dung
  * @since 9/5/12 11:19 AM
  *
  */
-class GenKPlugin extends ParserPlugin {
+class GenKParser extends ParserPlugin {
   def pluginData = {
     val pluginData = new ParserPluginData
     pluginData.name = "Genk"

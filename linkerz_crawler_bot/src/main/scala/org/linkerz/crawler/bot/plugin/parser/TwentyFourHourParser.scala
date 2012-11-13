@@ -4,18 +4,18 @@
 
 package org.linkerz.crawler.bot.plugin.parser
 
-import org.linkerz.crawler.bot.plugin.{ParserPluginData, ParserPlugin}
+import org.linkerz.crawler.bot.plugin.{ParserData, NewsParser}
 import org.linkerz.crawler.core.job.CrawlJob
 import org.jsoup.nodes.Document
 
 /**
- * The Class TwentyFourHourPlugin.
+ * The Class TwentyFourHourParser.
  *
  * @author Nguyen Duc Dung
  * @since 10/4/12 10:28 PM
  *
  */
-class TwentyFourHourPlugin extends ParserPlugin {
+class TwentyFourHourParser extends ParserPlugin {
 
   def pluginData = {
     val pluginData = new ParserPluginData

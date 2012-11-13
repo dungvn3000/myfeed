@@ -14,7 +14,7 @@ import grizzled.slf4j.Logging
  * @since 9/5/12 12:35 PM
  *
  */
-trait ParserDebugger extends ParserPlugin {
+trait ParserDebugger extends NewsParser {
 
   override def onFinished(crawlJob: CrawlJob) {
     val webPage = crawlJob.result.get

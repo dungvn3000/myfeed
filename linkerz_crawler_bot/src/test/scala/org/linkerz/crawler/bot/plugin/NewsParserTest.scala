@@ -7,13 +7,13 @@ import org.linkerz.crawler.core.job.CrawlJob
 import org.junit.Assert
 
 /**
- * The Class ParserPluginTest.
+ * The Class NewsParserTest.
  *
  * @author Nguyen Duc Dung
  * @since 11/13/12 4:49 PM
  *
  */
-trait ParserPluginTest[P <: Parser] extends FunSuite {
+trait NewsParserTest[P <: Parser] extends FunSuite {
 
   val downloader = new DefaultDownloadFactory().createDownloader()
   private var _parser: P = _

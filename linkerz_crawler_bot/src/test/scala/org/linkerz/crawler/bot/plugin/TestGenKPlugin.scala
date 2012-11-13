@@ -4,7 +4,7 @@
 
 package org.linkerz.crawler.bot.plugin
 
-import parser.GenKPlugin
+import parser.GenKParser
 
 /**
  * The Class TestGenKPlugin.
@@ -13,9 +13,9 @@ import parser.GenKPlugin
  * @since 9/5/12 11:21 AM
  *
  */
-class TestGenKPlugin extends ParserPluginTest[GenKPlugin] {
+class TestGenKPlugin extends NewsParserTest[GenKParser] {
 
-  withParser(new GenKPlugin)
+  withParser(new GenKParser)
 
   test("Test 1 GenkPlugin") {
     withUrl("http://genk.vn/pc-do-choi-so/macbook-air-gia-tu-679-usd-tren-apple-store-2012090401511183.chn")
