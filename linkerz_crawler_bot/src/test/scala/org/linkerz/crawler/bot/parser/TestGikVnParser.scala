@@ -1,4 +1,4 @@
-package org.linkerz.crawler.bot.plugin
+package org.linkerz.crawler.bot.parser
 
 import org.linkerz.crawler.bot.parser.GikVnParser
 

@@ -2,30 +2,30 @@
  * Copyright (C) 2012 - 2013 LinkerZ (Searching and Sharing)
  */
 
-package org.linkerz.crawler.bot.plugin
+package org.linkerz.crawler.bot.parser
 
-import org.junit.Test
 import org.linkerz.crawler.core.factory.{ParserFactory, DefaultDownloadFactory}
+import org.junit.Test
 import org.linkerz.crawler.core.job.CrawlJob
 import org.linkerz.job.queue.controller.BaseController
 import org.linkerz.crawler.core.handler.CrawlerHandler
-import org.linkerz.crawler.bot.parser.HOnlineParser
+import org.linkerz.crawler.bot.parser.JavaDZoneParser
 
 /**
- * The Class TestHOnlinePlugin.
+ * The Class TestJavaDzonePlugin.
  *
  * @author Nguyen Duc Dung
- * @since 9/29/12 10:15 AM
+ * @since 10/2/12 9:18 PM
  *
  */
-class TestHOnlinePlugin {
+class TestJavaDzonePlugin {
 
   val downloader = new DefaultDownloadFactory().createDownloader()
-  val plugin = new HOnlineParser
+  val plugin = new JavaDZoneParser
 
   @Test
   def testPlugin() {
-    val crawlJob = new CrawlJob("http://www.h-online.com/security/news/item/Cisco-fixes-alleged-DoS-holes-1720128.html")
+    val crawlJob = new CrawlJob("http://java.dzone.com/articles/soa-service-design-cheat-sheet")
     downloader.download(crawlJob)
     plugin.parse(crawlJob)
     val webPage = crawlJob.result.get
@@ -34,4 +34,5 @@ class TestHOnlinePlugin {
     println("webPage = " + webPage.text.get)
     println("webPage = " + webPage.featureImageUrl)
   }
+
 }

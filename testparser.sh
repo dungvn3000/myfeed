@@ -1,2 +1,2 @@
-sbt "test-only org.linkerz.crawler.bot.plugin.*"
+sbt "test-only org.linkerz.crawler.bot.parser.*"
 

@@ -2,7 +2,7 @@
  * Copyright (C) 2012 - 2013 LinkerZ (Searching and Sharing)
  */
 
-package org.linkerz.crawler.bot.plugin
+package org.linkerz.crawler.bot.parser
 
 import org.linkerz.crawler.bot.parser.GenKParser
 
