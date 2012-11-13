@@ -26,8 +26,8 @@ class HOnlinePlugin extends ParserPlugin {
     pluginData.enable = true
     pluginData.urlRegex = "*/www.h-online.com/*/*"
     pluginData.titleSelection = "#content #item h1"
-    pluginData.descriptionSelection = "#content #item .item_wrapper"
-    pluginData.descriptionMaxLength = 150
+//    pluginData.descriptionSelection = "#content #item .item_wrapper"
+//    pluginData.descriptionMaxLength = 150
     pluginData.imgSelection = "#content #item .item_wrapper .pic_right img"
     pluginData.urlTest = "http://www.h-online.com/"
     pluginData

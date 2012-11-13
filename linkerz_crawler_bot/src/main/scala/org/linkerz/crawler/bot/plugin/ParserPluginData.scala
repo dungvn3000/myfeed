@@ -34,9 +34,9 @@ class ParserPluginData {
   var titleAttName: String = _
   var titleMaxLength: Int = _
 
-  var descriptionSelection: String = _
-  var descriptionAttName: String = _
-  var descriptionMaxLength: Int = _
+//  var descriptionSelection: String = _
+//  var descriptionAttName: String = _
+//  var descriptionMaxLength: Int = _
 
   var contentSelection: String = _
 

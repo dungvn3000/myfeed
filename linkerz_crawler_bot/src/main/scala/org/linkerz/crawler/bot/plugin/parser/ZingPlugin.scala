@@ -26,7 +26,7 @@ class ZingPlugin extends ParserPlugin {
     pluginData.enable = true
     pluginData.urlRegex = "*/news.zing.vn/*/*"
     pluginData.titleSelection = "title"
-    pluginData.descriptionSelection = "h2.pHead"
+//    pluginData.descriptionSelection = "h2.pHead"
     pluginData.contentSelection = "#content_document"
     pluginData.imgSelection = "#content_document img"
     pluginData.urlTest = "http://news.zing.vn/"

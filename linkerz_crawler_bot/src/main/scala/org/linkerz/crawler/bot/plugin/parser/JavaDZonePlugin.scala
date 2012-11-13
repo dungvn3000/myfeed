@@ -27,8 +27,8 @@ class JavaDZonePlugin extends ParserPlugin {
     pluginData.enable = true
     pluginData.urlRegex = "*/java.dzone.com/articles/*"
     pluginData.titleSelection = "#article #articleHead h1"
-    pluginData.descriptionSelection = "#article .content"
-    pluginData.descriptionMaxLength = 150
+//    pluginData.descriptionSelection = "#article .content"
+//    pluginData.descriptionMaxLength = 150
     pluginData.imgSelection = "#article .content img"
     pluginData.urlTest = "http://java.dzone.com/"
     pluginData

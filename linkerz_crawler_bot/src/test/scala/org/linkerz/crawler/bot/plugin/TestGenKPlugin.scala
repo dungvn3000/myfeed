@@ -32,7 +32,10 @@ class TestGenKPlugin {
 
     Assert.assertEquals("MacBook Air giá từ 679 USD trên Apple Store", webPage.title)
     Assert.assertEquals("http://genk2.vcmedia.vn/Hx5Pawrt3sWkCXFccccccccccccOU/Image/2012/08/apple-macbook-jpg-1346730695_480x0-8dc3f.jpg", webPage.featureImageUrl.get)
-    Assert.assertEquals(true, webPage.text.isDefined)
+    Assert.assertEquals(true, webPage.text.get.
+      contains("Các mẫu laptop siêu mỏng của Apple thế hệ ra mắt năm 2010 được bán dưới dạng hàng tân trang lại (refurbished) có cấu hình khá với chip Core 2 Duo, RAM tối đa 4 GB và ổ cứng tối đa 128 GB."))
+
+
   }
 
 }
