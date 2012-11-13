@@ -38,11 +38,6 @@ class VnExpressPlugin extends ParserPlugin {
 
   override def afterParse(crawlJob: CrawlJob, doc: Document) {
     val webPage = crawlJob.result.get
-    //Remove another link inside vnexpress description
-    if (webPage.description.isDefined && webPage.description.get.contains(". >")) {
-      webPage.description = Some(webPage.description.get.split(" >")(0))
-    }
-
     if (webPage.featureImageUrl.isEmpty || StringUtils.isBlank(webPage.featureImageUrl.get)) {
       val url = URLCanonicalizer.getCanonicalURL("images/home_selected.gif", webPage.webUrl.baseUrl)
       if (!StringUtils.isNotBlank(url)) webPage.featureImageUrl = Some(url)

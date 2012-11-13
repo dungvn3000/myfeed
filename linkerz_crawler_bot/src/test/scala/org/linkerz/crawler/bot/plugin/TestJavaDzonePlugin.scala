@@ -31,26 +31,8 @@ class TestJavaDzonePlugin {
     val webPage = crawlJob.result.get
 
     println("webPage = " + webPage.title)
-    println("webPage = " + webPage.description)
+    println("webPage = " + webPage.text.get)
     println("webPage = " + webPage.featureImageUrl)
-  }
-
-  @Test
-  def testWith50Links() {
-    val controller = new BaseController
-    val handler = new CrawlerHandler(
-      parserFactory = new ParserFactory {
-        def createParser() = new JavaDZonePlugin with ParserDebugger
-      }
-    )
-    controller.handlers = List(handler)
-    controller.start()
-
-    val job = new CrawlJob(plugin.pluginData.urlTest)
-    job.maxSubJob = 50
-
-    controller ! job
-    controller.stop()
   }
 
 }

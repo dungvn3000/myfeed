@@ -19,7 +19,7 @@ trait ParserDebugger extends ParserPlugin {
   override def onFinished(crawlJob: CrawlJob) {
     val webPage = crawlJob.result.get
     info("Title " + webPage.title)
-    info("Description " + webPage.description)
+    info("Text " + webPage.text)
     info("Image " + webPage.featureImageUrl)
   }
 

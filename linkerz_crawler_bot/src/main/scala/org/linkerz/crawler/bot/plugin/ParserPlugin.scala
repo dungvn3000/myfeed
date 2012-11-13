@@ -39,9 +39,9 @@ trait ParserPlugin extends DefaultParser with Logging {
       crawlJob.error("Can not parse the title for " + webPage.webUrl.url)
     }
 
-    if (webPage.description.isEmpty || StringUtils.isBlank(webPage.description.get)) {
-      crawlJob.error("Can not parse the description for " + webPage.webUrl.url)
-    }
+//    if (webPage.description.isEmpty || StringUtils.isBlank(webPage.description.get)) {
+//      crawlJob.error("Can not parse the description for " + webPage.webUrl.url)
+//    }
 
     if (webPage.featureImageUrl.isEmpty || StringUtils.isBlank(webPage.featureImageUrl.get)) {
       crawlJob.error("Can not parse the image for " + webPage.webUrl.url)
@@ -68,7 +68,7 @@ trait ParserPlugin extends DefaultParser with Logging {
     }
 
     val title = doc.select(pluginData.titleSelection).first()
-    val description = doc.select(pluginData.descriptionSelection).first()
+//    val description = doc.select(pluginData.descriptionSelection).first()
     val content = doc.select(pluginData.contentSelection)
     val img = doc.select(pluginData.imgSelection).first()
 
@@ -97,23 +97,23 @@ trait ParserPlugin extends DefaultParser with Logging {
       titleText = webPage.webUrl.url
     }
 
-    var descriptionText = ""
-    if (description != null) {
-      descriptionText = description.text()
-      if (pluginData.descriptionAttName != null
-        && pluginData.descriptionAttName.trim.length > 0) {
-        descriptionText = description.attr(pluginData.descriptionAttName)
-      }
-    }
-
-    if (descriptionText.length > pluginData.descriptionMaxLength
-      && pluginData.descriptionMaxLength > 0) {
-      descriptionText = descriptionText.substring(0, pluginData.descriptionMaxLength) + "..."
-    }
-
-    if (descriptionText == null || descriptionText.trim.isEmpty) {
-      descriptionText = titleText
-    }
+//    var descriptionText = ""
+//    if (description != null) {
+//      descriptionText = description.text()
+//      if (pluginData.descriptionAttName != null
+//        && pluginData.descriptionAttName.trim.length > 0) {
+//        descriptionText = description.attr(pluginData.descriptionAttName)
+//      }
+//    }
+//
+//    if (descriptionText.length > pluginData.descriptionMaxLength
+//      && pluginData.descriptionMaxLength > 0) {
+//      descriptionText = descriptionText.substring(0, pluginData.descriptionMaxLength) + "..."
+//    }
+//
+//    if (descriptionText == null || descriptionText.trim.isEmpty) {
+//      descriptionText = titleText
+//    }
 
     var text = ""
     if (content != null) {
@@ -122,7 +122,7 @@ trait ParserPlugin extends DefaultParser with Logging {
     }
 
     webPage.title = titleText
-    webPage.description = Some(descriptionText)
+//    webPage.description = Some(descriptionText)
 
     var imgSrc = ""
     if (img != null) {

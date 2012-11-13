@@ -30,9 +30,8 @@ class TestVnExpressPlugin {
     val webPage = crawlJob.result.get
 
     Assert.assertEquals("Phóng loa đòi nợ đại gia Diệu Hiền", webPage.title)
-    Assert.assertEquals("Hàng chục nông dân tiếp tục vây cổng biệt thự vợ chồng đại gia Diệu Hiền để căng băng rôn và phóng loa đòi nợ tiền trong ngày 11/8, " +
-      "ít ngày sau khi ACB ra mặt tuyên bố là chủ nợ ngân hàng thứ tư của Bianfishco.", webPage.description.get)
     Assert.assertEquals("http://vnexpress.net/Files/Subject/3b/bd/ab/d7/biet_thu_ba_Dieu_Hien.jpg", webPage.featureImageUrl.get)
+    Assert.assertEquals(true, webPage.text.isDefined)
   }
 
 }

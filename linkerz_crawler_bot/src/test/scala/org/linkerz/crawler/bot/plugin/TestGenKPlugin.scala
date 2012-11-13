@@ -31,27 +31,8 @@ class TestGenKPlugin {
     val webPage = crawlJob.result.get
 
     Assert.assertEquals("MacBook Air giá từ 679 USD trên Apple Store", webPage.title)
-    Assert.assertEquals("Các mẫu laptop siêu mỏng của Apple thế hệ ra mắt năm 2010 được bán dưới dạng hàng tân trang lại " +
-      "(refurbished) có cấu hình khá với chip Core 2 Duo, RAM...", webPage.description.get)
     Assert.assertEquals("http://genk2.vcmedia.vn/Hx5Pawrt3sWkCXFccccccccccccOU/Image/2012/08/apple-macbook-jpg-1346730695_480x0-8dc3f.jpg", webPage.featureImageUrl.get)
-  }
-
-  @Test
-  def testWith100Links() {
-    val controller = new BaseController
-    val handler = new CrawlerHandler(
-      parserFactory = new ParserFactory {
-        def createParser() = new GenKPlugin with ParserDebugger
-      }
-    )
-    controller.handlers = List(handler)
-    controller.start()
-
-    val job = new CrawlJob(plugin.pluginData.urlTest)
-    job.maxSubJob = 100
-
-    controller ! job
-    controller.stop()
+    Assert.assertEquals(true, webPage.text.isDefined)
   }
 
 }

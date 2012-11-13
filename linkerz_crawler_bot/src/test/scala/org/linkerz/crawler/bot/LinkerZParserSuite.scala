@@ -26,7 +26,7 @@ class LinkerZParserSuite extends FunSuite {
     val webPage1 = crawlJob1.result.get
     println("link = " + webPage1.webUrl.url)
     println("title = " + webPage1.title)
-    println("description = " + webPage1.description)
+    println("text = " + webPage1.text)
     println("img = " + webPage1.featureImageUrl)
 
 
@@ -35,7 +35,7 @@ class LinkerZParserSuite extends FunSuite {
     val webPage2 = crawlJob2.result.get
     println("link = " + webPage2.webUrl.url)
     println("title = " + webPage2.title)
-    println("description = " + webPage2.description)
+    println("text = " + webPage2.text)
     println("img = " + webPage2.featureImageUrl)
   }
 

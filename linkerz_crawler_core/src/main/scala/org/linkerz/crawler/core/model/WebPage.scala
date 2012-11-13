@@ -30,7 +30,7 @@ class WebPage {
   var contentType: String = _
   var contentEncoding: String = _
   var title: String = _
-  var description: Option[String] = None
+//  var description: Option[String] = None
   var featureImageUrl: Option[String] = None
   var featureImage: Option[Array[Byte]] = None
 
@@ -60,7 +60,7 @@ class WebPage {
     content = content,
     title = title,
     text = text,
-    description = description,
+//    description = description,
     featureImageUrl = featureImageUrl,
     contentEncoding = contentEncoding,
     responseCode = responseCode,
