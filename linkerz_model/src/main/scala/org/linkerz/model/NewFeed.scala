@@ -19,17 +19,17 @@ import util.Collections
 
 case class NewFeed
 (
-  id: ObjectId = new ObjectId,
+  _id: ObjectId = new ObjectId,
 
   name: String,
   group: String,
   url: String,
   enable: Boolean,
 
-  urlRegex: java.util.List[String] = Collections.emptyList(),
-  excludeUrl: java.util.List[String] = Collections.emptyList()
+  urlRegex: List[String] = Nil,
+  excludeUrl: List[String] = Nil
   )
 
-object NewFeed extends SalatDAO[NewFeed, ObjectId](collection = mongo("newfeed")) {
+object NewFeedDao extends SalatDAO[NewFeed, ObjectId](collection = mongo("newfeed")) {
 
 }
