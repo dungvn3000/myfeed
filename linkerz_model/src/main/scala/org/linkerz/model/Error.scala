@@ -1,7 +1,7 @@
 package org.linkerz.model
 
-import org.bson.types.ObjectId
 import java.util.Date
+import org.springframework.data.annotation.Id
 
 /**
  * The Class Error.
@@ -10,14 +10,12 @@ import java.util.Date
  * @since 11/13/12 12:39 AM
  *
  */
-case class Error
-(
-  _id: ObjectId = new ObjectId(),
-  name: String,
-  message: String,
-  className: String,
-  url: String,
-  createDate: Date = new Date
-  )
-
-object ErrorDao
+class Error {
+  @Id
+  var id: String = _
+  var name: String = _
+  var message: String = _
+  var className: String = _
+  var url: String = _
+  var createDate: Date = new Date
+}
