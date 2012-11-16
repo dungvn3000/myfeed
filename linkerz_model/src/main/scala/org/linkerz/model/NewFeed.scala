@@ -28,7 +28,11 @@ case class NewFeed
 
   urlRegex: List[String] = Nil,
   excludeUrl: List[String] = Nil
-  )
+  ) {
+
+  def id = _id.toString
+
+}
 
 object NewFeedDao extends SalatDAO[NewFeed, ObjectId](collection = mongo("newfeed")) {
 
