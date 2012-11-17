@@ -1,6 +1,6 @@
 package org.linkerz.dao
 
-import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.data.mongodb.core
 import com.mongodb.Mongo
 
 /**
@@ -12,6 +12,6 @@ import com.mongodb.Mongo
  */
 object MongoTemplate {
 
-  val mongo = new MongoTemplate(new Mongo("localhost"), "linkerz")
+  val mongo = new core.MongoTemplate(new Mongo("localhost"), "linkerz")
 
 }

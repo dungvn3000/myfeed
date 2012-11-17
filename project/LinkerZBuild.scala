@@ -60,7 +60,6 @@ object LinkerZBuild extends Build {
   )
 
   val modelDependencies = Seq(
-    "com.novus" %% "salat" % "1.9.1",
     "org.springframework.data" % "spring-data-mongodb" % "1.0.4.RELEASE"
   )
 
