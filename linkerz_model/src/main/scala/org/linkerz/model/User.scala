@@ -1,7 +1,7 @@
 package org.linkerz.model
 
-import org.springframework.data.annotation.Id
-
+import org.bson.types.ObjectId
+import com.novus.salat.dao.SalatDAO
 
 /**
  * The Class User.
@@ -11,9 +11,14 @@ import org.springframework.data.annotation.Id
  *
  */
 
-class User {
-  @Id
-  var id: String = _
-  var userName: String = _
-  var passWord: String = _
+case class User
+(
+  _id: ObjectId = new ObjectId,
+  userName: String,
+  passWord: String
+  )
+
+object UserDao extends SalatDAO[User, ObjectId](collection = mongo("user")) {
+
 }
+

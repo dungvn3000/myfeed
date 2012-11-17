@@ -27,31 +27,7 @@ case class NewFeed
   enable: Boolean,
 
   urlRegex: List[String] = Nil,
-  excludeUrl: List[String] = Nil,
-
-  titleSelection: String,
-  titleAttName: String,
-  titleMaxLength: Int,
-
-  contentSelection: String,
-
-  imgSelection: String
-
-//  urlTest1: Option[String] = None,
-//  title1: Option[String] = None,
-//  validateText1: Option[String] = None,
-//  imageUrl1: Option[String] = None,
-//
-//  urlTest2: Option[String] = None,
-//  title2: Option[String] = None,
-//  validateText2: Option[String] = None,
-//  imageUrl2: Option[String] = None,
-//
-//  urlTest3: Option[String] = None,
-//  title3: Option[String] = None,
-//  validateText3: Option[String] = None,
-//  imageUrl3: Option[String] = None
-
+  excludeUrl: List[String] = Nil
   ) {
 
   def id = _id.toString

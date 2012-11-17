@@ -17,5 +17,4 @@ package object model {
 
   val mongo = MongoConnection("localhost")("linkerz")
 
-
 }

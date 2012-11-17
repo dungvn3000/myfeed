@@ -5,9 +5,8 @@
 package linkerz.model
 
 import org.scalatest.FunSuite
-import org.linkerz.model.User
-import org.linkerz.model.MongoTemplate._
-import org.junit.Assert
+import org.linkerz.model.{User, UserDao}
+import com.mongodb.casbah.commons.MongoDBObject
 
 /**
  * The Class UserDaoSuite.
@@ -19,15 +18,14 @@ import org.junit.Assert
 class UserDaoSuite extends FunSuite {
 
   test("test find user by user name") {
-    val user = new User
-    user.userName = "testUser"
-    user.passWord = "testUSer"
+    UserDao.save(User(
+      userName = "dung",
+      passWord = "dung"
+    ))
 
-    mongo.save(user)
+    val user = UserDao.findOne(MongoDBObject("userName" -> "dung"))
 
-    Assert.assertEquals(true, user.id != null)
-
-    mongo.remove(user)
+    assert(user.isDefined)
   }
 
 }
