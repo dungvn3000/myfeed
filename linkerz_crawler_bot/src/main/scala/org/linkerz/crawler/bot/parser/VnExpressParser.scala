@@ -20,20 +20,20 @@ import org.linkerz.crawler.bot.parser.core.{ParserData, NewsParser}
 
 class VnExpressParser extends NewsParser {
 
-  def pluginData = {
-    val pluginData = new ParserData
-    pluginData.name = "VnExpress"
-    pluginData.version = "0.0.1"
-    pluginData.group = "vnexpress.net"
-    pluginData.pluginClass = this.getClass.getName
-    pluginData.enable = true
-    pluginData.urlRegex = "*/vnexpress.net/*/*/2012/*"
-    pluginData.titleSelection = ".content h1.Title"
-//    pluginData.descriptionSelection = ".content .Lead"
-    pluginData.contentSelection = ".content"
-    pluginData.imgSelection = ".content td img"
-    pluginData
-  }
+//  def pluginData = {
+//    val pluginData = new ParserData
+//    pluginData.name = "VnExpress"
+//    pluginData.version = "0.0.1"
+//    pluginData.group = "vnexpress.net"
+//    pluginData.pluginClass = this.getClass.getName
+//    pluginData.enable = true
+//    pluginData.urlRegex = "*/vnexpress.net/*/*/2012/*"
+//    pluginData.titleSelection = ".content h1.Title"
+////    pluginData.descriptionSelection = ".content .Lead"
+//    pluginData.contentSelection = ".content"
+//    pluginData.imgSelection = ".content td img"
+//    pluginData
+//  }
 
   override def afterParse(crawlJob: CrawlJob, doc: Document) {
     val webPage = crawlJob.result.get

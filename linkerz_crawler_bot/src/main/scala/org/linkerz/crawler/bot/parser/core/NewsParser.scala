@@ -13,6 +13,7 @@ import org.linkerz.crawler.core.parser.DefaultParser
 import org.apache.commons.lang.StringUtils
 import org.linkerz.crawler.core.job.CrawlJob
 import edu.uci.ics.crawler4j.url.URLCanonicalizer
+import org.linkerz.model.NewFeed
 
 /**
  * The Class NewsParser.
@@ -22,7 +23,7 @@ import edu.uci.ics.crawler4j.url.URLCanonicalizer
  *
  */
 
-trait NewsParser extends DefaultParser with Logging {
+class NewsParser extends DefaultParser with Logging {
 
   def isMatch(url: String): Boolean = {
     assert(url != null)
@@ -46,10 +47,6 @@ trait NewsParser extends DefaultParser with Logging {
     if (StringUtils.isBlank(webPage.title)) {
       crawlJob.error("Can not parse the title for " + webPage.webUrl.url)
     }
-
-//    if (webPage.description.isEmpty || StringUtils.isBlank(webPage.description.get)) {
-//      crawlJob.error("Can not parse the description for " + webPage.webUrl.url)
-//    }
 
     if (webPage.featureImageUrl.isEmpty || StringUtils.isBlank(webPage.featureImageUrl.get)) {
       crawlJob.error("Can not parse the image for " + webPage.webUrl.url)
@@ -76,23 +73,12 @@ trait NewsParser extends DefaultParser with Logging {
     }
 
     val title = doc.select(pluginData.titleSelection).first()
-//    val description = doc.select(pluginData.descriptionSelection).first()
     val content = doc.select(pluginData.contentSelection)
     val img = doc.select(pluginData.imgSelection).first()
 
     var titleText = ""
     if (title != null) {
       titleText = title.text()
-      if (pluginData.titleAttName != null
-        && pluginData.titleAttName.trim.length > 0) {
-        titleText = title.attr(pluginData.titleAttName)
-      }
-    }
-
-    if (titleText.length > pluginData.titleMaxLength
-      && pluginData.titleMaxLength > 0) {
-      titleText = titleText.substring(0, pluginData.titleMaxLength) + "..."
-
     }
 
     //To make sure the title will be never empty
@@ -105,24 +91,6 @@ trait NewsParser extends DefaultParser with Logging {
       titleText = webPage.webUrl.url
     }
 
-//    var descriptionText = ""
-//    if (description != null) {
-//      descriptionText = description.text()
-//      if (pluginData.descriptionAttName != null
-//        && pluginData.descriptionAttName.trim.length > 0) {
-//        descriptionText = description.attr(pluginData.descriptionAttName)
-//      }
-//    }
-//
-//    if (descriptionText.length > pluginData.descriptionMaxLength
-//      && pluginData.descriptionMaxLength > 0) {
-//      descriptionText = descriptionText.substring(0, pluginData.descriptionMaxLength) + "..."
-//    }
-//
-//    if (descriptionText == null || descriptionText.trim.isEmpty) {
-//      descriptionText = titleText
-//    }
-
     var text = ""
     if (content != null) {
       text = content.text()
@@ -130,7 +98,6 @@ trait NewsParser extends DefaultParser with Logging {
     }
 
     webPage.title = titleText
-//    webPage.description = Some(descriptionText)
 
     var imgSrc = ""
     if (img != null) {
@@ -148,5 +115,5 @@ trait NewsParser extends DefaultParser with Logging {
    * Plugin data.
    * @return
    */
-  def pluginData: ParserData
+  def pluginData: NewFeed = null
 }

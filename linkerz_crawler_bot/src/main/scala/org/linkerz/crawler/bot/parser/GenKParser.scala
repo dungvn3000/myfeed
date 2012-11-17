@@ -14,19 +14,19 @@ import org.linkerz.crawler.bot.parser.core.{ParserData, NewsParser}
  *
  */
 class GenKParser extends NewsParser {
-  def pluginData = {
-    val pluginData = new ParserData
-    pluginData.name = "Genk"
-    pluginData.version = "0.0.1"
-    pluginData.group = "genk.vn"
-    pluginData.pluginClass = this.getClass.getName
-    pluginData.enable = true
-    pluginData.urlRegex = "*/genk.vn/*/*"
-    pluginData.titleSelection = ".news-show .news-showtitle h1 a"
-//    pluginData.descriptionSelection = ".news-show .assessment-main1"
-//    pluginData.descriptionMaxLength = 150
-    pluginData.contentSelection = ".news-show .assessment-main1"
-    pluginData.imgSelection = ".news-show .assessment-main1 img"
-    pluginData
-  }
+//  def pluginData = {
+//    val pluginData = new ParserData
+//    pluginData.name = "Genk"
+//    pluginData.version = "0.0.1"
+//    pluginData.group = "genk.vn"
+//    pluginData.pluginClass = this.getClass.getName
+//    pluginData.enable = true
+//    pluginData.urlRegex = "*/genk.vn/*/*"
+//    pluginData.titleSelection = ".news-show .news-showtitle h1 a"
+////    pluginData.descriptionSelection = ".news-show .assessment-main1"
+////    pluginData.descriptionMaxLength = 150
+//    pluginData.contentSelection = ".news-show .assessment-main1"
+//    pluginData.imgSelection = ".news-show .assessment-main1 img"
+//    pluginData
+//  }
 }

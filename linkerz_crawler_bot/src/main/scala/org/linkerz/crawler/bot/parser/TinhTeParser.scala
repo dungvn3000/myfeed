@@ -10,17 +10,17 @@ import core.{ParserData, NewsParser}
  *
  */
 class TinhTeParser extends NewsParser {
-  def pluginData = {
-    val pluginData = new ParserData
-    pluginData.name = "tinhte.vn"
-    pluginData.version = "0.0.1"
-    pluginData.group = "technology"
-    pluginData.pluginClass = this.getClass.getName
-    pluginData.enable = true
-    pluginData.urlRegex = "*/tinhte.vn/*"
-    pluginData.titleSelection = ".mainContent .titleBar h1"
-    pluginData.contentSelection = ".mainContent"
-    pluginData.imgSelection = ".mainContent img"
-    pluginData
-  }
+//  def pluginData = {
+//    val pluginData = new ParserData
+//    pluginData.name = "tinhte.vn"
+//    pluginData.version = "0.0.1"
+//    pluginData.group = "technology"
+//    pluginData.pluginClass = this.getClass.getName
+//    pluginData.enable = true
+//    pluginData.urlRegex = "*/tinhte.vn/*"
+//    pluginData.titleSelection = ".mainContent .titleBar h1"
+//    pluginData.contentSelection = ".mainContent"
+//    pluginData.imgSelection = ".mainContent img"
+//    pluginData
+//  }
 }
