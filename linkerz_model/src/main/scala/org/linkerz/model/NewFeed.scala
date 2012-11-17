@@ -6,6 +6,8 @@ package org.linkerz.model
 
 import org.springframework.data.annotation.Id
 import java.util
+import collection.JavaConversions._
+import collection.JavaConverters._
 
 /**
  * The Class Feeds.
@@ -46,4 +48,11 @@ class NewFeed {
   var title3: String = _
   var validateText3: String = _
   var imageUrl3: String = _
+
+  //Helper method for converting from Java List to Scala List.
+  def sRegex = if (regex == null || regex.isEmpty) Nil else regex.toList
+  def sRegex_=(regex: List[String]) {this.regex = regex.asJava}
+
+  def sIgnore = if (ignore == null || ignore.isEmpty) Nil else ignore.toList
+  def sIgnore_=(ignore: List[String]) {this.ignore = ignore.asJava}
 }

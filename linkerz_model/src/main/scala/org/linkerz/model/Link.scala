@@ -5,10 +5,6 @@
 package org.linkerz.model
 
 import java.util.Date
-import org.linkerz.dao.MongoTemplate
-import MongoTemplate._
-import org.springframework.data.mongodb.core.query.Query._
-import org.springframework.data.mongodb.core.query.Criteria._
 
 /**
  * The Class Linker.
@@ -18,7 +14,7 @@ import org.springframework.data.mongodb.core.query.Criteria._
  *
  */
 
-case class Link {
+class Link {
 
   var id: String = _
 
@@ -27,14 +23,14 @@ case class Link {
   var responseCode: Int = _
 
   //Metadata
-  var text: Option[String] = None
+  var text: String = _
   var contentEncoding: String = _
   var title: String = _
 
   //  description: Option[String] = None,
-  var featureImageUrl: Option[String] = None
+  var featureImageUrl: String = _
   //Feature Image
-  var featureImage: Option[Array[Byte]] = None
+  var featureImage: Array[Byte] = _
 
   var parsed: Boolean = false
 
