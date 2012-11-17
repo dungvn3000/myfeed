@@ -36,12 +36,12 @@ case class CrawlJob(webUrl: WebUrl) extends Job {
   /**
    * Only crawl the url match with this regex.
    */
-  var urlRegex: List[String] = _
+  var urlRegex: Option[String] = None
 
   /**
    * For those of url match with this regex will not be crawl.
    */
-  var excludeUrl: List[String] = _
+  var excludeUrl: List[String] = Nil
 
   /**
    * String url.

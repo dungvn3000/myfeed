@@ -25,7 +25,7 @@ case class NewFeed
   url: String,
   enable: Boolean,
 
-  urlRegex: List[String] = Nil,
+  urlRegex: String,
   excludeUrl: List[String] = Nil,
 
   titleSelection: String,

@@ -19,11 +19,11 @@ import collection.JavaConversions._
 case class NewFeedJob(newFeed: NewFeed) extends CrawlJob(new WebUrl(newFeed.url)) {
 
   if(!newFeed.urlRegex.isEmpty) {
-    urlRegex = newFeed.urlRegex.toList
+    urlRegex = Some(newFeed.urlRegex)
   }
 
   if(!newFeed.excludeUrl.isEmpty) {
-    excludeUrl = newFeed.excludeUrl.toList
+    excludeUrl = newFeed.excludeUrl
   }
 
 }

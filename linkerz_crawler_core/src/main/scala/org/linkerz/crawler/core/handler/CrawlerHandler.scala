@@ -41,6 +41,7 @@ class CrawlerHandler(downloadFactory: DownloadFactory = new DefaultDownloadFacto
   override protected def onFinish() {
     info(currentSession.countUrl + " links found")
     info(currentSession.fetchedUrls.size + " links downloaded")
+    info(currentSession.urlStored + " links stored in db")
     info(currentSession.currentDepth + " level")
     info(currentSession.jobTime + " ms")
     info(currentSession.job.error.length + " error found")
@@ -63,7 +64,9 @@ class CrawlerHandler(downloadFactory: DownloadFactory = new DefaultDownloadFacto
       }
 
       //Store result to the database.
-      if (usingDB) LinkDao.save(webPage.asLink)
+      if (usingDB && LinkDao.checkAndSave(webPage.asLink)) {
+        currentSession.urlStored += 1
+      }
 
       //If the manager is going to stop, we will not add any job to the queue.
       if (!isStop) {
@@ -97,11 +100,9 @@ class CrawlerHandler(downloadFactory: DownloadFactory = new DefaultDownloadFacto
     if (currentJob.filterPattern.matcher(webUrl.url).matches()) return false
 
     //Only crawl the url is match with url regex
-    if (currentJob.urlRegex != null) currentJob.urlRegex.foreach(regex => {
-      if (!SimpleRegexMatcher.matcher(webUrl.url, regex)) {
-        return false
-      }
-    })
+    if (currentJob.urlRegex.isDefined && !SimpleRegexMatcher.matcher(webUrl.url, currentJob.urlRegex.get)) {
+      return false
+    }
 
     //Not crawl the exclude url
     if (currentJob.excludeUrl != null) currentJob.excludeUrl.foreach(regex => {

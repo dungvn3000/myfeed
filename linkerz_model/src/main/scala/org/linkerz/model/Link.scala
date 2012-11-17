@@ -29,7 +29,7 @@ case class Link
   text: Option[String] = None,
   contentEncoding: String,
   title: String,
-//  description: Option[String] = None,
+  //  description: Option[String] = None,
   featureImageUrl: Option[String] = None,
   //Feature Image
   featureImage: Option[Array[Byte]] = None,
@@ -53,8 +53,12 @@ object LinkDao extends SalatDAO[Link, ObjectId](collection = mongo("link")) {
 
   def findByUrl(url: String) = findOne(MongoDBObject("url" -> url))
 
-  override def save(link: Link) {
+  def checkAndSave(link: Link) = {
     val result = findOne(MongoDBObject("url" -> link.url))
-    if (result.isEmpty) super.save(link)
+    if (result.isEmpty) {
+      save(link)
+      true
+    }
+    false
   }
 }
