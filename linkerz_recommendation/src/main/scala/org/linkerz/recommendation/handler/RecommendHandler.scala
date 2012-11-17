@@ -3,7 +3,9 @@ package org.linkerz.recommendation.handler
 import org.linkerz.job.queue.core.{Job, Handler}
 import org.linkerz.recommendation.job.RecommendJob
 import org.linkerz.model.NewBox
+import com.mongodb.casbah.commons.MongoDBObject
 import org.linkerz.recommendation.Recommendation
+import org.bson.types.ObjectId
 import grizzled.slf4j.Logging
 
 /**
