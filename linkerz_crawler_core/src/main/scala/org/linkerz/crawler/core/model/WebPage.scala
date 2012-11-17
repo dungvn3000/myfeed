@@ -30,7 +30,7 @@ class WebPage {
   var contentType: String = _
   var contentEncoding: String = _
   var title: String = _
-//  var description: Option[String] = None
+  //  var description: Option[String] = None
   var featureImageUrl: Option[String] = None
   var featureImage: Option[Array[Byte]] = None
 
@@ -55,17 +55,21 @@ class WebPage {
    * Convenient method to convert a webpage to link model to store the database.
    * @return
    */
-  def asLink = Link(
-    url = webUrl.url,
-    content = content,
-    title = title,
-    text = text,
-//    description = description,
-    featureImageUrl = featureImageUrl,
-    contentEncoding = contentEncoding,
-    responseCode = responseCode,
-    featureImage = featureImage,
-    parsed = parsed,
-    indexDate = new util.Date
-  )
+  def asLink = {
+    val link = new Link
+    link.url = webUrl.url
+    link.content = content
+    link.title = title
+    link.text = text
+    //    description = description,
+    link.featureImageUrl = featureImageUrl
+    link.contentEncoding = contentEncoding
+    link.responseCode = responseCode
+    link.featureImage = featureImage
+    link.parsed = parsed
+    link.indexDate = new util.Date
+
+    link
+  }
+
 }

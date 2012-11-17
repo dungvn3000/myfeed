@@ -1,4 +1,4 @@
-package org.linkerz.model
+package org.linkerz.dao
 
 import org.springframework.data.mongodb.core.MongoTemplate
 import com.mongodb.Mongo

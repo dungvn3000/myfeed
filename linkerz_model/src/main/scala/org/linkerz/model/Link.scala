@@ -4,10 +4,11 @@
 
 package org.linkerz.model
 
-import org.bson.types.ObjectId
-import com.novus.salat.dao.SalatDAO
 import java.util.Date
-import com.mongodb.casbah.commons.MongoDBObject
+import org.linkerz.dao.MongoTemplate
+import MongoTemplate._
+import org.springframework.data.mongodb.core.query.Query._
+import org.springframework.data.mongodb.core.query.Criteria._
 
 /**
  * The Class Linker.
@@ -17,44 +18,32 @@ import com.mongodb.casbah.commons.MongoDBObject
  *
  */
 
-case class Link
-(
-  _id: ObjectId = new ObjectId,
+case class Link {
 
-  url: String,
-  content: Array[Byte],
-  responseCode: Int,
+  var id: String = _
+
+  var url: String = _
+  var content: Array[Byte] = _
+  var responseCode: Int = _
 
   //Metadata
-  text: Option[String] = None,
-  contentEncoding: String,
-  title: String,
-//  description: Option[String] = None,
-  featureImageUrl: Option[String] = None,
+  var text: Option[String] = None
+  var contentEncoding: String = _
+  var title: String = _
+
+  //  description: Option[String] = None,
+  var featureImageUrl: Option[String] = None
   //Feature Image
-  featureImage: Option[Array[Byte]] = None,
+  var featureImage: Option[Array[Byte]] = None
 
-  parsed: Boolean = false,
+  var parsed: Boolean = false
 
-  indexDate: Date = new Date
+  var indexDate: Date = new Date
 
-  ) {
-  //Convenience method to convert _id to String.
-  def id = _id.toString
 
   override def equals(obj: Any) = {
     obj.isInstanceOf[Link] && obj.asInstanceOf[Link].url == url
   }
 
   override def hashCode() = url.hashCode
-}
-
-object LinkDao extends SalatDAO[Link, ObjectId](collection = mongo("link")) {
-
-  def findByUrl(url: String) = findOne(MongoDBObject("url" -> url))
-
-  override def save(link: Link) {
-    val result = findOne(MongoDBObject("url" -> link.url))
-    if (result.isEmpty) super.save(link)
-  }
 }

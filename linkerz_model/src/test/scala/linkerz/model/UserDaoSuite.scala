@@ -6,7 +6,8 @@ package linkerz.model
 
 import org.scalatest.FunSuite
 import org.linkerz.model.User
-import org.linkerz.model.MongoTemplate._
+import org.linkerz.dao.MongoTemplate
+import MongoTemplate._
 import org.junit.Assert
 
 /**

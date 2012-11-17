@@ -4,15 +4,16 @@
 
 package org.linkerz.crawler.core
 
-import factory.{DefaultParserFactory, DefaultDownloadFactory}
 import handler.CrawlerHandler
 import job.CrawlJob
 import org.junit.Assert
 import org.linkerz.job.queue.core.JobStatus
 import org.linkerz.job.queue.controller.BaseController
 import org.scalatest.FunSuite
-import org.linkerz.model.LinkDao
-import com.mongodb.casbah.commons.MongoDBObject
+import org.linkerz.model.Link
+import org.linkerz.dao.MongoTemplate
+import MongoTemplate._
+import collection.JavaConversions._
 
 /**
  * The Class BasicCrawlJobSuite.
@@ -68,13 +69,13 @@ class BasicCrawlJobSuite extends FunSuite {
     Assert.assertEquals(JobStatus.DONE, job.status)
   }
 
-  test("test store crawling result into database") {
+  ignore("test store crawling result into database") {
     val controller = new BaseController
     val handler = new CrawlerHandler(usingDB = true)
     controller.handlers = List(handler)
     controller.start()
 
-    val job = new CrawlJob("http://genk.vn/")
+    val job = new CrawlJob("http://vnexpress.net/")
     job.maxSubJob = 100
 
     controller ! job
@@ -82,10 +83,14 @@ class BasicCrawlJobSuite extends FunSuite {
 
     Assert.assertEquals(JobStatus.DONE, job.status)
 
-    val count = LinkDao.count()
-    assert(count == 100)
+    val links = mongo.findAll(classOf[Link])
 
-    LinkDao.remove(MongoDBObject.empty)
+    links.foreach(link => {
+      mongo.remove(link)
+    })
+
+    Assert.assertEquals(100, links.size())
+
   }
 
 }

@@ -17,7 +17,7 @@ import org.linkerz.crawler.core.fetcher.DefaultFetcher
 import akka.actor.{Props, ActorContext}
 import akka.routing.RoundRobinRouter
 import collection.JavaConversions._
-import org.linkerz.model.LinkDao
+import org.linkerz.dao.LinkDao
 
 /**
  * CrawlHandler using for crawling data form the internet.
@@ -41,6 +41,7 @@ class CrawlerHandler(downloadFactory: DownloadFactory = new DefaultDownloadFacto
   override protected def onFinish() {
     info(currentSession.countUrl + " links found")
     info(currentSession.fetchedUrls.size + " links downloaded")
+    info(currentSession.urlStored + " links stored in db")
     info(currentSession.currentDepth + " level")
     info(currentSession.jobTime + " ms")
     info(currentSession.job.error.length + " error found")
@@ -63,7 +64,9 @@ class CrawlerHandler(downloadFactory: DownloadFactory = new DefaultDownloadFacto
       }
 
       //Store result to the database.
-      if (usingDB) LinkDao.save(webPage.asLink)
+      if (usingDB && LinkDao.save(webPage.asLink)) {
+        currentSession.urlStored += 1
+      }
 
       //If the manager is going to stop, we will not add any job to the queue.
       if (!isStop) {
