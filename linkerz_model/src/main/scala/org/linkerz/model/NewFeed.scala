@@ -7,7 +7,6 @@ package org.linkerz.model
 import java.util
 import org.bson.types.ObjectId
 import com.novus.salat.dao.SalatDAO
-import util.Collections
 
 /**
  * The Class Feeds.
@@ -27,7 +26,17 @@ case class NewFeed
   enable: Boolean,
 
   urlRegex: List[String] = Nil,
-  excludeUrl: List[String] = Nil
+  excludeUrl: List[String] = Nil,
+
+  titleSelection: String,
+  contentSelection: String,
+  imgSelection: String,
+
+  urlTests: List[String] = Nil,
+  titles: List[String] = Nil,
+  validateTexts: List[String] = Nil,
+  imageUrls: List[String] = Nil
+
   ) {
 
   def id = _id.toString
