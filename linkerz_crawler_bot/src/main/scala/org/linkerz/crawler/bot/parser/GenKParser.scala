@@ -13,7 +13,7 @@ import org.linkerz.crawler.bot.parser.core.{ParserData, NewsParser}
  * @since 9/5/12 11:19 AM
  *
  */
-class GenKParser extends NewsParser {
+class GenKParser {
 //  def pluginData = {
 //    val pluginData = new ParserData
 //    pluginData.name = "Genk"

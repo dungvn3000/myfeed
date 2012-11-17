@@ -13,7 +13,7 @@ import org.linkerz.crawler.bot.parser.core.{ParserData, NewsParser}
  * @since 10/4/12 10:28 PM
  *
  */
-class TwentyFourHourParser extends NewsParser {
+class TwentyFourHourParser {
 
 //  def pluginData = {
 //    val pluginData = new ParserData

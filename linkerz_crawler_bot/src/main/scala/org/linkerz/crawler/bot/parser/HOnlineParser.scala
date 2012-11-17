@@ -13,7 +13,7 @@ import org.linkerz.crawler.bot.parser.core.{ParserData, NewsParser}
  * @since 9/29/12 10:08 AM
  *
  */
-class HOnlineParser extends NewsParser {
+class HOnlineParser {
 
 //  def pluginData = {
 //    val pluginData = new ParserData

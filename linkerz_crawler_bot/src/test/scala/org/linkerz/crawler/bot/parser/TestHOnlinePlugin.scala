@@ -24,7 +24,7 @@ class TestHOnlinePlugin {
   def testPlugin() {
     val crawlJob = new CrawlJob("http://www.h-online.com/security/news/item/Cisco-fixes-alleged-DoS-holes-1720128.html")
     downloader.download(crawlJob)
-    plugin.parse(crawlJob)
+//    plugin.parse(crawlJob)
     val webPage = crawlJob.result.get
 
     println("webPage = " + webPage.title)

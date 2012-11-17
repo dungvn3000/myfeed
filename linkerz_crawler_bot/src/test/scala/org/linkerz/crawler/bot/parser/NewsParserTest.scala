@@ -13,7 +13,7 @@ import org.junit.Assert
  * @since 11/13/12 4:49 PM
  *
  */
-trait NewsParserTest[P <: Parser] extends FunSuite {
+trait NewsParserTest[P] extends FunSuite {
 
   val downloader = new DefaultDownloadFactory().createDownloader()
   private var _parser: P = _
@@ -42,7 +42,7 @@ trait NewsParserTest[P <: Parser] extends FunSuite {
     _contentText = text
     val crawlJob = new CrawlJob(_testUrl)
     downloader.download(crawlJob)
-    _parser.parse(crawlJob)
+//    _parser.parse(crawlJob)
 
     val webPage = crawlJob.result.get
 

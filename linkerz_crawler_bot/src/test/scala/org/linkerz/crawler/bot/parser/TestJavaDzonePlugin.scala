@@ -24,7 +24,7 @@ class TestJavaDzonePlugin {
   def testPlugin() {
     val crawlJob = new CrawlJob("http://java.dzone.com/articles/soa-service-design-cheat-sheet")
     downloader.download(crawlJob)
-    plugin.parse(crawlJob)
+//    plugin.parse(crawlJob)
     val webPage = crawlJob.result.get
 
     println("webPage = " + webPage.title)

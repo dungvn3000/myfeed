@@ -24,7 +24,7 @@ class TestVnExpressPlugin {
   def testPlugin() {
     val crawlJob = new CrawlJob("http://vnexpress.net/gl/kinh-doanh/2012/08/phong-loa-doi-no-dai-gia-dieu-hien/")
     downloader.download(crawlJob)
-    plugin.parse(crawlJob)
+//    plugin.parse(crawlJob)
     val webPage = crawlJob.result.get
 
     Assert.assertEquals("Phóng loa đòi nợ đại gia Diệu Hiền", webPage.title)

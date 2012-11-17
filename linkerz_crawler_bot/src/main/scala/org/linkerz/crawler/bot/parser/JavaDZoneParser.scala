@@ -16,7 +16,7 @@ import org.linkerz.crawler.bot.parser.core.{ParserData, NewsParser}
  * @since 10/2/12 9:10 PM
  *
  */
-class JavaDZoneParser extends NewsParser {
+class JavaDZoneParser {
 
 //  def pluginData = {
 //    val pluginData = new ParserData
@@ -33,12 +33,12 @@ class JavaDZoneParser extends NewsParser {
 //    pluginData
 //  }
 
-  override def afterParse(crawlJob: CrawlJob, doc: Document) {
-    val webPage = crawlJob.result.get
-    if (webPage.featureImageUrl.isEmpty || StringUtils.isBlank(webPage.featureImageUrl.get)) {
-      //Set default image if the article has no image.
-      webPage.featureImageUrl = Some("http://java.dzone.com/sites/all/themes/dzone2012/images/mh_dzone_logo.jpg")
-    }
-    super.afterParse(crawlJob, doc)
-  }
+//  override def afterParse(crawlJob: CrawlJob, doc: Document) {
+//    val webPage = crawlJob.result.get
+//    if (webPage.featureImageUrl.isEmpty || StringUtils.isBlank(webPage.featureImageUrl.get)) {
+//      //Set default image if the article has no image.
+//      webPage.featureImageUrl = Some("http://java.dzone.com/sites/all/themes/dzone2012/images/mh_dzone_logo.jpg")
+//    }
+//    super.afterParse(crawlJob, doc)
+//  }
 }

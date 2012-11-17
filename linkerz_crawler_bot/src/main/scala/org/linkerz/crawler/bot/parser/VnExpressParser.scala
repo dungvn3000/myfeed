@@ -18,7 +18,7 @@ import org.linkerz.crawler.bot.parser.core.{ParserData, NewsParser}
  *
  */
 
-class VnExpressParser extends NewsParser {
+class VnExpressParser {
 
 //  def pluginData = {
 //    val pluginData = new ParserData
@@ -35,13 +35,13 @@ class VnExpressParser extends NewsParser {
 //    pluginData
 //  }
 
-  override def afterParse(crawlJob: CrawlJob, doc: Document) {
-    val webPage = crawlJob.result.get
-    if (webPage.featureImageUrl.isEmpty || StringUtils.isBlank(webPage.featureImageUrl.get)) {
-      val url = URLCanonicalizer.getCanonicalURL("images/home_selected.gif", webPage.webUrl.baseUrl)
-      if (!StringUtils.isNotBlank(url)) webPage.featureImageUrl = Some(url)
-    }
-
-    super.afterParse(crawlJob, doc)
-  }
+//  override def afterParse(crawlJob: CrawlJob, doc: Document) {
+//    val webPage = crawlJob.result.get
+//    if (webPage.featureImageUrl.isEmpty || StringUtils.isBlank(webPage.featureImageUrl.get)) {
+//      val url = URLCanonicalizer.getCanonicalURL("images/home_selected.gif", webPage.webUrl.baseUrl)
+//      if (!StringUtils.isNotBlank(url)) webPage.featureImageUrl = Some(url)
+//    }
+//
+//    super.afterParse(crawlJob, doc)
+//  }
 }

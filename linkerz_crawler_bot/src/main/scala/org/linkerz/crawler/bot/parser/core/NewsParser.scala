@@ -23,7 +23,7 @@ import org.linkerz.model.NewFeed
  *
  */
 
-class NewsParser extends DefaultParser with Logging {
+class NewsParser(data: NewFeed) extends DefaultParser with Logging {
 
   def isMatch(url: String): Boolean = {
     assert(url != null)
@@ -116,9 +116,4 @@ class NewsParser extends DefaultParser with Logging {
     afterParse(crawlJob, doc)
   }
 
-  var _data: NewFeed = _
-
-  def data: NewFeed = _data
-
-  def data_=(data: NewFeed) {_data = data}
 }

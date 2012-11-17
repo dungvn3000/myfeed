@@ -9,7 +9,7 @@ import core.{ParserData, NewsParser}
  * @since 11/13/12 11:11 PM
  *
  */
-class TinhTeParser extends NewsParser {
+class TinhTeParser {
 //  def pluginData = {
 //    val pluginData = new ParserData
 //    pluginData.name = "tinhte.vn"

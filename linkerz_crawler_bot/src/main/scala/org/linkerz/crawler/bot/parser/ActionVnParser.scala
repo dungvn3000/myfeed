@@ -10,7 +10,7 @@ import org.linkerz.model.NewFeed
  * @since 11/13/12 8:10 PM
  *
  */
-class ActionVnParser extends NewsParser {
+class ActionVnParser {
 
   val feed = NewFeed(
     name = "action.vn",
@@ -23,7 +23,5 @@ class ActionVnParser extends NewsParser {
     imgSelection = ".contentpaneopenlink img",
     defaultImgUrl = "http://www.action.vn/images/stories/144x60xlogo.png.pagespeed.ic.F333qkSp3N.png"
   )
-
-  data = feed
 
 }

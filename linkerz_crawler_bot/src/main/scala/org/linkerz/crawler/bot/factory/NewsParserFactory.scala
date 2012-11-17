@@ -6,8 +6,10 @@ package org.linkerz.crawler.bot.factory
 
 import org.linkerz.crawler.core.parser.Parser
 import org.linkerz.crawler.core.factory.ParserFactory
-import org.linkerz.crawler.bot.parser.core.LinkerZParser
 import org.linkerz.crawler.bot.parser._
+import core.{LinkerZParser, NewsParser}
+import org.linkerz.model.NewFeedDao
+import com.mongodb.casbah.commons.MongoDBObject
 
 /**
  * The Class ParserFactory.
@@ -19,13 +21,10 @@ import org.linkerz.crawler.bot.parser._
 
 class NewsParserFactory extends ParserFactory {
 
-  override def createParser(): Parser = new LinkerZParser(List(
-    new GenKParser,
-    new HOnlineParser,
-    new JavaDZoneParser,
-    new TwentyFourHourParser,
-    new VnExpressParser,
-    new ZingParser
-  ))
+  override def createParser(): Parser = {
+    val feed = NewFeedDao.find(MongoDBObject("enable" -> true))
+    val parsers = feed.map(new NewsParser(_))
+    new LinkerZParser(parsers.toList)
+  }
 
 }

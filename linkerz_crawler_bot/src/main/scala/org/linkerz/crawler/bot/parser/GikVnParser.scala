@@ -9,7 +9,7 @@ import org.linkerz.crawler.bot.parser.core.{ParserData, NewsParser}
  * @since 11/13/12 9:05 PM
  *
  */
-class GikVnParser extends NewsParser {
+class GikVnParser {
 
 //  def pluginData = {
 //    val pluginData = new ParserData
