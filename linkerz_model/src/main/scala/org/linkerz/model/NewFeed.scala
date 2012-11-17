@@ -31,6 +31,7 @@ case class NewFeed
   titleSelection: String,
   contentSelection: String,
   imgSelection: String,
+  defaultImgUrl: String,
 
   urlTests: List[String] = Nil,
   titles: List[String] = Nil,

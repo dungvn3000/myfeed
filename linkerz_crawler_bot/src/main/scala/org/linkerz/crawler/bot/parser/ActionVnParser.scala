@@ -1,6 +1,7 @@
 package org.linkerz.crawler.bot.parser
 
 import org.linkerz.crawler.bot.parser.core.{ParserData, NewsParser}
+import org.linkerz.model.NewFeed
 
 /**
  * The Class ActionVnParser.
@@ -11,18 +12,18 @@ import org.linkerz.crawler.bot.parser.core.{ParserData, NewsParser}
  */
 class ActionVnParser extends NewsParser {
 
-//  def pluginData = {
-//    val pluginData = new ParserData
-//    pluginData.name = "action.vn"
-//    pluginData.version = "0.0.1"
-//    pluginData.group = "startup"
-//    pluginData.pluginClass = this.getClass.getName
-//    pluginData.enable = true
-//    pluginData.urlRegex = "*/action.vn/*"
-//    pluginData.titleSelection = ".contentpaneopen h1.contentheading"
-//    pluginData.contentSelection = ".contentpaneopenlink"
-//    pluginData.imgSelection = ".contentpaneopenlink img"
-//    pluginData
-//  }
+  val feed = NewFeed(
+    name = "action.vn",
+    group = "startup",
+    url = "action.vn",
+    enable = true,
+    urlRegex = "*/action.vn/*",
+    titleSelection = ".contentpaneopen h1.contentheading",
+    contentSelection = ".contentpaneopenlink",
+    imgSelection = ".contentpaneopenlink img",
+    defaultImgUrl = "http://www.action.vn/images/stories/144x60xlogo.png.pagespeed.ic.F333qkSp3N.png"
+  )
+
+  data = feed
 
 }

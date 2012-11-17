@@ -27,11 +27,11 @@ class NewsParser extends DefaultParser with Logging {
 
   def isMatch(url: String): Boolean = {
     assert(url != null)
-    SimpleRegexMatcher.matcher(url, pluginData.urlRegex)
+    SimpleRegexMatcher.matcher(url, data.urlRegex)
   }
 
   def beforeParse(crawlJob: CrawlJob, doc: Document): Boolean = {
-    if (doc.select(pluginData.contentSelection).isEmpty) {
+    if (doc.select(data.contentSelection).isEmpty) {
       crawlJob.code = CrawlJob.SKIP
       crawlJob.info("Skip it, cause it is not a new detail page " + crawlJob.webUrl.url)
       info("Skip it, cause it is not a new detail page " + crawlJob.webUrl.url)
@@ -42,6 +42,11 @@ class NewsParser extends DefaultParser with Logging {
 
   def afterParse(crawlJob: CrawlJob, doc: Document) {
     val webPage = crawlJob.result.get
+
+    if (webPage.featureImageUrl.isEmpty || StringUtils.isBlank(webPage.featureImageUrl.get)) {
+      //Set default image if the article has no image.
+      webPage.featureImageUrl = Some(data.defaultImgUrl)
+    }
 
     //Log error
     if (StringUtils.isBlank(webPage.title)) {
@@ -72,9 +77,9 @@ class NewsParser extends DefaultParser with Logging {
       return
     }
 
-    val title = doc.select(pluginData.titleSelection).first()
-    val content = doc.select(pluginData.contentSelection)
-    val img = doc.select(pluginData.imgSelection).first()
+    val title = doc.select(data.titleSelection).first()
+    val content = doc.select(data.contentSelection)
+    val img = doc.select(data.imgSelection).first()
 
     var titleText = ""
     if (title != null) {
@@ -111,9 +116,9 @@ class NewsParser extends DefaultParser with Logging {
     afterParse(crawlJob, doc)
   }
 
-  /**
-   * Plugin data.
-   * @return
-   */
-  def pluginData: NewFeed = null
+  var _data: NewFeed = _
+
+  def data: NewFeed = _data
+
+  def data_=(data: NewFeed) {_data = data}
 }
