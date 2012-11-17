@@ -27,11 +27,11 @@ object Recommendation {
   def buildScoreTable(userLinks: List[Link], newestLinks: List[Link], n: Int = 10, minScore: Double = 0.0): ListBuffer[(String, String, Double)] = {
     val scores = new ListBuffer[(String, String, Double)]
     userLinks.foreach(userLink => {
-      if (userLink.text != null) {
-        val text1 = userLink.text
+      if (userLink.text.isDefined) {
+        val text1 = userLink.text.get
         newestLinks.foreach(newestLink => {
-          if (newestLink.text != null) {
-            val text2 = newestLink.text
+          if (newestLink.text.isDefined) {
+            val text2 = newestLink.text.get
             scores += Tuple3(userLink.id, newestLink.id, sim_pearson(text1, text2))
           }
         })

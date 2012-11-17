@@ -60,17 +60,12 @@ class WebPage {
     link.url = webUrl.url
     link.content = content
     link.title = title
-
-    link.text = text.getOrElse(null)
-
+    link.text = text
     //    description = description,
-    link.featureImageUrl = featureImageUrl.getOrElse(null)
-
+    link.featureImageUrl = featureImageUrl
     link.contentEncoding = contentEncoding
     link.responseCode = responseCode
-
-    link.featureImage = featureImage.getOrElse(null)
-
+    link.featureImage = featureImage
     link.parsed = parsed
     link.indexDate = new util.Date
 

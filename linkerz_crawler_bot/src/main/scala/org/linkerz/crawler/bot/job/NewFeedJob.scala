@@ -7,6 +7,7 @@ package org.linkerz.crawler.bot.job
 import org.linkerz.crawler.core.job.CrawlJob
 import org.linkerz.crawler.core.model.WebUrl
 import org.linkerz.model.NewFeed
+import collection.JavaConversions._
 
 /**
  * The Class NewFeedJob.
@@ -18,11 +19,11 @@ import org.linkerz.model.NewFeed
 case class NewFeedJob(newFeed: NewFeed) extends CrawlJob(new WebUrl(newFeed.url)) {
 
   if(!newFeed.regex.isEmpty) {
-    urlRegex = newFeed.sRegex
+    urlRegex = newFeed.regex.toList
   }
 
   if(!newFeed.ignore.isEmpty) {
-    excludeUrl = newFeed.sIgnore
+    excludeUrl = newFeed.ignore.toList
   }
 
 }
