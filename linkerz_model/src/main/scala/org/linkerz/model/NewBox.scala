@@ -19,3 +19,15 @@ class NewBox {
   var click: Boolean = false
   var createDate: Date = new Date()
 }
+
+object NewBoxDao {
+
+  def findByUserId(userId: ObjectId): List[Link] = {
+    Nil
+  }
+
+  def getUserClicked(userId: ObjectId) = {
+    Nil
+  }
+
+}

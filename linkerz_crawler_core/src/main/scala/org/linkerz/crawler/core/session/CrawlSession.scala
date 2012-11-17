@@ -21,8 +21,6 @@ class CrawlSession extends Session[CrawlJob] {
 
   var countUrl = 0
 
-  var urlStored = 0
-
   /**
    * Store fetched urls list
    */

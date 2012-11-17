@@ -4,44 +4,60 @@
 
 package org.linkerz.model
 
+import java.util
 import org.bson.types.ObjectId
-import org.springframework.data.annotation.Id
+import com.novus.salat.dao.SalatDAO
+import util.Collections
 
 /**
  * The Class Feeds.
  *
  * @author Nguyen Duc Dung
- * @since 8/12/12 7:47 PM
+ * @since 8/12/12, 7:47 PM
  *
  */
 
-class NewFeed {
-  @Id
-  var id: String = _
-  var name: String = _
-  var group: String = _
-  var url: String = _
-  var enable: Boolean = _
-  var urlRegex: List[String] = Nil
-  var excludeUrl: List[String] = Nil
-  var titleSelection: String = _
-  var titleAttName: String = _
-  var titleMaxLength: Int = _
-  var contentSelection: String = _
-  var imgSelection: String = _
+case class NewFeed
+(
+  _id: ObjectId = new ObjectId,
 
-  var urlTest1: Option[String] = None
-  var title1: Option[String] = None
-  var validateText1: Option[String] = None
-  var imageUrl1: Option[String] = None
+  name: String,
+  group: String,
+  url: String,
+  enable: Boolean,
 
-  var urlTest2: Option[String] = None
-  var title2: Option[String] = None
-  var validateText2: Option[String] = None
-  var imageUrl2: Option[String] = None
+  urlRegex: List[String] = Nil,
+  excludeUrl: List[String] = Nil,
 
-  var urlTest3: Option[String] = None
-  var title3: Option[String] = None
-  var validateText3: Option[String] = None
-  var imageUrl3: Option[String] = None
+  titleSelection: String,
+  titleAttName: String,
+  titleMaxLength: Int,
+
+  contentSelection: String,
+
+  imgSelection: String
+
+//  urlTest1: Option[String] = None,
+//  title1: Option[String] = None,
+//  validateText1: Option[String] = None,
+//  imageUrl1: Option[String] = None,
+//
+//  urlTest2: Option[String] = None,
+//  title2: Option[String] = None,
+//  validateText2: Option[String] = None,
+//  imageUrl2: Option[String] = None,
+//
+//  urlTest3: Option[String] = None,
+//  title3: Option[String] = None,
+//  validateText3: Option[String] = None,
+//  imageUrl3: Option[String] = None
+
+  ) {
+
+  def id = _id.toString
+
+}
+
+object NewFeedDao extends SalatDAO[NewFeed, ObjectId](collection = mongo("newfeed")) {
+
 }
