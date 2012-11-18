@@ -23,7 +23,7 @@ class NewsParserFactory extends ParserFactory {
 
   override def createParser(): Parser = {
     val feed = NewFeedDao.find(MongoDBObject("enable" -> true))
-    val parsers = feed.map(new NewsParser(_))
+    val parsers = feed.map(NewsParser(_))
     new LinkerZParser(parsers.toList)
   }
 
