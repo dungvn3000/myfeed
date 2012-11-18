@@ -7,7 +7,6 @@ package org.linkerz.crawler.bot.factory
 import org.linkerz.crawler.core.parser.Parser
 import org.linkerz.crawler.core.factory.ParserFactory
 import org.linkerz.crawler.bot.parser._
-import core.{LinkerZParser, NewsParser}
 import org.linkerz.model.NewFeedDao
 import com.mongodb.casbah.commons.MongoDBObject
 
