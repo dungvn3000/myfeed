@@ -58,7 +58,7 @@ class BaseController extends Controller with Logging {
     error(ex.getMessage, ex)
     if (job != null) {
       //marking the error job
-      job.error(ex.getMessage, ex)
+      job.error(ex.getMessage, getClass.getName, ex)
     }
   }
 

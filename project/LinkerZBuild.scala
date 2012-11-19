@@ -29,11 +29,11 @@ object LinkerZBuild extends Build {
   lazy val linkerZJobQueue = Project("linkerz_job_queue", file("linkerz_job_queue"), settings = defaultSettings ++ sharedSetting).settings(
     libraryDependencies ++= jobQueueDependencies ++ testDependencies,
     resolvers += "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/"
-  ).dependsOn(linkerZCore)
+  ).dependsOn(linkerZCore, linkerzModel)
 
   lazy val linkerZCrawlerCore = Project("linkerz_crawler_core", file("linkerz_crawler_core"), settings = defaultSettings ++ sharedSetting).settings(
     libraryDependencies ++= crawlerCoreDependencies ++ testDependencies
-  ).dependsOn(linkerZCore, linkerZJobQueue, linkerzModel)
+  ).dependsOn(linkerZCore, linkerZJobQueue, linkerzModel, linkerZLogger)
 
   lazy val linkerZCrawlerBot = Project("linkerz_crawler_bot", file("linkerz_crawler_bot"), settings = defaultSettings ++ sharedSetting).settings(
     libraryDependencies ++= crawlerBotDependencies ++ testDependencies

@@ -13,7 +13,8 @@ import akka.actor.{Props, ActorContext}
 import akka.routing.RoundRobinRouter
 import org.linkerz.crawler.core.factory.{ParserFactory, DownloadFactory}
 import org.linkerz.crawler.bot.fetcher.NewFetcher
-import org.linkerz.model.LinkDao
+import org.linkerz.model.{LoggingDao, LinkDao}
+import org.linkerz.logger.DBLogger
 
 /**
  * The Class NewFeedHandler.
@@ -35,4 +36,10 @@ class NewFeedHandler(downloadFactory: DownloadFactory, parserFactory: ParserFact
 
 
   override def accept(job: Job) = job.isInstanceOf[NewFeedJob]
+
+  override protected def onFinish() {
+    super.onFinish()
+    //Store error into the database
+    LoggingDao.insert(currentSession.job.error)
+  }
 }

@@ -4,10 +4,11 @@
 
 package org.linkerz.crawler.core.job
 
-import org.linkerz.job.queue.core.Job
+import org.linkerz.job.queue.core.{JobStatus, Job}
 import org.linkerz.crawler.core.model.{WebPage, WebUrl}
 import scala.Some
 import java.util.regex.Pattern
+import org.linkerz.model.Logging
 
 /**
  * The Class CrawlJob.
@@ -74,6 +75,36 @@ case class CrawlJob(webUrl: WebUrl) extends Job {
 
   def parent_=(parent: Option[CrawlJob]) {
     _parent = parent
+  }
+
+  def info(msg: String, className: String, webUrl: WebUrl) {
+    _info += Logging(
+      message = msg,
+      className = className,
+      url = Some(webUrl.url),
+      logType = "info"
+    )
+  }
+
+  def error(msg: String, className: String, webUrl: WebUrl) {
+    status = JobStatus.ERROR
+    _error += Logging(
+      message = msg,
+      className = className,
+      url = Some(webUrl.url),
+      logType = "error"
+    )
+  }
+
+  def error(msg: String, className: String, webUrl: WebUrl, ex: Throwable) {
+    status = JobStatus.ERROR
+    _error += Logging(
+      message = msg,
+      className = className,
+      exceptionClass = Some(ex.getClass.getName),
+      url = Some(webUrl.url),
+      logType = "error"
+    )
   }
 }
 

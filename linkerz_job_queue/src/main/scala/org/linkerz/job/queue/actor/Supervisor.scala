@@ -29,7 +29,7 @@ class Supervisor extends Actor with Logging {
               val jobTime = System.currentTimeMillis() - startTime
               if (timeOut > 0 && jobTime > timeOut) {
                 isStop = true
-                job.error("Time Out")
+                job.error("Time Out", getClass.getName)
                 stop(manager)
               }
               Thread.sleep(100)

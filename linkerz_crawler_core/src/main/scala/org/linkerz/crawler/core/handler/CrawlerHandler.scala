@@ -45,7 +45,6 @@ class CrawlerHandler(downloadFactory: DownloadFactory = new DefaultDownloadFacto
     info(currentSession.currentDepth + " level")
     info(currentSession.jobTime + " ms")
     info(currentSession.job.error.length + " error found")
-    currentSession.job.error.foreach(error => info("error = " + error))
   }
 
   override protected def onSuccess(job: CrawlJob) {

@@ -5,6 +5,7 @@
 package org.linkerz.job.queue.core
 
 import collection.mutable.ListBuffer
+import org.linkerz.model.{LoggingDao, Logging}
 
 /**
  * The Class Job.
@@ -19,8 +20,9 @@ import collection.mutable.ListBuffer
  */
 trait Job extends Serializable {
 
-  private var _error = new ListBuffer[(String, Throwable)]
-  private var _info = new ListBuffer[String]
+  protected var _error = new ListBuffer[Logging]
+  protected var _warn = new ListBuffer[Logging]
+  protected var _info = new ListBuffer[Logging]
 
   /**
    * The depth of the job from the first job.
@@ -73,21 +75,43 @@ trait Job extends Serializable {
 
   def info = _info
 
+  def warn = _warn
+
   /**
    * For debug information.
    * @param msg
    */
-  def info(msg: String) {
-    _info += msg
+  def warn(msg: String, className: String) {
+    _warn += Logging(
+      message = msg,
+      className = className,
+      logType = "warn"
+    )
+  }
+
+  /**
+   * For debug information.
+   * @param msg
+   */
+  def info(msg: String, className: String) {
+    _info += Logging(
+      message = msg,
+      className = className,
+      logType = "info"
+    )
   }
 
   /**
    * For detect error.
    * @param msg
    */
-  def error(msg: String) {
+  def error(msg: String, className: String) {
     status = JobStatus.ERROR
-    _error += Tuple2(msg, null)
+    _error += Logging(
+      message = msg,
+      className = className,
+      logType = "error"
+    )
   }
 
   /**
@@ -95,9 +119,14 @@ trait Job extends Serializable {
    * @param msg
    * @param ex Throwable.
    */
-  def error(msg: String, ex: Throwable) {
+  def error(msg: String, className: String, ex: Throwable) {
     status = JobStatus.ERROR
-    _error += Tuple2(msg, ex)
+    _error += Logging(
+      message = msg,
+      className = className,
+      exceptionClass = Some(ex.getClass.getName),
+      logType = "error"
+    )
   }
 
 

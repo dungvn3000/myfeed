@@ -33,7 +33,7 @@ case class NewsParser(data: NewFeed) extends DefaultParser with Logging {
   def beforeParse(crawlJob: CrawlJob, doc: Document): Boolean = {
     if (doc.select(data.contentSelection).isEmpty) {
       crawlJob.code = CrawlJob.SKIP
-      crawlJob.info("Skip it, cause it is not a new detail page " + crawlJob.webUrl.url)
+      crawlJob.info("Skip it, cause it is not a new detail page ", getClass.getName, crawlJob.webUrl)
       info("Skip it, cause it is not a new detail page " + crawlJob.webUrl.url)
       return false
     }
@@ -50,11 +50,15 @@ case class NewsParser(data: NewFeed) extends DefaultParser with Logging {
 
     //Log error
     if (StringUtils.isBlank(webPage.title)) {
-      crawlJob.error("Can not parse the title for " + webPage.webUrl.url)
+      crawlJob.error("Can not parse the title", getClass.getName, crawlJob.webUrl)
     }
 
     if (webPage.featureImageUrl.isEmpty || StringUtils.isBlank(webPage.featureImageUrl.get)) {
-      crawlJob.error("Can not parse the image for " + webPage.webUrl.url)
+      crawlJob.error("Can not parse the image", getClass.getName, crawlJob.webUrl)
+    }
+
+    if (webPage.text.isEmpty || StringUtils.isBlank(webPage.text.get)) {
+      crawlJob.error("Can not parse the content", getClass.getName, crawlJob.webUrl)
     }
 
     webPage.parsed = !crawlJob.isError
@@ -109,7 +113,7 @@ case class NewsParser(data: NewFeed) extends DefaultParser with Logging {
       imgSrc = img.attr("src")
       if (StringUtils.isNotBlank(imgSrc)) {
         val url = URLCanonicalizer.getCanonicalURL(imgSrc, webPage.webUrl.baseUrl)
-        if(StringUtils.isNotBlank(url)) webPage.featureImageUrl = Some(url)
+        if (StringUtils.isNotBlank(url)) webPage.featureImageUrl = Some(url)
       }
     }
 

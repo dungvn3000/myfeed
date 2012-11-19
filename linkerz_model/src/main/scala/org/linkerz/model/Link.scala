@@ -58,7 +58,6 @@ object LinkDao extends SalatDAO[Link, ObjectId](collection = mongo("link")) {
     if (result.isEmpty) {
       save(link)
       true
-    }
-    false
+    } else false
   }
 }
