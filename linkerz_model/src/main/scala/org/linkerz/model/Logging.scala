@@ -20,6 +20,10 @@ case class Logging
   logType: String,
   url: Option[String] = None,
   createDate: Date = new Date
-  )
+  ) {
+
+  def id = _id.toString
+
+}
 
 object LoggingDao extends SalatDAO[Logging, ObjectId](collection = mongo("logging"))

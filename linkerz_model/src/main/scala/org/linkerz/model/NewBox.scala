@@ -22,7 +22,7 @@ case class NewBox
   createdDate: Date = new Date()
   )
 
-object NewBoxDao extends SalatDAO[NewBox, ObjectId](collection = mongo("newbox")) {
+object NewBoxDao extends SalatDAO[NewBox, ObjectId](collection = mongo("newBox")) {
 
   def findByUserId(userId: ObjectId): List[Link] = {
     val newBox = find(MongoDBObject("userId" -> userId)).toList

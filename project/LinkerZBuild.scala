@@ -13,9 +13,9 @@ object LinkerZBuild extends Build {
   )
 
   lazy val linkerZ = Project("linkerz", file("."), settings = defaultSettings ++ sharedSetting ++ oneJarSettings).aggregate(
-    linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot, linkerZRecommendation
+    linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot, linkerZRecommendation, linkerZLogger
   ).dependsOn(
-    linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot, linkerZRecommendation
+    linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot, linkerZRecommendation, linkerZLogger
   )
 
   lazy val linkerZCore = Project("linkerz_core", file("linkerz_core"), settings = defaultSettings ++ sharedSetting).settings(
