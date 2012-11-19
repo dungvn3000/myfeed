@@ -43,8 +43,9 @@ object LinkerZBuild extends Build {
     libraryDependencies ++= recommendationDependencies ++ testDependencies
   ).dependsOn(linkerZCore, linkerzModel, linkerZJobQueue)
 
-  lazy val linkerZLogger = Project("linkerz_logger", file("linkerz_logger"), settings = defaultSettings ++ sharedSetting)
-    .dependsOn(linkerZCore, linkerzModel)
+  lazy val linkerZLogger = Project("linkerz_logger", file("linkerz_logger"), settings = defaultSettings ++ sharedSetting).settings(
+    libraryDependencies ++= loggerDependencies ++ testDependencies
+  ).dependsOn(linkerZCore, linkerzModel)
 
   val coreDependencies = Seq(
     "org.slf4j" % "slf4j-simple" % "1.6.6",
@@ -101,6 +102,10 @@ object LinkerZBuild extends Build {
     "org.scalanlp" % "breeze-viz_2.9.2" % "0.1",
     "org.apache.commons" % "commons-math3" % "3.0",
     "redis.clients" % "jedis" % "2.1.0"
+  )
+
+  val loggerDependencies = Seq(
+    "com.typesafe.akka" % "akka-actor" % "2.0.3"
   )
 }
 

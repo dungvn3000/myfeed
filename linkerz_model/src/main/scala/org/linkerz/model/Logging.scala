@@ -2,6 +2,7 @@ package org.linkerz.model
 
 import org.bson.types.ObjectId
 import java.util.Date
+import com.novus.salat.dao.SalatDAO
 
 /**
  * The Class Logging.
@@ -13,11 +14,12 @@ import java.util.Date
 case class Logging
 (
   _id: ObjectId = new ObjectId(),
-  name: String,
   message: String,
   className: String,
-  url: String,
+  exceptionClass: Option[String] = None,
+  logType: String,
+  url: Option[String] = None,
   createDate: Date = new Date
   )
 
-object LoggingDao
+object LoggingDao extends SalatDAO[Logging, ObjectId](collection = mongo("logging"))
