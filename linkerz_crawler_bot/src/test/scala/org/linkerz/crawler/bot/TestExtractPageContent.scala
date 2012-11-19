@@ -24,12 +24,10 @@ class TestExtractPageContent {
 
   @Test
   def testExtractDescription() {
-
     val extractor = new MyExtractor
     val hh = HTMLHighlighter.newExtractingInstance
     val extractedHtml = hh
       .process(new URL("http://www.dzone.com/links/index.html"), extractor)
-
   }
 
   class MyExtractor extends ExtractorBase {
