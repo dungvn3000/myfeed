@@ -13,9 +13,9 @@ object LinkerZBuild extends Build {
   )
 
   lazy val linkerZ = Project("linkerz", file("."), settings = defaultSettings ++ sharedSetting ++ oneJarSettings).aggregate(
-    linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot, linkerRecommendation
+    linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot, linkerZRecommendation
   ).dependsOn(
-    linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot, linkerRecommendation
+    linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot, linkerZRecommendation
   )
 
   lazy val linkerZCore = Project("linkerz_core", file("linkerz_core"), settings = defaultSettings ++ sharedSetting).settings(
@@ -39,9 +39,12 @@ object LinkerZBuild extends Build {
     libraryDependencies ++= crawlerBotDependencies ++ testDependencies
   ).dependsOn(linkerZCore, linkerZJobQueue, linkerzModel, linkerZCrawlerCore)
 
-  lazy val linkerRecommendation = Project("linkerz_recommendation", file("linkerz_recommendation"), settings = defaultSettings ++ sharedSetting).settings(
+  lazy val linkerZRecommendation = Project("linkerz_recommendation", file("linkerz_recommendation"), settings = defaultSettings ++ sharedSetting).settings(
     libraryDependencies ++= recommendationDependencies ++ testDependencies
   ).dependsOn(linkerZCore, linkerzModel, linkerZJobQueue)
+
+  lazy val linkerZLogger = Project("linkerz_logger", file("linkerz_logger"), settings = defaultSettings ++ sharedSetting)
+    .dependsOn(linkerZCore, linkerzModel)
 
   val coreDependencies = Seq(
     "org.slf4j" % "slf4j-simple" % "1.6.6",

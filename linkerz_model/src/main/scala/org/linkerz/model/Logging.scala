@@ -4,13 +4,13 @@ import org.bson.types.ObjectId
 import java.util.Date
 
 /**
- * The Class Error.
+ * The Class Logging.
  *
  * @author Nguyen Duc Dung
  * @since 11/13/12 12:39 AM
  *
  */
-case class Error
+case class Logging
 (
   _id: ObjectId = new ObjectId(),
   name: String,
@@ -20,4 +20,4 @@ case class Error
   createDate: Date = new Date
   )
 
-object ErrorDao
+object LoggingDao
