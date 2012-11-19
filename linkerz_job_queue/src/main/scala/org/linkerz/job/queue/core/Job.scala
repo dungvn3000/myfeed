@@ -20,9 +20,9 @@ import org.linkerz.model.{LoggingDao, Logging}
  */
 trait Job extends Serializable {
 
-  protected var _error = new ListBuffer[Logging]
-  protected var _warn = new ListBuffer[Logging]
-  protected var _info = new ListBuffer[Logging]
+  protected var _errors = new ListBuffer[Logging]
+  protected var _warns = new ListBuffer[Logging]
+  protected var _infos = new ListBuffer[Logging]
 
   /**
    * The depth of the job from the first job.
@@ -68,21 +68,21 @@ trait Job extends Serializable {
    */
   def parent: Option[Job] = None
 
-  def error = _error
+  def errors = _errors
 
   //Check whether the job is error or not.
-  def isError = !error.isEmpty
+  def isError = !errors.isEmpty
 
-  def info = _info
+  def infos = _infos
 
-  def warn = _warn
+  def warns = _warns
 
   /**
    * For debug information.
    * @param msg
    */
   def warn(msg: String, className: String) {
-    _warn += Logging(
+    _warns += Logging(
       message = msg,
       className = className,
       logType = "warn"
@@ -94,7 +94,7 @@ trait Job extends Serializable {
    * @param msg
    */
   def info(msg: String, className: String) {
-    _info += Logging(
+    _infos += Logging(
       message = msg,
       className = className,
       logType = "info"
@@ -107,7 +107,7 @@ trait Job extends Serializable {
    */
   def error(msg: String, className: String) {
     status = JobStatus.ERROR
-    _error += Logging(
+    _errors += Logging(
       message = msg,
       className = className,
       logType = "error"
@@ -121,7 +121,7 @@ trait Job extends Serializable {
    */
   def error(msg: String, className: String, ex: Throwable) {
     status = JobStatus.ERROR
-    _error += Logging(
+    _errors += Logging(
       message = msg,
       className = className,
       exceptionClass = Some(ex.getClass.getName),

@@ -44,7 +44,7 @@ class CrawlerHandler(downloadFactory: DownloadFactory = new DefaultDownloadFacto
     info(currentSession.urlStored + " links stored in db")
     info(currentSession.currentDepth + " level")
     info(currentSession.jobTime + " ms")
-    info(currentSession.job.error.length + " error found")
+    info(currentSession.job.errors.length + " errors found")
   }
 
   override protected def onSuccess(job: CrawlJob) {

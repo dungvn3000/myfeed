@@ -40,6 +40,6 @@ class NewFeedHandler(downloadFactory: DownloadFactory, parserFactory: ParserFact
   override protected def onFinish() {
     super.onFinish()
     //Store error into the database
-    LoggingDao.insert(currentSession.job.error)
+    LoggingDao.insert(currentSession.job.errors)
   }
 }

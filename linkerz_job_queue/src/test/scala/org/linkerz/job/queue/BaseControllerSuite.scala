@@ -74,7 +74,7 @@ class BaseControllerSuite extends FunSuite {
     controller.stop()
 
     Assert.assertEquals(JobStatus.ERROR, echo.status)
-    Assert.assertEquals(classOf[TestException].getName, echo.error.head.exceptionClass.get)
+    Assert.assertEquals(classOf[TestException].getName, echo.errors.head.exceptionClass.get)
   }
 
   ignore("test async handler with 10000 jobs") {

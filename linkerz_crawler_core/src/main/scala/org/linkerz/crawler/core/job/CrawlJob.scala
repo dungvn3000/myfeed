@@ -78,7 +78,7 @@ case class CrawlJob(webUrl: WebUrl) extends Job {
   }
 
   def info(msg: String, className: String, webUrl: WebUrl) {
-    _info += Logging(
+    _infos += Logging(
       message = msg,
       className = className,
       url = Some(webUrl.url),
@@ -88,7 +88,7 @@ case class CrawlJob(webUrl: WebUrl) extends Job {
 
   def error(msg: String, className: String, webUrl: WebUrl) {
     status = JobStatus.ERROR
-    _error += Logging(
+    _errors += Logging(
       message = msg,
       className = className,
       url = Some(webUrl.url),
@@ -98,7 +98,7 @@ case class CrawlJob(webUrl: WebUrl) extends Job {
 
   def error(msg: String, className: String, webUrl: WebUrl, ex: Throwable) {
     status = JobStatus.ERROR
-    _error += Logging(
+    _errors += Logging(
       message = msg,
       className = className,
       exceptionClass = Some(ex.getClass.getName),

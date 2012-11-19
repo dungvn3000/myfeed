@@ -34,8 +34,8 @@ trait Worker[J <: Job, S <: Session[J]] extends Actor with Logging {
           val job = session.job
           val subJob = next.job
 
-          subJob.error.foreach(error => job.error += error)
-          subJob.info.foreach(info => job.info += info)
+          subJob.errors.foreach(error => job.errors += error)
+          subJob.infos.foreach(info => job.infos += info)
         }
         sender ! Success(next.job)
       } catch {
