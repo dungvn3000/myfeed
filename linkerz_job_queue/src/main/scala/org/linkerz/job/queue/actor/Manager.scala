@@ -16,7 +16,7 @@ import org.linkerz.job.queue.handler.AsyncHandler.Progress
  *
  */
 class Manager[J <: Job](supervisor: ActorRef, createWorker: (ActorContext) => ActorRef, doJob: (J, ActorRef) => Unit,
-                        onError: (String, Exception) => Unit, onSuccess: (J) => Unit) extends Actor with Logging {
+                        onError: (J, String, Exception) => Unit, onSuccess: (J) => Unit) extends Actor with Logging {
 
   private val worker = createWorker(context)
 
@@ -29,11 +29,11 @@ class Manager[J <: Job](supervisor: ActorRef, createWorker: (ActorContext) => Ac
         jobReceive += 1
         doJob(job, worker)
       } catch {
-        case ex: Exception => onError(ex.getMessage, ex)
+        case ex: Exception => onError(job, ex.getMessage, ex)
       }
     }
     case f: Fail[J] => {
-      onError(f.ex.getMessage, f.ex)
+      onError(f.job, f.ex.getMessage, f.ex)
       jobDone += 1
       reportToSupervisor()
     }

@@ -47,6 +47,11 @@ class CrawlerHandler(downloadFactory: DownloadFactory = new DefaultDownloadFacto
     info(currentSession.job.errors.length + " errors found")
   }
 
+  //Override and add more error information.
+  override protected def onError(job: CrawlJob, message: String, ex: Exception) {
+    currentJob.error(ex.getMessage, getClass.getName, job.webUrl, ex)
+  }
+
   override protected def onSuccess(job: CrawlJob) {
     val jobResult = job.result
     currentSession.fetchedUrls.add(job.webUrl)

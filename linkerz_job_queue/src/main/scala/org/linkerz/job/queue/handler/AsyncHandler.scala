@@ -164,7 +164,7 @@ abstract class AsyncHandler[J <: Job, S <: Session[J]] extends HandlerInSession[
    * @param message
    * @param ex
    */
-  protected def onError(message: String, ex: Exception) {
+  protected def onError(job: J,message: String, ex: Exception) {
     error(ex.getMessage, ex)
     currentJob.error(ex.getMessage, getClass.getName, ex)
   }

@@ -68,7 +68,7 @@ class BasicCrawlJobSuite extends FunSuite {
     Assert.assertEquals(JobStatus.DONE, job.status)
   }
 
-  test("test store crawling result into database") {
+  ignore("test store crawling result into database") {
     val controller = new BaseController
     val handler = new CrawlerHandler(usingDB = true)
     controller.handlers = List(handler)
