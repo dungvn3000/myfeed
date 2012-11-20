@@ -1,6 +1,7 @@
 package org.linkerz
 
 import com.mongodb.casbah.MongoConnection
+import core.actor.AppConfig
 
 /**
  * The Class package.
@@ -15,6 +16,6 @@ package object model {
 
   implicit val context = ctx
 
-  val mongo = MongoConnection("localhost")("linkerz")
+  val mongo = MongoConnection(AppConfig.mongoHost)(AppConfig.mongoDb)
 
 }

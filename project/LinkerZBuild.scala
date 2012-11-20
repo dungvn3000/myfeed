@@ -55,7 +55,9 @@ object LinkerZBuild extends Build {
     "commons-digester" % "commons-digester" % "2.1",
     "commons-lang" % "commons-lang" % "2.6",
     "commons-validator" % "commons-validator" % "1.4.0",
-    "commons-io" % "commons-io" % "2.4"
+    "commons-io" % "commons-io" % "2.4",
+    "org.scalaz" %% "scalaz-full" % "6.0.4",
+    "com.typesafe" % "config" % "1.0.0"
   )
 
   val testDependencies = Seq(

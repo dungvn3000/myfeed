@@ -1,6 +1,7 @@
 package org.linkerz
 
 import com.rabbitmq.client.ConnectionFactory
+import core.actor.AppConfig
 import crawler.bot.factory.NewsParserFactory
 import crawler.bot.handler.NewFeedHandler
 import crawler.core.factory.DefaultDownloadFactory
@@ -17,7 +18,7 @@ import recommendation.handler.RecommendHandler
 object Main extends App {
 
   val factory = new ConnectionFactory
-  factory.setHost("localhost")
+  factory.setHost(AppConfig.rabbitMqHost)
 
   val controller = new RabbitMQController(factory)
   controller.prefetchCount = 1
