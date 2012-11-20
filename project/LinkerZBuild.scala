@@ -69,14 +69,14 @@ object LinkerZBuild extends Build {
 
   val jobQueueDependencies = Seq(
     "com.rabbitmq" % "amqp-client" % "2.8.7",
-    "com.typesafe.akka" % "akka-actor" % "2.0.3"
+    "com.typesafe.akka" % "akka-actor" % "2.0.4"
   )
 
   val crawlerCoreDependencies = Seq(
     "org.jsoup" % "jsoup" % "1.7.1",
     "commons-httpclient" % "commons-httpclient" % "3.1",
     "org.apache.httpcomponents" % "httpclient" % "4.2.1",
-    "com.ning" % "async-http-client" % "1.7.6",
+    "com.ning" % "async-http-client" % "1.7.7",
     "org.apache.tika" % "tika-core" % "1.2",
     "org.apache.tika" % "tika-parsers" % "1.2",
     "net.coobird" % "thumbnailator" % "0.4.2",
@@ -92,7 +92,6 @@ object LinkerZBuild extends Build {
   )
 
   val crawlerBotDependencies = Seq(
-    "org.quartz-scheduler" % "quartz" % "2.1.6"
   )
 
   val recommendationDependencies = Seq(
@@ -105,7 +104,7 @@ object LinkerZBuild extends Build {
   )
 
   val loggerDependencies = Seq(
-    "com.typesafe.akka" % "akka-actor" % "2.0.3"
+    "com.typesafe.akka" % "akka-actor" % "2.0.4"
   )
 }
 
