@@ -77,7 +77,7 @@ class BaseControllerSuite extends FunSuite {
     Assert.assertEquals(classOf[TestException].getName, echo.errors.head.exceptionClass.get)
   }
 
-  ignore("test async handler with 10000 jobs") {
+  test("test async handler with 10000 jobs") {
     val controller = new BaseController
     val handler = new AsyncTestHandler
     controller.handlers = List(handler)
@@ -120,7 +120,7 @@ class BaseControllerSuite extends FunSuite {
     Assert.assertEquals(1001, job.result.get)
   }
 
-  ignore("test async handler with 10 jobs") {
+  test("test async handler with 10 jobs") {
     val controller = new BaseController
     controller.handlers = List(new AsyncTestHandler)
     controller.start()
