@@ -80,15 +80,7 @@ object LinkerZBuild extends Build {
     "org.apache.tika" % "tika-core" % "1.2",
     "org.apache.tika" % "tika-parsers" % "1.2",
     "net.coobird" % "thumbnailator" % "0.4.2",
-    "net.sf.trove4j" % "trove4j" % "3.0.3",
-    "org.springframework" % "spring-web" % "3.1.2.RELEASE" excludeAll(
-      ExclusionRule(organization = "org.springframework", name = "spring-beans"),
-      ExclusionRule(organization = "org.springframework", name = "spring-asm"),
-      ExclusionRule(organization = "org.springframework", name = "spring-context"),
-      ExclusionRule(organization = "org.springframework", name = "spring-tx"),
-      ExclusionRule(organization = "org.springframework", name = "spring-aop"),
-      ExclusionRule(organization = "org.springframework", name = "spring-expression")
-    )
+    "net.sf.trove4j" % "trove4j" % "3.0.3"
   )
 
   val crawlerBotDependencies = Seq(
@@ -104,7 +96,6 @@ object LinkerZBuild extends Build {
   )
 
   val loggerDependencies = Seq(
-    "com.typesafe.akka" % "akka-actor" % "2.0.4"
   )
 }
 
