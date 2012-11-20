@@ -22,8 +22,8 @@ class DefaultDownloadFactory extends DownloadFactory {
     .setCompressionEnabled(true)
     .setAllowPoolingConnection(true)
     .setFollowRedirects(false)
-    .setMaximumConnectionsPerHost(5)
-    .setMaximumConnectionsTotal(100)
+    .setMaximumConnectionsPerHost(3)
+    .setMaximumConnectionsTotal(10)
     .build()
 
   def createDownloader() = {

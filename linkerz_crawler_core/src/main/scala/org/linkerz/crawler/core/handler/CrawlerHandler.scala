@@ -35,7 +35,7 @@ class CrawlerHandler(downloadFactory: DownloadFactory = new DefaultDownloadFacto
 
   override protected def createWorker(context: ActorContext) = {
     context.actorOf(Props(new CrawlWorker(new DefaultFetcher(downloadFactory, parserFactory))).
-      withRouter(RoundRobinRouter(5)))
+      withRouter(RoundRobinRouter(3)))
   }
 
   override protected def onFinish() {
