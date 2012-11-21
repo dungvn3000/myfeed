@@ -7,8 +7,8 @@ package org.linkerz.job.queue.controller
 import org.linkerz.job.queue.core._
 import org.linkerz.job.queue.core.Controller._
 import grizzled.slf4j.Logging
-import collection.JavaConversions._
 import akka.actor.{Actor, Props}
+import org.linkerz.job.queue.event.RemoteEvents.Login
 
 /**
  * The Class BaseController.
@@ -68,7 +68,7 @@ class BaseController extends Controller with Logging {
    * Start the controller
    */
   def start() {
-    serverActor ! "hello"
+    serverActor ! Login("Hello")
   }
 
 
