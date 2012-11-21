@@ -4,7 +4,7 @@ import akka.actor.{ActorContext, ActorRef, Actor}
 import akka.util.duration._
 import grizzled.slf4j.Logging
 import org.linkerz.job.queue.core.Job
-import org.linkerz.job.queue.event.Events._
+import org.linkerz.job.queue.event.LocalEvents._
 
 /**
  * The Class Manager.

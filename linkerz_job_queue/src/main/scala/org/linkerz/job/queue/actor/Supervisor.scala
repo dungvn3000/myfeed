@@ -6,7 +6,7 @@ package org.linkerz.job.queue.actor
 
 import akka.actor.{Props, ActorRef, Actor}
 import grizzled.slf4j.Logging
-import org.linkerz.job.queue.event.Events.{Progress, StartWatching}
+import org.linkerz.job.queue.event.LocalEvents.{Progress, StartWatching}
 
 /**
  * The Class Supervisor.

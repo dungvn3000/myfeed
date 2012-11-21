@@ -9,7 +9,7 @@ import org.linkerz.job.queue.core.Controller._
 import grizzled.slf4j.Logging
 import akka.actor._
 import org.linkerz.job.queue.actor.{Supervisor, Manager}
-import org.linkerz.job.queue.event.Events.{Next, StartWatching}
+import org.linkerz.job.queue.event.LocalEvents.{Next, StartWatching}
 
 /**
  * The Class AsyncHandler.
