@@ -23,8 +23,10 @@ class BaseController extends Controller with Logging {
 
   var handlers: List[Handler[_ <: Job]] = Nil
 
+  val serverActor = systemActor.actorFor("akka://serverSystem@127.0.0.1:2552/user/server")
+
   //The handler actor to handle all the handler
-  val handlerActor = systemActor.actorOf(Props(new Actor {
+  implicit val handlerActor = systemActor.actorOf(Props(new Actor {
     protected def receive = {
       case job: Job => handleJob(job)
       case "stop" => context.stop(self)
@@ -65,7 +67,9 @@ class BaseController extends Controller with Logging {
   /**
    * Start the controller
    */
-  def start() {}
+  def start() {
+    serverActor ! "hello"
+  }
 
 
   /**

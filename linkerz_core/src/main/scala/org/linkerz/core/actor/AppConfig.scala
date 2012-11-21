@@ -21,4 +21,6 @@ object AppConfig {
   def mongoDb = conf.getString(mongoKey + defaultKey + "db")
   def rabbitMqHost = conf.getString(rabbitMqKey + defaultKey + "host")
 
+  def controllerSystem = conf.getConfig("controllerSystem")
+
 }

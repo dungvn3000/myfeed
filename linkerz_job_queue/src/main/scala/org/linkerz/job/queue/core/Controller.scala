@@ -5,6 +5,7 @@
 package org.linkerz.job.queue.core
 
 import akka.actor.ActorSystem
+import org.linkerz.core.actor.AppConfig
 
 /**
  * The Class Controller.
@@ -39,5 +40,5 @@ trait Controller {
 }
 
 object Controller{
-  val systemActor = ActorSystem("controller")
+  val systemActor = ActorSystem("controllerSystem", AppConfig.controllerSystem)
 }
