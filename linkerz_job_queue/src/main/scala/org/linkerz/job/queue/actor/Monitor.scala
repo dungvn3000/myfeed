@@ -1,7 +1,7 @@
 package org.linkerz.job.queue.actor
 
 import akka.actor.Actor
-import org.linkerz.job.queue.event.RemoteEvents.Login
+import org.linkerz.job.queue.event.RemoteEvents.{LoginOk, Login}
 
 /**
  * This actor is run in server to monitor controllers.
@@ -12,6 +12,9 @@ import org.linkerz.job.queue.event.RemoteEvents.Login
  */
 class Monitor extends Actor {
   protected def receive = {
-    case Login(msg) => println(msg)
+    case Login(msg) => {
+      println(sender.path.address.host)
+      sender ! LoginOk("Robot 1")
+    }
   }
 }

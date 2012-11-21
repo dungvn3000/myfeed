@@ -8,7 +8,7 @@ import org.linkerz.job.queue.core._
 import org.linkerz.job.queue.core.Controller._
 import grizzled.slf4j.Logging
 import akka.actor.{Actor, Props}
-import org.linkerz.job.queue.event.RemoteEvents.{Logout, Login}
+import org.linkerz.job.queue.event.RemoteEvents.{LoginOk, Logout, Login}
 
 /**
  * The Class BaseController.
@@ -23,12 +23,16 @@ class BaseController extends Controller with Logging {
 
   var handlers: List[Handler[_ <: Job]] = Nil
 
+  //This will be assigned by server.
+  var id: String = _
+
   val serverActor = systemActor.actorFor("akka://serverSystem@127.0.0.1:2552/user/server")
 
   //The handler actor to handle all the handler
   implicit val handlerActor = systemActor.actorOf(Props(new Actor {
     protected def receive = {
       case job: Job => handleJob(job)
+      case LoginOk(_id) => id = _id
       case "stop" => context.stop(self)
     }
   }))
