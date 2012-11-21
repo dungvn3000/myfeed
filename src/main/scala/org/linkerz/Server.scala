@@ -2,6 +2,7 @@ package org.linkerz
 
 import akka.actor.{Props, ActorSystem, Actor}
 import com.typesafe.config.ConfigFactory
+import job.queue.actor.Monitor
 
 /**
  * The Class Server.
@@ -13,12 +14,8 @@ import com.typesafe.config.ConfigFactory
 object Server extends App {
 
   val system = ActorSystem("serverSystem", ConfigFactory.load.getConfig("serverSystem"))
-  val actor = system.actorOf(Props[ServerActor], "server")
+  val actor = system.actorOf(Props[Monitor], "server")
 
 }
 
-class ServerActor extends Actor {
-  protected def receive = {
-    case name: String => println(name)
-  }
-}
+

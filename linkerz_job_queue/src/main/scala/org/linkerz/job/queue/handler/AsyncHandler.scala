@@ -8,24 +8,8 @@ import org.linkerz.job.queue.core._
 import org.linkerz.job.queue.core.Controller._
 import grizzled.slf4j.Logging
 import akka.actor._
-import org.linkerz.job.queue.handler.AsyncHandler.{StartWatching, Next}
 import org.linkerz.job.queue.actor.{Supervisor, Manager}
-
-object AsyncHandler {
-
-  sealed trait Event
-
-  case class StartWatching[J <: Job](job: J, manager: ActorRef) extends Event
-
-  case class Next[J <: Job, S <: Session[J]](job: J, session: S) extends Event
-
-  case class Progress(percent: Int) extends Event
-
-  case class Success[J <: Job](job: J) extends Event
-
-  case class Fail[J <: Job](job: J, ex: Exception) extends Event
-
-}
+import org.linkerz.job.queue.event.Events.{Next, StartWatching}
 
 /**
  * The Class AsyncHandler.

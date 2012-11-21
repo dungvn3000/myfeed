@@ -7,10 +7,7 @@ package org.linkerz.job.queue.actor
 import grizzled.slf4j.Logging
 import org.linkerz.job.queue.core.{Session, Job}
 import akka.actor.Actor
-import org.linkerz.job.queue.handler.AsyncHandler._
-import org.linkerz.job.queue.handler.AsyncHandler.Success
-import org.linkerz.job.queue.handler.AsyncHandler.Fail
-import org.linkerz.job.queue.handler.AsyncHandler.Next
+import org.linkerz.job.queue.event.Events.{Fail, Success, Next}
 
 /**
  * The Class Worker.

@@ -4,9 +4,7 @@ import akka.actor.{ActorContext, ActorRef, Actor}
 import akka.util.duration._
 import grizzled.slf4j.Logging
 import org.linkerz.job.queue.core.Job
-import org.linkerz.job.queue.handler.AsyncHandler.Success
-import org.linkerz.job.queue.handler.AsyncHandler.Fail
-import org.linkerz.job.queue.handler.AsyncHandler.Progress
+import org.linkerz.job.queue.event.Events._
 
 /**
  * The Class Manager.
