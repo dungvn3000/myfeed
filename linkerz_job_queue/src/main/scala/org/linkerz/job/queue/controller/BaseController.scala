@@ -8,7 +8,7 @@ import org.linkerz.job.queue.core._
 import org.linkerz.job.queue.core.Controller._
 import grizzled.slf4j.Logging
 import akka.actor.{Actor, Props}
-import org.linkerz.job.queue.event.RemoteEvents.Login
+import org.linkerz.job.queue.event.RemoteEvents.{Logout, Login}
 
 /**
  * The Class BaseController.
@@ -77,6 +77,7 @@ class BaseController extends Controller with Logging {
    */
   def stop() {
     handlerActor ! "stop"
+    serverActor ! Logout("Goodbye")
     while (!handlerActor.isTerminated) Thread.sleep(1000)
     info("Stoped.")
   }
