@@ -71,7 +71,9 @@ object LinkerZBuild extends Build {
 
   val jobQueueDependencies = Seq(
     "com.rabbitmq" % "amqp-client" % "2.8.7",
-    "com.typesafe.akka" % "akka-actor" % "2.0.4"
+    "com.typesafe.akka" % "akka-actor" % "2.0.4",
+    "com.typesafe.akka" % "akka-remote" % "2.0.4",
+    "com.typesafe.akka" % "akka-kernel" % "2.0.4"
   )
 
   val crawlerCoreDependencies = Seq(
