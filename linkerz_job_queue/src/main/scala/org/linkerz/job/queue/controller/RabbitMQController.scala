@@ -68,10 +68,10 @@ class RabbitMQController(connectionFactory: ConnectionFactory) extends BaseContr
     _isStop = true
     consumerActor ! "stop"
     while (!consumerActor.isTerminated) Thread.sleep(1000)
-    if (_channel.isOpen) {
+    if (_channel != null &&  _channel.isOpen) {
       _channel.close()
     }
-    _connection.close()
+    if(_connection != null) _connection.close()
     super.stop()
   }
 }
