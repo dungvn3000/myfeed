@@ -1,5 +1,7 @@
 package org.linkerz.job.queue.event
 
+import org.linkerz.job.queue.core.Job
+
 /**
  * The Class RemoteEvents.
  *
@@ -25,5 +27,5 @@ object RemoteEvents {
 
   case class Restart(msg: String) extends RemoteEvents
 
-
+  case class Process(job: Job) extends RemoteEvents
 }

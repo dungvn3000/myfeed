@@ -1,6 +1,8 @@
-package org.linkerz.job.queue.actor
+package org.linkerz
 
 import akka.actor.Actor
+import crawler.core.job.CrawlJob
+import org.linkerz.job.queue.event.RemoteEvents._
 import org.linkerz.job.queue.event.RemoteEvents.{LoginOk, Login}
 
 /**
@@ -15,6 +17,9 @@ class Monitor extends Actor {
     case Login(msg) => {
       println(sender.path.address.host)
       sender ! LoginOk("Robot 1")
+    }
+    case Process(job) => job match {
+      case job: CrawlJob => println(job.webUrl.url)
     }
   }
 }

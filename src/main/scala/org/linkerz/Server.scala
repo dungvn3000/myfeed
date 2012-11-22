@@ -2,7 +2,7 @@ package org.linkerz
 
 import akka.actor.{Props, ActorSystem, Actor}
 import com.typesafe.config.ConfigFactory
-import job.queue.actor.Monitor
+import org.linkerz.Monitor
 
 /**
  * The Class Server.
