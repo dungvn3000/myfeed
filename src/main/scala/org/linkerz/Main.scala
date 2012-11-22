@@ -1,7 +1,7 @@
 package org.linkerz
 
 import com.rabbitmq.client.ConnectionFactory
-import core.actor.AppConfig
+import core.conf.AppConfig
 import crawler.bot.factory.NewsParserFactory
 import crawler.bot.handler.NewFeedHandler
 import crawler.core.factory.DefaultDownloadFactory

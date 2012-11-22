@@ -5,7 +5,7 @@
 package org.linkerz.job.queue.core
 
 import akka.actor.ActorSystem
-import org.linkerz.core.actor.AppConfig
+import org.linkerz.core.conf.AppConfig
 
 /**
  * The Class Controller.

@@ -1,4 +1,4 @@
-package org.linkerz.core.actor
+package org.linkerz.core.conf
 
 import com.typesafe.config.ConfigFactory
 
@@ -23,4 +23,5 @@ object AppConfig {
 
   lazy val controllerSystem = conf.getConfig("controllerSystem")
 
+  lazy val monitorActorPath = conf.getString("server.monitor.path")
 }

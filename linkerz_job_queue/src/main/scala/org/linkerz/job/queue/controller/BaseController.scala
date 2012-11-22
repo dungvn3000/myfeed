@@ -12,6 +12,7 @@ import org.linkerz.job.queue.event.RemoteEvents._
 import org.linkerz.job.queue.event.RemoteEvents.Login
 import org.linkerz.job.queue.event.RemoteEvents.LoginOk
 import org.linkerz.job.queue.event.RemoteEvents.Logout
+import org.linkerz.core.conf.AppConfig
 
 /**
  * The Class BaseController.
@@ -29,7 +30,7 @@ class BaseController extends Controller with Logging {
   //This will be assigned by server.
   var id: String = _
 
-  val serverActor = systemActor.actorFor("akka://serverSystem@127.0.0.1:2552/user/server")
+  val serverActor = systemActor.actorFor(AppConfig.monitorActorPath)
 
   //The handler actor to handle all the handler
   implicit val handlerActor = systemActor.actorOf(Props(new Actor {

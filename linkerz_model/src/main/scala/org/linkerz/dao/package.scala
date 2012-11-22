@@ -1,7 +1,7 @@
 package org.linkerz
 
 import com.mongodb.casbah.MongoConnection
-import core.actor.AppConfig
+import core.conf.AppConfig
 
 /**
  * The Class package.
