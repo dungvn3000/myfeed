@@ -15,12 +15,12 @@ object AppConfig {
   val mongoKey = "mongodb."
   val rabbitMqKey = "rabbitmq."
 
-  val conf = ConfigFactory.load()
+  lazy val conf = ConfigFactory.load()
 
-  def mongoHost = conf.getString(mongoKey + defaultKey + "host")
-  def mongoDb = conf.getString(mongoKey + defaultKey + "db")
-  def rabbitMqHost = conf.getString(rabbitMqKey + defaultKey + "host")
+  lazy val mongoHost = conf.getString(mongoKey + defaultKey + "host")
+  lazy val mongoDb = conf.getString(mongoKey + defaultKey + "db")
+  lazy val rabbitMqHost = conf.getString(rabbitMqKey + defaultKey + "host")
 
-  def controllerSystem = conf.getConfig("controllerSystem")
+  lazy val controllerSystem = conf.getConfig("controllerSystem")
 
 }

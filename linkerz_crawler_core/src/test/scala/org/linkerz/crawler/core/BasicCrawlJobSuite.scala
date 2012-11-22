@@ -11,8 +11,8 @@ import org.junit.Assert
 import org.linkerz.job.queue.core.JobStatus
 import org.linkerz.job.queue.controller.BaseController
 import org.scalatest.FunSuite
-import org.linkerz.model.LinkDao
 import com.mongodb.casbah.commons.MongoDBObject
+import org.linkerz.dao.LinkDao
 
 /**
  * The Class BasicCrawlJobSuite.

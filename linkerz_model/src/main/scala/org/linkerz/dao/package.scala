@@ -10,12 +10,12 @@ import core.actor.AppConfig
  * @since 11/4/12 1:19 PM
  *
  */
-package object model {
+package object dao {
 
   import com.novus.salat.global._
 
   implicit val context = ctx
 
-  val mongo = MongoConnection(AppConfig.mongoHost)(AppConfig.mongoDb)
+  lazy val mongo = MongoConnection(AppConfig.mongoHost)(AppConfig.mongoDb)
 
 }

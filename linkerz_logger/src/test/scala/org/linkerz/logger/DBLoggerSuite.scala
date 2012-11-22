@@ -1,9 +1,9 @@
 package org.linkerz.logger
 
 import org.scalatest.FunSuite
-import org.linkerz.model.LoggingDao
 import com.mongodb.casbah.commons.MongoDBObject
 import org.junit.Assert
+import org.linkerz.dao.LoggingDao
 
 /**
  * The Class DBLoggerSuite.

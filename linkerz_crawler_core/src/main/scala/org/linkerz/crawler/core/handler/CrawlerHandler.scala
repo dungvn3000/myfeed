@@ -17,7 +17,7 @@ import org.linkerz.crawler.core.fetcher.DefaultFetcher
 import akka.actor.{Props, ActorContext}
 import akka.routing.RoundRobinRouter
 import collection.JavaConversions._
-import org.linkerz.model.LinkDao
+import org.linkerz.dao.LinkDao
 
 /**
  * CrawlHandler using for crawling data form the internet.

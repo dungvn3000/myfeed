@@ -7,8 +7,8 @@ package org.linkerz.crawler.bot.factory
 import org.linkerz.crawler.core.parser.Parser
 import org.linkerz.crawler.core.factory.ParserFactory
 import org.linkerz.crawler.bot.parser._
-import org.linkerz.model.NewFeedDao
 import com.mongodb.casbah.commons.MongoDBObject
+import org.linkerz.dao.NewFeedDao
 
 /**
  * The Class ParserFactory.

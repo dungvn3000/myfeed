@@ -26,4 +26,4 @@ case class Logging
 
 }
 
-object LoggingDao extends SalatDAO[Logging, ObjectId](collection = mongo("logging"))
+

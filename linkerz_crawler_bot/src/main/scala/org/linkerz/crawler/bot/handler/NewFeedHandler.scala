@@ -13,8 +13,8 @@ import akka.actor.{Props, ActorContext}
 import akka.routing.RoundRobinRouter
 import org.linkerz.crawler.core.factory.{ParserFactory, DownloadFactory}
 import org.linkerz.crawler.bot.fetcher.NewFetcher
-import org.linkerz.model.{LoggingDao, LinkDao}
 import org.linkerz.logger.DBLogger
+import org.linkerz.dao.{LoggingDao, LinkDao}
 
 /**
  * The Class NewFeedHandler.

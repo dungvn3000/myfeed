@@ -1,11 +1,11 @@
 package org.linkerz.recommendation
 
-import org.linkerz.model.LinkDao
 import com.mongodb.casbah.commons.MongoDBObject
 import org.linkerz.core.time.StopWatch
 import redis.clients.jedis.Jedis
 import collection.JavaConversions._
 import org.bson.types.ObjectId
+import org.linkerz.dao.LinkDao
 
 /**
  * The Class Main.

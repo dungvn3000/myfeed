@@ -5,7 +5,7 @@
 package org.linkerz.job.queue.core
 
 import collection.mutable.ListBuffer
-import org.linkerz.model.{LoggingDao, Logging}
+import org.linkerz.model.{Logging}
 
 /**
  * The Class Job.

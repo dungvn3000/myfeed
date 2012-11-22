@@ -18,7 +18,5 @@ case class User
   passWord: String
   )
 
-object UserDao extends SalatDAO[User, ObjectId](collection = mongo("user")) {
 
-}
 

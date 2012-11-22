@@ -44,6 +44,3 @@ case class NewFeed
 
 }
 
-object NewFeedDao extends SalatDAO[NewFeed, ObjectId](collection = mongo("newFeed")) {
-
-}

@@ -5,8 +5,9 @@
 package linkerz.model
 
 import org.scalatest.FunSuite
-import org.linkerz.model.{User, UserDao}
+import org.linkerz.model.{User}
 import com.mongodb.casbah.commons.MongoDBObject
+import org.linkerz.dao.UserDao
 
 /**
  * The Class UserDaoSuite.

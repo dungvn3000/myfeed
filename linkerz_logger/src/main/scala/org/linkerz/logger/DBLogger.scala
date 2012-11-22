@@ -1,6 +1,7 @@
 package org.linkerz.logger
 
-import org.linkerz.model.{LoggingDao, Logging}
+import org.linkerz.model.{Logging}
+import org.linkerz.dao.LoggingDao
 
 /**
  * The Class DBLogger.
