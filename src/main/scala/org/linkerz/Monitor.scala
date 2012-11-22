@@ -18,7 +18,7 @@ class Monitor extends Actor {
       println(sender.path.address.host)
       sender ! LoginOk("Robot 1")
     }
-    case Process(job) => job match {
+    case Processing(job) => job match {
       case job: CrawlJob => println(job.webUrl.url)
     }
   }

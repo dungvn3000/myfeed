@@ -27,5 +27,5 @@ object RemoteEvents {
 
   case class Restart(msg: String) extends RemoteEvents
 
-  case class Process(job: Job) extends RemoteEvents
+  case class Processing(job: Job) extends RemoteEvents
 }

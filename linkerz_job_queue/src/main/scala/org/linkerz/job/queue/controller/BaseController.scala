@@ -8,7 +8,7 @@ import org.linkerz.job.queue.core._
 import org.linkerz.job.queue.core.Controller._
 import grizzled.slf4j.Logging
 import akka.actor.{Actor, Props}
-import org.linkerz.job.queue.event.RemoteEvents.{Process, LoginOk, Logout, Login}
+import org.linkerz.job.queue.event.RemoteEvents.{Processing, LoginOk, Logout, Login}
 
 /**
  * The Class BaseController.
