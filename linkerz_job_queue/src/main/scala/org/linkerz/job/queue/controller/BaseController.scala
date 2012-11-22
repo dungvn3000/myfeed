@@ -8,7 +8,10 @@ import org.linkerz.job.queue.core._
 import org.linkerz.job.queue.core.Controller._
 import grizzled.slf4j.Logging
 import akka.actor.{Actor, Props}
-import org.linkerz.job.queue.event.RemoteEvents.{Processing, LoginOk, Logout, Login}
+import org.linkerz.job.queue.event.RemoteEvents._
+import org.linkerz.job.queue.event.RemoteEvents.Login
+import org.linkerz.job.queue.event.RemoteEvents.LoginOk
+import org.linkerz.job.queue.event.RemoteEvents.Logout
 
 /**
  * The Class BaseController.
@@ -33,11 +36,14 @@ class BaseController extends Controller with Logging {
     protected def receive = {
       case job: Job => {
         //Notify server, we are processing this job.
-        serverActor ! Process(job)
+        serverActor ! Processing(job)
         handleJob(job)
       }
       case LoginOk(_id) => id = _id
       case "stop" => context.stop(self)
+      case Restart => {
+        //TODO @dungvn3000
+      }
     }
   }))
 
@@ -66,6 +72,7 @@ class BaseController extends Controller with Logging {
 
   protected def handleError(job: Job, ex: Exception) {
     error(ex.getMessage, ex)
+    serverActor ! Error(job, ex.getMessage)
     if (job != null) {
       //marking the error job
       job.error(ex.getMessage, getClass.getName, ex)

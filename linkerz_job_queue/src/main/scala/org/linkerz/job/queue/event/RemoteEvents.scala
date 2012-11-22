@@ -19,7 +19,7 @@ object RemoteEvents {
 
   case class Logout(msg: String) extends RemoteEvents
 
-  case class Error(msg: String) extends RemoteEvents
+  case class Error(job: Job, msg: String) extends RemoteEvents
 
   case class Start(msg: String) extends RemoteEvents
 
