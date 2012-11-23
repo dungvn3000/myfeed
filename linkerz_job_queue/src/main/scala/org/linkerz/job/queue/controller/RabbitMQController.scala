@@ -28,18 +28,16 @@ class RabbitMQController(connectionFactory: ConnectionFactory) extends BaseContr
   //Time out for waiting a delivery.
   var deliverTimeOut = 1000
 
-  private var _connection: Connection = _
-  private var _channel: Channel = _
+  private lazy val _connection: Connection = connectionFactory.newConnection()
+  private lazy val _channel: Channel = _connection.createChannel()
+  private lazy val consumer = new QueueingConsumer(_channel)
 
   private var _isStop = false
 
   val consumerActor = systemActor.actorOf(Props(new Actor {
     protected def receive = {
       case "start" => {
-        _connection = connectionFactory.newConnection()
-        _channel = _connection.createChannel()
         _channel.basicQos(prefetchCount)
-        val consumer = new QueueingConsumer(_channel)
         _channel.basicConsume(queueName, false, consumer)
         var job: Job = null
         try {
@@ -68,10 +66,10 @@ class RabbitMQController(connectionFactory: ConnectionFactory) extends BaseContr
     _isStop = true
     consumerActor ! "stop"
     while (!consumerActor.isTerminated) Thread.sleep(1000)
-    if (_channel != null &&  _channel.isOpen) {
+    if (_channel.isOpen) {
       _channel.close()
     }
-    if(_connection != null) _connection.close()
+    _connection.close()
     super.stop()
   }
 }
