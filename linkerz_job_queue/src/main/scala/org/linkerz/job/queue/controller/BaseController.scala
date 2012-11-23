@@ -88,21 +88,18 @@ class BaseController extends Controller with Logging {
    */
   def start() {
     implicit val timeout = Timeout(15 seconds)
-    val f = serverActor ? Login("Hello")
-    f.onSuccess {
-      case LoginOk(_id) => {
-        id = _id
-        info("Login Ok with " + _id)
-      }
-      case Reject(msg) => {
-        info("Server reject login request with reason " + msg)
-        stop()
-        return
-      }
-    }
-
     try {
-      Await.result(f, timeout.duration)
+      Await.result(serverActor ? Login("Hello"), timeout.duration) match {
+        case LoginOk(_id) => {
+          id = _id
+          info("Login Ok with " + _id)
+        }
+        case Reject(msg) => {
+          info("Server reject login request with reason " + msg)
+          stop()
+          return
+        }
+      }
     } catch {
       case ex: Exception => {
         error(ex.getMessage, ex)
