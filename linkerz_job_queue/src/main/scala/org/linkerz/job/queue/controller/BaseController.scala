@@ -13,6 +13,10 @@ import org.linkerz.job.queue.event.RemoteEvents.Login
 import org.linkerz.job.queue.event.RemoteEvents.LoginOk
 import org.linkerz.job.queue.event.RemoteEvents.Logout
 import org.linkerz.core.conf.AppConfig
+import akka.pattern.ask
+import akka.dispatch.Await
+import akka.util.duration._
+import akka.util.Timeout
 
 /**
  * The Class BaseController.
@@ -40,7 +44,6 @@ class BaseController extends Controller with Logging {
         serverActor ! Processing(job)
         handleJob(job)
       }
-      case LoginOk(_id) => id = _id
       case "stop" => context.stop(self)
       case Restart => {
         //TODO @dungvn3000
@@ -84,7 +87,24 @@ class BaseController extends Controller with Logging {
    * Start the controller
    */
   def start() {
-    serverActor ! Login("Hello")
+    implicit val timeout = Timeout(15 seconds)
+    val f = serverActor ? Login("Hello")
+    f.onSuccess {
+      case LoginOk(_id) => {
+        id = _id
+        println("_id = " + _id)
+      }
+    }
+
+    try {
+      Await.result(f, timeout.duration)
+    } catch {
+      case ex: Exception => {
+        error(ex.getMessage, ex)
+        stop()
+        return
+      }
+    }
   }
 
 
@@ -95,6 +115,8 @@ class BaseController extends Controller with Logging {
     handlerActor ! "stop"
     serverActor ! Logout("Goodbye")
     while (!handlerActor.isTerminated) Thread.sleep(1000)
+    systemActor.shutdown()
+    systemActor.awaitTermination()
     info("Stoped.")
   }
 
