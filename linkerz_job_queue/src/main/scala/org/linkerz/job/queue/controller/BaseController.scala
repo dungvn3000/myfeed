@@ -73,8 +73,8 @@ class BaseController extends Controller with Logging {
 
   protected def handleError(job: Job, ex: Exception) {
     error(ex.getMessage, ex)
-    serverActor ! ErrorReport(job, ex.getMessage)
     if (job != null) {
+      serverActor ! ErrorReport(job, ex.getMessage)
       //marking the error job
       job.error(ex.getMessage, getClass.getName, ex)
     }
