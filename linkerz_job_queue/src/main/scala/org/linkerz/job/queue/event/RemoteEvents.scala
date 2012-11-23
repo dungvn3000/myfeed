@@ -11,23 +11,20 @@ import org.linkerz.job.queue.core.Job
  */
 object RemoteEvents {
 
+  //This event was design for patten fire and forget.
+  //It's main proposal is using for reporting the monitor, so it's not necessary to waiting for answer from the monitor.
   sealed trait RemoteEvents
 
-  case class Login(msg: String) extends RemoteEvents
+  //Event using for sending report to the monitor
+  case class Processing(job: Job) extends RemoteEvents
 
-  case class LoginOk(id: Int) extends RemoteEvents
+  //Reporting error to the monitor
+  case class ErrorReport(job: Job, msg: String) extends RemoteEvents
 
-  case class Reject(msg: String) extends RemoteEvents
-
-  case class Logout(msg: String) extends RemoteEvents
-
-  case class Error(job: Job, msg: String) extends RemoteEvents
-
-  case class Start(msg: String) extends RemoteEvents
-
+  //When the controller receive this event. it's gonna stop.
+  // In the other hand, it will send this event to the monitor when it's gonna stop.
   case class Stop(msg: String) extends RemoteEvents
 
+  //When the controller receive this event. it's gonna restart
   case class Restart(msg: String) extends RemoteEvents
-
-  case class Processing(job: Job) extends RemoteEvents
 }

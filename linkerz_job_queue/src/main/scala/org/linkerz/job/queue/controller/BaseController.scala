@@ -9,9 +9,6 @@ import org.linkerz.job.queue.core.Controller._
 import grizzled.slf4j.Logging
 import akka.actor.{Actor, Props}
 import org.linkerz.job.queue.event.RemoteEvents._
-import org.linkerz.job.queue.event.RemoteEvents.Login
-import org.linkerz.job.queue.event.RemoteEvents.LoginOk
-import org.linkerz.job.queue.event.RemoteEvents.Logout
 import org.linkerz.core.conf.AppConfig
 import akka.pattern.ask
 import akka.dispatch.Await
@@ -40,8 +37,6 @@ class BaseController extends Controller with Logging {
   implicit val handlerActor = systemActor.actorOf(Props(new Actor {
     protected def receive = {
       case job: Job => {
-        //Notify server, we are processing this job.
-        serverActor ! Processing(job)
         handleJob(job)
       }
       case "stop" => context.stop(self)
@@ -53,6 +48,8 @@ class BaseController extends Controller with Logging {
 
   private def handleJob(job: Job) {
     var isDone = false
+    //Notify server, we are processing this job.
+    serverActor ! Processing(job)
     try {
       handlers.foreach(handler => if (handler accept job) {
         handler match {
@@ -76,7 +73,7 @@ class BaseController extends Controller with Logging {
 
   protected def handleError(job: Job, ex: Exception) {
     error(ex.getMessage, ex)
-    serverActor ! Error(job, ex.getMessage)
+    serverActor ! ErrorReport(job, ex.getMessage)
     if (job != null) {
       //marking the error job
       job.error(ex.getMessage, getClass.getName, ex)
@@ -86,28 +83,7 @@ class BaseController extends Controller with Logging {
   /**
    * Start the controller
    */
-  def start() {
-    implicit val timeout = Timeout(15 seconds)
-    try {
-      Await.result(serverActor ? Login("Hello"), timeout.duration) match {
-        case LoginOk(_id) => {
-          id = _id
-          info("Login Ok with id " + _id)
-        }
-        case Reject(msg) => {
-          info("Server reject login request with reason " + msg)
-          stop()
-          return
-        }
-      }
-    } catch {
-      case ex: Exception => {
-        error(ex.getMessage, ex)
-        stop()
-        return
-      }
-    }
-  }
+  def start() {}
 
 
   /**
@@ -115,7 +91,7 @@ class BaseController extends Controller with Logging {
    */
   def stop() {
     handlerActor ! "stop"
-    serverActor ! Logout("Goodbye")
+    serverActor ! Stop("Goodbye")
     while (!handlerActor.isTerminated) Thread.sleep(1000)
     systemActor.shutdown()
     systemActor.awaitTermination()
