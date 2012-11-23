@@ -15,7 +15,7 @@ object RemoteEvents {
 
   case class Login(msg: String) extends RemoteEvents
 
-  case class LoginOk(id: String) extends RemoteEvents
+  case class LoginOk(id: Int) extends RemoteEvents
 
   case class Reject(msg: String) extends RemoteEvents
 

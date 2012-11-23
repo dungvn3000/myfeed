@@ -32,7 +32,7 @@ class BaseController extends Controller with Logging {
   var handlers: List[Handler[_ <: Job]] = Nil
 
   //This will be assigned by server.
-  var id: String = _
+  var id: Int = _
 
   val serverActor = systemActor.actorFor(AppConfig.monitorActorPath)
 
@@ -92,7 +92,7 @@ class BaseController extends Controller with Logging {
       Await.result(serverActor ? Login("Hello"), timeout.duration) match {
         case LoginOk(_id) => {
           id = _id
-          info("Login Ok with " + _id)
+          info("Login Ok with id " + _id)
         }
         case Reject(msg) => {
           info("Server reject login request with reason " + msg)
