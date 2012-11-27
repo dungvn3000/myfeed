@@ -20,7 +20,7 @@ class RandomSentenceSpout extends StormSpout(outputFields = List("sentence")) {
     "i am at two with nature")
 
   override def nextTuple() {
-    Utils.sleep(100)
+    Utils.sleep(10000)
     emit(sentences(Random.nextInt(sentences.length)))
   }
 }

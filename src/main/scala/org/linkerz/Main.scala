@@ -1,8 +1,7 @@
 package org.linkerz
 
 import backtype.storm.topology.TopologyBuilder
-import backtype.storm.testing.TestWordSpout
-import backtype.storm.{LocalCluster, Config}
+import backtype.storm.{StormSubmitter, Config}
 import storm.bolt.{WordCount, SplitSentence}
 import storm.spout.RandomSentenceSpout
 import backtype.storm.tuple.Fields
@@ -24,10 +23,11 @@ object Main extends App {
 
   val conf = new Config()
   conf setDebug true
+  conf put (Config.NIMBUS_HOST, "192.168.1.100")
 
-  val cluster = new LocalCluster()
-  cluster.submitTopology("test", conf, builder.createTopology())
-  Thread sleep 10000
-  cluster.killTopology("test")
-  cluster.shutdown()
+  //  val cluster = new LocalCluster()
+  StormSubmitter.submitTopology("test", conf, builder.createTopology())
+  //  Thread sleep 10000
+  //  cluster.killTopology("test")
+  //  cluster.shutdown()
 }

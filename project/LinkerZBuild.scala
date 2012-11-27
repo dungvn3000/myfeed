@@ -28,7 +28,8 @@ object LinkerZBuild extends Build {
         case "overview.html" => MergeStrategy.discard
         case x => old(x)
       }
-    }
+    },
+    libraryDependencies ++= stormDependencies
   ).aggregate(
     linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot, linkerZRecommendation, linkerZLogger, linkerZStorm
   ).dependsOn(
@@ -123,8 +124,9 @@ object LinkerZBuild extends Build {
 
   val stormDependencies = Seq(
     "com.dc" %% "scala-storm" % "0.2.2-SNAPSHOT",
-    //Set this to provided when develop to storm server.
     "storm" % "storm" % "0.8.1"
+    //Set this to provided when develop to storm server. TODO: fix it @dungvn3000
+    //        "storm" % "storm" % "0.8.1" % "provided"
   )
 }
 
