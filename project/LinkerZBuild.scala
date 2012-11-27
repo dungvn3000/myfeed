@@ -1,49 +1,62 @@
 import sbt._
 import Keys._
 import Project._
-import com.github.retronym.SbtOneJar._
+import sbtassembly.Plugin._
+import sbtassembly._
+import AssemblyKeys._
 
 object LinkerZBuild extends Build {
 
-  val sharedSetting = Seq(
+  val sharedSetting = defaultSettings ++ Seq(
     version := "0.1-SNAPSHOT",
     organization := "org.linkerz",
     scalaVersion := "2.9.1",
-    exportJars := true
+    resolvers ++= Seq(
+      "Typesafe Repository" at "http://repo.akka.io/releases/",
+      "twitter4j" at "http://twitter4j.org/maven2",
+      "clojars.org" at "http://clojars.org/repo"
+    )
   )
 
-  lazy val linkerZ = Project("linkerz", file("."), settings = defaultSettings ++ sharedSetting ++ oneJarSettings).aggregate(
+  lazy val linkerZ = Project("linkerz", file("."), settings = sharedSetting ++ assemblySettings).settings(
+    jarName in assembly := "linkerz.jar",
+    mergeStrategy in assembly <<= (mergeStrategy in assembly) {
+      (old) => {
+        case "overview.html" => MergeStrategy.discard
+        case x => old(x)
+      }
+    }
+  ).aggregate(
     linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot, linkerZRecommendation, linkerZLogger
   ).dependsOn(
     linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot, linkerZRecommendation, linkerZLogger
   )
 
-  lazy val linkerZCore = Project("linkerz_core", file("linkerz_core"), settings = defaultSettings ++ sharedSetting).settings(
+  lazy val linkerZCore = Project("linkerz_core", file("linkerz_core"), settings = sharedSetting).settings(
     libraryDependencies ++= coreDependencies
   )
 
-  lazy val linkerzModel = Project("linkerz_model", file("linkerz_model"), settings = defaultSettings ++ sharedSetting).settings(
+  lazy val linkerzModel = Project("linkerz_model", file("linkerz_model"), settings = sharedSetting).settings(
     libraryDependencies ++= modelDependencies ++ testDependencies
   ).dependsOn(linkerZCore)
 
-  lazy val linkerZJobQueue = Project("linkerz_job_queue", file("linkerz_job_queue"), settings = defaultSettings ++ sharedSetting).settings(
-    libraryDependencies ++= jobQueueDependencies ++ testDependencies,
-    resolvers += "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/"
+  lazy val linkerZJobQueue = Project("linkerz_job_queue", file("linkerz_job_queue"), settings = sharedSetting).settings(
+    libraryDependencies ++= jobQueueDependencies ++ testDependencies
   ).dependsOn(linkerZCore, linkerzModel)
 
-  lazy val linkerZCrawlerCore = Project("linkerz_crawler_core", file("linkerz_crawler_core"), settings = defaultSettings ++ sharedSetting).settings(
+  lazy val linkerZCrawlerCore = Project("linkerz_crawler_core", file("linkerz_crawler_core"), settings = sharedSetting).settings(
     libraryDependencies ++= crawlerCoreDependencies ++ testDependencies
   ).dependsOn(linkerZCore, linkerZJobQueue, linkerzModel, linkerZLogger)
 
-  lazy val linkerZCrawlerBot = Project("linkerz_crawler_bot", file("linkerz_crawler_bot"), settings = defaultSettings ++ sharedSetting).settings(
+  lazy val linkerZCrawlerBot = Project("linkerz_crawler_bot", file("linkerz_crawler_bot"), settings = sharedSetting).settings(
     libraryDependencies ++= crawlerBotDependencies ++ testDependencies
   ).dependsOn(linkerZCore, linkerZJobQueue, linkerzModel, linkerZCrawlerCore)
 
-  lazy val linkerZRecommendation = Project("linkerz_recommendation", file("linkerz_recommendation"), settings = defaultSettings ++ sharedSetting).settings(
+  lazy val linkerZRecommendation = Project("linkerz_recommendation", file("linkerz_recommendation"), settings = sharedSetting).settings(
     libraryDependencies ++= recommendationDependencies ++ testDependencies
   ).dependsOn(linkerZCore, linkerzModel, linkerZJobQueue)
 
-  lazy val linkerZLogger = Project("linkerz_logger", file("linkerz_logger"), settings = defaultSettings ++ sharedSetting).settings(
+  lazy val linkerZLogger = Project("linkerz_logger", file("linkerz_logger"), settings = sharedSetting).settings(
     libraryDependencies ++= loggerDependencies ++ testDependencies
   ).dependsOn(linkerZCore, linkerzModel)
 
@@ -52,9 +65,9 @@ object LinkerZBuild extends Build {
     "org.slf4j" % "slf4j-api" % "1.6.6",
     "org.clapper" %% "grizzled-slf4j" % "0.6.9",
     "commons-collections" % "commons-collections" % "3.2.1",
-    "commons-digester" % "commons-digester" % "2.1",
+    "commons-digester" % "commons-digester" % "2.1" exclude("commons-beanutils", "commons-beanutils"),
     "commons-lang" % "commons-lang" % "2.6",
-    "commons-validator" % "commons-validator" % "1.4.0",
+    "commons-validator" % "commons-validator" % "1.4.0" exclude("commons-beanutils", "commons-beanutils"),
     "commons-io" % "commons-io" % "2.4",
     "org.scalaz" %% "scalaz-full" % "6.0.4",
     "com.typesafe" % "config" % "1.0.0"
@@ -91,10 +104,7 @@ object LinkerZBuild extends Build {
   )
 
   val recommendationDependencies = Seq(
-    "org.scalanlp" % "breeze-math_2.9.2" % "0.1",
-    "org.scalanlp" % "breeze-learn_2.9.2" % "0.1",
     "org.scalanlp" % "breeze-process_2.9.2" % "0.1",
-    "org.scalanlp" % "breeze-viz_2.9.2" % "0.1",
     "org.apache.commons" % "commons-math3" % "3.0",
     "redis.clients" % "jedis" % "2.1.0"
   )
