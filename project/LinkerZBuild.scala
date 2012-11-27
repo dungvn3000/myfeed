@@ -2,7 +2,6 @@ import sbt._
 import Keys._
 import Project._
 import sbtassembly.Plugin._
-import sbtassembly._
 import AssemblyKeys._
 
 object LinkerZBuild extends Build {
@@ -14,12 +13,16 @@ object LinkerZBuild extends Build {
     resolvers ++= Seq(
       "Typesafe Repository" at "http://repo.akka.io/releases/",
       "twitter4j" at "http://twitter4j.org/maven2",
-      "clojars.org" at "http://clojars.org/repo"
+      "clojars.org" at "http://clojars.org/repo",
+      Resolver.file("Local Repository", file(Path.userHome.absolutePath + "/.ivy2/local"))(Resolver.ivyStylePatterns)
     )
   )
 
   lazy val linkerZ = Project("linkerz", file("."), settings = sharedSetting ++ assemblySettings).settings(
     jarName in assembly := "linkerz.jar",
+    excludedJars in assembly <<= (fullClasspath in assembly) map {
+      _.filter(key => List("scala-compiler.jar").contains(key.data.getName))
+    },
     mergeStrategy in assembly <<= (mergeStrategy in assembly) {
       (old) => {
         case "overview.html" => MergeStrategy.discard
@@ -27,9 +30,9 @@ object LinkerZBuild extends Build {
       }
     }
   ).aggregate(
-    linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot, linkerZRecommendation, linkerZLogger
+    linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot, linkerZRecommendation, linkerZLogger, linkerZStorm
   ).dependsOn(
-    linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot, linkerZRecommendation, linkerZLogger
+    linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot, linkerZRecommendation, linkerZLogger, linkerZStorm
   )
 
   lazy val linkerZCore = Project("linkerz_core", file("linkerz_core"), settings = sharedSetting).settings(
@@ -60,6 +63,12 @@ object LinkerZBuild extends Build {
     libraryDependencies ++= loggerDependencies ++ testDependencies
   ).dependsOn(linkerZCore, linkerzModel)
 
+  lazy val linkerZStorm = Project("linkerz_storm", file("linkerz_storm"), settings = sharedSetting).settings(
+    libraryDependencies ++= stormDependencies ++ testDependencies
+  ).dependsOn(
+    linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot, linkerZRecommendation, linkerZLogger
+  )
+
   val coreDependencies = Seq(
     "org.slf4j" % "slf4j-simple" % "1.6.6",
     "org.slf4j" % "slf4j-api" % "1.6.6",
@@ -69,7 +78,7 @@ object LinkerZBuild extends Build {
     "commons-lang" % "commons-lang" % "2.6",
     "commons-validator" % "commons-validator" % "1.4.0" exclude("commons-beanutils", "commons-beanutils"),
     "commons-io" % "commons-io" % "2.4",
-    "org.scalaz" %% "scalaz-full" % "6.0.4",
+    "org.scalaz" %% "scalaz-core" % "6.0.4",
     "com.typesafe" % "config" % "1.0.0"
   )
 
@@ -110,6 +119,12 @@ object LinkerZBuild extends Build {
   )
 
   val loggerDependencies = Seq(
+  )
+
+  val stormDependencies = Seq(
+    "com.dc" %% "scala-storm" % "0.2.2-SNAPSHOT",
+    //Set this to provided when develop to storm.
+    "storm" % "storm" % "0.8.1"
   )
 }
 

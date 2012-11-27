@@ -1,12 +1,10 @@
 package org.linkerz
 
-import com.rabbitmq.client.ConnectionFactory
-import core.conf.AppConfig
-import crawler.bot.factory.NewsParserFactory
-import crawler.bot.handler.NewFeedHandler
-import crawler.core.factory.DefaultDownloadFactory
-import job.queue.controller.RabbitMQController
-import recommendation.handler.RecommendHandler
+import storm.scala.dsl.StormBolt
+import backtype.storm.tuple.Tuple
+import backtype.storm.topology.TopologyBuilder
+import backtype.storm.testing.TestWordSpout
+import backtype.storm.{LocalCluster, Config}
 
 /**
  * The Class Main.
@@ -17,16 +15,27 @@ import recommendation.handler.RecommendHandler
  */
 object Main extends App {
 
-  val factory = new ConnectionFactory
-  factory.setHost(AppConfig.rabbitMqHost)
+  val builder = new TopologyBuilder()
 
-  val controller = new RabbitMQController(factory)
-  controller.prefetchCount = 1
+  builder.setSpout("words", new TestWordSpout(), 10)
+  builder.setBolt("exclaim1", new ExclamationBolt, 3)
+    .shuffleGrouping("words")
+  builder.setBolt("exclaim2", new ExclamationBolt, 2)
+    .shuffleGrouping("exclaim1")
 
-  controller.handlers = List(
-    new NewFeedHandler(new DefaultDownloadFactory, new NewsParserFactory),
-    new RecommendHandler
-  )
+  val conf = new Config()
+  conf setDebug true
 
-  controller.start()
+  val cluster = new LocalCluster()
+  cluster.submitTopology("test", conf, builder.createTopology())
+  Thread sleep 10000
+  cluster.killTopology("test")
+  cluster.shutdown()
+}
+
+class ExclamationBolt extends StormBolt(outputFields = List("word")) {
+  def execute(t: Tuple) {
+    t emit (t.getString(0) + "!!!")
+    t ack
+  }
 }
