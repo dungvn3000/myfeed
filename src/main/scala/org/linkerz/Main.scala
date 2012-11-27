@@ -1,10 +1,11 @@
 package org.linkerz
 
-import storm.scala.dsl.StormBolt
-import backtype.storm.tuple.Tuple
 import backtype.storm.topology.TopologyBuilder
 import backtype.storm.testing.TestWordSpout
 import backtype.storm.{LocalCluster, Config}
+import storm.bolt.{WordCount, SplitSentence}
+import storm.spout.RandomSentenceSpout
+import backtype.storm.tuple.Fields
 
 /**
  * The Class Main.
@@ -17,11 +18,9 @@ object Main extends App {
 
   val builder = new TopologyBuilder()
 
-  builder.setSpout("words", new TestWordSpout(), 10)
-  builder.setBolt("exclaim1", new ExclamationBolt, 3)
-    .shuffleGrouping("words")
-  builder.setBolt("exclaim2", new ExclamationBolt, 2)
-    .shuffleGrouping("exclaim1")
+  builder.setSpout("randsentence", new RandomSentenceSpout)
+  builder.setBolt("split", new SplitSentence, 8).shuffleGrouping("randsentence")
+  builder.setBolt("count", new WordCount, 12).fieldsGrouping("split", new Fields("word"))
 
   val conf = new Config()
   conf setDebug true
@@ -31,11 +30,4 @@ object Main extends App {
   Thread sleep 10000
   cluster.killTopology("test")
   cluster.shutdown()
-}
-
-class ExclamationBolt extends StormBolt(outputFields = List("word")) {
-  def execute(t: Tuple) {
-    t emit (t.getString(0) + "!!!")
-    t ack
-  }
 }

@@ -123,7 +123,7 @@ object LinkerZBuild extends Build {
 
   val stormDependencies = Seq(
     "com.dc" %% "scala-storm" % "0.2.2-SNAPSHOT",
-    //Set this to provided when develop to storm.
+    //Set this to provided when develop to storm server.
     "storm" % "storm" % "0.8.1"
   )
 }
