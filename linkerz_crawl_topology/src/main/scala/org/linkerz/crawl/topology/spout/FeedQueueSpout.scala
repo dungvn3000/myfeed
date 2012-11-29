@@ -5,6 +5,7 @@ import com.rabbitmq.client.{ConnectionFactory, QueueingConsumer, Channel, Connec
 import util.Marshal
 import com.rabbitmq.client.QueueingConsumer.Delivery
 import org.linkerz.crawler.bot.job.FeedJob
+import org.linkerz.crawl.topology.event.StartWith
 
 /**
  * This spout is using for take a feeding job form the RabbitMq server.
@@ -14,7 +15,7 @@ import org.linkerz.crawler.bot.job.FeedJob
  * @since 11/30/12 1:42 AM
  *
  */
-class FeedQueueSpout(connectionFactory: ConnectionFactory) extends StormSpout(outputFields = List("feedJob")) {
+class FeedQueueSpout(connectionFactory: ConnectionFactory) extends StormSpout(outputFields = List("start")) {
 
   private val queueName = "feedQueue"
 
@@ -41,7 +42,7 @@ class FeedQueueSpout(connectionFactory: ConnectionFactory) extends StormSpout(ou
         val job = Marshal.load[FeedJob](delivery.getBody)
 
         //Using url for tuple id, assume url is unique for each jobs.
-        using msgId job.webUrl.url emit job
+        using msgId job.webUrl.url emit StartWith(job)
       }
     } catch {
       case ex: Exception => _collector.reportError(ex)
