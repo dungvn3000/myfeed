@@ -1,10 +1,10 @@
-package org.linkerz.storm
+package org.linkerz.crawl.topology
 
 import backtype.storm.topology.TopologyBuilder
-import bolt._
-import org.linkerz.storm.spout._
 import backtype.storm.{Config, LocalCluster}
 import backtype.storm.utils.Utils
+import bolt._
+import spout.FeedQueueSpout
 
 /**
  * The Class Main.

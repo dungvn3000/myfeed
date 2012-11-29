@@ -1,4 +1,4 @@
-package org.linkerz.storm.bolt
+package org.linkerz.crawl.topology.bolt
 
 import storm.scala.dsl.StormBolt
 import backtype.storm.tuple.Tuple

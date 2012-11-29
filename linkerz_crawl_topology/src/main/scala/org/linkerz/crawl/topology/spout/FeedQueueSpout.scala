@@ -1,4 +1,4 @@
-package org.linkerz.storm.spout
+package org.linkerz.crawl.topology.spout
 
 import storm.scala.dsl.StormSpout
 
