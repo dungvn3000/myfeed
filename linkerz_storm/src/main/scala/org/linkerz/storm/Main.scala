@@ -1,20 +1,19 @@
-package org.linkerz
+package org.linkerz.storm
 
 import backtype.storm.topology.TopologyBuilder
-import backtype.storm.{StormSubmitter, Config}
-import storm.bolt.{WordCount, SplitSentence}
-import storm.spout.RandomSentenceSpout
+import bolt.{WordCount, SplitSentence}
+import spout.RandomSentenceSpout
 import backtype.storm.tuple.Fields
+import backtype.storm.{LocalCluster, Config}
 
 /**
  * The Class Main.
  *
  * @author Nguyen Duc Dung
- * @since 11/2/12 3:13 PM
+ * @since 11/27/12 11:39 PM
  *
  */
 object Main extends App {
-
   val builder = new TopologyBuilder()
 
   builder.setSpout("randsentence", new RandomSentenceSpout)
@@ -23,13 +22,10 @@ object Main extends App {
 
   val conf = new Config()
   conf setDebug true
-  conf put (Config.NIMBUS_HOST, "192.168.1.100")
 
-  conf.setNumWorkers(10)
-
-  //  val cluster = new LocalCluster()
-  StormSubmitter.submitTopology(args(0), conf, builder.createTopology())
-  //  Thread sleep 10000
-  //  cluster.killTopology("test")
-  //  cluster.shutdown()
+  val cluster = new LocalCluster()
+  cluster.submitTopology("test", conf, builder.createTopology())
+  Thread sleep 10000
+  cluster.killTopology("test")
+  cluster.shutdown()
 }
