@@ -1,9 +1,8 @@
 package org.linkerz.crawl.topology.bolt
 
-import storm.scala.dsl.{StormBolt, StormSpout}
-import util.Random
-import backtype.storm.utils.Utils
+import storm.scala.dsl.StormBolt
 import backtype.storm.tuple.Tuple
+import org.linkerz.crawler.bot.job.FeedJob
 
 /**
  * The mission of this bolt will receive job from the feed spot and emit it to a fetcher. On the other hand this bolt
@@ -14,6 +13,12 @@ import backtype.storm.tuple.Tuple
  * @since 11/29/12 11:41 PM
  *
  */
-class CrawlerBolt extends StormBolt(outputFields = List("url")) {
-  def execute(p1: Tuple) {}
+class CrawlerBolt extends StormBolt(outputFields = List("feedJob")) {
+  def execute(tuple: Tuple) {
+    tuple matchSeq {
+      case Seq(feedJob: FeedJob) => {
+
+      }
+    }
+  }
 }

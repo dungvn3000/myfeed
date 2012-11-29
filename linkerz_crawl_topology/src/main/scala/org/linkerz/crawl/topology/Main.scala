@@ -5,6 +5,8 @@ import backtype.storm.{Config, LocalCluster}
 import backtype.storm.utils.Utils
 import bolt._
 import spout.FeedQueueSpout
+import com.rabbitmq.client.ConnectionFactory
+import org.linkerz.core.conf.AppConfig
 
 /**
  * The Class Main.
@@ -15,9 +17,11 @@ import spout.FeedQueueSpout
  */
 object Main extends App {
 
-  val builder = new TopologyBuilder
+  val factory = new ConnectionFactory
+  factory.setHost(AppConfig.rabbitMqHost)
 
-  builder.setSpout("feedQueue", new FeedQueueSpout)
+  val builder = new TopologyBuilder
+  builder.setSpout("feedQueue", new FeedQueueSpout(factory))
   builder.setBolt("crawler", new CrawlerBolt).shuffleGrouping("feedQueue").shuffleGrouping("persistent")
   builder.setBolt("fetcher", new FetcherBolt).shuffleGrouping("crawler")
   builder.setBolt("parser", new ParserBolt).shuffleGrouping("fetcher")
@@ -31,7 +35,7 @@ object Main extends App {
   conf setDebug true
 
 
-  localCluster.submitTopology("crawler",conf,  builder.createTopology())
+  localCluster.submitTopology("crawler", conf, builder.createTopology())
 
   Utils sleep 20000
 

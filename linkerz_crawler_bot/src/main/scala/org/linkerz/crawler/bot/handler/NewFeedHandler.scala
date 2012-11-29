@@ -8,12 +8,11 @@ import org.linkerz.crawler.core.handler.CrawlerHandler
 import org.linkerz.crawler.core.worker.CrawlWorker
 import org.linkerz.crawler.core.model.WebUrl
 import org.linkerz.job.queue.core.Job
-import org.linkerz.crawler.bot.job.NewFeedJob
+import org.linkerz.crawler.bot.job.FeedJob
 import akka.actor.{Props, ActorContext}
 import akka.routing.RoundRobinRouter
 import org.linkerz.crawler.core.factory.{ParserFactory, DownloadFactory}
 import org.linkerz.crawler.bot.fetcher.NewFetcher
-import org.linkerz.logger.DBLogger
 import org.linkerz.dao.{LoggingDao, LinkDao}
 
 /**
@@ -35,7 +34,7 @@ class NewFeedHandler(downloadFactory: DownloadFactory, parserFactory: ParserFact
   override protected def shouldCrawl(webUrl: WebUrl) = LinkDao.findByUrl(webUrl.url).isEmpty && super.shouldCrawl(webUrl)
 
 
-  override def accept(job: Job) = job.isInstanceOf[NewFeedJob]
+  override def accept(job: Job) = job.isInstanceOf[FeedJob]
 
   override protected def onFinish() {
     super.onFinish()
