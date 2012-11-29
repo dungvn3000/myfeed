@@ -10,6 +10,6 @@ import backtype.storm.tuple.Tuple
  * @since 11/30/12 2:12 AM
  *
  */
-class PersistentBolt extends StormBolt(outputFields = List("feedJob")) {
+class PersistentBolt extends StormBolt(outputFields = List("persistent")) {
   def execute(p1: Tuple) {}
 }

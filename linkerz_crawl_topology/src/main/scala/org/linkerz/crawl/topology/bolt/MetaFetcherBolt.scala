@@ -10,6 +10,6 @@ import backtype.storm.tuple.Tuple
  * @since 11/30/12 2:08 AM
  *
  */
-class MetaFetcherBolt extends StormBolt(outputFields = List("feedJob")){
+class MetaFetcherBolt extends StormBolt(outputFields = List("metaFetch")){
   def execute(p1: Tuple) {}
 }

@@ -1,6 +1,5 @@
 package org.linkerz.crawl.topology.bolt
 
-import backtype.storm.topology.base.BaseBasicBolt
 import storm.scala.dsl.StormBolt
 import backtype.storm.tuple.Tuple
 
@@ -11,7 +10,7 @@ import backtype.storm.tuple.Tuple
  * @since 11/30/12 1:00 AM
  *
  */
-class ParserBolt extends StormBolt(outputFields = List("urls")) {
+class ParserBolt extends StormBolt(outputFields = List("parse")) {
   def execute(tuple: Tuple) {
 
   }

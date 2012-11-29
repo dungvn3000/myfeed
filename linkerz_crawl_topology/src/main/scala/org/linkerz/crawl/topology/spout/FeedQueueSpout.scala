@@ -15,7 +15,7 @@ import org.linkerz.crawl.topology.event.StartWith
  * @since 11/30/12 1:42 AM
  *
  */
-class FeedQueueSpout(connectionFactory: ConnectionFactory) extends StormSpout(outputFields = List("start")) {
+class FeedQueueSpout(connectionFactory: ConnectionFactory) extends StormSpout(outputFields = List("startWith")) {
 
   private val queueName = "feedQueue"
 

@@ -10,7 +10,7 @@ import backtype.storm.tuple.Tuple
  * @since 11/30/12 12:55 AM
  *
  */
-class FetcherBolt extends StormBolt(outputFields = List("html")) {
+class FetcherBolt extends StormBolt(outputFields = List("fetch")) {
 
   def execute(tuple: Tuple) {
 

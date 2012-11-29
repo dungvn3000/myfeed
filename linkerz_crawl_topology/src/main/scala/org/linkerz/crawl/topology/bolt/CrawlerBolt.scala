@@ -13,7 +13,7 @@ import org.linkerz.crawl.topology.event.StartWith
  * @since 11/29/12 11:41 PM
  *
  */
-class CrawlerBolt extends StormBolt(outputFields = List("feedJob")) {
+class CrawlerBolt extends StormBolt(outputFields = List("crawl")) {
   def execute(tuple: Tuple) {
     tuple matchSeq {
       case Seq(StartWith(feedJob)) => {

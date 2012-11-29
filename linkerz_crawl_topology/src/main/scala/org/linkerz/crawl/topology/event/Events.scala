@@ -1,6 +1,6 @@
 package org.linkerz.crawl.topology.event
 
-import org.linkerz.crawler.core.job.CrawlJob
+import org.linkerz.crawler.bot.job.FeedJob
 
 /**
  * The Class Event.
@@ -11,4 +11,15 @@ import org.linkerz.crawler.core.job.CrawlJob
  */
 sealed trait Event
 
-case class StartWith(feedJob: CrawlJob) extends Event
+//This event starting from the spout, using for start crawling an url.
+case class StartWith(feedJob: FeedJob) extends Event
+
+case class Crawl(feedJob: FeedJob) extends Event
+
+case class Fetch(feedJob: FeedJob) extends Event
+
+case class Parse(feedJob: FeedJob) extends Event
+
+case class MetaFetch(feedJob: FeedJob) extends Event
+
+case class Persistent(feedJob: FeedJob) extends Event
