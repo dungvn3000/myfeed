@@ -1,9 +1,5 @@
 package org.linkerz
 
-import backtype.storm.topology.TopologyBuilder
-import backtype.storm.{StormSubmitter, Config}
-import backtype.storm.tuple.Fields
-
 /**
  * The Class Main.
  *

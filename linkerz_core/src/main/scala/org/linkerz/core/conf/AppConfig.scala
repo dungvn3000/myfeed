@@ -11,9 +11,9 @@ import com.typesafe.config.ConfigFactory
  */
 object AppConfig {
 
-  val defaultKey = "default."
-  val mongoKey = "mongodb."
-  val rabbitMqKey = "rabbitmq."
+  private val defaultKey = "default."
+  private val mongoKey = "mongodb."
+  private val rabbitMqKey = "rabbitmq."
 
   lazy val conf = ConfigFactory.load()
 

@@ -10,16 +10,17 @@ object LinkerZBuild extends Build {
     version := "0.1-SNAPSHOT",
     organization := "org.linkerz",
     scalaVersion := "2.9.1",
+    scalacOptions += "-Yresolve-term-conflict:package",
     resolvers ++= Seq(
       "Typesafe Repository" at "http://repo.akka.io/releases/",
       "twitter4j" at "http://twitter4j.org/maven2",
       "clojars.org" at "http://clojars.org/repo",
+      "Local Maven Repository" at "file://" + Path.userHome.absolutePath + "/.m2/repository",
       Resolver.file("Local Repository", file(Path.userHome.absolutePath + "/.ivy2/local"))(Resolver.ivyStylePatterns)
     )
   )
 
-  lazy val linkerZ = Project("linkerz", file("."), settings = sharedSetting ++ assemblySettings).settings(
-    jarName in assembly := "linkerz.jar",
+  val topologySettings = assemblySettings ++ Seq (
     excludedJars in assembly <<= (fullClasspath in assembly) map {
       _.filter(key => List("scala-compiler.jar").contains(key.data.getName))
     },
@@ -28,11 +29,10 @@ object LinkerZBuild extends Build {
         case "overview.html" => MergeStrategy.discard
         case x => old(x)
       }
-    },
-    libraryDependencies ++= stormDependencies
-  ).aggregate(
-    linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot, linkerZRecommendation, linkerZLogger, linkerZCrawlTopology
-  ).dependsOn(
+    }
+  )
+
+  lazy val linkerZ = Project("linkerz", file("."), settings = sharedSetting).aggregate(
     linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot, linkerZRecommendation, linkerZLogger, linkerZCrawlTopology
   )
 
@@ -64,10 +64,11 @@ object LinkerZBuild extends Build {
     libraryDependencies ++= loggerDependencies ++ testDependencies
   ).dependsOn(linkerZCore, linkerzModel)
 
-  lazy val linkerZCrawlTopology = Project("linkerz_crawl_topology", file("linkerz_crawl_topology"), settings = sharedSetting).settings(
+  lazy val linkerZCrawlTopology = Project("linkerz_crawl_topology", file("linkerz_crawl_topology"), settings = sharedSetting ++ topologySettings).settings(
+    jarName in assembly := "linkerz_crawl_topology.jar",
     libraryDependencies ++= stormDependencies ++ testDependencies
   ).dependsOn(
-    linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot, linkerZRecommendation, linkerZLogger
+    linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot, linkerZLogger
   )
 
   val coreDependencies = Seq(
@@ -124,9 +125,7 @@ object LinkerZBuild extends Build {
 
   val stormDependencies = Seq(
     "com.dc" %% "scala-storm" % "0.2.2-SNAPSHOT",
-    "storm" % "storm" % "0.8.1"
-    //Set this to provided when develop to storm server. TODO: fix it @dungvn3000
-    //        "storm" % "storm" % "0.8.1" % "provided"
+    "storm" % "storm" % "0.8.1" % "provided"
   )
 }
 

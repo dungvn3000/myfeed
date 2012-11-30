@@ -5,6 +5,7 @@ import com.rabbitmq.client.{ConnectionFactory, QueueingConsumer, Channel, Connec
 import util.Marshal
 import com.rabbitmq.client.QueueingConsumer.Delivery
 import org.linkerz.crawler.bot.job.FeedJob
+import scala.{transient, Some}
 import org.linkerz.crawl.topology.event.StartWith
 
 /**
@@ -15,24 +16,33 @@ import org.linkerz.crawl.topology.event.StartWith
  * @since 11/30/12 1:42 AM
  *
  */
-class FeedQueueSpout(connectionFactory: ConnectionFactory) extends StormSpout(outputFields = List("startWith")) {
+class FeedQueueSpout(rabbitMqHost: String, prefetchCount: Int = 1, deliverTimeOut: Int = 5000) extends StormSpout(outputFields = List("startWith")) {
 
   private val queueName = "feedQueue"
 
-  //The number of job the controller will take at a time.
-  var prefetchCount = 1
+  @transient
+  private var connection: Connection = _
 
-  //Time out for waiting a delivery.
-  var deliverTimeOut = 5000
+  @transient
+  private var channel: Channel = _
 
-  private val connection: Connection = connectionFactory.newConnection()
-  private val channel: Channel = connection.createChannel()
-  private val consumer = new QueueingConsumer(channel)
+  @transient
+  private var consumer: QueueingConsumer = _
 
-  channel.basicQos(prefetchCount)
-  channel.basicConsume(queueName, false, consumer)
+  @transient
+  private var currentDelivery: Option[Delivery] = None
 
-  var currentDelivery: Option[Delivery] = None
+  setup {
+    val factory = new ConnectionFactory
+    factory.setHost(rabbitMqHost)
+    connection = factory.newConnection()
+    channel = connection.createChannel()
+    consumer = new QueueingConsumer(channel)
+
+    channel.basicQos(prefetchCount)
+    channel.basicConsume(queueName, false, consumer)
+  }
+
 
   def nextTuple() {
     try {
@@ -61,5 +71,13 @@ class FeedQueueSpout(connectionFactory: ConnectionFactory) extends StormSpout(ou
       channel.basicReject(currentDelivery.get.getEnvelope.getDeliveryTag, true)
       currentDelivery = None
     }
+  }
+
+  override def close() {
+    if (currentDelivery.isDefined) {
+      channel.basicCancel(consumer.getConsumerTag)
+    }
+    channel.close()
+    connection.close()
   }
 }
