@@ -21,13 +21,13 @@ class FeedQueueSpout(rabbitMqHost: String, prefetchCount: Int = 1, deliverTimeOu
   private val queueName = "feedQueue"
 
   @transient
-  private var connection: Connection = _
+  private var connection: Option[Connection] = None
 
   @transient
-  private var channel: Channel = _
+  private var channel: Option[Channel] = None
 
   @transient
-  private var consumer: QueueingConsumer = _
+  private var consumer: Option[QueueingConsumer] = None
 
   @transient
   private var currentDelivery: Option[Delivery] = None
@@ -35,24 +35,30 @@ class FeedQueueSpout(rabbitMqHost: String, prefetchCount: Int = 1, deliverTimeOu
   setup {
     val factory = new ConnectionFactory
     factory.setHost(rabbitMqHost)
-    connection = factory.newConnection()
-    channel = connection.createChannel()
-    consumer = new QueueingConsumer(channel)
+    val _connection = factory.newConnection()
 
-    channel.basicQos(prefetchCount)
-    channel.basicConsume(queueName, false, consumer)
+    if (_connection != null) {
+      connection = Some(_connection)
+      channel = Some(_connection.createChannel())
+      consumer = Some(new QueueingConsumer(channel.get))
+      channel.get basicQos prefetchCount
+      channel.get basicConsume(queueName, false, consumer.get)
+    }
   }
 
 
   def nextTuple() {
     try {
-      val delivery = consumer.nextDelivery(deliverTimeOut)
-      if (delivery != null && delivery.getBody != null) {
-        currentDelivery = Some(delivery)
-        val job = Marshal.load[FeedJob](delivery.getBody)
+      consumer.map {
+        _consumer =>
+          val delivery = _consumer.nextDelivery(deliverTimeOut)
+          if (delivery != null && delivery.getBody != null) {
+            currentDelivery = Some(delivery)
+            val job = Marshal.load[FeedJob](delivery.getBody)
 
-        //Using url for tuple id, assume url is unique for each jobs.
-        using msgId job.webUrl.url emit StartWith(job)
+            //Using url for tuple id, assume url is unique for each jobs.
+            using msgId job.webUrl.url emit StartWith(job)
+          }
       }
     } catch {
       case ex: Exception => _collector.reportError(ex)
@@ -60,24 +66,26 @@ class FeedQueueSpout(rabbitMqHost: String, prefetchCount: Int = 1, deliverTimeOu
   }
 
   override def ack(msgId: Any) {
-    if (currentDelivery.isDefined) {
-      channel.basicAck(currentDelivery.get.getEnvelope.getDeliveryTag, false)
-      currentDelivery = None
+    currentDelivery.map {
+      _delivery => channel.map(_.basicAck(_delivery.getEnvelope.getDeliveryTag, false))
     }
   }
 
   override def fail(msgId: Any) {
-    if (currentDelivery.isDefined) {
-      channel.basicReject(currentDelivery.get.getEnvelope.getDeliveryTag, true)
-      currentDelivery = None
+    currentDelivery.map {
+      _delivery => channel.map(_.basicReject(_delivery.getEnvelope.getDeliveryTag, true))
     }
   }
 
   override def close() {
-    if (currentDelivery.isDefined) {
-      channel.basicCancel(consumer.getConsumerTag)
-    }
-    channel.close()
-    connection.close()
+    channel.map(_channel => {
+      consumer.map {
+        _consumer => {
+          _channel.basicCancel(_consumer.getConsumerTag)
+          _channel.close()
+          connection.map(_.close())
+        }
+      }
+    })
   }
 }
