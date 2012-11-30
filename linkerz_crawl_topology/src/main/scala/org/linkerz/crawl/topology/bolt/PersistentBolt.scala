@@ -2,7 +2,7 @@ package org.linkerz.crawl.topology.bolt
 
 import storm.scala.dsl.StormBolt
 import backtype.storm.tuple.Tuple
-import org.linkerz.crawl.topology.event.Persistent
+import org.linkerz.crawl.topology.event.{Crawl, Persistent}
 
 /**
  * This bolt is using for persistent data to the database server.
@@ -14,8 +14,8 @@ import org.linkerz.crawl.topology.event.Persistent
 class PersistentBolt extends StormBolt(outputFields = List("persistent")) {
   def execute(tuple: Tuple) {
     tuple matchSeq {
-      case Seq(Persistent(feedJob)) => {
-
+      case Seq(Persistent(job)) => {
+        tuple emit Crawl(job)
       }
     }
     tuple.ack

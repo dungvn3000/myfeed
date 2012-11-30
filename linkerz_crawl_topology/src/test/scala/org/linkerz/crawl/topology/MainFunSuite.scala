@@ -14,7 +14,7 @@ import CrawlTopology._
  */
 class MainFunSuite extends FunSuite {
 
-  ignore("Example for Crawl Topology") {
+  test("Example for Crawl Topology") {
 
     val localCluster = new LocalCluster
 
