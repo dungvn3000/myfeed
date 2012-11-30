@@ -2,7 +2,7 @@ package org.linkerz.crawl.topology.bolt
 
 import storm.scala.dsl.StormBolt
 import backtype.storm.tuple.Tuple
-import org.linkerz.crawl.topology.event.StartWith
+import org.linkerz.crawl.topology.event.{StartWith, Crawl}
 
 /**
  * The mission of this bolt will receive job from the feed spot and emit it to a fetcher. On the other hand this bolt
@@ -17,8 +17,12 @@ class CrawlerBolt extends StormBolt(outputFields = List("crawl")) {
   def execute(tuple: Tuple) {
     tuple matchSeq {
       case Seq(StartWith(feedJob)) => {
-        println(feedJob.webUrl.url)
+        println("StartWith: " + feedJob.webUrl.url)
+      }
+      case Seq(Crawl(feedJob)) => {
+        println("Persistent: " + feedJob.webUrl.url)
       }
     }
+    tuple.ack
   }
 }

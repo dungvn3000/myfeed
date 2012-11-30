@@ -2,6 +2,7 @@ package org.linkerz.crawl.topology.bolt
 
 import storm.scala.dsl.StormBolt
 import backtype.storm.tuple.Tuple
+import org.linkerz.crawl.topology.event.MetaFetch
 
 /**
  * This bolt is using for download meta data relate to a url.
@@ -11,5 +12,11 @@ import backtype.storm.tuple.Tuple
  *
  */
 class MetaFetcherBolt extends StormBolt(outputFields = List("metaFetch")){
-  def execute(p1: Tuple) {}
+  def execute(tuple: Tuple) {
+    tuple matchSeq {
+      case Seq(MetaFetch(feedJob)) => {
+
+      }
+    }
+  }
 }

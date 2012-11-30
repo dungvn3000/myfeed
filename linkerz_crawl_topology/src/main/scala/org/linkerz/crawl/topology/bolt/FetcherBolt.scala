@@ -2,6 +2,7 @@ package org.linkerz.crawl.topology.bolt
 
 import storm.scala.dsl.StormBolt
 import backtype.storm.tuple.Tuple
+import org.linkerz.crawl.topology.event.Fetch
 
 /**
  * This bolt is simply download a url and emit it to a parser.
@@ -13,6 +14,11 @@ import backtype.storm.tuple.Tuple
 class FetcherBolt extends StormBolt(outputFields = List("fetch")) {
 
   def execute(tuple: Tuple) {
+    tuple matchSeq {
+      case Seq(Fetch(job)) => {
 
+      }
+    }
+    tuple.ack
   }
 }
