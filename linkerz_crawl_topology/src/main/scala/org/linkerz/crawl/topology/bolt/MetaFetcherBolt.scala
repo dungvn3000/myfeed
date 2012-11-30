@@ -23,7 +23,7 @@ class MetaFetcherBolt extends StormBolt(outputFields = List("metaFetch")) {
     downloader = downloadFactory.createImageDownloader()
   }
 
-  def execute(tuple: Tuple) {
+  override def execute(tuple: Tuple) {
     tuple matchSeq {
       case Seq(MetaFetch(feedJob)) => {
         downloader download feedJob

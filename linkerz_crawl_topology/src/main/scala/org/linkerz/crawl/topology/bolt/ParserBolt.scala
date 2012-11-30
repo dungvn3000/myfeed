@@ -23,7 +23,7 @@ class ParserBolt extends StormBolt(outputFields = List("parse")) {
     parser = parserFactory.createParser()
   }
 
-  def execute(tuple: Tuple) {
+  override def execute(tuple: Tuple) {
     tuple matchSeq {
       case Seq(Parse(job)) => {
         parser parse job

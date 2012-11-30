@@ -12,7 +12,7 @@ import org.linkerz.crawl.topology.event.{Crawl, Persistent}
  *
  */
 class PersistentBolt extends StormBolt(outputFields = List("persistent")) {
-  def execute(tuple: Tuple) {
+  override def execute(tuple: Tuple) {
     tuple matchSeq {
       case Seq(Persistent(job)) => {
         tuple emit Crawl(job)

@@ -23,7 +23,7 @@ class FetcherBolt extends StormBolt(outputFields = List("fetch")) {
     downloader = downloadFactory.createDownloader()
   }
 
-  def execute(tuple: Tuple) {
+  override def execute(tuple: Tuple) {
     tuple matchSeq {
       case Seq(Fetch(job)) => {
         println("job = " + job.webUrl.url)

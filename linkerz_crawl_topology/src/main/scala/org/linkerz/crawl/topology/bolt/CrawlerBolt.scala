@@ -5,6 +5,7 @@ import backtype.storm.tuple.Tuple
 import org.linkerz.crawl.topology.event.{Fetch, StartWith, Crawl}
 import collection.JavaConversions._
 import org.linkerz.crawler.bot.job.FeedJob
+import org.linkerz.crawler.core.model.WebUrl
 
 /**
  * The mission of this bolt will receive job from the feed spot and emit it to a fetcher. On the other hand this bolt
@@ -16,7 +17,10 @@ import org.linkerz.crawler.bot.job.FeedJob
  *
  */
 class CrawlerBolt extends StormBolt(outputFields = List("crawl")) {
-  def execute(tuple: Tuple) {
+
+  private var count = 0
+
+  override def execute(tuple: Tuple) {
     tuple matchSeq {
       case Seq(StartWith(job)) => {
         tuple emit Fetch(job)
@@ -24,12 +28,19 @@ class CrawlerBolt extends StormBolt(outputFields = List("crawl")) {
       case Seq(Crawl(job)) => {
         job.result.map(webPage => {
           webPage.webUrls.foreach {
-            webUrl =>
+            webUrl => if (shouldCrawl(webUrl)) {
               tuple emit Fetch(FeedJob(job.newFeed.copy(url = webUrl.url)))
+            }
           }
         })
       }
     }
     tuple.ack
   }
+
+  private def shouldCrawl(url: WebUrl): Boolean = {
+    count += 1
+    count < 10
+  }
+
 }
