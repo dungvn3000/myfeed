@@ -6,6 +6,7 @@ import org.linkerz.crawl.topology.event.{Fetch, StartWith, Crawl}
 import collection.JavaConversions._
 import org.linkerz.crawler.bot.job.FeedJob
 import org.linkerz.crawler.core.model.WebUrl
+import org.linkerz.crawler.core.session.CrawlSession
 
 /**
  * The mission of this bolt will receive job from the feed spot and emit it to a fetcher. On the other hand this bolt
@@ -18,11 +19,14 @@ import org.linkerz.crawler.core.model.WebUrl
  */
 class CrawlerBolt extends StormBolt(outputFields = List("crawl")) {
 
-  private var count = 0
+  private var startJob: FeedJob = _
+
+  private var currentSession: CrawlSession = _
 
   override def execute(tuple: Tuple) {
     tuple matchSeq {
       case Seq(StartWith(job)) => {
+        startJob = job
         tuple emit Fetch(job)
       }
       case Seq(Crawl(job)) => {
@@ -39,8 +43,7 @@ class CrawlerBolt extends StormBolt(outputFields = List("crawl")) {
   }
 
   private def shouldCrawl(url: WebUrl): Boolean = {
-    count += 1
-    count < 10
+    true
   }
 
 }

@@ -54,10 +54,13 @@ class FeedQueueSpout(rabbitMqHost: String, prefetchCount: Int = 1, deliverTimeOu
           val delivery = _consumer.nextDelivery(deliverTimeOut)
           if (delivery != null && delivery.getBody != null) {
             currentDelivery = Some(delivery)
-            val job = Marshal.load[FeedJob](delivery.getBody)
-
-            //Using url for tuple id, assume url is unique for each jobs.
-            using msgId job.webUrl.url emit StartWith(job)
+            Marshal.load[AnyRef](delivery.getBody) match {
+              case job: FeedJob => {
+                //Using url for tuple id, assume url is unique for each jobs.
+                using msgId job.webUrl.url emit StartWith(job)
+              }
+              case _ => //Ignore
+            }
           }
       }
     } catch {
