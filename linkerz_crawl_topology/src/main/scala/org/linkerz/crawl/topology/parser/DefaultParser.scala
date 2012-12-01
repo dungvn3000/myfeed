@@ -13,6 +13,8 @@ import collection.JavaConversions._
 import org.linkerz.crawl.topology.job.CrawlJob
 import org.apache.commons.validator.routines.UrlValidator
 import java.util
+import edu.uci.ics.crawler4j.parser.HtmlContentHandler
+import edu.uci.ics.crawler4j.url.URLCanonicalizer
 
 /**
  * The Class DefaultParser.

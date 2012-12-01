@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils
 import org.linkerz.crawl.topology.job.CrawlJob
 import org.linkerz.crawl.topology.model.WebPage
 import org.apache.commons.httpclient.HttpStatus
+import edu.uci.ics.crawler4j.url.URLCanonicalizer
 
 /**
  * The Class DefaultDownload.

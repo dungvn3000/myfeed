@@ -6,6 +6,8 @@ package org.linkerz.crawl.topology.util
 
 import org.apache.commons.lang.StringUtils
 import java.net.URLDecoder
+import edu.uci.ics.crawler4j.url.URLCanonicalizer
+import org.springframework.web.util.UriComponentsBuilder
 
 /**
  * The Class UrlUtils.
