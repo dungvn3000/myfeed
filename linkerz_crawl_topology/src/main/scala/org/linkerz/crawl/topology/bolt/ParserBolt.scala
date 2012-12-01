@@ -3,8 +3,8 @@ package org.linkerz.crawl.topology.bolt
 import storm.scala.dsl.StormBolt
 import backtype.storm.tuple.Tuple
 import org.linkerz.crawl.topology.event.{MetaFetch, Parse}
-import org.linkerz.crawler.core.factory.{DefaultParserFactory, ParserFactory}
-import org.linkerz.crawler.core.parser.Parser
+import org.linkerz.crawl.topology.factory.{DefaultParserFactory, ParserFactory}
+import org.linkerz.crawl.topology.parser.Parser
 
 /**
  * This bolt will parse a web page.

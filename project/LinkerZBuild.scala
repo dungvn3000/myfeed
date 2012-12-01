@@ -20,7 +20,7 @@ object LinkerZBuild extends Build {
     )
   )
 
-  val topologySettings = assemblySettings ++ Seq (
+  val topologySettings = assemblySettings ++ Seq(
     excludedJars in assembly <<= (fullClasspath in assembly) map {
       _.filter(key => List("scala-compiler.jar").contains(key.data.getName))
     },
@@ -66,9 +66,9 @@ object LinkerZBuild extends Build {
 
   lazy val linkerZCrawlTopology = Project("linkerz_crawl_topology", file("linkerz_crawl_topology"), settings = sharedSetting ++ topologySettings).settings(
     jarName in assembly := "linkerz_crawl_topology.jar",
-    libraryDependencies ++= stormDependencies ++ testDependencies
+    libraryDependencies ++= stormDependencies ++ crawlerTopologyDependencies ++ testDependencies
   ).dependsOn(
-    linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot, linkerZLogger
+    linkerZCore, linkerzModel, linkerZJobQueue, linkerZLogger
   )
 
   val coreDependencies = Seq(
@@ -101,6 +101,17 @@ object LinkerZBuild extends Build {
   )
 
   val crawlerCoreDependencies = Seq(
+    "org.jsoup" % "jsoup" % "1.7.1",
+    "commons-httpclient" % "commons-httpclient" % "3.1",
+    "org.apache.httpcomponents" % "httpclient" % "4.2.1",
+    "com.ning" % "async-http-client" % "1.7.7",
+    "org.apache.tika" % "tika-core" % "1.2",
+    "org.apache.tika" % "tika-parsers" % "1.2",
+    "net.coobird" % "thumbnailator" % "0.4.2",
+    "net.sf.trove4j" % "trove4j" % "3.0.3"
+  )
+
+  val crawlerTopologyDependencies = Seq(
     "org.jsoup" % "jsoup" % "1.7.1",
     "commons-httpclient" % "commons-httpclient" % "3.1",
     "org.apache.httpcomponents" % "httpclient" % "4.2.1",

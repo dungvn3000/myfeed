@@ -4,9 +4,9 @@ import storm.scala.dsl.StormBolt
 import backtype.storm.tuple.Tuple
 import org.linkerz.crawl.topology.event.{Fetch, StartWith, Crawl}
 import collection.JavaConversions._
-import org.linkerz.crawler.bot.job.FeedJob
-import org.linkerz.crawler.core.model.WebUrl
-import org.linkerz.crawler.core.session.CrawlSession
+import org.linkerz.crawl.topology.model.WebUrl
+import org.linkerz.crawl.topology.session.CrawlSession
+import org.linkerz.crawl.topology.job.CrawlJob
 
 /**
  * The mission of this bolt will receive job from the feed spot and emit it to a fetcher. On the other hand this bolt
@@ -19,7 +19,7 @@ import org.linkerz.crawler.core.session.CrawlSession
  */
 class CrawlerBolt extends StormBolt(outputFields = List("crawl")) {
 
-  private var startJob: FeedJob = _
+  private var startJob: CrawlJob = _
 
   private var currentSession: CrawlSession = _
 
@@ -33,7 +33,7 @@ class CrawlerBolt extends StormBolt(outputFields = List("crawl")) {
         job.result.map(webPage => {
           webPage.webUrls.foreach {
             webUrl => if (shouldCrawl(webUrl)) {
-              tuple emit Fetch(FeedJob(job.newFeed.copy(url = webUrl.url)))
+//              tuple emit Fetch(FeedJob(job.newFeed.copy(url = webUrl.url)))
             }
           }
         })

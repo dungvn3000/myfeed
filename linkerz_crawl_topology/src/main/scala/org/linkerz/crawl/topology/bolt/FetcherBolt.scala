@@ -3,8 +3,8 @@ package org.linkerz.crawl.topology.bolt
 import storm.scala.dsl.StormBolt
 import backtype.storm.tuple.Tuple
 import org.linkerz.crawl.topology.event.{Parse, Fetch}
-import org.linkerz.crawler.core.factory.{DefaultDownloadFactory, DownloadFactory}
-import org.linkerz.crawler.core.downloader.Downloader
+import org.linkerz.crawl.topology.factory.{DefaultDownloadFactory, DownloadFactory}
+import org.linkerz.crawl.topology.downloader.Downloader
 
 /**
  * This bolt is simply download a url and emit it to a parser.

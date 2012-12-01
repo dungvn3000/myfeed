@@ -4,7 +4,7 @@ import storm.scala.dsl.StormSpout
 import com.rabbitmq.client.{ConnectionFactory, QueueingConsumer, Channel, Connection}
 import util.Marshal
 import com.rabbitmq.client.QueueingConsumer.Delivery
-import org.linkerz.crawler.bot.job.FeedJob
+import org.linkerz.crawl.topology.job.CrawlJob
 import scala.{transient, Some}
 import org.linkerz.crawl.topology.event.StartWith
 
@@ -55,7 +55,7 @@ class FeedQueueSpout(rabbitMqHost: String, prefetchCount: Int = 1, deliverTimeOu
           if (delivery != null && delivery.getBody != null) {
             currentDelivery = Some(delivery)
             Marshal.load[AnyRef](delivery.getBody) match {
-              case job: FeedJob => {
+              case job: CrawlJob => {
                 //Using url for tuple id, assume url is unique for each jobs.
                 using msgId job.webUrl.url emit StartWith(job)
               }
