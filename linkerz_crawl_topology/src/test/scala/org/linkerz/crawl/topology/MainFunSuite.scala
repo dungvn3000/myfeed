@@ -19,11 +19,12 @@ class MainFunSuite extends FunSuite {
     val localCluster = new LocalCluster
 
     val conf = new Config
-    conf setDebug true
+    conf setDebug false
+    conf setNumWorkers 10
 
     localCluster.submitTopology("crawler", conf, topology)
 
-    Utils sleep 20000
+    Utils sleep 60000
 
     localCluster.shutdown()
   }

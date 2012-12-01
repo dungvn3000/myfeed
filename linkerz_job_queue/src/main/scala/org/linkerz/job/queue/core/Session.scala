@@ -12,7 +12,7 @@ package org.linkerz.job.queue.core
  *
  */
 
-trait Session[J <: Job] {
+trait Session[J <: Job] extends Serializable {
 
   var job: J = _
 

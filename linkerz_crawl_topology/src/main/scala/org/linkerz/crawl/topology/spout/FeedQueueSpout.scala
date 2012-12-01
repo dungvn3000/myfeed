@@ -7,6 +7,7 @@ import com.rabbitmq.client.QueueingConsumer.Delivery
 import org.linkerz.crawl.topology.job.CrawlJob
 import scala.{transient, Some}
 import org.linkerz.crawl.topology.event.StartWith
+import org.linkerz.crawl.topology.session.CrawlSession
 
 /**
  * This spout is using for take a feeding job form the RabbitMq server.
@@ -32,6 +33,8 @@ class FeedQueueSpout(rabbitMqHost: String, prefetchCount: Int = 1, deliverTimeOu
   @transient
   private var currentDelivery: Option[Delivery] = None
 
+  private var currentSession: CrawlSession = _
+
   setup {
     val factory = new ConnectionFactory
     factory.setHost(rabbitMqHost)
@@ -46,7 +49,6 @@ class FeedQueueSpout(rabbitMqHost: String, prefetchCount: Int = 1, deliverTimeOu
     }
   }
 
-
   def nextTuple() {
     try {
       consumer.map {
@@ -56,8 +58,11 @@ class FeedQueueSpout(rabbitMqHost: String, prefetchCount: Int = 1, deliverTimeOu
             currentDelivery = Some(delivery)
             Marshal.load[AnyRef](delivery.getBody) match {
               case job: CrawlJob => {
+                //Begin new session
+                currentSession = new CrawlSession
+                currentSession.openSession(job)
                 //Using url for tuple id, assume url is unique for each jobs.
-                using msgId job.webUrl.url emit StartWith(job)
+                using msgId job.webUrl.url emit StartWith(currentSession, job)
               }
               case _ => //Ignore
             }
@@ -72,12 +77,14 @@ class FeedQueueSpout(rabbitMqHost: String, prefetchCount: Int = 1, deliverTimeOu
     currentDelivery.map {
       _delivery => channel.map(_.basicAck(_delivery.getEnvelope.getDeliveryTag, false))
     }
+    currentSession.endSession()
   }
 
   override def fail(msgId: Any) {
     currentDelivery.map {
       _delivery => channel.map(_.basicReject(_delivery.getEnvelope.getDeliveryTag, true))
     }
+    currentSession.endSession()
   }
 
   override def close() {

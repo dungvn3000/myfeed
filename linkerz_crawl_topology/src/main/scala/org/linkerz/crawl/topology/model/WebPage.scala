@@ -16,7 +16,7 @@ import org.linkerz.model.Link
  *
  */
 
-class WebPage {
+class WebPage extends Serializable {
 
   var webUrl: WebUrl = _
   //Using java list for better performance.

@@ -33,42 +33,42 @@ object LinkerZBuild extends Build {
   )
 
   lazy val linkerZ = Project("linkerz", file("."), settings = sharedSetting).aggregate(
-    linkerZCore, linkerzModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot, linkerZRecommendation, linkerZLogger, linkerZCrawlTopology
+    linkerZCore, linkerZModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot, linkerZRecommendation, linkerZLogger, linkerZCrawlTopology
   )
 
   lazy val linkerZCore = Project("linkerz_core", file("linkerz_core"), settings = sharedSetting).settings(
     libraryDependencies ++= coreDependencies
   )
 
-  lazy val linkerzModel = Project("linkerz_model", file("linkerz_model"), settings = sharedSetting).settings(
+  lazy val linkerZModel = Project("linkerz_model", file("linkerz_model"), settings = sharedSetting).settings(
     libraryDependencies ++= modelDependencies ++ testDependencies
   ).dependsOn(linkerZCore)
 
   lazy val linkerZJobQueue = Project("linkerz_job_queue", file("linkerz_job_queue"), settings = sharedSetting).settings(
     libraryDependencies ++= jobQueueDependencies ++ testDependencies
-  ).dependsOn(linkerZCore, linkerzModel)
+  ).dependsOn(linkerZCore, linkerZModel)
 
   lazy val linkerZCrawlerCore = Project("linkerz_crawler_core", file("linkerz_crawler_core"), settings = sharedSetting).settings(
     libraryDependencies ++= crawlerCoreDependencies ++ testDependencies
-  ).dependsOn(linkerZCore, linkerZJobQueue, linkerzModel, linkerZLogger)
+  ).dependsOn(linkerZCore, linkerZJobQueue, linkerZModel, linkerZLogger)
 
   lazy val linkerZCrawlerBot = Project("linkerz_crawler_bot", file("linkerz_crawler_bot"), settings = sharedSetting).settings(
     libraryDependencies ++= crawlerBotDependencies ++ testDependencies
-  ).dependsOn(linkerZCore, linkerZJobQueue, linkerzModel, linkerZCrawlerCore)
+  ).dependsOn(linkerZCore, linkerZJobQueue, linkerZModel, linkerZCrawlerCore)
 
   lazy val linkerZRecommendation = Project("linkerz_recommendation", file("linkerz_recommendation"), settings = sharedSetting).settings(
     libraryDependencies ++= recommendationDependencies ++ testDependencies
-  ).dependsOn(linkerZCore, linkerzModel, linkerZJobQueue)
+  ).dependsOn(linkerZCore, linkerZModel, linkerZJobQueue)
 
   lazy val linkerZLogger = Project("linkerz_logger", file("linkerz_logger"), settings = sharedSetting).settings(
     libraryDependencies ++= loggerDependencies ++ testDependencies
-  ).dependsOn(linkerZCore, linkerzModel)
+  ).dependsOn(linkerZCore, linkerZModel)
 
   lazy val linkerZCrawlTopology = Project("linkerz_crawl_topology", file("linkerz_crawl_topology"), settings = sharedSetting ++ topologySettings).settings(
     jarName in assembly := "linkerz_crawl_topology.jar",
     libraryDependencies ++= stormDependencies ++ crawlerTopologyDependencies ++ testDependencies
   ).dependsOn(
-    linkerZCore, linkerzModel, linkerZJobQueue, linkerZLogger
+    linkerZCore, linkerZModel, linkerZJobQueue, linkerZLogger
   )
 
   val coreDependencies = Seq(

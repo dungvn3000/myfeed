@@ -25,9 +25,9 @@ class ParserBolt extends StormBolt(outputFields = List("parse")) {
 
   override def execute(tuple: Tuple) {
     tuple matchSeq {
-      case Seq(Parse(job)) => {
+      case Seq(Parse(session, job)) => {
         parser parse job
-        tuple emit MetaFetch(job)
+        tuple emit MetaFetch(session, job)
       }
     }
     tuple.ack

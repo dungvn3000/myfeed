@@ -19,21 +19,21 @@ import org.linkerz.crawl.topology.job.CrawlJob
  */
 class CrawlerBolt extends StormBolt(outputFields = List("crawl")) {
 
-  private var startJob: CrawlJob = _
-
   private var currentSession: CrawlSession = _
 
-  override def execute(tuple: Tuple) {
-    tuple matchSeq {
-      case Seq(StartWith(job)) => {
-        startJob = job
-        tuple emit Fetch(job)
+  execute {
+    implicit tuple => tuple matchSeq {
+      case Seq(StartWith(session, job)) => {
+        //Begin new session
+        currentSession = new CrawlSession
+        currentSession.openSession(job)
+        tuple emit Fetch(session, job)
       }
-      case Seq(Crawl(job)) => {
+      case Seq(Crawl(session, job)) => {
         job.result.map(webPage => {
           webPage.webUrls.foreach {
             webUrl => if (shouldCrawl(webUrl)) {
-//              tuple emit Fetch(FeedJob(job.newFeed.copy(url = webUrl.url)))
+              crawl(session, new CrawlJob(webUrl, job))
             }
           }
         })
@@ -42,7 +42,29 @@ class CrawlerBolt extends StormBolt(outputFields = List("crawl")) {
     tuple.ack
   }
 
+  private def crawl(session: CrawlSession, job: CrawlJob)(implicit tuple: Tuple) {
+    if (job.depth > session.currentDepth) {
+      session.currentDepth = job.depth
+    }
+
+    tuple emit Fetch(currentSession, CrawlJob(job.webUrl))
+
+    //Counting
+    session.subJobCount += 1
+  }
+
   private def shouldCrawl(url: WebUrl): Boolean = {
+
+    //Step 1: Checking whether go for the job or not
+    if (currentSession.job.maxSubJob >= 0 && currentSession.subJobCount >= currentSession.job.maxSubJob) {
+      return false
+    }
+
+    if (currentSession.currentDepth > currentSession.job.maxDepth && currentSession.job.maxDepth > 0) {
+      currentSession.currentDepth -= 1
+      return false
+    }
+
     true
   }
 
