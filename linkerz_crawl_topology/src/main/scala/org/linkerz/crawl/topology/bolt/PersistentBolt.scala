@@ -1,7 +1,6 @@
 package org.linkerz.crawl.topology.bolt
 
 import storm.scala.dsl.StormBolt
-import backtype.storm.tuple.Tuple
 import org.linkerz.crawl.topology.event.{Crawl, Persistent}
 
 /**
@@ -12,8 +11,8 @@ import org.linkerz.crawl.topology.event.{Crawl, Persistent}
  *
  */
 class PersistentBolt extends StormBolt(outputFields = List("persistent")) {
-  override def execute(tuple: Tuple) {
-    tuple matchSeq {
+  execute {
+    tuple => tuple matchSeq {
       case Seq(Persistent(session, job)) => {
         tuple emit Crawl(session, job)
       }

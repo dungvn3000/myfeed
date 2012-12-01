@@ -3,7 +3,7 @@ package org.linkerz.crawl.topology.bolt
 import storm.scala.dsl.StormBolt
 import backtype.storm.tuple.Tuple
 import org.linkerz.crawl.topology.event.{Persistent, MetaFetch}
-import org.linkerz.crawl.topology.factory.{DefaultDownloadFactory, DownloadFactory}
+import org.linkerz.crawl.topology.factory.DownloadFactory
 import org.linkerz.crawl.topology.downloader.Downloader
 
 /**
@@ -15,12 +15,10 @@ import org.linkerz.crawl.topology.downloader.Downloader
  */
 class MetaFetcherBolt extends StormBolt(outputFields = List("metaFetch")) {
 
-  var downloadFactory: DownloadFactory = _
   var downloader: Downloader = _
 
   setup {
-    downloadFactory = new DefaultDownloadFactory
-    downloader = downloadFactory.createImageDownloader()
+    downloader = DownloadFactory.createImageDownloader()
   }
 
   override def execute(tuple: Tuple) {

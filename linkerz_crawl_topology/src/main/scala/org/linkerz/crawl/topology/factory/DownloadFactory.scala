@@ -4,19 +4,33 @@
 
 package org.linkerz.crawl.topology.factory
 
-import org.linkerz.crawl.topology.downloader.Downloader
+import com.ning.http.client.{AsyncHttpClient, AsyncHttpClientConfig}
+import org.linkerz.crawl.topology.downloader.{ImageDownloader, DefaultDownload}
 
 /**
- * The Class DownloadFactory.
+ * The Class DefaultDownloadFactory.
  *
  * @author Nguyen Duc Dung
- * @since 8/13/12, 6:37 PM
+ * @since 8/13/12, 6:41 PM
  *
  */
 
-trait DownloadFactory {
+object DownloadFactory {
 
-  def createDownloader(): Downloader
+  val cf = new AsyncHttpClientConfig.Builder()
+    .setUserAgent("Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+    .setCompressionEnabled(true)
+    .setAllowPoolingConnection(true)
+    .setFollowRedirects(false)
+    .setMaximumConnectionsPerHost(3)
+    .setMaximumConnectionsTotal(10)
+    .build()
 
-  def createImageDownloader(): Downloader
+  def createDownloader() = {
+    new DefaultDownload(new AsyncHttpClient(cf))
+  }
+
+  def createImageDownloader() = {
+    new ImageDownloader(new AsyncHttpClient(cf))
+  }
 }

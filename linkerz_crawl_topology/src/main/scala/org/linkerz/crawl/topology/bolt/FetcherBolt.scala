@@ -3,7 +3,7 @@ package org.linkerz.crawl.topology.bolt
 import storm.scala.dsl.StormBolt
 import backtype.storm.tuple.Tuple
 import org.linkerz.crawl.topology.event.{Parse, Fetch}
-import org.linkerz.crawl.topology.factory.{DefaultDownloadFactory, DownloadFactory}
+import org.linkerz.crawl.topology.factory.DownloadFactory
 import org.linkerz.crawl.topology.downloader.Downloader
 
 /**
@@ -15,12 +15,10 @@ import org.linkerz.crawl.topology.downloader.Downloader
  */
 class FetcherBolt extends StormBolt(outputFields = List("fetch")) {
 
-  var downloadFactory: DownloadFactory = _
   var downloader: Downloader = _
 
   setup {
-    downloadFactory = new DefaultDownloadFactory
-    downloader = downloadFactory.createDownloader()
+    downloader = DownloadFactory.createDownloader()
   }
 
   override def execute(tuple: Tuple) {

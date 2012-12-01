@@ -4,18 +4,18 @@
 
 package org.linkerz.crawl.topology.factory
 
-import org.linkerz.crawl.topology.parser.Parser
+import org.linkerz.crawl.topology.parser.DefaultParser
 
 /**
- * The Class ParserFactory.
+ * The Class DefaultParserFactory.
  *
  * @author Nguyen Duc Dung
  * @since 8/13/12, 6:46 PM
  *
  */
 
-trait ParserFactory {
-
-  def createParser() : Parser
-
+object ParserFactory {
+  def createParser() = {
+    new DefaultParser
+  }
 }

@@ -14,7 +14,7 @@ import org.apache.tika.parser.ParseContext
 import org.apache.tika.metadata.Metadata
 import com.ning.http.client.AsyncHttpClient
 import org.junit.Test
-import org.linkerz.crawl.topology.factory.DefaultDownloadFactory
+import org.linkerz.crawl.topology.factory.DownloadFactory
 
 /**
  * The Class TestParser.
@@ -25,7 +25,7 @@ import org.linkerz.crawl.topology.factory.DefaultDownloadFactory
  */
 class TestParser extends Logging {
 
-  val downloader = new DefaultDownloadFactory().createDownloader()
+  val downloader = DownloadFactory.createDownloader()
 
   @Test
   def testSimpleParser() {
