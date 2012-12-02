@@ -17,8 +17,8 @@ object CrawlTopology extends Serializable {
   def topology = {
     val builder = new TopologyBuilder
     builder.setSpout("feedQueue", new FeedQueueSpout(AppConfig.rabbitMqHost), 10)
-    builder.setBolt("crawler", new CrawlerBolt, 10).shuffleGrouping("feedQueue").shuffleGrouping("persistent")
-    builder.setBolt("fetcher", new FetcherBolt, 10).shuffleGrouping("crawler")
+    builder.setBolt("handler", new HandlerBolt, 10).shuffleGrouping("feedQueue").shuffleGrouping("persistent")
+    builder.setBolt("fetcher", new FetcherBolt, 10).shuffleGrouping("handler")
     builder.setBolt("parser", new ParserBolt, 10).shuffleGrouping("fetcher")
     builder.setBolt("metaFetcher", new MetaFetcherBolt, 10).shuffleGrouping("parser")
     builder.setBolt("persistent", new PersistentBolt, 10).shuffleGrouping("metaFetcher")

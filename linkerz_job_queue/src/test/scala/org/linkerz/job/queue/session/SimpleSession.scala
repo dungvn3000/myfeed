@@ -5,7 +5,7 @@
 package org.linkerz.job.queue.session
 
 import org.linkerz.job.queue.core.Session
-import org.linkerz.job.queue.job.{EmptyJob, SumJob}
+import org.linkerz.job.queue.job.EmptyJob
 import grizzled.slf4j.Logging
 
 /**
@@ -22,7 +22,6 @@ class SimpleSession extends Session[EmptyJob] with Logging {
     info("Opening Session")
     this
   }
-
 
   override def endSession() {
     info("Ending Session " + jobTime + " ms")

@@ -8,6 +8,7 @@ import org.linkerz.crawl.topology.job.CrawlJob
 import scala.{transient, Some}
 import org.linkerz.crawl.topology.event.StartWith
 import org.linkerz.crawl.topology.session.CrawlSession
+import grizzled.slf4j.Logging
 
 /**
  * This spout is using for take a feeding job form the RabbitMq server.
@@ -17,7 +18,7 @@ import org.linkerz.crawl.topology.session.CrawlSession
  * @since 11/30/12 1:42 AM
  *
  */
-class FeedQueueSpout(rabbitMqHost: String, prefetchCount: Int = 1, deliverTimeOut: Int = 5000) extends StormSpout(outputFields = List("startWith")) {
+class FeedQueueSpout(rabbitMqHost: String, prefetchCount: Int = 1, deliverTimeOut: Int = 5000) extends StormSpout(outputFields = List("startWith")) with Logging {
 
   private val queueName = "feedQueue"
 
@@ -32,8 +33,6 @@ class FeedQueueSpout(rabbitMqHost: String, prefetchCount: Int = 1, deliverTimeOu
 
   @transient
   private var currentDelivery: Option[Delivery] = None
-
-  private var currentSession: CrawlSession = _
 
   setup {
     val factory = new ConnectionFactory
@@ -52,21 +51,20 @@ class FeedQueueSpout(rabbitMqHost: String, prefetchCount: Int = 1, deliverTimeOu
   def nextTuple() {
     try {
       consumer.map {
-        _consumer =>
-          val delivery = _consumer.nextDelivery(deliverTimeOut)
-          if (delivery != null && delivery.getBody != null) {
-            currentDelivery = Some(delivery)
-            Marshal.load[AnyRef](delivery.getBody) match {
-              case job: CrawlJob => {
-                //Begin new session
-                currentSession = new CrawlSession
-                currentSession.openSession(job)
-                //Using url for tuple id, assume url is unique for each jobs.
-                using msgId job.webUrl.url emit StartWith(currentSession, job)
-              }
-              case _ => //Ignore
+        _consumer => val delivery = _consumer.nextDelivery(deliverTimeOut)
+        if (delivery != null && delivery.getBody != null) {
+          currentDelivery = Some(delivery)
+          Marshal.load[AnyRef](delivery.getBody) match {
+            case job: CrawlJob => {
+              //Begin new session
+              val session = new CrawlSession
+              session.openSession(job)
+              //Using url for tuple id, assume url is unique for each jobs.
+              using msgId job.webUrl.url emit StartWith(session, job)
             }
+            case _ => //Ignore
           }
+        }
       }
     } catch {
       case ex: Exception => _collector.reportError(ex)
@@ -77,14 +75,12 @@ class FeedQueueSpout(rabbitMqHost: String, prefetchCount: Int = 1, deliverTimeOu
     currentDelivery.map {
       _delivery => channel.map(_.basicAck(_delivery.getEnvelope.getDeliveryTag, false))
     }
-    currentSession.endSession()
   }
 
   override def fail(msgId: Any) {
     currentDelivery.map {
       _delivery => channel.map(_.basicReject(_delivery.getEnvelope.getDeliveryTag, true))
     }
-    currentSession.endSession()
   }
 
   override def close() {

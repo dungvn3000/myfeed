@@ -39,7 +39,7 @@ trait Session[J <: Job] extends Serializable {
    * End the session.
    */
   def endSession() {
-    println("job = " + job)
+    //Template method.
   }
 
 }

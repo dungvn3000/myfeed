@@ -17,7 +17,7 @@ case class StartWith(session: CrawlSession, job: CrawlJob) extends Event
 
 //This event come form persistent bolt, after it sync result with the database,
 //the event will be sent to the crawler bolt to decide whether go for it or not.
-case class Crawl(session: CrawlSession, job: CrawlJob) extends Event
+case class Handle(session: CrawlSession, job: CrawlJob) extends Event
 
 case class Fetch(session: CrawlSession, job: CrawlJob) extends Event
 
