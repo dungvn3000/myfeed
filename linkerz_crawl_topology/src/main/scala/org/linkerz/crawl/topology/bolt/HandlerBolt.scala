@@ -22,20 +22,30 @@ class HandlerBolt extends StormBolt(outputFields = List("handler")) with Logging
 
   execute {
     implicit tuple => tuple matchSeq {
-      case Seq(StartWith(session, job)) => tuple emit Fetch(session, job)
-      case Seq(Handle(session, job)) => {
-        job.result.map(webPage => {
+      case Seq(StartWith(session, parentJob)) => tuple emit Fetch(session, parentJob)
+      case Seq(Handle(session, subJob)) => {
+        subJob.result.map(webPage => {
           if (!webPage.isError) {
-            session.fetchedUrls.add(job.webUrl)
+            session.fetchedUrls.add(subJob.webUrl)
             session.countUrl += webPage.webUrls.size
             //Set the parent for the website.
-            if (!job.parent.isEmpty) {
-              val parentWebPage = job.parent.get.result.get
+            if (!subJob.parent.isEmpty) {
+              val parentWebPage = subJob.parent.get.result.get
               webPage.parent = parentWebPage
             }
 
             val crawlJobs = for (webUrl <- webPage.webUrls if (shouldCrawl(session, webUrl))) yield {
-              buildCrawlJob(session, new CrawlJob(webUrl, job))
+              if (subJob.depth > session.currentDepth) {
+                session.currentDepth = subJob.depth
+              }
+
+              //Counting
+              session.subJobCount += 1
+
+              //Store queue url.
+              session.queueUrls.add(subJob.webUrl)
+
+              new CrawlJob(webUrl, subJob)
             }
 
             //Note: We don't emit a tuple when changing the session value, to make sure all session when emit have same values.
@@ -45,20 +55,6 @@ class HandlerBolt extends StormBolt(outputFields = List("handler")) with Logging
       }
     }
     tuple.ack
-  }
-
-  private def buildCrawlJob(session: CrawlSession, job: CrawlJob) = {
-    if (job.depth > session.currentDepth) {
-      session.currentDepth = job.depth
-    }
-
-    //Counting
-    session.subJobCount += 1
-
-    //Store queue url.
-    session.queueUrls.add(job.webUrl)
-
-    CrawlJob(job.webUrl)
   }
 
   private def shouldCrawl(session: CrawlSession, webUrl: WebUrl): Boolean = {

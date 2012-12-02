@@ -15,7 +15,5 @@ import org.linkerz.crawl.topology.parser.DefaultParser
  */
 
 object ParserFactory {
-  def createParser() = {
-    new DefaultParser
-  }
+  def createParser() = new DefaultParser
 }

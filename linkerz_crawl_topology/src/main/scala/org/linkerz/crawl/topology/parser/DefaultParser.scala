@@ -26,11 +26,13 @@ import edu.uci.ics.crawler4j.url.URLCanonicalizer
 
 class DefaultParser extends Parser {
 
-  val htmlParser = new HtmlParser
-  val parseContext = new ParseContext
-  val htmlHandler = new HtmlContentHandler
 
   def parse(crawlJob: CrawlJob) {
+
+    val htmlParser = new HtmlParser
+    val parseContext = new ParseContext
+    val htmlHandler = new HtmlContentHandler
+
     val webUrl = crawlJob.result.get.webUrl
     val webPage = crawlJob.result.get
 
