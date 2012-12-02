@@ -56,11 +56,8 @@ class FeedQueueSpout(rabbitMqHost: String, prefetchCount: Int = 1, deliverTimeOu
           currentDelivery = Some(delivery)
           Marshal.load[AnyRef](delivery.getBody) match {
             case job: CrawlJob => {
-              //Begin new session
-              val session = new CrawlSession
-              session.openSession(job)
               //Using url for tuple id, assume url is unique for each jobs.
-              using msgId job.webUrl.url emit StartWith(session, job)
+              using msgId job.webUrl.url emit StartWith(CrawlSession(job), job)
             }
             case _ => //Ignore
           }

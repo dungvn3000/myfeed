@@ -4,11 +4,11 @@
 
 package org.linkerz.crawl.topology.job
 
-import org.linkerz.job.queue.core.{JobStatus, Job}
 import org.linkerz.crawl.topology.model.{WebPage, WebUrl}
 import scala.Some
 import java.util.regex.Pattern
 import org.linkerz.model.{NewFeed, Logging}
+import collection.mutable.ListBuffer
 
 /**
  * The Class CrawlJob.
@@ -18,12 +18,11 @@ import org.linkerz.model.{NewFeed, Logging}
  *
  */
 
-case class CrawlJob(webUrl: WebUrl) extends Job {
+case class CrawlJob(webUrl: WebUrl) {
 
-  private var _parent: Option[CrawlJob] = None
-  private var _result: Option[WebPage] = None
+  var parent: Option[CrawlJob] = None
 
-  var code: CrawlJob.Status = CrawlJob.DONE
+  var result: Option[WebPage] = None
 
   var onlyCrawlInSameDomain: Boolean = true
 
@@ -45,6 +44,28 @@ case class CrawlJob(webUrl: WebUrl) extends Job {
   var excludeUrl: List[String] = Nil
 
   /**
+   * Max depth for a crawl job, default is umlimted.
+   */
+  var maxDepth: Int = -1
+
+  /**
+   * Time out for working on the job, default is unlimted.
+   */
+  var timeOut = -1
+
+  /**
+   * Politeness delay in milliseconds (delay between sending two requests to
+   * the same job parent).
+   */
+  var politenessDelay: Int = 0
+
+  /**
+   * Maximum number of sub job, the job can have.
+   * -1 is unlimited.
+   */
+  var maxSubJob: Int = -1
+
+  /**
    * String url.
    * @param url
    */
@@ -52,14 +73,18 @@ case class CrawlJob(webUrl: WebUrl) extends Job {
     this(new WebUrl(url))
   }
 
+  /**
+   *
+   * @param newFeed
+   */
   def this(newFeed: NewFeed) {
     this(newFeed.url)
 
-    if(!newFeed.urlRegex.isEmpty) {
+    if (!newFeed.urlRegex.isEmpty) {
       urlRegex = Some(newFeed.urlRegex)
     }
 
-    if(!newFeed.excludeUrl.isEmpty) {
+    if (!newFeed.excludeUrl.isEmpty) {
       excludeUrl = newFeed.excludeUrl
     }
   }
@@ -75,19 +100,30 @@ case class CrawlJob(webUrl: WebUrl) extends Job {
     this.parent = Some(parentJob)
   }
 
-  def result = {
-    _result
+  /**
+   * The depth of the job from the first job.
+   */
+  private var _depth: Int = 0
+
+  def depth: Int = {
+    if (!parent.isEmpty) {
+      _depth = parent.get.depth + 1
+    }
+    _depth
   }
 
-  def result_=(result: Option[WebPage]) {
-    _result = result
-  }
+  protected var _errors = new ListBuffer[Logging]
+  protected var _warns = new ListBuffer[Logging]
+  protected var _infos = new ListBuffer[Logging]
 
-  override def parent = _parent
+  def errors = _errors
 
-  def parent_=(parent: Option[CrawlJob]) {
-    _parent = parent
-  }
+  //Check whether the job is error or not.
+  def isError = !errors.isEmpty
+
+  def infos = _infos
+
+  def warns = _warns
 
   def info(msg: String, className: String, webUrl: WebUrl) {
     _infos += Logging(
@@ -99,7 +135,6 @@ case class CrawlJob(webUrl: WebUrl) extends Job {
   }
 
   def error(msg: String, className: String, webUrl: WebUrl) {
-    status = JobStatus.ERROR
     _errors += Logging(
       message = msg,
       className = className,
@@ -109,7 +144,6 @@ case class CrawlJob(webUrl: WebUrl) extends Job {
   }
 
   def error(msg: String, className: String, webUrl: WebUrl, ex: Throwable) {
-    status = JobStatus.ERROR
     _errors += Logging(
       message = msg,
       className = className,
@@ -118,9 +152,54 @@ case class CrawlJob(webUrl: WebUrl) extends Job {
       logType = "error"
     )
   }
-}
 
-object CrawlJob extends Enumeration {
-  type Status = Value
-  val DONE, SKIP, ERROR = Value
+  /**
+   * For debug information.
+   * @param msg
+   */
+  def warn(msg: String, className: String) {
+    _warns += Logging(
+      message = msg,
+      className = className,
+      logType = "warn"
+    )
+  }
+
+  /**
+   * For debug information.
+   * @param msg
+   */
+  def info(msg: String, className: String) {
+    _infos += Logging(
+      message = msg,
+      className = className,
+      logType = "info"
+    )
+  }
+
+  /**
+   * For detect error.
+   * @param msg
+   */
+  def error(msg: String, className: String) {
+    _errors += Logging(
+      message = msg,
+      className = className,
+      logType = "error"
+    )
+  }
+
+  /**
+   * For detect error.
+   * @param msg
+   * @param ex Throwable.
+   */
+  def error(msg: String, className: String, ex: Throwable) {
+    _errors += Logging(
+      message = msg,
+      className = className,
+      exceptionClass = Some(ex.getClass.getName),
+      logType = "error"
+    )
+  }
 }

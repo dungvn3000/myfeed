@@ -4,7 +4,6 @@
 
 package org.linkerz.crawl.topology.session
 
-import org.linkerz.job.queue.core.Session
 import org.linkerz.crawl.topology.job.CrawlJob
 import org.linkerz.crawl.topology.model.WebUrl
 import java.util
@@ -17,8 +16,7 @@ import grizzled.slf4j.Logging
  * @since 7/29/12, 1:06 AM
  *
  */
-
-class CrawlSession extends Session[CrawlJob] with Logging {
+case class CrawlSession(job: CrawlJob) extends Logging {
 
   var countUrl = 0
 
@@ -35,20 +33,19 @@ class CrawlSession extends Session[CrawlJob] with Logging {
    */
   val queueUrls = new util.HashSet[WebUrl]()
 
-  var domainName: String = _
+  var currentDepth = 0
 
-  def openSession(job: CrawlJob) = {
-    this.job = job
-    domainName = job.webUrl.domainName
-    this
-  }
+  //Counting child jobs was done by the current job.
+  var subJobCount = 0
 
-  override def endSession() {
-    info("Crawl " + domainName + " " + jobTime + " ms")
-    info(countUrl + " links found")
-    info(fetchedUrls.size + " links downloaded")
-    info(urlStored + " links stored in db")
-    info(currentDepth + " level")
-    info(job.errors.length + " errors found")
-  }
+  //Starting count the time on current job.
+  val startTime = System.currentTimeMillis
+
+  /**
+   * Time for done the job.
+   * @return
+   */
+  def jobTime = System.currentTimeMillis - startTime
+
+  var domainName: String = job.webUrl.domainName
 }
