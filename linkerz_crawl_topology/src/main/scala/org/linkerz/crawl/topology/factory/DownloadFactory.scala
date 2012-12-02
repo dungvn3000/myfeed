@@ -26,11 +26,8 @@ object DownloadFactory {
     .setMaximumConnectionsTotal(10)
     .build()
 
-  def createDownloader() = {
-    new DefaultDownload(new AsyncHttpClient(cf))
-  }
+  def createDownloader() = new DefaultDownload(new AsyncHttpClient(cf))
 
-  def createImageDownloader() = {
-    new ImageDownloader(new AsyncHttpClient(cf))
-  }
+  def createImageDownloader() = new ImageDownloader(new AsyncHttpClient(cf))
+
 }

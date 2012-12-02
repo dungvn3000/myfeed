@@ -15,7 +15,7 @@ import org.linkerz.crawl.topology.downloader.Downloader
  */
 class FetcherBolt extends StormBolt(outputFields = List("fetch")) {
 
-  var downloader: Downloader = _
+  private var downloader: Downloader = _
 
   setup {
     downloader = DownloadFactory.createDownloader()

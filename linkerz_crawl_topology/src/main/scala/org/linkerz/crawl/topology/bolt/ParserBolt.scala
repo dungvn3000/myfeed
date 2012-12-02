@@ -4,6 +4,7 @@ import storm.scala.dsl.StormBolt
 import backtype.storm.tuple.Tuple
 import org.linkerz.crawl.topology.event.{MetaFetch, Parse}
 import org.linkerz.crawl.topology.parser.Parser
+import org.linkerz.crawl.topology.factory.ParserFactory
 
 /**
  * This bolt will parse a web page.

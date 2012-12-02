@@ -3,7 +3,6 @@ package org.linkerz.crawl.topology.bolt
 import storm.scala.dsl.StormBolt
 import backtype.storm.tuple.Tuple
 import org.linkerz.crawl.topology.event.{Persistent, MetaFetch}
-import org.linkerz.crawl.topology.factory.DownloadFactory
 import org.linkerz.crawl.topology.downloader.Downloader
 
 /**
@@ -18,13 +17,13 @@ class MetaFetcherBolt extends StormBolt(outputFields = List("metaFetch")) {
   var downloader: Downloader = _
 
   setup {
-    downloader = DownloadFactory.createImageDownloader()
+//    downloader = DownloadFactory.createImageDownloader()
   }
 
   override def execute(tuple: Tuple) {
     tuple matchSeq {
       case Seq(MetaFetch(session, job)) => {
-        downloader download job
+//        downloader download job
         tuple emit Persistent(session, job)
       }
     }
