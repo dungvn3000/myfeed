@@ -12,7 +12,13 @@ import org.linkerz.crawl.topology.job.CrawlJob
 sealed trait Event
 
 //This event starting from the spout, using for start crawling an url.
-case class StartWith(job: CrawlJob) extends Event
+case class Start(job: CrawlJob) extends Event
+
+//This event will be sent from the spout. When a job was acked.
+case class Ack(sessionId: String) extends Event
+
+//This event will be sent from the spout. When a job was failed.
+case class Fail(sessionId: String) extends Event
 
 //This event come form persistent bolt, after it sync result with the database,
 //the event will be sent to the crawler bolt to decide whether go for it or not.

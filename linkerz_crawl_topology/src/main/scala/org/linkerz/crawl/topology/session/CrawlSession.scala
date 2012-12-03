@@ -20,8 +20,6 @@ case class CrawlSession(id: String, job: CrawlJob) extends Logging {
 
   var countUrl = 0
 
-  var urlStored = 0
-
   /**
    * Store fetched urls list
    */
@@ -48,4 +46,12 @@ case class CrawlSession(id: String, job: CrawlJob) extends Logging {
   def jobTime = System.currentTimeMillis - startTime
 
   var domainName: String = job.webUrl.domainName
+
+  def endSession() {
+    info("End session " + domainName + " " + jobTime + " ms")
+    info(countUrl + " links found")
+    info(fetchedUrls.size + " links downloaded")
+    info(currentDepth + " level")
+    info(job.errors.length + " errors found")
+  }
 }

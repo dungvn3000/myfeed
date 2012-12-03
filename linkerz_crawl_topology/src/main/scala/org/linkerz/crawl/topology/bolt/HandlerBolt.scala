@@ -1,15 +1,19 @@
 package org.linkerz.crawl.topology.bolt
 
 import storm.scala.dsl.StormBolt
-import org.linkerz.crawl.topology.event.{Fetch, StartWith, Handle}
+import org.linkerz.crawl.topology.event._
 import collection.JavaConversions._
 import org.linkerz.crawl.topology.model.WebUrl
-import org.linkerz.crawl.topology.session.CrawlSession
-import org.linkerz.crawl.topology.job.CrawlJob
 import org.linkerz.core.matcher.SimpleRegexMatcher
 import grizzled.slf4j.Logging
 import org.linkerz.crawl.topology.session.RichSession._
 import backtype.storm.tuple.Tuple
+import org.linkerz.crawl.topology.event.Ack
+import org.linkerz.crawl.topology.event.Handle
+import org.linkerz.crawl.topology.session.CrawlSession
+import org.linkerz.crawl.topology.event.Start
+import org.linkerz.crawl.topology.job.CrawlJob
+import org.linkerz.crawl.topology.event.Fetch
 
 /**
  * The mission of this bolt will receive job from the feed spot and emit it to a fetcher. On the other hand this bolt
@@ -26,18 +30,20 @@ class HandlerBolt extends StormBolt(outputFields = List("handler")) with Logging
 
   execute {
     implicit tuple => tuple matchSeq {
-      case Seq(StartWith(parentJob)) => {
+      case Seq(Start(parentJob)) => {
         //New sessions.
         val session = CrawlSession(parentJob.webUrl.url, parentJob)
         sessions ::= session
         tuple emit Fetch(session.id, parentJob)
-        tuple.ack
+        tuple.ack()
       }
       case Seq(Handle(sessionId, subJob)) => sessions ~> sessionId map (session => handle(session, subJob)) getOrElse {
         //TODO: Change to: "tuple fail" @dungvn3000
-        _collector fail tuple
+        tuple.fail()
         _collector reportError new Exception("Some thing goes worng, can't find session id for this job " + subJob.webUrl.url)
       }
+      case Seq(Ack(sessionId)) => sessions = sessions !! sessionId
+      case Seq(Fail(sessionId)) => sessions = sessions !! sessionId
     }
   }
 
@@ -68,7 +74,7 @@ class HandlerBolt extends StormBolt(outputFields = List("handler")) with Logging
       //Note: We don't emit a tuple when changing the session value, to make sure all session when emit have same values.
       crawlJobs.foreach(tuple emit Fetch(session.id, _))
 
-      tuple.ack
+      tuple.ack()
     })
   }
 

@@ -6,8 +6,8 @@ import util.Marshal
 import com.rabbitmq.client.QueueingConsumer.Delivery
 import org.linkerz.crawl.topology.job.CrawlJob
 import scala.{transient, Some}
-import org.linkerz.crawl.topology.event.StartWith
 import grizzled.slf4j.Logging
+import org.linkerz.crawl.topology.event._
 
 /**
  * This spout is using for take a feeding job form the RabbitMq server.
@@ -56,7 +56,7 @@ class FeedQueueSpout(rabbitMqHost: String, prefetchCount: Int = 1, deliverTimeOu
           Marshal.load[AnyRef](delivery.getBody) match {
             case job: CrawlJob => {
               //Using url for tuple id, assume url is unique for each jobs.
-              using msgId job.webUrl.url emit StartWith(job)
+              using msgId job.webUrl.url emit Start(job)
             }
             case _ => //Ignore
           }
@@ -71,12 +71,14 @@ class FeedQueueSpout(rabbitMqHost: String, prefetchCount: Int = 1, deliverTimeOu
     currentDelivery.map {
       _delivery => channel.map(_.basicAck(_delivery.getEnvelope.getDeliveryTag, false))
     }
+    this emit Ack(msgId.toString)
   }
 
   override def fail(msgId: Any) {
     currentDelivery.map {
       _delivery => channel.map(_.basicReject(_delivery.getEnvelope.getDeliveryTag, true))
     }
+    this emit Fail(msgId.toString)
   }
 
   override def close() {
