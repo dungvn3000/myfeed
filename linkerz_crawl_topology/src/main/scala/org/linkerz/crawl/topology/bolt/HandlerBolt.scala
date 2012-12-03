@@ -12,9 +12,9 @@ import org.linkerz.crawl.topology.event.Ack
 import org.linkerz.crawl.topology.event.Handle
 import org.linkerz.crawl.topology.session.CrawlSession
 import org.linkerz.crawl.topology.event.Start
-import org.linkerz.crawl.topology.job.CrawlJob
 import org.linkerz.crawl.topology.event.Fetch
-import backtype.storm.utils.Utils
+import org.apache.commons.lang.StringUtils
+import org.linkerz.crawl.topology.job.CrawlJob
 
 /**
  * The mission of this bolt will receive job from the feed spot and emit it to a fetcher. On the other hand this bolt
@@ -51,11 +51,11 @@ class HandlerBolt extends StormBolt(outputFields = List("handler")) with Logging
     subJob.result.map(webPage => if (!webPage.isError) {
       session.fetchedUrls add subJob.webUrl
       session.countUrl += webPage.webUrls.size
-      //Set the parent for the website.
-      if (!subJob.parent.isEmpty) {
-        val parentWebPage = subJob.parent.get.result.get
-        webPage.parent = parentWebPage
-      }
+
+      //Store result to the database.
+//      if (usingDB && LinkDao.checkAndSave(webPage.asLink)) {
+//        currentSession.urlStored += 1
+//      }
 
       val crawlJobs = for (webUrl <- webPage.webUrls if (shouldCrawl(session, webUrl))) yield {
         if (subJob.depth > session.currentDepth) {
@@ -66,18 +66,24 @@ class HandlerBolt extends StormBolt(outputFields = List("handler")) with Logging
         session.subJobCount += 1
 
         //Store queue url.
-        session.queueUrls.add(subJob.webUrl)
+        session.queueUrls add subJob.webUrl
 
         new CrawlJob(webUrl, subJob)
       }
 
       //Important Note: We don't emit a tuple when changing the session value, to make sure all session when emit have same values.
-      crawlJobs foreach {
-        job => tuple emit Fetch(session.id, job)
-        //Delay time for each job.
-        if (session.job.politenessDelay > 0) Utils sleep session.job.politenessDelay
-      }
+      crawlJobs foreach (tuple emit Fetch(session.id, _))
 
+    } else if (webPage.isRedirect) {
+      val movedUrl = webPage.webUrl.movedToUrl
+      if (StringUtils.isNotBlank(movedUrl)) {
+        val newWebUrl = new WebUrl(movedUrl)
+        if (shouldCrawl(session, newWebUrl)) {
+          session.queueUrls add newWebUrl
+
+          tuple emit Fetch(session.id, new CrawlJob(newWebUrl, subJob))
+        }
+      }
     })
     tuple.ack()
   }

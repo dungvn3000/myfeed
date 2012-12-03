@@ -49,11 +49,6 @@ case class CrawlJob(webUrl: WebUrl) {
   var maxDepth: Int = -1
 
   /**
-   * Time out for working on the job, default is unlimted.
-   */
-  var timeOut = -1
-
-  /**
    * Politeness delay in milliseconds (delay between sending two requests to
    * the same job parent).
    */
@@ -98,6 +93,14 @@ case class CrawlJob(webUrl: WebUrl) {
     this(webUrl)
     assert(parent != null)
     this.parent = Some(parentJob)
+
+    //Copy data from parent job.
+    this.urlRegex = parentJob.urlRegex
+    this.excludeUrl = parentJob.excludeUrl
+    this.maxDepth = parentJob.maxDepth
+    this.maxSubJob = parentJob.maxSubJob
+    this.politenessDelay = parentJob.politenessDelay
+    this.onlyCrawlInSameDomain = parentJob.onlyCrawlInSameDomain
   }
 
   /**

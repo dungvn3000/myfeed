@@ -36,8 +36,6 @@ class WebPage extends Serializable {
 
   var parsed: Boolean = false
 
-  var parent: WebPage = _
-
   /**
    * Check the is any error on this page.
    * @return
