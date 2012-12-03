@@ -21,12 +21,12 @@ class MainFunSuite extends FunSuite {
     val conf = new Config
     conf setDebug false
     conf setNumWorkers 10
-    //Set time out for an crawl job is ten minutes
-    conf setMessageTimeoutSecs 60 * 10
+    //Set time out for an crawl job is fifty minutes
+    conf setMessageTimeoutSecs 60 * 15
 
     localCluster.submitTopology("crawler", conf, topology)
 
-    Utils sleep 60000 * 15
+    Utils sleep 1000 * 60 * 30
 
     localCluster.shutdown()
   }

@@ -59,7 +59,7 @@ class HandlerBolt extends StormBolt(outputFields = List("handler")) with Logging
 
       val crawlJobs = for (webUrl <- webPage.webUrls if (shouldCrawl(session, webUrl))) yield {
         if (subJob.depth > session.currentDepth) {
-          session.currentDepth = subJob.depth
+          session.currentDepth = subJob.depth + 1
         }
 
         //Counting
@@ -92,7 +92,6 @@ class HandlerBolt extends StormBolt(outputFields = List("handler")) with Logging
     }
 
     if (session.currentDepth > job.maxDepth && job.maxDepth > 0) {
-      session.currentDepth -= 1
       return false
     }
 
