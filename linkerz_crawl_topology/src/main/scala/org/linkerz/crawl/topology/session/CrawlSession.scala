@@ -50,7 +50,7 @@ case class CrawlSession(id: String, job: CrawlJob) extends Logging {
   def endSession() {
     info("End session " + domainName + " " + jobTime + " ms")
     info(countUrl + " links found")
-    info(fetchedUrls.size + " links downloaded")
+    info(subJobCount + " links downloaded")
     info(currentDepth + " level")
     info(job.errors.length + " errors found")
   }

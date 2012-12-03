@@ -28,6 +28,6 @@ class ParserBolt extends StormBolt(outputFields = List("parse")) {
         tuple emit MetaFetch(sessionId, job)
       }
     }
-    tuple.ack
+    tuple.ack()
   }
 }

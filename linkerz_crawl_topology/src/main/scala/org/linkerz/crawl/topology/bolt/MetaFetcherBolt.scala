@@ -27,6 +27,6 @@ class MetaFetcherBolt extends StormBolt(outputFields = List("metaFetch")) {
         tuple emit Persistent(sessionId, job)
       }
     }
-    tuple.ack
+    tuple.ack()
   }
 }

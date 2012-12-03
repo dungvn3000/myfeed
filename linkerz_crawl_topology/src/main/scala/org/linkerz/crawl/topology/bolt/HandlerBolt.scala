@@ -42,8 +42,8 @@ class HandlerBolt extends StormBolt(outputFields = List("handler")) with Logging
         tuple.fail()
         _collector reportError new Exception("Some thing goes worng, can't find session id for this job " + subJob.webUrl.url)
       }
-      case Seq(Ack(sessionId)) => sessions = sessions !! sessionId
-      case Seq(Fail(sessionId)) => sessions = sessions !! sessionId
+      case Seq(Ack(sessionId)) => sessions = sessions end sessionId
+      case Seq(Fail(sessionId)) => sessions = sessions end sessionId
     }
   }
 
@@ -74,8 +74,8 @@ class HandlerBolt extends StormBolt(outputFields = List("handler")) with Logging
       //Note: We don't emit a tuple when changing the session value, to make sure all session when emit have same values.
       crawlJobs.foreach(tuple emit Fetch(session.id, _))
 
-      tuple.ack()
     })
+    tuple.ack()
   }
 
   private def shouldCrawl(session: CrawlSession, webUrl: WebUrl): Boolean = {

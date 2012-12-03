@@ -21,7 +21,7 @@ class RichSession(sessions: List[CrawlSession]) {
    * @param sessionId
    * @return
    */
-  def !!(sessionId: String) = sessions.filter(session => {
+  def end(sessionId: String) = sessions.filter(session => {
     if (session.id == sessionId) {
       session.endSession()
       false

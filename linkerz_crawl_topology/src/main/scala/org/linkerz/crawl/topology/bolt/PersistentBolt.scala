@@ -17,6 +17,6 @@ class PersistentBolt extends StormBolt(outputFields = List("persistent")) {
         tuple emit Handle(sessionId, job)
       }
     }
-    tuple.ack
+    tuple.ack()
   }
 }
