@@ -107,8 +107,7 @@ object LinkerZBuild extends Build {
     "com.ning" % "async-http-client" % "1.7.7",
     "org.apache.tika" % "tika-core" % "1.2",
     "org.apache.tika" % "tika-parsers" % "1.2",
-    "net.coobird" % "thumbnailator" % "0.4.2",
-    "net.sf.trove4j" % "trove4j" % "3.0.3"
+    "net.coobird" % "thumbnailator" % "0.4.2"
   )
 
   val crawlerTopologyDependencies = Seq(
