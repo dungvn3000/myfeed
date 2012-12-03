@@ -14,6 +14,7 @@ import org.linkerz.crawl.topology.session.CrawlSession
 import org.linkerz.crawl.topology.event.Start
 import org.linkerz.crawl.topology.job.CrawlJob
 import org.linkerz.crawl.topology.event.Fetch
+import backtype.storm.utils.Utils
 
 /**
  * The mission of this bolt will receive job from the feed spot and emit it to a fetcher. On the other hand this bolt
@@ -39,7 +40,7 @@ class HandlerBolt extends StormBolt(outputFields = List("handler")) with Logging
       }
       case Seq(Handle(sessionId, subJob)) => sessions ~> sessionId map (session => handle(session, subJob)) getOrElse {
         //When session id is none that mean this job is expired already, we will stop it.
-        info("Session is expired "+ subJob.webUrl.url)
+        info("Session is expired " + subJob.webUrl.url)
       }
       case Seq(Ack(sessionId)) => sessions = sessions end sessionId
       case Seq(Fail(sessionId)) => sessions = sessions end sessionId
@@ -48,7 +49,7 @@ class HandlerBolt extends StormBolt(outputFields = List("handler")) with Logging
 
   private def handle(session: CrawlSession, subJob: CrawlJob)(implicit tuple: Tuple) {
     subJob.result.map(webPage => if (!webPage.isError) {
-      session.fetchedUrls.add(subJob.webUrl)
+      session.fetchedUrls add subJob.webUrl
       session.countUrl += webPage.webUrls.size
       //Set the parent for the website.
       if (!subJob.parent.isEmpty) {
@@ -70,8 +71,12 @@ class HandlerBolt extends StormBolt(outputFields = List("handler")) with Logging
         new CrawlJob(webUrl, subJob)
       }
 
-      //Note: We don't emit a tuple when changing the session value, to make sure all session when emit have same values.
-      crawlJobs.foreach(tuple emit Fetch(session.id, _))
+      //Important Note: We don't emit a tuple when changing the session value, to make sure all session when emit have same values.
+      crawlJobs foreach {
+        job => tuple emit Fetch(session.id, job)
+        //Delay time for each job.
+        if (session.job.politenessDelay > 0) Utils sleep session.job.politenessDelay
+      }
 
     })
     tuple.ack()
