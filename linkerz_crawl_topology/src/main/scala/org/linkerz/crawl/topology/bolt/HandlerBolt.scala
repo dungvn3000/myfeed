@@ -8,6 +8,8 @@ import org.linkerz.crawl.topology.session.CrawlSession
 import org.linkerz.crawl.topology.job.CrawlJob
 import org.linkerz.core.matcher.SimpleRegexMatcher
 import grizzled.slf4j.Logging
+import org.linkerz.crawl.topology.session.RichSession._
+import backtype.storm.tuple.Tuple
 
 /**
  * The mission of this bolt will receive job from the feed spot and emit it to a fetcher. On the other hand this bolt
@@ -20,41 +22,54 @@ import grizzled.slf4j.Logging
  */
 class HandlerBolt extends StormBolt(outputFields = List("handler")) with Logging {
 
+  private var sessions = List[CrawlSession]()
+
   execute {
     implicit tuple => tuple matchSeq {
-      case Seq(StartWith(session, parentJob)) => tuple emit Fetch(session, parentJob)
-      case Seq(Handle(session, subJob)) => {
-        subJob.result.map(webPage => {
-          if (!webPage.isError) {
-            session.fetchedUrls.add(subJob.webUrl)
-            session.countUrl += webPage.webUrls.size
-            //Set the parent for the website.
-            if (!subJob.parent.isEmpty) {
-              val parentWebPage = subJob.parent.get.result.get
-              webPage.parent = parentWebPage
-            }
-
-            val crawlJobs = for (webUrl <- webPage.webUrls if (shouldCrawl(session, webUrl))) yield {
-              if (subJob.depth > session.currentDepth) {
-                session.currentDepth = subJob.depth
-              }
-
-              //Counting
-              session.subJobCount += 1
-
-              //Store queue url.
-              session.queueUrls.add(subJob.webUrl)
-
-              new CrawlJob(webUrl, subJob)
-            }
-
-            //Note: We don't emit a tuple when changing the session value, to make sure all session when emit have same values.
-            crawlJobs.foreach(tuple emit Fetch(session, _))
-          }
-        })
+      case Seq(StartWith(parentJob)) => {
+        //New sessions.
+        val session = CrawlSession(parentJob.webUrl.url, parentJob)
+        sessions ::= session
+        tuple emit Fetch(session.id, parentJob)
+        tuple.ack
+      }
+      case Seq(Handle(sessionId, subJob)) => sessions ~> sessionId map (session => handle(session, subJob)) getOrElse {
+        //TODO: Change to: "tuple fail" @dungvn3000
+        _collector fail tuple
+        _collector reportError new Exception("Some thing goes worng, can't find session id for this job " + subJob.webUrl.url)
       }
     }
-    tuple.ack
+  }
+
+  private def handle(session: CrawlSession, subJob: CrawlJob)(implicit tuple: Tuple) {
+    subJob.result.map(webPage => if (!webPage.isError) {
+      session.fetchedUrls.add(subJob.webUrl)
+      session.countUrl += webPage.webUrls.size
+      //Set the parent for the website.
+      if (!subJob.parent.isEmpty) {
+        val parentWebPage = subJob.parent.get.result.get
+        webPage.parent = parentWebPage
+      }
+
+      val crawlJobs = for (webUrl <- webPage.webUrls if (shouldCrawl(session, webUrl))) yield {
+        if (subJob.depth > session.currentDepth) {
+          session.currentDepth = subJob.depth
+        }
+
+        //Counting
+        session.subJobCount += 1
+
+        //Store queue url.
+        session.queueUrls.add(subJob.webUrl)
+
+        new CrawlJob(webUrl, subJob)
+      }
+
+      //Note: We don't emit a tuple when changing the session value, to make sure all session when emit have same values.
+      crawlJobs.foreach(tuple emit Fetch(session.id, _))
+
+      tuple.ack
+    })
   }
 
   private def shouldCrawl(session: CrawlSession, webUrl: WebUrl): Boolean = {

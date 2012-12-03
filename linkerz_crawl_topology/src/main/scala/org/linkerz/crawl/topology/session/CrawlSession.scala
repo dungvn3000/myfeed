@@ -16,7 +16,7 @@ import grizzled.slf4j.Logging
  * @since 7/29/12, 1:06 AM
  *
  */
-case class CrawlSession(job: CrawlJob) extends Logging {
+case class CrawlSession(id: String, job: CrawlJob) extends Logging {
 
   var countUrl = 0
 

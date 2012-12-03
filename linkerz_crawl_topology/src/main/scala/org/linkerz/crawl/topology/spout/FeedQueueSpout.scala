@@ -7,7 +7,6 @@ import com.rabbitmq.client.QueueingConsumer.Delivery
 import org.linkerz.crawl.topology.job.CrawlJob
 import scala.{transient, Some}
 import org.linkerz.crawl.topology.event.StartWith
-import org.linkerz.crawl.topology.session.CrawlSession
 import grizzled.slf4j.Logging
 
 /**
@@ -57,7 +56,7 @@ class FeedQueueSpout(rabbitMqHost: String, prefetchCount: Int = 1, deliverTimeOu
           Marshal.load[AnyRef](delivery.getBody) match {
             case job: CrawlJob => {
               //Using url for tuple id, assume url is unique for each jobs.
-              using msgId job.webUrl.url emit StartWith(CrawlSession(job), job)
+              using msgId job.webUrl.url emit StartWith(job)
             }
             case _ => //Ignore
           }

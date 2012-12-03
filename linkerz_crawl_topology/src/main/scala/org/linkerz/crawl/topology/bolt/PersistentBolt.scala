@@ -13,8 +13,8 @@ import org.linkerz.crawl.topology.event.{Handle, Persistent}
 class PersistentBolt extends StormBolt(outputFields = List("persistent")) {
   execute {
     tuple => tuple matchSeq {
-      case Seq(Persistent(session, job)) => {
-        tuple emit Handle(session, job)
+      case Seq(Persistent(sessionId, job)) => {
+        tuple emit Handle(sessionId, job)
       }
     }
     tuple.ack

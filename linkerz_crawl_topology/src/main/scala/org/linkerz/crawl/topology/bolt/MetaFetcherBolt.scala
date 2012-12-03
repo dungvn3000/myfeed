@@ -22,9 +22,9 @@ class MetaFetcherBolt extends StormBolt(outputFields = List("metaFetch")) {
 
   override def execute(tuple: Tuple) {
     tuple matchSeq {
-      case Seq(MetaFetch(session, job)) => {
+      case Seq(MetaFetch(sessionId, job)) => {
 //        downloader download job
-        tuple emit Persistent(session, job)
+        tuple emit Persistent(sessionId, job)
       }
     }
     tuple.ack
