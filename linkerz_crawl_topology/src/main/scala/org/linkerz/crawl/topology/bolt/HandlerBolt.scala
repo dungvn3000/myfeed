@@ -85,6 +85,12 @@ class HandlerBolt extends StormBolt(outputFields = List("handler")) with Logging
         }
       }
     })
+
+    //Copy logging information from sub jobs.
+    session.job.errors ++= subJob.errors
+    session.job.infos ++= subJob.infos
+    session.job.warns ++= subJob.warns
+
     tuple.ack()
   }
 

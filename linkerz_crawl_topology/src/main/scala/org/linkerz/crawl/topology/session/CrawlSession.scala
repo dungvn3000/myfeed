@@ -54,5 +54,6 @@ case class CrawlSession(id: UUID, job: CrawlJob) extends Logging {
     info(subJobCount + " links downloaded")
     info(currentDepth + " level")
     info(job.errors.length + " errors found")
+    job.errors.foreach(println)
   }
 }

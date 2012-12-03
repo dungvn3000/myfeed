@@ -24,7 +24,15 @@ class ParserBolt extends StormBolt(outputFields = List("parse")) {
   override def execute(tuple: Tuple) {
     tuple matchSeq {
       case Seq(Parse(sessionId, job)) => {
-        parser parse job
+        try {
+          if(job.result.exists(!_.isError)) parser parse job
+        } catch {
+          case ex: Exception => {
+            job.error(ex.getMessage, getClass.getName, job.webUrl, ex)
+            _collector reportError ex
+          }
+        }
+
         tuple emit MetaFetch(sessionId, job)
       }
     }

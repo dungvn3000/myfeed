@@ -32,15 +32,13 @@ class FetcherBolt extends StormBolt(outputFields = List("fetch")) with Logging {
           downloader download job
         } catch {
           case ex: Exception => {
-            error("Fetch error: " + job.webUrl.url)
+            job.error(ex.getMessage, getClass.getName, job.webUrl, ex)
             _collector reportError ex
           }
         }
-        if (job.result.exists(!_.isError)) {
-          tuple emit Parse(session, job)
-        }
-        tuple.ack()
+        tuple emit Parse(session, job)
       }
     }
+    tuple.ack()
   }
 }
