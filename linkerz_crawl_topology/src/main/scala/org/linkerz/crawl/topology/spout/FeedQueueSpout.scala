@@ -8,6 +8,7 @@ import org.linkerz.crawl.topology.job.CrawlJob
 import scala.{transient, Some}
 import grizzled.slf4j.Logging
 import org.linkerz.crawl.topology.event._
+import java.util.UUID
 
 /**
  * This spout is using for take a feeding job form the RabbitMq server.
@@ -55,8 +56,9 @@ class FeedQueueSpout(rabbitMqHost: String, prefetchCount: Int = 1, deliverTimeOu
           currentDelivery = Some(delivery)
           Marshal.load[AnyRef](delivery.getBody) match {
             case job: CrawlJob => {
-              //Using url for tuple id, assume url is unique for each jobs.
-              using msgId job.webUrl.url emit Start(job)
+              //Make sure the id is unique all the time.
+              val sessionId = UUID.randomUUID()
+              using msgId sessionId emit Start(sessionId, job)
             }
             case _ => //Ignore
           }
@@ -71,14 +73,14 @@ class FeedQueueSpout(rabbitMqHost: String, prefetchCount: Int = 1, deliverTimeOu
     currentDelivery.map {
       _delivery => channel.map(_.basicAck(_delivery.getEnvelope.getDeliveryTag, false))
     }
-    this emit Ack(msgId.toString)
+    this emit Ack(msgId.asInstanceOf[UUID])
   }
 
   override def fail(msgId: Any) {
     currentDelivery.map {
       _delivery => channel.map(_.basicReject(_delivery.getEnvelope.getDeliveryTag, true))
     }
-    this emit Fail(msgId.toString)
+    this emit Fail(msgId.asInstanceOf[UUID])
   }
 
   override def close() {

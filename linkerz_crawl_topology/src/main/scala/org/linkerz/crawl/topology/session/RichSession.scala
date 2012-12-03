@@ -1,5 +1,7 @@
 package org.linkerz.crawl.topology.session
 
+import java.util.UUID
+
 /**
  * The Class RichSession.
  *
@@ -14,14 +16,14 @@ class RichSession(sessions: List[CrawlSession]) {
    * @param sessionId
    * @return
    */
-  def ~>(sessionId: String) = sessions.find(_.id == sessionId)
+  def ~>(sessionId: UUID) = sessions.find(_.id == sessionId)
 
   /**
    * End a session and remove it form the list
    * @param sessionId
    * @return
    */
-  def end(sessionId: String) = sessions.filter(session => {
+  def end(sessionId: UUID) = sessions.filter(session => {
     if (session.id == sessionId) {
       session.endSession()
       false

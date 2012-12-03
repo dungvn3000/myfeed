@@ -8,6 +8,7 @@ import org.linkerz.crawl.topology.job.CrawlJob
 import org.linkerz.crawl.topology.model.WebUrl
 import java.util
 import grizzled.slf4j.Logging
+import util.UUID
 
 /**
  * The Class CrawlSession.
@@ -16,7 +17,7 @@ import grizzled.slf4j.Logging
  * @since 7/29/12, 1:06 AM
  *
  */
-case class CrawlSession(id: String, job: CrawlJob) extends Logging {
+case class CrawlSession(id: UUID, job: CrawlJob) extends Logging {
 
   var countUrl = 0
 

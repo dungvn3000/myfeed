@@ -30,17 +30,16 @@ class HandlerBolt extends StormBolt(outputFields = List("handler")) with Logging
 
   execute {
     implicit tuple => tuple matchSeq {
-      case Seq(Start(parentJob)) => {
+      case Seq(Start(sessionId, parentJob)) => {
         //New sessions.
-        val session = CrawlSession(parentJob.webUrl.url, parentJob)
+        val session = CrawlSession(sessionId, parentJob)
         sessions ::= session
         tuple emit Fetch(session.id, parentJob)
         tuple.ack()
       }
       case Seq(Handle(sessionId, subJob)) => sessions ~> sessionId map (session => handle(session, subJob)) getOrElse {
-        //TODO: Change to: "tuple fail" @dungvn3000
-        tuple.fail()
-        _collector reportError new Exception("Some thing goes worng, can't find session id for this job " + subJob.webUrl.url)
+        //When session id is none that mean this job is expired already, we will stop it.
+        info("Session is expired "+ subJob.webUrl.url)
       }
       case Seq(Ack(sessionId)) => sessions = sessions end sessionId
       case Seq(Fail(sessionId)) => sessions = sessions end sessionId
