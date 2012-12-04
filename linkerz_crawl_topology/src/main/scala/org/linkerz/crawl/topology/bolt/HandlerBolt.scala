@@ -16,6 +16,7 @@ import org.linkerz.crawl.topology.event.Fetch
 import org.apache.commons.lang.StringUtils
 import org.linkerz.crawl.topology.job.CrawlJob
 import java.util.UUID
+import org.linkerz.dao.LinkDao
 
 /**
  * The mission of this bolt will receive job from the feed spot and emit it to a fetcher. On the other hand this bolt
@@ -53,11 +54,6 @@ class HandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) w
     subJob.result.map(webPage => if (!webPage.isError) {
 
       session.fetchedUrls add subJob.webUrl
-
-      //Store result to the database.
-      //      if (usingDB && LinkDao.checkAndSave(webPage.asLink)) {
-      //        currentSession.urlStored += 1
-      //      }
 
       for (webUrl <- webPage.webUrls if (shouldCrawl(session, webUrl))) {
         if (subJob.depth > session.currentDepth) {
@@ -124,7 +120,9 @@ class HandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) w
       || (job.onlyCrawlInSameDomain && webUrl.domainName == session.domainName)) {
       //Make sure the url is not in the queue
       if (!session.queueUrls.contains(webUrl)) {
-        return true
+        if (LinkDao.findByUrl(webUrl.url).isEmpty) {
+          return true
+        }
       }
     }
 

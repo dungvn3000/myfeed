@@ -9,7 +9,7 @@ import org.linkerz.crawl.topology.job.CrawlJob
  * @since 11/30/12 3:49 AM
  *
  */
-sealed trait Event
+sealed trait Event extends Serializable
 
 //This event starting from the spout, using for start crawling an url.
 case class Start(job: CrawlJob) extends Event

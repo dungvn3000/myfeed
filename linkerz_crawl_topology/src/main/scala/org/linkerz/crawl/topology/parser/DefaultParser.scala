@@ -15,6 +15,7 @@ import org.apache.commons.validator.routines.UrlValidator
 import java.util
 import edu.uci.ics.crawler4j.parser.HtmlContentHandler
 import edu.uci.ics.crawler4j.url.URLCanonicalizer
+import org.apache.commons.lang.StringUtils
 
 /**
  * The Class DefaultParser.
@@ -50,6 +51,10 @@ class DefaultParser extends Parser {
       if (webPage.title == null) webPage.title = webUrl.url
 
       webPage.contentEncoding = metadata.get("Content-Encoding")
+      if (StringUtils.isBlank(webPage.contentEncoding)) {
+        //Default encoding
+        webPage.contentEncoding = "UTF-8"
+      }
 
       //Extract links in side a website
       val baseURL = htmlHandler.getBaseUrl

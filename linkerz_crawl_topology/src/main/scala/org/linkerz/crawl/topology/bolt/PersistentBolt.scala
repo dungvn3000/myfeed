@@ -3,6 +3,7 @@ package org.linkerz.crawl.topology.bolt
 import storm.scala.dsl.StormBolt
 import org.linkerz.crawl.topology.event.{Handle, Persistent}
 import java.util.UUID
+import org.linkerz.dao.LinkDao
 
 /**
  * This bolt is using for persistent data to the database server.
@@ -15,6 +16,9 @@ class PersistentBolt extends StormBolt(outputFields = List("sessionId", "event")
   execute {
     implicit tuple => tuple matchSeq {
       case Seq(sessionId: UUID, Persistent(job)) => {
+        job.result.map {
+          webPage => if (!webPage.isError) LinkDao.checkAndSave(webPage.asLink)
+        }
         tuple emit(sessionId, Handle(job))
       }
     }
