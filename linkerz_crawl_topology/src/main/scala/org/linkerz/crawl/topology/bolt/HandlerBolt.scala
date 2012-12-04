@@ -34,6 +34,7 @@ class HandlerBolt extends StormBolt(outputFields = List("handler")) with Logging
       case Seq(Start(sessionId, parentJob)) => {
         //New sessions.
         val session = CrawlSession(sessionId, parentJob)
+        session.queueUrls += parentJob.webUrl
         sessions ::= session
         tuple emit Fetch(session.id, parentJob)
         tuple.ack()
@@ -53,11 +54,11 @@ class HandlerBolt extends StormBolt(outputFields = List("handler")) with Logging
       session.fetchedUrls add subJob.webUrl
 
       //Store result to the database.
-//      if (usingDB && LinkDao.checkAndSave(webPage.asLink)) {
-//        currentSession.urlStored += 1
-//      }
+      //      if (usingDB && LinkDao.checkAndSave(webPage.asLink)) {
+      //        currentSession.urlStored += 1
+      //      }
 
-      val crawlJobs = for (webUrl <- webPage.webUrls if (shouldCrawl(session, webUrl))) yield {
+      for (webUrl <- webPage.webUrls if (shouldCrawl(session, webUrl))) {
         if (subJob.depth > session.currentDepth) {
           session.currentDepth = subJob.depth
         }
@@ -66,14 +67,10 @@ class HandlerBolt extends StormBolt(outputFields = List("handler")) with Logging
         session.subJobCount += 1
 
         //Store queue url.
-        session.queueUrls add subJob.webUrl
+        session.queueUrls add webUrl
 
-        new CrawlJob(webUrl, subJob)
+        tuple emit Fetch(session.id, new CrawlJob(webUrl, subJob))
       }
-
-      //Important Note: We don't emit a tuple when changing the session value, to make sure all session when emit have same values.
-      crawlJobs foreach (tuple emit Fetch(session.id, _))
-
     } else if (webPage.isRedirect) {
       val movedUrl = webPage.webUrl.movedToUrl
       if (StringUtils.isNotBlank(movedUrl)) {
@@ -124,12 +121,9 @@ class HandlerBolt extends StormBolt(outputFields = List("handler")) with Logging
     //Only crawl in same domain.
     if (!job.onlyCrawlInSameDomain
       || (job.onlyCrawlInSameDomain && webUrl.domainName == session.domainName)) {
-      //Make sure we not fetch a link what we did already.
-      if (!session.fetchedUrls.contains(webUrl)) {
-        //And make sure the url is not in the queue
-        if (!session.queueUrls.contains(webUrl)) {
-          return true
-        }
+      //Make sure the url is not in the queue
+      if (!session.queueUrls.contains(webUrl)) {
+        return true
       }
     }
 
