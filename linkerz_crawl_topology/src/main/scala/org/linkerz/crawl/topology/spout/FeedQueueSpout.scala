@@ -18,7 +18,8 @@ import java.util.UUID
  * @since 11/30/12 1:42 AM
  *
  */
-class FeedQueueSpout(rabbitMqHost: String, prefetchCount: Int = 1, deliverTimeOut: Int = 5000) extends StormSpout(outputFields = List("startWith")) with Logging {
+class FeedQueueSpout(rabbitMqHost: String, prefetchCount: Int = 1, deliverTimeOut: Int = 5000)
+  extends StormSpout(outputFields = List("sessionId", "event")) with Logging {
 
   private val queueName = "feedQueue"
 
@@ -58,7 +59,7 @@ class FeedQueueSpout(rabbitMqHost: String, prefetchCount: Int = 1, deliverTimeOu
             case job: CrawlJob => {
               //Make sure the id is unique all the time.
               val sessionId = UUID.randomUUID()
-              using msgId sessionId emit Start(sessionId, job)
+              using msgId sessionId emit(sessionId, Start(job))
             }
             case _ => //Ignore
           }
@@ -73,14 +74,14 @@ class FeedQueueSpout(rabbitMqHost: String, prefetchCount: Int = 1, deliverTimeOu
     currentDelivery.map {
       _delivery => channel.map(_.basicAck(_delivery.getEnvelope.getDeliveryTag, false))
     }
-    this emit Ack(msgId.asInstanceOf[UUID])
+    this emit(msgId.asInstanceOf[UUID], Ack)
   }
 
   override def fail(msgId: Any) {
     currentDelivery.map {
       _delivery => channel.map(_.basicReject(_delivery.getEnvelope.getDeliveryTag, true))
     }
-    this emit Fail(msgId.asInstanceOf[UUID])
+    this emit(msgId.asInstanceOf[UUID], Fail)
   }
 
   override def close() {

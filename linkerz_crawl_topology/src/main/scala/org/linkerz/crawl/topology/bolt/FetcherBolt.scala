@@ -1,12 +1,12 @@
 package org.linkerz.crawl.topology.bolt
 
 import storm.scala.dsl.StormBolt
-import backtype.storm.tuple.Tuple
 import org.linkerz.crawl.topology.event.{Parse, Fetch}
 import org.linkerz.crawl.topology.factory.DownloadFactory
 import org.linkerz.crawl.topology.downloader.Downloader
 import backtype.storm.utils.Utils
 import grizzled.slf4j.Logging
+import java.util.UUID
 
 /**
  * This bolt is simply download a url and emit it to a parser.
@@ -15,7 +15,7 @@ import grizzled.slf4j.Logging
  * @since 11/30/12 12:55 AM
  *
  */
-class FetcherBolt extends StormBolt(outputFields = List("fetch")) with Logging {
+class FetcherBolt extends StormBolt(outputFields = List("sessionId", "event")) with Logging {
 
   private var downloader: Downloader = _
 
@@ -23,9 +23,9 @@ class FetcherBolt extends StormBolt(outputFields = List("fetch")) with Logging {
     downloader = DownloadFactory.createDownloader()
   }
 
-  override def execute(tuple: Tuple) {
-    tuple matchSeq {
-      case Seq(Fetch(session, job)) => {
+  execute {
+    implicit tuple => tuple matchSeq {
+      case Seq(sessionId: UUID, Fetch(job)) => {
         try {
           //Delay time for each job.
           if (job.politenessDelay > 0 && job.parent.isDefined) Utils sleep job.politenessDelay
@@ -36,7 +36,7 @@ class FetcherBolt extends StormBolt(outputFields = List("fetch")) with Logging {
             _collector reportError ex
           }
         }
-        tuple emit Parse(session, job)
+        tuple emit(sessionId, Parse(job))
       }
     }
     tuple.ack()

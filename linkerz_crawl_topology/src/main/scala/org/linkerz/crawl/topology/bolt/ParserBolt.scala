@@ -1,10 +1,10 @@
 package org.linkerz.crawl.topology.bolt
 
 import storm.scala.dsl.StormBolt
-import backtype.storm.tuple.Tuple
 import org.linkerz.crawl.topology.event.{MetaFetch, Parse}
 import org.linkerz.crawl.topology.parser.Parser
 import org.linkerz.crawl.topology.factory.ParserFactory
+import java.util.UUID
 
 /**
  * This bolt will parse a web page.
@@ -13,7 +13,7 @@ import org.linkerz.crawl.topology.factory.ParserFactory
  * @since 11/30/12 1:00 AM
  *
  */
-class ParserBolt extends StormBolt(outputFields = List("parse")) {
+class ParserBolt extends StormBolt(outputFields = List("sessionId", "event")) {
 
   var parser: Parser = _
 
@@ -21,11 +21,11 @@ class ParserBolt extends StormBolt(outputFields = List("parse")) {
     parser = ParserFactory.createParser()
   }
 
-  override def execute(tuple: Tuple) {
-    tuple matchSeq {
-      case Seq(Parse(sessionId, job)) => {
+  execute {
+    implicit tuple => tuple matchSeq {
+      case Seq(sessionId: UUID, Parse(job)) => {
         try {
-          if(job.result.exists(!_.isError)) parser parse job
+          if (job.result.exists(!_.isError)) parser parse job
         } catch {
           case ex: Exception => {
             job.error(ex.getMessage, getClass.getName, job.webUrl, ex)
@@ -33,7 +33,7 @@ class ParserBolt extends StormBolt(outputFields = List("parse")) {
           }
         }
 
-        tuple emit MetaFetch(sessionId, job)
+        tuple emit(sessionId, MetaFetch(job))
       }
     }
     tuple.ack()
