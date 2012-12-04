@@ -4,7 +4,9 @@
 
 package org.linkerz.crawl.topology.factory
 
-import org.linkerz.crawl.topology.parser.DefaultParser
+import org.linkerz.dao.NewFeedDao
+import com.mongodb.casbah.commons.MongoDBObject
+import org.linkerz.crawl.topology.parser.{CustomParser, AutoParser}
 
 /**
  * The Class DefaultParserFactory.
@@ -15,5 +17,11 @@ import org.linkerz.crawl.topology.parser.DefaultParser
  */
 
 object ParserFactory {
-  def createParser() = new DefaultParser
+
+  lazy val feed = NewFeedDao.find(MongoDBObject("enable" -> true))
+  lazy val parsers = feed.map(CustomParser(_))
+
+  def createParser() = {
+    new AutoParser(parsers.toList)
+  }
 }
