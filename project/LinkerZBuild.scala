@@ -33,7 +33,7 @@ object LinkerZBuild extends Build {
   )
 
   lazy val linkerZ = Project("linkerz", file("."), settings = sharedSetting).aggregate(
-    linkerZCore, linkerZModel, linkerZJobQueue, linkerZCrawlerCore, linkerZCrawlerBot, linkerZRecommendation, linkerZLogger, linkerZCrawlTopology
+    linkerZCore, linkerZModel, linkerZRecommendation, linkerZLogger, linkerZCrawlTopology
   )
 
   lazy val linkerZCore = Project("linkerz_core", file("linkerz_core"), settings = sharedSetting).settings(
@@ -44,21 +44,9 @@ object LinkerZBuild extends Build {
     libraryDependencies ++= modelDependencies ++ testDependencies
   ).dependsOn(linkerZCore)
 
-  lazy val linkerZJobQueue = Project("linkerz_job_queue", file("linkerz_job_queue"), settings = sharedSetting).settings(
-    libraryDependencies ++= jobQueueDependencies ++ testDependencies
-  ).dependsOn(linkerZCore, linkerZModel)
-
-  lazy val linkerZCrawlerCore = Project("linkerz_crawler_core", file("linkerz_crawler_core"), settings = sharedSetting).settings(
-    libraryDependencies ++= crawlerCoreDependencies ++ testDependencies
-  ).dependsOn(linkerZCore, linkerZJobQueue, linkerZModel, linkerZLogger)
-
-  lazy val linkerZCrawlerBot = Project("linkerz_crawler_bot", file("linkerz_crawler_bot"), settings = sharedSetting).settings(
-    libraryDependencies ++= crawlerBotDependencies ++ testDependencies
-  ).dependsOn(linkerZCore, linkerZJobQueue, linkerZModel, linkerZCrawlerCore)
-
   lazy val linkerZRecommendation = Project("linkerz_recommendation", file("linkerz_recommendation"), settings = sharedSetting).settings(
     libraryDependencies ++= recommendationDependencies ++ testDependencies
-  ).dependsOn(linkerZCore, linkerZModel, linkerZJobQueue)
+  ).dependsOn(linkerZCore, linkerZModel)
 
   lazy val linkerZLogger = Project("linkerz_logger", file("linkerz_logger"), settings = sharedSetting).settings(
     libraryDependencies ++= loggerDependencies ++ testDependencies
@@ -68,7 +56,7 @@ object LinkerZBuild extends Build {
     jarName in assembly := "linkerz_crawl_topology.jar",
     libraryDependencies ++= stormDependencies ++ crawlerTopologyDependencies ++ testDependencies
   ).dependsOn(
-    linkerZCore, linkerZModel, linkerZJobQueue, linkerZLogger
+    linkerZCore, linkerZModel, linkerZLogger
   )
 
   val coreDependencies = Seq(
@@ -93,22 +81,6 @@ object LinkerZBuild extends Build {
     "com.novus" %% "salat" % "1.9.1"
   )
 
-  val jobQueueDependencies = Seq(
-    "com.rabbitmq" % "amqp-client" % "2.8.7",
-    "com.typesafe.akka" % "akka-actor" % "2.0.3",
-    "com.typesafe.akka" % "akka-remote" % "2.0.3",
-    "com.typesafe.akka" % "akka-kernel" % "2.0.3"
-  )
-
-  val crawlerCoreDependencies = Seq(
-    "org.jsoup" % "jsoup" % "1.7.1",
-    "commons-httpclient" % "commons-httpclient" % "3.1",
-    "org.apache.httpcomponents" % "httpclient" % "4.2.1",
-    "com.ning" % "async-http-client" % "1.7.7",
-    "org.apache.tika" % "tika-core" % "1.2",
-    "org.apache.tika" % "tika-parsers" % "1.2",
-    "net.coobird" % "thumbnailator" % "0.4.2"
-  )
 
   val crawlerTopologyDependencies = Seq(
     "org.jsoup" % "jsoup" % "1.7.1",
@@ -118,10 +90,10 @@ object LinkerZBuild extends Build {
     "org.apache.tika" % "tika-core" % "1.2",
     "org.apache.tika" % "tika-parsers" % "1.2",
     "net.coobird" % "thumbnailator" % "0.4.2",
-    "net.sf.trove4j" % "trove4j" % "3.0.3"
-  )
-
-  val crawlerBotDependencies = Seq(
+    "com.rabbitmq" % "amqp-client" % "2.8.7",
+    "com.typesafe.akka" % "akka-actor" % "2.0.3",
+    "com.typesafe.akka" % "akka-remote" % "2.0.3",
+    "com.typesafe.akka" % "akka-kernel" % "2.0.3"
   )
 
   val recommendationDependencies = Seq(

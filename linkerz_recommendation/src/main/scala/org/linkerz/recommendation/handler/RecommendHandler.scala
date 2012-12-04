@@ -1,8 +1,7 @@
 package org.linkerz.recommendation.handler
 
-import org.linkerz.job.queue.core.{Job, Handler}
 import org.linkerz.recommendation.job.RecommendJob
-import org.linkerz.model.{NewBox}
+import org.linkerz.model.NewBox
 import com.mongodb.casbah.commons.MongoDBObject
 import org.linkerz.recommendation.Recommendation
 import org.bson.types.ObjectId
@@ -16,9 +15,7 @@ import org.linkerz.dao.{UserDao, NewBoxDao, LinkDao}
  * @since 11/11/12 4:37 PM
  *
  */
-class RecommendHandler extends Handler[RecommendJob] with Logging {
-
-  def accept(job: Job) = job.isInstanceOf[RecommendJob]
+class RecommendHandler extends Logging {
 
   protected def doHandle(job: RecommendJob) {
     info("Doing recommendation")
