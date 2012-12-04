@@ -20,7 +20,6 @@ case class Link
   _id: ObjectId = new ObjectId,
 
   url: String,
-  content: Array[Byte],
   responseCode: Int,
 
   //Metadata

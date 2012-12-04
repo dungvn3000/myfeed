@@ -55,7 +55,6 @@ class WebPage extends Serializable {
    */
   def asLink = Link(
     url = webUrl.url,
-    content = content,
     title = title,
     text = text,
 //    description = description,
