@@ -19,8 +19,6 @@ import util.UUID
  */
 case class CrawlSession(id: UUID, job: CrawlJob) extends Logging {
 
-  var countUrl = 0
-
   /**
    * Store fetched urls list
    */
@@ -50,8 +48,7 @@ case class CrawlSession(id: UUID, job: CrawlJob) extends Logging {
 
   def endSession() {
     info("End session " + domainName + " " + jobTime + " ms")
-    info(countUrl + " links found")
-    info(subJobCount + " links downloaded")
+    info(fetchedUrls.size() + " links downloaded")
     info(currentDepth + " level")
     info(job.errors.length + " errors found")
     job.errors.foreach(println)

@@ -49,8 +49,8 @@ class HandlerBolt extends StormBolt(outputFields = List("handler")) with Logging
 
   private def handle(session: CrawlSession, subJob: CrawlJob)(implicit tuple: Tuple) {
     subJob.result.map(webPage => if (!webPage.isError) {
+
       session.fetchedUrls add subJob.webUrl
-      session.countUrl += webPage.webUrls.size
 
       //Store result to the database.
 //      if (usingDB && LinkDao.checkAndSave(webPage.asLink)) {
@@ -59,7 +59,7 @@ class HandlerBolt extends StormBolt(outputFields = List("handler")) with Logging
 
       val crawlJobs = for (webUrl <- webPage.webUrls if (shouldCrawl(session, webUrl))) yield {
         if (subJob.depth > session.currentDepth) {
-          session.currentDepth = subJob.depth + 1
+          session.currentDepth = subJob.depth
         }
 
         //Counting
@@ -99,11 +99,11 @@ class HandlerBolt extends StormBolt(outputFields = List("handler")) with Logging
     val job = session.job
 
     //Step 1: Checking whether go for the job or not
-    if (job.maxSubJob >= 0 && session.subJobCount >= job.maxSubJob) {
+    if (job.maxSubJob > 0 && session.subJobCount >= job.maxSubJob) {
       return false
     }
 
-    if (session.currentDepth > job.maxDepth && job.maxDepth > 0) {
+    if (session.currentDepth > job.maxDepth + 1 && job.maxDepth > 0) {
       return false
     }
 
