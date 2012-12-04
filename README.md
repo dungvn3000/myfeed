@@ -1,6 +1,6 @@
-LinkerZ
+VKetNoi
 =======
 
-LinkerZ.org
+vketnoi.com
 
-Searching without keywords.
+Cong thong tin danh cho nguoi Viet.
