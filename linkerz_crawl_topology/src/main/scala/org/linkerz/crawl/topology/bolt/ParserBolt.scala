@@ -15,7 +15,7 @@ import java.util.UUID
  */
 class ParserBolt extends StormBolt(outputFields = List("sessionId", "event")) {
 
-  var parser: Parser = _
+  private var parser: Parser = _
 
   setup {
     parser = ParserFactory.createParser()

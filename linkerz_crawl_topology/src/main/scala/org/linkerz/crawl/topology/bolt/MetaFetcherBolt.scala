@@ -4,6 +4,7 @@ import storm.scala.dsl.StormBolt
 import org.linkerz.crawl.topology.event.{Persistent, MetaFetch}
 import org.linkerz.crawl.topology.downloader.Downloader
 import java.util.UUID
+import org.linkerz.crawl.topology.factory.DownloadFactory
 
 /**
  * This bolt is using for download meta data relate to a url.
@@ -14,16 +15,23 @@ import java.util.UUID
  */
 class MetaFetcherBolt extends StormBolt(outputFields = List("sessionId", "event")) {
 
-  var downloader: Downloader = _
+  private var downloader: Downloader = _
 
   setup {
-    //    downloader = DownloadFactory.createImageDownloader()
+    downloader = DownloadFactory.createImageDownloader()
   }
 
   execute {
     implicit tuple => tuple matchSeq {
       case Seq(sessionId: UUID, MetaFetch(job)) => {
-        //        downloader download job
+        try {
+          downloader download job
+        } catch {
+          case ex: Exception => {
+            job.error(ex.getMessage, getClass.getName, job.webUrl, ex)
+            _collector reportError ex
+          }
+        }
         tuple emit(sessionId, Persistent(job))
       }
     }
