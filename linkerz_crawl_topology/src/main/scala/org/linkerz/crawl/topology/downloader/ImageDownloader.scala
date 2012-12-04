@@ -20,17 +20,17 @@ import org.apache.commons.httpclient.HttpStatus
  */
 class ImageDownloader(httpClient: AsyncHttpClient) extends Downloader {
   def download(crawlJob: CrawlJob) {
-    val webPage = crawlJob.result.get
-    val imgUrl = webPage.featureImageUrl
-
-    if (imgUrl.isDefined && StringUtils.isNotBlank(imgUrl.get)) {
-      val response = httpClient.prepareGet(imgUrl.get).execute().get()
-      if (response.getStatusCode == HttpStatus.SC_OK && response.getResponseBodyAsBytes.length > 0
-        && response.getContentType.contains("image")) {
-        val outputStream = new ByteArrayOutputStream()
-        Thumbnails.of(response.getResponseBodyAsStream)
-          .forceSize(160, 160).toOutputStream(outputStream)
-        webPage.featureImage = Some(outputStream.toByteArray)
+    crawlJob.result map {
+      webPage => val imgUrl = webPage.featureImageUrl
+      if (imgUrl.isDefined && StringUtils.isNotBlank(imgUrl.get)) {
+        val response = httpClient.prepareGet(imgUrl.get).execute().get()
+        if (response.getStatusCode == HttpStatus.SC_OK && response.getResponseBodyAsBytes.length > 0
+          && response.getContentType.contains("image")) {
+          val outputStream = new ByteArrayOutputStream()
+          Thumbnails.of(response.getResponseBodyAsStream)
+            .forceSize(160, 160).toOutputStream(outputStream)
+          webPage.featureImage = Some(outputStream.toByteArray)
+        }
       }
     }
   }

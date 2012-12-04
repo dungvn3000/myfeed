@@ -25,7 +25,7 @@ class MetaFetcherBolt extends StormBolt(outputFields = List("sessionId", "event"
     implicit tuple => tuple matchSeq {
       case Seq(sessionId: UUID, MetaFetch(job)) => {
         try {
-          downloader download job
+          if (job.result.exists(!_.isError)) downloader download job
         } catch {
           case ex: Exception => {
             job.error(ex.getMessage, getClass.getName, job.webUrl, ex)
