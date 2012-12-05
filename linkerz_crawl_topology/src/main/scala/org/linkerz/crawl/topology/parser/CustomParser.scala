@@ -13,6 +13,7 @@ import org.apache.commons.lang.StringUtils
 import edu.uci.ics.crawler4j.url.URLCanonicalizer
 import org.linkerz.model.NewFeed
 import org.linkerz.crawl.topology.job.CrawlJob
+import gumi.builders.UrlBuilder
 
 /**
  * The Class CustomParser.
@@ -108,7 +109,7 @@ case class CustomParser(data: NewFeed) extends DefaultParser with Logging {
 
     var imgSrc = ""
     if (img != null) {
-      imgSrc = img.attr("src")
+      imgSrc = UrlBuilder.fromString(img.attr("src")).toString
       if (StringUtils.isNotBlank(imgSrc)) {
         val url = URLCanonicalizer.getCanonicalURL(imgSrc, webPage.webUrl.baseUrl)
         if (StringUtils.isNotBlank(url)) webPage.featureImageUrl = Some(url)

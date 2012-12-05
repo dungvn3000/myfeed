@@ -6,8 +6,8 @@ package org.linkerz.crawl.topology.model
 
 import org.apache.http.client.utils.URIUtils
 import java.net.URI
-import org.linkerz.crawl.topology.util.UrlUtils
 import grizzled.slf4j.Logging
+import gumi.builders.UrlBuilder
 
 /**
  * The Class WebUrl.
@@ -19,6 +19,8 @@ import grizzled.slf4j.Logging
 
 class WebUrl(_url: String) extends Logging with Serializable {
 
+  val urlBuilder = UrlBuilder.fromString(_url)
+
   /**
    * Redirect url. in case response code is 301 and 302
    */
@@ -26,9 +28,9 @@ class WebUrl(_url: String) extends Logging with Serializable {
 
   def domainName = httpHost.getHostName
 
-  def baseUrl = httpHost.toURI.toString
+  def baseUrl = httpHost.toURI
 
-  def url = UrlUtils.normalize(_url)
+  def url = urlBuilder.toString
 
   def httpHost = URIUtils.extractHost(new URI(url))
 
