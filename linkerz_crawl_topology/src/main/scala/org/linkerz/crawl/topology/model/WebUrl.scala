@@ -19,6 +19,7 @@ import gumi.builders.UrlBuilder
 
 class WebUrl(_url: String) extends Logging with Serializable {
 
+  @transient
   val urlBuilder = UrlBuilder.fromString(_url)
 
   /**
