@@ -33,7 +33,7 @@ object LinkerZBuild extends Build {
   )
 
   lazy val linkerZ = Project("linkerz", file("."), settings = sharedSetting).aggregate(
-    linkerZCore, linkerZModel, linkerZRecommendation, linkerZLogger, linkerZCrawlTopology
+    linkerZCore, linkerZModel, linkerZRecommendation, linkerZLogger, scalaStorm, linkerZCrawlTopology
   )
 
   lazy val linkerZCore = Project("linkerz_core", file("linkerz_core"), settings = sharedSetting).settings(
@@ -56,8 +56,12 @@ object LinkerZBuild extends Build {
     jarName in assembly := "linkerz_crawl_topology.jar",
     libraryDependencies ++= stormDependencies ++ crawlerTopologyDependencies ++ testDependencies
   ).dependsOn(
-    linkerZCore, linkerZModel, linkerZLogger
+    linkerZCore, linkerZModel, linkerZLogger, scalaStorm
   )
+
+  lazy val scalaStorm = Project("scala-storm", file("scala-storm"), settings = sharedSetting).settings {
+    libraryDependencies ++= stormDependencies ++ testDependencies
+  }
 
   val coreDependencies = Seq(
     "org.slf4j" % "slf4j-simple" % "1.6.6",
@@ -107,7 +111,6 @@ object LinkerZBuild extends Build {
   )
 
   val stormDependencies = Seq(
-    "com.dc" %% "scala-storm" % "0.2.2-SNAPSHOT",
     "storm" % "storm" % "0.8.1" % "provided"
   )
 }
