@@ -33,7 +33,7 @@ object LinkerZBuild extends Build {
   )
 
   lazy val linkerZ = Project("linkerz", file("."), settings = sharedSetting).aggregate(
-    linkerZCore, linkerZModel, linkerZRecommendation, linkerZLogger, scalaStorm, linkerZCrawlTopology
+    linkerZCore, linkerZModel, linkerZRecommendation, linkerZLogger, scalaStorm, urlBuilder, linkerZCrawlTopology
   )
 
   lazy val linkerZCore = Project("linkerz_core", file("linkerz_core"), settings = sharedSetting).settings(
@@ -56,11 +56,15 @@ object LinkerZBuild extends Build {
     jarName in assembly := "linkerz_crawl_topology.jar",
     libraryDependencies ++= stormDependencies ++ crawlerTopologyDependencies ++ testDependencies
   ).dependsOn(
-    linkerZCore, linkerZModel, linkerZLogger, scalaStorm
+    linkerZCore, linkerZModel, linkerZLogger, scalaStorm, urlBuilder
   )
 
   lazy val scalaStorm = Project("scala-storm", file("scala-storm"), settings = sharedSetting).settings {
     libraryDependencies ++= stormDependencies ++ testDependencies
+  }
+
+  lazy val urlBuilder = Project("url-builder", file("url-builder"), settings = sharedSetting).settings {
+    libraryDependencies ++= testDependencies
   }
 
   val coreDependencies = Seq(
@@ -85,7 +89,6 @@ object LinkerZBuild extends Build {
     "com.novus" %% "salat" % "1.9.1"
   )
 
-
   val crawlerTopologyDependencies = Seq(
     "org.jsoup" % "jsoup" % "1.7.1",
     "commons-httpclient" % "commons-httpclient" % "3.1",
@@ -97,8 +100,7 @@ object LinkerZBuild extends Build {
     "com.rabbitmq" % "amqp-client" % "2.8.7",
     "com.typesafe.akka" % "akka-actor" % "2.0.3",
     "com.typesafe.akka" % "akka-remote" % "2.0.3",
-    "com.typesafe.akka" % "akka-kernel" % "2.0.3",
-    "gumi" % "builders" % "1.1"
+    "com.typesafe.akka" % "akka-kernel" % "2.0.3"
   )
 
   val recommendationDependencies = Seq(
