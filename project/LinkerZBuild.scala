@@ -59,11 +59,11 @@ object LinkerZBuild extends Build {
     linkerZCore, linkerZModel, linkerZLogger, scalaStorm, urlBuilder
   )
 
-  lazy val scalaStorm = Project("scala-storm", file("scala-storm"), settings = sharedSetting).settings {
+  lazy val scalaStorm = Project("scala_storm", file("scala_storm"), settings = sharedSetting).settings {
     libraryDependencies ++= stormDependencies ++ testDependencies
   }
 
-  lazy val urlBuilder = Project("url-builder", file("url-builder"), settings = sharedSetting).settings {
+  lazy val urlBuilder = Project("url_builder", file("url_builder"), settings = sharedSetting).settings {
     libraryDependencies ++= testDependencies
   }
 
@@ -97,10 +97,7 @@ object LinkerZBuild extends Build {
     "org.apache.tika" % "tika-core" % "1.2",
     "org.apache.tika" % "tika-parsers" % "1.2",
     "net.coobird" % "thumbnailator" % "0.4.2",
-    "com.rabbitmq" % "amqp-client" % "2.8.7",
-    "com.typesafe.akka" % "akka-actor" % "2.0.3",
-    "com.typesafe.akka" % "akka-remote" % "2.0.3",
-    "com.typesafe.akka" % "akka-kernel" % "2.0.3"
+    "com.rabbitmq" % "amqp-client" % "2.8.7"
   )
 
   val recommendationDependencies = Seq(
