@@ -22,22 +22,31 @@ trait DBLogger {
     ))
   }
 
-  def storeError(msg: String, url: String, t: => Throwable, category: LogCategory.Value) {
+  def storeError(msg: String, url: String, category: LogCategory.Value) {
+    LoggingDao.save(Logging(
+      message = msg,
+      className = clazz.getName,
+      category = category.toString,
+      url = Some(url)
+    ))
+  }
+
+  def storeError(msg: String, url: String, exception: Throwable, category: LogCategory.Value) {
     LoggingDao.save(Logging(
       message = msg,
       className = clazz.getName,
       category = category.toString,
       url = Some(url),
-      exceptionClass = Some(t.getClass.getName)
+      exceptionClass = Some(exception.getClass.getName)
     ))
   }
 
-  def storeError(msg: String, t: => Throwable, category: LogCategory.Value) {
+  def storeError(msg: String, exception: Throwable, category: LogCategory.Value) {
     LoggingDao.save(Logging(
       message = msg,
       className = clazz.getName,
       category = category.toString,
-      exceptionClass = Some(t.getClass.getName)
+      exceptionClass = Some(exception.getClass.getName)
     ))
   }
 
