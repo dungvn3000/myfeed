@@ -4,6 +4,7 @@ import org.scalatest.FunSuite
 import com.mongodb.casbah.commons.MongoDBObject
 import org.junit.Assert
 import org.linkerz.dao.LoggingDao
+import org.linkerz.model.LogCategory
 
 /**
  * The Class DBLoggerSuite.
@@ -15,8 +16,8 @@ import org.linkerz.dao.LoggingDao
 class DBLoggerSuite extends FunSuite with DBLogger {
 
   test("store an error into the database") {
-    storeError("test error1")
-    storeError("test error1", "example.com", new Exception)
+    storeError("test error1", LogCategory.System)
+    storeError("test error1", "example.com", new Exception, LogCategory.TestCase)
 
     Assert.assertEquals(false, LoggingDao.find(MongoDBObject("message" -> "test error1")).isEmpty)
     LoggingDao.remove(MongoDBObject("message" -> "test error1"))

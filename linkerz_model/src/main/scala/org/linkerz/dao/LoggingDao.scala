@@ -1,8 +1,8 @@
 package org.linkerz.dao
 
 import com.novus.salat.dao.SalatDAO
-import org.linkerz.model.{Logging, User}
-import org.bson.types.ObjectId
+import com.mongodb.casbah.Imports._
+import org.linkerz.model.Logging
 
 /**
  * The Class LoggingDao.
@@ -11,4 +11,8 @@ import org.bson.types.ObjectId
  * @since 11/22/12 1:07 PM
  *
  */
-object LoggingDao extends SalatDAO[Logging, ObjectId](collection = mongo("logging"))
+class LoggingDao(override val collection: MongoCollection) extends SalatDAO[Logging, ObjectId](collection) {
+
+}
+
+object LoggingDao extends LoggingDao(mongo("logging"))

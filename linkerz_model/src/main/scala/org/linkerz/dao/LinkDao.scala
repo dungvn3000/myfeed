@@ -1,9 +1,9 @@
 package org.linkerz.dao
 
 import com.novus.salat.dao.SalatDAO
-import org.linkerz.model.{Link, User}
-import org.bson.types.ObjectId
 import com.mongodb.casbah.commons.MongoDBObject
+import com.mongodb.casbah.Imports._
+import org.linkerz.model.Link
 
 /**
  * The Class LinkDao.
@@ -12,7 +12,7 @@ import com.mongodb.casbah.commons.MongoDBObject
  * @since 11/22/12 1:07 PM
  *
  */
-object LinkDao extends SalatDAO[Link, ObjectId](collection = mongo("link")) {
+class LinkDao(override val collection: MongoCollection) extends SalatDAO[Link, ObjectId](collection) {
 
   def findByUrl(url: String) = findOne(MongoDBObject("url" -> url))
 
@@ -23,4 +23,8 @@ object LinkDao extends SalatDAO[Link, ObjectId](collection = mongo("link")) {
       true
     } else false
   }
+}
+
+object LinkDao extends LinkDao(mongo("link")) {
+
 }

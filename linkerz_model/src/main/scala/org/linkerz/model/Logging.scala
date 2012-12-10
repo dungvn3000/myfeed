@@ -2,7 +2,6 @@ package org.linkerz.model
 
 import org.bson.types.ObjectId
 import java.util.Date
-import com.novus.salat.dao.SalatDAO
 
 /**
  * The Class Logging.
@@ -17,13 +16,20 @@ case class Logging
   message: String,
   className: String,
   exceptionClass: Option[String] = None,
-  logType: String,
+  logType: String = LogType.Error.toString,
+  category: String = LogCategory.System.toString,
   url: Option[String] = None,
   createDate: Date = new Date
   ) {
-
   def id = _id.toString
-
 }
 
+object LogCategory extends Enumeration("testcase", "crawling", "system") {
+  type LogCategory = Value
+  val TestCase, Crawling, System = Value
+}
 
+object LogType extends Enumeration("error", "info", "warn") {
+  type LogType = Value
+  val Error, Warn, Info = Value
+}

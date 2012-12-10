@@ -1,8 +1,8 @@
 package org.linkerz.dao
 
 import com.novus.salat.dao.SalatDAO
-import org.linkerz.model.{NewFeed, User}
-import org.bson.types.ObjectId
+import com.mongodb.casbah.Imports._
+import org.linkerz.model.NewFeed
 
 /**
  * The Class NewFeedDao.
@@ -11,6 +11,9 @@ import org.bson.types.ObjectId
  * @since 11/22/12 1:07 PM
  *
  */
-object NewFeedDao extends SalatDAO[NewFeed, ObjectId](collection = mongo("newFeed")) {
+class NewFeedDao(override val collection: MongoCollection) extends SalatDAO[NewFeed, ObjectId](collection) {
 
 }
+
+
+object NewFeedDao extends NewFeedDao(mongo("newfeed"))

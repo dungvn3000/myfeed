@@ -1,10 +1,11 @@
 package org.linkerz.dao
 
 import com.novus.salat.dao.SalatDAO
-import org.linkerz.model.{Link, NewBox, User}
-import org.bson.types.ObjectId
 import com.mongodb.casbah.commons.MongoDBObject
 import collection.mutable.ListBuffer
+import com.mongodb.casbah.Imports._
+import org.linkerz.model.Link
+import org.linkerz.model.NewBox
 
 /**
  * The Class NewBoxDao.
@@ -13,7 +14,7 @@ import collection.mutable.ListBuffer
  * @since 11/22/12 1:07 PM
  *
  */
-object NewBoxDao extends SalatDAO[NewBox, ObjectId](collection = mongo("newBox")) {
+class NewBoxDao(override val collection: MongoCollection) extends SalatDAO[NewBox, ObjectId](collection) {
 
   def findByUserId(userId: ObjectId): List[Link] = {
     val newBox = find(MongoDBObject("userId" -> userId)).toList
@@ -36,3 +37,5 @@ object NewBoxDao extends SalatDAO[NewBox, ObjectId](collection = mongo("newBox")
   }
 
 }
+
+object NewBoxDao extends NewBoxDao(mongo("newbox"))
