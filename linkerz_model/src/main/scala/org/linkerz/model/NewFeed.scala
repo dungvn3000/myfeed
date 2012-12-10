@@ -4,9 +4,7 @@
 
 package org.linkerz.model
 
-import java.util
 import org.bson.types.ObjectId
-import com.novus.salat.dao.SalatDAO
 
 /**
  * The Class Feeds.
@@ -20,7 +18,6 @@ case class NewFeed
 (
   _id: ObjectId = new ObjectId,
 
-  name: String,
   group: String,
   url: String,
   enable: Boolean,
