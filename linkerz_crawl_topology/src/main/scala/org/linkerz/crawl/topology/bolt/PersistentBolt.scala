@@ -4,6 +4,7 @@ import storm.scala.dsl.StormBolt
 import org.linkerz.crawl.topology.event.{Handle, Persistent}
 import java.util.UUID
 import org.linkerz.dao.{LoggingDao, LinkDao}
+import java.util.concurrent.TimeoutException
 
 /**
  * This bolt is using for persistent data to the database server.
@@ -21,7 +22,11 @@ class PersistentBolt extends StormBolt(outputFields = List("sessionId", "event")
         }
 
         //Save error for each job.
-        LoggingDao.insert(job.errors)
+        //We will not save TimeOutException, because it so common.
+        val errors = job.errors.filter {
+          error => !(error.exceptionClass.isDefined && error.exceptionClass.get == classOf[TimeoutException].getName)
+        }
+        LoggingDao.insert(errors)
 //        LoggingDao.insert(job.infos)
         LoggingDao.insert(job.warns)
 
