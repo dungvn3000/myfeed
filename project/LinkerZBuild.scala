@@ -20,18 +20,6 @@ object LinkerZBuild extends Build {
     )
   )
 
-  val topologySettings = assemblySettings ++ Seq(
-    excludedJars in assembly <<= (fullClasspath in assembly) map {
-      _.filter(key => List("scala-compiler.jar").contains(key.data.getName))
-    },
-    mergeStrategy in assembly <<= (mergeStrategy in assembly) {
-      (old) => {
-        case "overview.html" => MergeStrategy.discard
-        case x => old(x)
-      }
-    }
-  )
-
   lazy val linkerZ = Project("linkerz", file("."), settings = sharedSetting).aggregate(
     linkerZCore, linkerZModel, linkerZRecommendation, linkerZLogger, scalaStorm, urlBuilder, linkerZCrawlTopology
   )
@@ -52,7 +40,7 @@ object LinkerZBuild extends Build {
     libraryDependencies ++= loggerDependencies ++ testDependencies
   ).dependsOn(linkerZCore, linkerZModel)
 
-  lazy val linkerZCrawlTopology = Project("linkerz_crawl_topology", file("linkerz_crawl_topology"), settings = sharedSetting ++ topologySettings).settings(
+  lazy val linkerZCrawlTopology = Project("linkerz_crawl_topology", file("linkerz_crawl_topology"), settings = sharedSetting).settings(
     jarName in assembly := "linkerz_crawl_topology.jar",
     libraryDependencies ++= stormDependencies ++ crawlerTopologyDependencies ++ testDependencies
   ).dependsOn(
