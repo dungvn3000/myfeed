@@ -13,7 +13,7 @@ import CrawlTopology._
 object Main extends App {
 
   val conf = new Config()
-  conf setDebug true
+  conf setDebug false
   conf put (Config.NIMBUS_HOST, "192.168.1.100")
   conf setNumWorkers 8
 
