@@ -17,12 +17,12 @@ class PersistentBolt extends StormBolt(outputFields = List("sessionId", "event")
     implicit tuple => tuple matchSeq {
       case Seq(sessionId: UUID, Persistent(job)) => {
         job.result.map {
-          webPage => if (!webPage.isError) LinkDao.checkAndSave(webPage.asLink)
+          webPage => if (!webPage.isError && webPage.parsed) LinkDao.checkAndSave(webPage.asLink)
         }
 
         //Save error for each job.
         LoggingDao.insert(job.errors)
-        LoggingDao.insert(job.infos)
+//        LoggingDao.insert(job.infos)
         LoggingDao.insert(job.warns)
 
         tuple emit(sessionId, Handle(job))

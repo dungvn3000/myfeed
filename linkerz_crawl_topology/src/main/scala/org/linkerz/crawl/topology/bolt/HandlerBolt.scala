@@ -53,12 +53,14 @@ class HandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) w
   private def handle(session: CrawlSession, subJob: CrawlJob)(implicit tuple: Tuple) {
     subJob.result.map(webPage => if (!webPage.isError) {
 
+      //Store fetched urls only for debugging. TODO: It might remove in future for better performance @dungvn3000
       session.fetchedUrls add subJob.webUrl
 
+      if (subJob.depth > session.currentDepth) {
+        session.currentDepth = subJob.depth
+      }
+
       for (webUrl <- webPage.webUrls if (shouldCrawl(session, webUrl))) {
-        if (subJob.depth > session.currentDepth) {
-          session.currentDepth = subJob.depth
-        }
 
         //Counting
         session.subJobCount += 1
@@ -97,7 +99,7 @@ class HandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) w
       return false
     }
 
-    if (session.currentDepth > job.maxDepth + 1 && job.maxDepth > 0) {
+    if (session.currentDepth >= job.maxDepth && job.maxDepth > 0) {
       return false
     }
 

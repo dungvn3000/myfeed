@@ -3,7 +3,7 @@ package org.linkerz.crawl.topology.session
 import java.util.UUID
 
 /**
- * The Class RichSession.
+ * This class is a session wrapper using for adding more functional for a session list.
  *
  * @author Nguyen Duc Dung
  * @since 12/3/12 1:16 PM

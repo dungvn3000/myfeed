@@ -15,7 +15,7 @@ import org.linkerz.crawl.topology.job.CrawlJob
  *
  */
 
-class AutoDetectParser(plugins: List[CustomParser]) extends Parser {
+class AutoDetectParser(parsers: List[CustomParser]) extends Parser {
 
   val defaultParser = new DefaultParser
 
@@ -25,7 +25,7 @@ class AutoDetectParser(plugins: List[CustomParser]) extends Parser {
    * @param crawlJob
    */
   def parse(crawlJob: CrawlJob) {
-    plugins.foreach(plugin => {
+    parsers.foreach(plugin => {
       if (plugin.isMatch(crawlJob.webUrl.url)) {
         plugin.parse(crawlJob)
         return
