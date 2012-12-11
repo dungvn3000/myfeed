@@ -15,7 +15,7 @@ object Main extends App {
   val conf = new Config()
   conf setDebug true
   conf put (Config.NIMBUS_HOST, "192.168.1.100")
-  conf setNumWorkers 10
+  conf setNumWorkers 8
 
   StormSubmitter.submitTopology("crawling", conf, topology)
 }
