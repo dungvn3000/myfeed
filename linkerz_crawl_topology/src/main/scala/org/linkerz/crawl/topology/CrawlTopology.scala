@@ -21,8 +21,8 @@ object CrawlTopology extends Serializable {
     builder.setBolt("handler", new HandlerBolt, 2).
       fieldsGrouping("feedQueue", new Fields("sessionId")).fieldsGrouping("persistent", new Fields("sessionId"))
     builder.setBolt("fetcher", new FetcherBolt, 4).shuffleGrouping("handler")
-    builder.setBolt("parser", new ParserBolt, 4).shuffleGrouping("fetcher")
-    builder.setBolt("metaFetcher", new MetaFetcherBolt, 4).shuffleGrouping("parser")
+    builder.setBolt("parser", new ParserBolt, 2).shuffleGrouping("fetcher")
+    builder.setBolt("metaFetcher", new MetaFetcherBolt, 2).shuffleGrouping("parser")
     builder.setBolt("persistent", new PersistentBolt, 2).shuffleGrouping("metaFetcher")
     builder.createTopology()
   }
