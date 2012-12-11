@@ -16,6 +16,7 @@ case class Logging
   message: String,
   className: String,
   exceptionClass: Option[String] = None,
+  stackTrace: Option[String] = None,
   logType: String = LogType.Error.toString,
   category: String = LogCategory.System.toString,
   url: Option[String] = None,

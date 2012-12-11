@@ -37,7 +37,8 @@ trait DBLogger {
       className = clazz.getName,
       category = category.toString,
       url = Some(url),
-      exceptionClass = Some(exception.getClass.getName)
+      exceptionClass = Some(exception.getClass.getName),
+      stackTrace = Some(exception.getStackTraceString)
     ))
   }
 
@@ -46,7 +47,8 @@ trait DBLogger {
       message = msg,
       className = clazz.getName,
       category = category.toString,
-      exceptionClass = Some(exception.getClass.getName)
+      exceptionClass = Some(exception.getClass.getName),
+      stackTrace = Some(exception.getStackTraceString)
     ))
   }
 

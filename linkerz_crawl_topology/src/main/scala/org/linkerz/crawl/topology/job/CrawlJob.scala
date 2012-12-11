@@ -153,6 +153,7 @@ case class CrawlJob(webUrl: WebUrl) {
       message = msg,
       className = className,
       exceptionClass = Some(ex.getClass.getName),
+      stackTrace = Some(ex.getStackTraceString),
       url = Some(webUrl.url),
       logType = LogType.Error.toString,
       category = LogCategory.Crawling.toString
@@ -208,6 +209,7 @@ case class CrawlJob(webUrl: WebUrl) {
       message = msg,
       className = className,
       exceptionClass = Some(ex.getClass.getName),
+      stackTrace = Some(ex.getStackTraceString),
       logType = LogType.Error.toString,
       category = LogCategory.Crawling.toString
     )
