@@ -20,7 +20,6 @@ class MainFunSuite extends FunSuite {
 
     val conf = new Config
     conf setDebug false
-    conf setNumWorkers 10
     //Set time out for an crawl job is fifty minutes
     conf setMessageTimeoutSecs 60 * 15
 
