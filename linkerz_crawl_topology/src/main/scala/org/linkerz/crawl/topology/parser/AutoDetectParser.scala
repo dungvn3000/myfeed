@@ -15,7 +15,7 @@ import org.linkerz.crawl.topology.job.CrawlJob
  *
  */
 
-class AutoParser(plugins: List[CustomParser]) extends Parser {
+class AutoDetectParser(plugins: List[CustomParser]) extends Parser {
 
   val defaultParser = new DefaultParser
 
