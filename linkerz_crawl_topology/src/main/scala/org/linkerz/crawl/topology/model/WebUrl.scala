@@ -19,8 +19,7 @@ import gumi.builders.UrlBuilder
 
 class WebUrl(_url: String) extends Logging with Serializable {
 
-  @transient
-  val urlBuilder = UrlBuilder.fromString(_url)
+  def urlBuilder = UrlBuilder.fromString(_url)
 
   /**
    * Redirect url. in case response code is 301 and 302
