@@ -18,10 +18,10 @@ import org.linkerz.crawl.topology.parser.{CustomParser, AutoDetectParser}
 
 object ParserFactory {
 
-  lazy val feed = NewFeedDao.find(MongoDBObject("enable" -> true))
-  lazy val parsers = feed.map(CustomParser(_))
+  val feed = NewFeedDao.find(MongoDBObject("enable" -> true)).toList
+  val parsers = feed.map(CustomParser(_))
 
   def createParser() = {
-    new AutoDetectParser(parsers.toList)
+    new AutoDetectParser(parsers)
   }
 }
