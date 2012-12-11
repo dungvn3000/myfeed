@@ -24,7 +24,7 @@ class PersistentBolt extends StormBolt(outputFields = List("sessionId", "event")
         //Save error for each job.
         //We will not save TimeOutException, because it so common.
         val errors = job.errors.filter {
-          error => !(error.exceptionClass.isDefined && error.exceptionClass.get == classOf[TimeoutException].getName)
+          error => !error.message.contains(classOf[TimeoutException].getName)
         }
         LoggingDao.insert(errors)
 //        LoggingDao.insert(job.infos)
