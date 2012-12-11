@@ -7,7 +7,7 @@ package org.linkerz.crawl.topology.job
 import org.linkerz.crawl.topology.model.{WebPage, WebUrl}
 import scala.Some
 import java.util.regex.Pattern
-import org.linkerz.model.{NewFeed, Logging}
+import org.linkerz.model.{LogCategory, LogType, NewFeed, Logging}
 import collection.mutable.ListBuffer
 
 /**
@@ -133,7 +133,8 @@ case class CrawlJob(webUrl: WebUrl) {
       message = msg,
       className = className,
       url = Some(webUrl.url),
-      logType = "info"
+      logType = LogType.Info.toString,
+      category = LogCategory.Crawling.toString
     )
   }
 
@@ -142,7 +143,8 @@ case class CrawlJob(webUrl: WebUrl) {
       message = msg,
       className = className,
       url = Some(webUrl.url),
-      logType = "error"
+      logType = LogType.Error.toString,
+      category = LogCategory.Crawling.toString
     )
   }
 
@@ -152,7 +154,8 @@ case class CrawlJob(webUrl: WebUrl) {
       className = className,
       exceptionClass = Some(ex.getClass.getName),
       url = Some(webUrl.url),
-      logType = "error"
+      logType = LogType.Error.toString,
+      category = LogCategory.Crawling.toString
     )
   }
 
@@ -164,7 +167,8 @@ case class CrawlJob(webUrl: WebUrl) {
     _warns += Logging(
       message = msg,
       className = className,
-      logType = "warn"
+      logType = LogType.Warn.toString,
+      category = LogCategory.Crawling.toString
     )
   }
 
@@ -176,7 +180,8 @@ case class CrawlJob(webUrl: WebUrl) {
     _infos += Logging(
       message = msg,
       className = className,
-      logType = "info"
+      logType = LogType.Info.toString,
+      category = LogCategory.Crawling.toString
     )
   }
 
@@ -188,7 +193,8 @@ case class CrawlJob(webUrl: WebUrl) {
     _errors += Logging(
       message = msg,
       className = className,
-      logType = "error"
+      logType = LogType.Error.toString,
+      category = LogCategory.Crawling.toString
     )
   }
 
@@ -202,7 +208,8 @@ case class CrawlJob(webUrl: WebUrl) {
       message = msg,
       className = className,
       exceptionClass = Some(ex.getClass.getName),
-      logType = "error"
+      logType = LogType.Error.toString,
+      category = LogCategory.Crawling.toString
     )
   }
 }
