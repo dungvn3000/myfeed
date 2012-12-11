@@ -25,7 +25,8 @@ class MainFunSuite extends FunSuite {
 
     localCluster.submitTopology("crawler", conf, topology)
 
-    Utils sleep 1000 * 60 * 30
+    //One day.
+    Utils sleep 1000 * 60 * 60 * 24
 
     localCluster.shutdown()
   }
