@@ -103,7 +103,7 @@ class HandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) w
       return false
     }
 
-    if (job.filterPattern.matcher(webUrl.url).matches()) return false
+    if (job.filterPattern.matches(webUrl.url)) return false
 
     //Only crawl the url is match with url regex
     if (job.urlRegex.isDefined && !SimpleRegexMatcher.matcher(webUrl.url, job.urlRegex.get)) {

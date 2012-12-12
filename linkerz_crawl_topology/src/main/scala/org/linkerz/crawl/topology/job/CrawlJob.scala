@@ -27,11 +27,7 @@ case class CrawlJob(webUrl: WebUrl) {
   var onlyCrawlInSameDomain: Boolean = true
 
   //File Filter
-  var filter = ".*(\\.(css|js|bmp|gif|jpe?g" + "|png|tiff?|mid|mp2|mp3|mp4" +
-    "|wav|avi|mov|mpeg|ram|m4v|pdf" + "|rm|smil|wmv|swf|wma|zip|rar|gz))$"
-
-
-  def filterPattern = Pattern.compile(filter)
+  var filterPattern = ".*(\\.(css|js|bmp|gif|jpe?g|png|tiff?|mid|mp2|mp3|mp4|wav|avi|mov|mpeg|ram|m4v|pdf|exe|msi|jar|flv|doc|docx|xls|xlsx|ppt|pptx|rm|smil|wmv|swf|wma|zip|rar|gz))$".r
 
   /**
    * Only crawl the url match with this regex.
@@ -44,7 +40,7 @@ case class CrawlJob(webUrl: WebUrl) {
   var excludeUrl: List[String] = Nil
 
   /**
-   * Max depth for a crawl job, default is umlimted.
+   * Max depth for a crawl job, default is unlimited.
    */
   var maxDepth: Int = -1
 
