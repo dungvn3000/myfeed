@@ -27,7 +27,7 @@ case class CrawlJob(webUrl: WebUrl) {
   var onlyCrawlInSameDomain: Boolean = true
 
   //File Filter
-  var filterPattern = ".*(\\.(css|js|bmp|gif|jpe?g|png|tiff?|mid|mp2|mp3|mp4|wav|avi|mov|mpeg|ram|m4v|pdf|exe|msi|jar|flv|doc|docx|xls|xlsx|ppt|pptx|rm|smil|wmv|swf|wma|zip|rar|gz))$".r
+  val filterPattern = ".*(\\.(css|js|bmp|gif|jpe?g|png|tiff?|mid|mp2|mp3|mp4|wav|avi|mov|mpeg|ram|m4v|pdf|exe|msi|jar|flv|doc|docx|xls|xlsx|ppt|pptx|rm|smil|wmv|swf|wma|zip|rar|gz))$".r.pattern
 
   /**
    * Only crawl the url match with this regex.
