@@ -2,6 +2,7 @@ package org.linkerz.crawl.topology
 
 import backtype.storm.{StormSubmitter, Config}
 import CrawlTopology._
+import org.linkerz.core.conf.AppConfig
 
 /**
  * The Class Main.
@@ -14,7 +15,7 @@ object Main extends App {
 
   val conf = new Config()
   conf setDebug false
-  conf put (Config.NIMBUS_HOST, "192.168.1.100")
+  conf put (Config.NIMBUS_HOST, AppConfig.nimbusHost)
   conf setNumWorkers 8
 
   StormSubmitter.submitTopology("crawling", conf, topology)

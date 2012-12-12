@@ -14,14 +14,12 @@ object AppConfig {
   private val defaultKey = "default."
   private val mongoKey = "mongodb."
   private val rabbitMqKey = "rabbitmq."
+  private val storm = "storm."
 
   lazy val conf = ConfigFactory.load()
 
   lazy val mongoHost = conf.getString(mongoKey + defaultKey + "host")
   lazy val mongoDb = conf.getString(mongoKey + defaultKey + "db")
   lazy val rabbitMqHost = conf.getString(rabbitMqKey + defaultKey + "host")
-
-  lazy val controllerSystem = conf.getConfig("controllerSystem")
-
-  lazy val monitorActorPath = conf.getString("server.monitor.path")
+  lazy val nimbusHost = conf.getString(storm + defaultKey + "nimbus.host")
 }
