@@ -22,8 +22,8 @@ object DownloadFactory {
     .setCompressionEnabled(true)
     .setAllowPoolingConnection(true)
     .setFollowRedirects(false)
-    .setMaximumConnectionsPerHost(3)
-    .setMaximumConnectionsTotal(10)
+    .setMaximumConnectionsPerHost(5)
+    .setMaximumConnectionsTotal(50)
     .build()
 
   def createDownloader() = new DefaultDownload(new AsyncHttpClient(cf))
