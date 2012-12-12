@@ -20,11 +20,6 @@ import util.UUID
 case class CrawlSession(id: UUID, job: CrawlJob) extends Logging {
 
   /**
-   * Store fetched urls list
-   */
-  val fetchedUrls = new util.HashSet[WebUrl]()
-
-  /**
    * Store queue urls list, It is not using for queue url,
    * it is using for mark the url already queue then we won't queue again.
    */
@@ -48,7 +43,7 @@ case class CrawlSession(id: UUID, job: CrawlJob) extends Logging {
 
   def endSession() {
     info("End session " + domainName + " " + jobTime + " ms")
-    info(fetchedUrls.size() + " links downloaded")
+    info(subJobCount + " links downloaded")
     info(currentDepth + " level")
     info(job.errors.length + " errors found")
     job.errors.foreach(println)
