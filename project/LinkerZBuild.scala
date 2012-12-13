@@ -81,7 +81,7 @@ object LinkerZBuild extends Build {
     "org.jsoup" % "jsoup" % "1.7.1",
     "commons-httpclient" % "commons-httpclient" % "3.1",
     "org.apache.httpcomponents" % "httpclient" % "4.2.1",
-    "com.ning" % "async-http-client" % "1.7.7",
+    "com.ning" % "async-http-client" % "1.7.8",
     "org.apache.tika" % "tika-core" % "1.2",
     "org.apache.tika" % "tika-parsers" % "1.2",
     "net.coobird" % "thumbnailator" % "0.4.2",
