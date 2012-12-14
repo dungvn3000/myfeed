@@ -91,6 +91,8 @@ object LinkerZBuild extends Build {
   val recommendationDependencies = Seq(
     "org.scalanlp" % "breeze-process_2.9.2" % "0.1",
     "org.apache.commons" % "commons-math3" % "3.0",
+    "org.apache.mahout" % "mahout-core" % "0.7",
+    "org.carrot2" % "carrot2-mini" % "3.6.1",
     "redis.clients" % "jedis" % "2.1.0"
   )
 
