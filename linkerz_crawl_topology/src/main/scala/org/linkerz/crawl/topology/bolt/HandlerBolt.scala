@@ -73,7 +73,8 @@ class HandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) w
         if (shouldCrawl(session, newWebUrl)) {
           session.queueUrls add newWebUrl
 
-          tuple emit(session.id, Handle(new CrawlJob(newWebUrl, subJob)))
+          //Because this one just is redirect url, so that is not really is a new job so we just copy this job then change the new url.
+          tuple emit(session.id, Handle(subJob.copy(newWebUrl)))
         }
       }
     })
