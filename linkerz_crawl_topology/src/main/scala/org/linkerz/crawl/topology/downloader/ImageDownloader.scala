@@ -18,7 +18,7 @@ import org.apache.commons.httpclient.HttpStatus
  * @since 8/19/12, 11:59 AM
  *
  */
-class ImageDownloader(httpClient: AsyncHttpClient) extends Downloader {
+class ImageDownloader(httpClient: AsyncHttpClient = new AsyncHttpClient) extends Downloader {
   def download(crawlJob: CrawlJob) {
     crawlJob.result map {
       webPage => val imgUrl = webPage.featureImageUrl

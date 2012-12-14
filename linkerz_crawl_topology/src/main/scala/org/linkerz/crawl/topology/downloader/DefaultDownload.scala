@@ -19,7 +19,7 @@ import edu.uci.ics.crawler4j.url.URLCanonicalizer
  *
  */
 
-class DefaultDownload(httpClient: AsyncHttpClient) extends Downloader {
+class DefaultDownload(httpClient: AsyncHttpClient = new AsyncHttpClient) extends Downloader {
 
   def download(crawlJob: CrawlJob) {
     val webUrl = crawlJob.webUrl
