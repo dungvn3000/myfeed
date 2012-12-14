@@ -17,6 +17,15 @@ import org.linkerz.crawl.topology.job.CrawlJob
 
 trait Downloader extends Logging {
 
+  /**
+   * Download a crawl job.
+   * @param crawlJob
+   */
   def download(crawlJob: CrawlJob)
+
+  /**
+   * Close all connection used by this downloader.
+   */
+  def close()
 
 }

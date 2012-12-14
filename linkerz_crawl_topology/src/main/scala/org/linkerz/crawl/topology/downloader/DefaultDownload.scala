@@ -45,4 +45,7 @@ class DefaultDownload(httpClient: AsyncHttpClient) extends Downloader {
     crawlJob.result = Some(webPage)
   }
 
+  def close() {
+    httpClient.close()
+  }
 }
