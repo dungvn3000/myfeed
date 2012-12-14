@@ -32,7 +32,7 @@ object LinkerZBuild extends Build {
     libraryDependencies ++= modelDependencies ++ testDependencies
   ).dependsOn(linkerZCore)
 
-  lazy val linkerZRecommendation = Project("linkerz_recommendation", file("linkerz_recommendation"), settings = sharedSetting).settings(
+  lazy val linkerZRecommendation = Project("linkerz_recommendation_topology", file("linkerz_recommendation_topology"), settings = sharedSetting).settings(
     libraryDependencies ++= recommendationDependencies ++ testDependencies
   ).dependsOn(linkerZCore, linkerZModel)
 

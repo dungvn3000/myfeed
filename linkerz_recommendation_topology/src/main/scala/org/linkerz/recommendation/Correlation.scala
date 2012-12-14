@@ -1,14 +1,11 @@
 package org.linkerz.recommendation
 
 import org.apache.commons.math3.stat.correlation.{SpearmansCorrelation, PearsonsCorrelation}
-import org.linkerz.model.Link
 import breeze.text.tokenize.JavaWordTokenizer
 import breeze.text.transform.StopWordFilter
 import breeze.text.analyze.CaseFolder
 import org.apache.commons.math3.stat.Frequency
 import collection.immutable.HashSet
-import java.util
-import collection.JavaConversions._
 import collection.mutable.ListBuffer
 
 /**
