@@ -24,6 +24,8 @@ object DownloadFactory {
     .setFollowRedirects(false)
     .setMaximumConnectionsPerHost(5)
     .setMaximumConnectionsTotal(50)
+    .setRequestTimeoutInMs(1000 * 30)
+    .setUseRawUrl(true)
     .build()
 
   def createDownloader() = new DefaultDownload(new AsyncHttpClient(cf))

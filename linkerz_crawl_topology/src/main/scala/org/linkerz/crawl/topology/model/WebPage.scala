@@ -25,6 +25,8 @@ class WebPage extends Serializable {
 
   var responseCode: Int = _
 
+  var isRedirect = false
+
   //Meta data
   var text: Option[String] = None
   var contentType: String = _
@@ -42,11 +44,6 @@ class WebPage extends Serializable {
    */
   def isError = {
     responseCode != HttpStatus.SC_OK
-  }
-
-
-  def isRedirect = {
-    responseCode == HttpStatus.SC_MOVED_PERMANENTLY || responseCode == HttpStatus.SC_MOVED_TEMPORARILY
   }
 
   /**

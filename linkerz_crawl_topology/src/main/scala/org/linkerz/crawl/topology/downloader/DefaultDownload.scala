@@ -28,8 +28,7 @@ class DefaultDownload(httpClient: AsyncHttpClient) extends Downloader {
     val response = httpClient.prepareGet(webUrl.url).execute().get()
     info("Download " + response.getStatusCode + " : " + webUrl.url)
 
-    if (response.getStatusCode == HttpStatus.SC_MOVED_PERMANENTLY
-      || response.getStatusCode == HttpStatus.SC_MOVED_TEMPORARILY) {
+    if (response.isRedirected) {
       val location = response.getHeader("Location")
       if (StringUtils.isNotBlank(location)) {
         webUrl.movedToUrl = URLCanonicalizer.getCanonicalURL(location, webUrl.baseUrl)
@@ -41,6 +40,7 @@ class DefaultDownload(httpClient: AsyncHttpClient) extends Downloader {
 
     webPage.webUrl = webUrl
     webPage.responseCode = response.getStatusCode
+    webPage.isRedirect = response.isRedirected
 
     crawlJob.result = Some(webPage)
   }
