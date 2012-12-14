@@ -34,4 +34,8 @@ class ImageDownloader(httpClient: AsyncHttpClient) extends Downloader {
       }
     }
   }
+
+  def close() {
+    httpClient.close()
+  }
 }
