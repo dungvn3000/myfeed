@@ -17,9 +17,9 @@ import collection.mutable.ListBuffer
  */
 object Correlation {
 
-  val pearsonsCorrelation = new PearsonsCorrelation
-  val spearmansCorrelation = new SpearmansCorrelation()
-  val tokenizer = JavaWordTokenizer ~> StopWordFilter("vi")
+  lazy val pearsonsCorrelation = new PearsonsCorrelation
+  lazy val spearmansCorrelation = new SpearmansCorrelation()
+  lazy val tokenizer = JavaWordTokenizer ~> StopWordFilter("vi")
 
   /**
    * Calculate similar score between two texts by using @see PearsonsCorrelation.

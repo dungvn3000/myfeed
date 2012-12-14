@@ -17,10 +17,10 @@ object Main extends App with StopWatch {
   val links = LinkDao.find(MongoDBObject.empty).toList
 
   //Assumption the user click on 10 links
-  val userClickLinks = links.take(100)
+  val userClickLinks = links.take(10)
 
   //And we got 250 news from the robot.
-  val newestLink = links.takeRight(500)
+  val newestLink = links.takeRight(2000)
 
   stopWatch("Build Score Table") {
     val scores = Recommendation.buildScoreTable(userClickLinks, newestLink, 3)

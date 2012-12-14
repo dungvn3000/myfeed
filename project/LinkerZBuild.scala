@@ -6,7 +6,7 @@ import AssemblyKeys._
 
 object LinkerZBuild extends Build {
 
-  val sharedSetting = defaultSettings ++ Seq(
+  lazy val sharedSetting = defaultSettings ++ Seq(
     version := "0.1-SNAPSHOT",
     organization := "org.linkerz",
     scalaVersion := "2.9.1",
@@ -33,8 +33,8 @@ object LinkerZBuild extends Build {
   ).dependsOn(linkerZCore)
 
   lazy val linkerZRecommendation = Project("linkerz_recommendation_topology", file("linkerz_recommendation_topology"), settings = sharedSetting).settings(
-    libraryDependencies ++= recommendationDependencies ++ testDependencies
-  ).dependsOn(linkerZCore, linkerZModel)
+    libraryDependencies ++= recommendationDependencies
+  ).dependsOn(linkerZCore, linkerZModel, scalaStorm)
 
   lazy val linkerZLogger = Project("linkerz_logger", file("linkerz_logger"), settings = sharedSetting).settings(
     libraryDependencies ++= loggerDependencies ++ testDependencies
@@ -42,20 +42,20 @@ object LinkerZBuild extends Build {
 
   lazy val linkerZCrawlTopology = Project("linkerz_crawl_topology", file("linkerz_crawl_topology"), settings = sharedSetting ++ assemblySettings).settings(
     jarName in assembly := "linkerz_crawl_topology.jar",
-    libraryDependencies ++= stormDependencies ++ crawlerTopologyDependencies ++ testDependencies
+    libraryDependencies ++= crawlerTopologyDependencies
   ).dependsOn(
     linkerZCore, linkerZModel, linkerZLogger, scalaStorm, urlBuilder
   )
 
   lazy val scalaStorm = Project("scala_storm", file("scala_storm"), settings = sharedSetting).settings {
-    libraryDependencies ++= stormDependencies ++ testDependencies
+    libraryDependencies ++= stormDependencies ++ rabbitMqDependencies ++ testDependencies
   }
 
   lazy val urlBuilder = Project("url_builder", file("url_builder"), settings = sharedSetting).settings {
     libraryDependencies ++= testDependencies
   }
 
-  val coreDependencies = Seq(
+  lazy val coreDependencies = Seq(
     "org.slf4j" % "slf4j-simple" % "1.6.6",
     "org.slf4j" % "slf4j-api" % "1.6.6",
     "org.clapper" %% "grizzled-slf4j" % "0.6.9",
@@ -68,38 +68,41 @@ object LinkerZBuild extends Build {
     "com.typesafe" % "config" % "1.0.0"
   )
 
-  val testDependencies = Seq(
+  lazy val testDependencies = Seq(
     "junit" % "junit" % "4.10" % "test",
     "org.scalatest" %% "scalatest" % "1.8" % "test"
   )
 
-  val modelDependencies = Seq(
+  lazy val modelDependencies = Seq(
     "com.novus" %% "salat" % "1.9.1"
   )
 
-  val crawlerTopologyDependencies = Seq(
+  lazy val crawlerTopologyDependencies = Seq(
     "org.jsoup" % "jsoup" % "1.7.1",
     "commons-httpclient" % "commons-httpclient" % "3.1",
     "org.apache.httpcomponents" % "httpclient" % "4.2.1",
     "com.ning" % "async-http-client" % "1.7.8",
     "org.apache.tika" % "tika-core" % "1.2",
     "org.apache.tika" % "tika-parsers" % "1.2",
-    "net.coobird" % "thumbnailator" % "0.4.2",
-    "com.rabbitmq" % "amqp-client" % "2.8.7"
-  )
+    "net.coobird" % "thumbnailator" % "0.4.2"
+  ) ++ stormDependencies ++ testDependencies ++ rabbitMqDependencies
 
-  val recommendationDependencies = Seq(
+  lazy val recommendationDependencies = Seq(
     "org.scalanlp" % "breeze-process_2.9.2" % "0.1",
     "org.apache.commons" % "commons-math3" % "3.0",
     "org.apache.mahout" % "mahout-core" % "0.7",
     "org.carrot2" % "carrot2-mini" % "3.6.1",
     "redis.clients" % "jedis" % "2.1.0"
+  ) ++ stormDependencies ++ testDependencies ++ rabbitMqDependencies
+
+  lazy val loggerDependencies = Seq(
   )
 
-  val loggerDependencies = Seq(
-  )
-
-  val stormDependencies = Seq(
+  lazy val stormDependencies = Seq(
     "storm" % "storm" % "0.8.1" % "provided"
+  )
+
+  lazy val rabbitMqDependencies = Seq(
+    "com.rabbitmq" % "amqp-client" % "2.8.7"
   )
 }
