@@ -13,6 +13,7 @@ trait StopWatch extends Logging {
 
   def stopWatch(name: String)(f: => Unit) {
     var time = System.currentTimeMillis()
+    info("Start watching - " + name)
     f
     time = System.currentTimeMillis() - time
     info(name + " - finished in " + time + " ms")
