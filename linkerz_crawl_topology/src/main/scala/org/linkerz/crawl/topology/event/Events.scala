@@ -20,14 +20,17 @@ object Ack extends Event
 //This event will be sent from the spout. When a job was failed.
 object Fail extends Event
 
-//This event come form persistent bolt, after it sync result with the database,
-//the event will be sent to the crawler bolt to decide whether go for it or not.
+//This event will sent by handler bolt, after the bolt finished it's job.
 case class Handle(job: CrawlJob) extends Event
 
+//This event will sent by fetcher bolt, after the bolt finished it's job.
 case class Fetch(job: CrawlJob) extends Event
 
+//This event will sent by parser bolt, after the bolt finished it's job.
 case class Parse(job: CrawlJob) extends Event
 
+//This event will sent by meta fetcher bolt, after the bolt finished it's job.
 case class MetaFetch(job: CrawlJob) extends Event
 
+//This event will sent by persistent bolt, after the bolt finished it's job.
 case class Persistent(job: CrawlJob) extends Event

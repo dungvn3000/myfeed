@@ -1,7 +1,7 @@
 package org.linkerz.crawl.topology.bolt
 
 import storm.scala.dsl.StormBolt
-import org.linkerz.crawl.topology.event.{MetaFetch, Parse}
+import org.linkerz.crawl.topology.event.{Fetch, Parse}
 import org.linkerz.crawl.topology.parser.Parser
 import org.linkerz.crawl.topology.factory.ParserFactory
 import java.util.UUID
@@ -23,7 +23,7 @@ class ParserBolt extends StormBolt(outputFields = List("sessionId", "event")) {
 
   execute {
     implicit tuple => tuple matchSeq {
-      case Seq(sessionId: UUID, Parse(job)) => {
+      case Seq(sessionId: UUID, Fetch(job)) => {
         try {
           if (job.result.exists(!_.isError)) parser parse job
         } catch {
@@ -33,7 +33,7 @@ class ParserBolt extends StormBolt(outputFields = List("sessionId", "event")) {
           }
         }
 
-        tuple emit(sessionId, MetaFetch(job))
+        tuple emit(sessionId, Parse(job))
       }
     }
     tuple.ack()

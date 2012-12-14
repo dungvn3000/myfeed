@@ -1,7 +1,7 @@
 package org.linkerz.crawl.topology.bolt
 
 import storm.scala.dsl.StormBolt
-import org.linkerz.crawl.topology.event.{Parse, Fetch}
+import org.linkerz.crawl.topology.event.{Handle, Fetch}
 import org.linkerz.crawl.topology.factory.DownloadFactory
 import org.linkerz.crawl.topology.downloader.Downloader
 import backtype.storm.utils.Utils
@@ -25,7 +25,7 @@ class FetcherBolt extends StormBolt(outputFields = List("sessionId", "event")) w
 
   execute {
     implicit tuple => tuple matchSeq {
-      case Seq(sessionId: UUID, Fetch(job)) => {
+      case Seq(sessionId: UUID, Handle(job)) => {
         try {
           //Delay time for each job.
           if (job.politenessDelay > 0 && job.parent.isDefined) Utils sleep job.politenessDelay
@@ -36,7 +36,7 @@ class FetcherBolt extends StormBolt(outputFields = List("sessionId", "event")) w
             _collector reportError ex
           }
         }
-        tuple emit(sessionId, Parse(job))
+        tuple emit(sessionId, Fetch(job))
       }
     }
     tuple.ack()

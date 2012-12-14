@@ -12,7 +12,6 @@ import org.linkerz.crawl.topology.event.Ack
 import org.linkerz.crawl.topology.event.Handle
 import org.linkerz.crawl.topology.session.CrawlSession
 import org.linkerz.crawl.topology.event.Start
-import org.linkerz.crawl.topology.event.Fetch
 import org.apache.commons.lang.StringUtils
 import org.linkerz.crawl.topology.job.CrawlJob
 import java.util.UUID
@@ -38,10 +37,10 @@ class HandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) w
         val session = CrawlSession(sessionId, parentJob)
         session.queueUrls += parentJob.webUrl
         sessions ::= session
-        tuple emit(session.id, Fetch(parentJob))
+        tuple emit(session.id, Handle(parentJob))
         tuple.ack()
       }
-      case Seq(sessionId: UUID, Handle(subJob)) => sessions ~> sessionId map (session => handle(session, subJob)) getOrElse {
+      case Seq(sessionId: UUID, Parse(subJob)) => sessions ~> sessionId map (session => handle(session, subJob)) getOrElse {
         //When session id is none that mean this job is expired already, we will stop it.
         info("Session is expired " + subJob.webUrl.url)
       }
@@ -65,7 +64,7 @@ class HandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) w
         //Store queue url.
         session.queueUrls add webUrl
 
-        tuple emit(session.id, Fetch(new CrawlJob(webUrl, subJob)))
+        tuple emit(session.id, Handle(new CrawlJob(webUrl, subJob)))
       }
     } else if (webPage.isRedirect) {
       val movedUrl = webPage.webUrl.movedToUrl
@@ -74,7 +73,7 @@ class HandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) w
         if (shouldCrawl(session, newWebUrl)) {
           session.queueUrls add newWebUrl
 
-          tuple emit(session.id, Fetch(new CrawlJob(newWebUrl, subJob)))
+          tuple emit(session.id, Handle(new CrawlJob(newWebUrl, subJob)))
         }
       }
     })
