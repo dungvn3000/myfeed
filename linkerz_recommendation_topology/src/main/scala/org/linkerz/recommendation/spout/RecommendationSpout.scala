@@ -8,13 +8,13 @@ import storm.scala.dsl.StormSpout
 import org.linkerz.recommendation.event.Recommendation
 
 /**
- * The Class RecommendQueueSpout.
+ * The Class RecommendationSpout.
  *
  * @author Nguyen Duc Dung
  * @since 12/15/12 2:27 AM
  *
  */
-class RecommendQueueSpout extends StormSpout(outputFields = List("userId", "event")) with Logging {
+class RecommendationSpout extends StormSpout(outputFields = List("userId", "event")) with Logging {
   def nextTuple() {
     val users = UserDao.find(MongoDBObject.empty).toList
     users.foreach(user =>
