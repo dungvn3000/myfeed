@@ -1,6 +1,6 @@
 package org.linkerz.recommendation.event
 
-import org.linkerz.model.{Link, User}
+import org.linkerz.model.Link
 
 /**
  * The Class Events.
@@ -11,11 +11,7 @@ import org.linkerz.model.{Link, User}
  */
 sealed trait Event extends Serializable
 
-/**
- * This event will starting the recommendation.
- */
-object Start extends Event
-
-case class GetUser(user: User) extends Event
-case class GetLink(link: Link) extends Event
+object Recommendation extends Event
+case class GetClickedLink(clickedLink: Link) extends Event
+case class MergeLink(clickedLink: Link, link: Link) extends Event
 
