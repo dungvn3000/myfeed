@@ -3,6 +3,7 @@ package org.linkerz.recommendation.spout
 import grizzled.slf4j.Logging
 import storm.scala.rabbitmq.RabbitMqSpout
 import org.linkerz.recommendation.job.RecommendJob
+import org.linkerz.recommendation.event.Start
 
 /**
  * The Class RecommendQueueSpout.
@@ -14,9 +15,11 @@ import org.linkerz.recommendation.job.RecommendJob
 class RecommendQueueSpout(rabbitMqHost: String)
   extends RabbitMqSpout(queueName = "recommendationQueue", rabbitMqHost = rabbitMqHost, outputFields = List("event")) with Logging {
 
-  def nextDelivery(job: AnyRef) {
-    job match {
-      case job: RecommendJob =>
+  nextDelivery {
+    job => job match {
+      case job: RecommendJob => {
+        emit(Start)
+      }
       case _ => //ignore
     }
   }

@@ -46,7 +46,7 @@ abstract class RabbitMqSpout(queueName: String, rabbitMqHost: String, prefetchCo
         _consumer => val delivery = _consumer.nextDelivery(deliverTimeOut)
         if (delivery != null && delivery.getBody != null) {
           currentDelivery = Some(delivery)
-          nextDelivery(Marshal.load[AnyRef](delivery.getBody))
+          _nextDelivery(Marshal.load[AnyRef](delivery.getBody))
         }
       }
     } catch {
@@ -54,11 +54,14 @@ abstract class RabbitMqSpout(queueName: String, rabbitMqHost: String, prefetchCo
     }
   }
 
+  var _nextDelivery: AnyRef => Unit = _
+
   /**
    * This method will be called when a delivery come from the rabbit queue.
-   * @param job
    */
-  def nextDelivery(job: AnyRef)
+  def nextDelivery(func: AnyRef => Unit) {
+    _nextDelivery = func
+  }
 
 
   override def ack(msgId: Any) {

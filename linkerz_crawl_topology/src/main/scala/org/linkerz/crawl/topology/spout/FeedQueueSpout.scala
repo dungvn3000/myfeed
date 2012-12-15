@@ -17,8 +17,8 @@ import storm.scala.rabbitmq.RabbitMqSpout
 class FeedQueueSpout(rabbitMqHost: String)
   extends RabbitMqSpout(queueName = "feedQueue", rabbitMqHost = rabbitMqHost, outputFields = List("sessionId", "event")) with Logging {
 
-  def nextDelivery(job: AnyRef) {
-    job match {
+  nextDelivery {
+    job => job match {
       case job: CrawlJob => {
         //Make sure the id is unique all the time.
         val sessionId = UUID.randomUUID()
