@@ -217,7 +217,7 @@ public final class UrlBuilder {
         return ('a' <= c && 'z' >= c) ||
                 ('A' <= c && 'Z' >= c) ||
                 ('0' <= c && '9' >= c) ||
-                (c == '-' || c == '_' || c == '.' || c == '~' || c == ' ');
+                (c == '-' || c == '_' || c == '.' || c == '~' || c == ' ' || c == ';');
     }
 
     private static String urlEncode(final String input, final Charset charset) {
