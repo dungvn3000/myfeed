@@ -20,7 +20,7 @@ class RecommendationSpout extends StormSpout(outputFields = List("userId", "even
   setup {
     val scheduleActor = Akka.system.actorOf(Props(new ScheduleActor(_collector)))
     //Schedule the actor run for every 15 minutes.
-    Akka.system.scheduler.schedule(10 seconds, 15 minutes, scheduleActor, "run")
+    Akka.system.scheduler.schedule(10 seconds, 5 minutes, scheduleActor, "run")
   }
 
   def nextTuple() {

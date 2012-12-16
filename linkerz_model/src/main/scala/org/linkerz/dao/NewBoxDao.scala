@@ -36,6 +36,11 @@ class NewBoxDao(override val collection: MongoCollection) extends SalatDAO[NewBo
     links.toList
   }
 
+  def isUserClicked(userId: ObjectId, linkId: ObjectId) = !find(
+    MongoDBObject(
+      "userId" -> userId,
+      "linkId" -> linkId
+    )).isEmpty
 }
 
 object NewBoxDao extends NewBoxDao(mongo("newbox"))
