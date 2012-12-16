@@ -11,7 +11,7 @@ import CrawlTopology._
  * @since 11/30/12 3:59 AM
  *
  */
-class TopologyLocalRunner extends App {
+object TopologyLocalRunner extends App {
 
   val localCluster = new LocalCluster
 
