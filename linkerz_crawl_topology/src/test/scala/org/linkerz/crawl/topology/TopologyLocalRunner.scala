@@ -18,8 +18,8 @@ object TopologyLocalRunner extends App {
   val conf = new Config
   conf setDebug false
   conf setNumWorkers 8
-  //Set time out for an crawl job is fifty minutes
-  conf setMessageTimeoutSecs 60 * 15
+  //Set time out for an crawl job is 10 minutes
+  conf setMessageTimeoutSecs 60 * 10
 
   localCluster.submitTopology("crawler", conf, topology)
 

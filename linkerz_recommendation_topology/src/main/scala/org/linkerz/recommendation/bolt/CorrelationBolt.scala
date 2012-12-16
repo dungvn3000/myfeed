@@ -39,7 +39,11 @@ class CorrelationBolt extends StormBolt(outputFields = List("userId", "event")) 
           val text2 = link.text.get
           val score = sim_pearson(text1, text2)
           count +=1
-          info(score + " - " + count)
+
+          if (score > 0.5) {
+            info(score + " - " + count)
+          }
+
           tuple emit(clickedLink.id, link.id, score)
         }
       }

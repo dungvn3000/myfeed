@@ -2,10 +2,11 @@ package org.linkerz.recommendation.spout
 
 import grizzled.slf4j.Logging
 import backtype.storm.utils.Utils
-import org.linkerz.dao.UserDao
-import com.mongodb.casbah.commons.MongoDBObject
 import storm.scala.dsl.StormSpout
-import org.linkerz.recommendation.event.Recommendation
+import org.linkerz.core.actor.Akka
+import akka.actor.Props
+import akka.util.duration._
+import org.linkerz.recommendation.actor.ScheduleActor
 
 /**
  * The Class RecommendationSpout.
@@ -15,12 +16,15 @@ import org.linkerz.recommendation.event.Recommendation
  *
  */
 class RecommendationSpout extends StormSpout(outputFields = List("userId", "event")) with Logging {
+
+  setup {
+    val scheduleActor = Akka.system.actorOf(Props(new ScheduleActor(_collector)))
+    //Schedule the actor run for every 15 minutes.
+    Akka.system.scheduler.schedule(10 seconds, 15 minutes, scheduleActor, "run")
+  }
+
   def nextTuple() {
-    val users = UserDao.find(MongoDBObject.empty).toList
-    users.foreach(user =>
-      emit(user._id, Recommendation)
-    )
-    //Sleep 15 minutes.
-    Utils sleep 1000 * 60 * 15
+    //Sleep 10ms for not wasting cpu
+    Utils sleep 10
   }
 }

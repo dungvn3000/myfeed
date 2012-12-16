@@ -34,7 +34,7 @@ object LinkerZBuild extends Build {
 
   lazy val linkerZRecommendation = Project("linkerz_recommendation_topology", file("linkerz_recommendation_topology"), settings = sharedSetting).settings(
     libraryDependencies ++= recommendationDependencies
-  ).dependsOn(linkerZCore, linkerZModel, scalaStorm)
+  ).dependsOn(linkerZCore, linkerZModel, scalaStorm, linkerZLogger)
 
   lazy val linkerZLogger = Project("linkerz_logger", file("linkerz_logger"), settings = sharedSetting).settings(
     libraryDependencies ++= loggerDependencies ++ testDependencies

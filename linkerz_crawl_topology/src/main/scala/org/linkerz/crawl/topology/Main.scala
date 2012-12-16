@@ -17,8 +17,8 @@ object Main extends App {
   conf setDebug false
   conf put (Config.NIMBUS_HOST, AppConfig.nimbusHost)
   conf setNumWorkers 8
-  //Set time out for an crawl job is fifty minutes
-  conf setMessageTimeoutSecs 60 * 15
+  //Set time out for an crawl job is 10 minutes
+  conf setMessageTimeoutSecs 60 * 10
 
   StormSubmitter.submitTopology("crawling", conf, topology)
 }
