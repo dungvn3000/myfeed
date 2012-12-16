@@ -11,6 +11,8 @@ import collection.immutable.HashSet
 import org.apache.commons.math3.stat.Frequency
 import collection.mutable.ListBuffer
 import grizzled.slf4j.Logging
+import org.linkerz.model.NewBox
+import org.linkerz.dao.NewBoxDao
 
 /**
  * The Class CorrelationBolt.
@@ -34,14 +36,18 @@ class CorrelationBolt extends StormBolt(outputFields = List("userId", "event")) 
   execute {
     tuple => tuple matchSeq {
       case Seq(userId: ObjectId, MergeLink(clickedLink, link)) => {
-        if (clickedLink.text.isDefined && link.text.isDefined) {
-          val text1 = clickedLink.text.get
-          val text2 = link.text.get
+        if (clickedLink.text.isDefined && link.text.isDefined && clickedLink.id != link.id) {
+          val text1 = clickedLink.text.get + " " + clickedLink.title
+          val text2 = link.text.get + " " + link.title
           val score = sim_pearson(text1, text2)
           count +=1
 
-          if (score > 0.5) {
-            info(score + " - " + count)
+          if (score > 0.6) {
+            info(score + " - " + clickedLink.title + " - " + link.title)
+            NewBoxDao.save(NewBox(
+              userId = userId,
+              linkId = link._id
+            ))
           }
 
           tuple emit(clickedLink.id, link.id, score)

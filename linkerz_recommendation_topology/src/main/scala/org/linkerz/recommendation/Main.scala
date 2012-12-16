@@ -1,9 +1,8 @@
 package org.linkerz.recommendation
 
-import com.mongodb.casbah.commons.MongoDBObject
-import org.linkerz.core.time.StopWatch
-import org.bson.types.ObjectId
-import org.linkerz.dao.LinkDao
+import backtype.storm.{StormSubmitter, Config}
+import org.linkerz.core.conf.AppConfig
+import org.linkerz.recommendation.RecommendationTopology._
 
 /**
  * The Class Main.
@@ -12,26 +11,13 @@ import org.linkerz.dao.LinkDao
  * @since 11/8/12 1:49 AM
  *
  */
-object Main extends App with StopWatch {
+object Main extends App {
 
-  val links = LinkDao.find(MongoDBObject.empty).toList
+  val conf = new Config()
+  conf setDebug false
+  conf put (Config.NIMBUS_HOST, AppConfig.nimbusHost)
+  conf setNumWorkers 4
 
-  //Assumption the user click on 10 links
-  val userClickLinks = links.take(8)
-
-  //And we got 250 news from the robot.
-  val newestLink = links.takeRight(7000)
-
-  stopWatch("Build Score Table") {
-    val scores = Recommendation.buildScoreTable(userClickLinks, newestLink, 3)
-    scores.foreach(s => s match {
-      case (id1, id2, score) => {
-        val link1 = LinkDao.findOneById(new ObjectId(id1)).get
-        val link2 = LinkDao.findOneById(new ObjectId(id2)).get
-        info(link1.title + " - " + link2.title + " - " + score)
-      }
-    })
-  }
-
+  StormSubmitter.submitTopology("crawling", conf, topology)
 
 }
