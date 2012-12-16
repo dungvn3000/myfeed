@@ -15,6 +15,7 @@ import org.linkerz.crawl.topology.event.Start
 import grizzled.slf4j.Logging
 import backtype.storm.tuple.Values
 import backtype.storm.spout.SpoutOutputCollector
+import scala.util.control.Breaks._
 
 /**
  * The Class ScheduleActor.
@@ -55,45 +56,49 @@ class ScheduleActor(collector: SpoutOutputCollector) extends Actor with DBLogger
     val downloader = new DefaultDownload(new AsyncHttpClient(cf))
 
     try {
-      for (i <- 0 to feed.urlTests.size - 1) {
-        val crawlJob = new CrawlJob(feed.urlTests(i))
-        downloader.download(crawlJob)
-        parser.parse(crawlJob)
+      breakable {
+        for (i <- 0 to feed.urlTests.size - 1) {
+          val crawlJob = new CrawlJob(feed.urlTests(i))
+          downloader.download(crawlJob)
+          parser.parse(crawlJob)
 
-        crawlJob.result map {
-          webPage => if (StringUtils.isBlank(webPage.title)) {
-            storeError("Can't parse the title", url = webPage.webUrl.url, category = LogCategory.TestCase)
-            error = true
-          }
-
-          if (StringUtils.isNotBlank(webPage.title) && webPage.title != feed.titles(i)) {
-            storeError("The title do not match with the test case", url = webPage.webUrl.url, category = LogCategory.TestCase)
-            error = true
-          }
-
-          webPage.text map {
-            text => if (!text.contains(feed.validateTexts(i))) {
-              storeError("The text do not match with the test case", url = webPage.webUrl.url, category = LogCategory.TestCase)
+          crawlJob.result map {
+            webPage => if (StringUtils.isBlank(webPage.title)) {
+              storeError("Can't parse the title", url = feed.url, category = LogCategory.TestCase)
               error = true
             }
-          } getOrElse {
-            storeError("Can't parse the text content", url = webPage.webUrl.url, category = LogCategory.TestCase)
-            error = true
-          }
 
-          webPage.featureImageUrl map {
-            url => if (url != feed.imageUrls(i)) {
-              storeError("The image url do not match with the test case", url = webPage.webUrl.url, category = LogCategory.TestCase)
+            if (StringUtils.isNotBlank(webPage.title) && webPage.title != feed.titles(i)) {
+              storeError("The title do not match with the test case", url = feed.url, category = LogCategory.TestCase)
               error = true
             }
+
+            webPage.text map {
+              text => if (!text.contains(feed.validateTexts(i))) {
+                storeError("The text do not match with the test case", url = feed.url, category = LogCategory.TestCase)
+                error = true
+              }
+            } getOrElse {
+              storeError("Can't parse the text content", url = feed.url, category = LogCategory.TestCase)
+              error = true
+            }
+
+            webPage.featureImageUrl map {
+              url => if (url != feed.imageUrls(i)) {
+                storeError("The image url do not match with the test case", url = feed.url, category = LogCategory.TestCase)
+                error = true
+              }
+            } getOrElse {
+              storeError("Can't parse the image url", url = feed.url, category = LogCategory.TestCase)
+              error = true
+            }
+
           } getOrElse {
-            storeError("Can't parse the image url", url = webPage.webUrl.url, category = LogCategory.TestCase)
+            storeError("Download error", url = feed.urlTests(i), category = LogCategory.TestCase)
             error = true
           }
 
-        } getOrElse {
-          storeError("Download error", url = feed.urlTests(i), category = LogCategory.TestCase)
-          error = true
+          if (error) break() // Stop testing in case one of test case is error
         }
       }
     }
