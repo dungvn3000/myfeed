@@ -65,7 +65,8 @@ object LinkerZBuild extends Build {
     "commons-validator" % "commons-validator" % "1.4.0" exclude("commons-beanutils", "commons-beanutils"),
     "commons-io" % "commons-io" % "2.4",
     "org.scalaz" %% "scalaz-core" % "6.0.4",
-    "com.typesafe" % "config" % "1.0.0"
+    "com.typesafe" % "config" % "1.0.0",
+    "com.typesafe.akka" % "akka-actor" % "2.0.3"
   )
 
   lazy val testDependencies = Seq(

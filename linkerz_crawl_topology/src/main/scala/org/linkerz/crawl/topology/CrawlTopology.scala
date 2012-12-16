@@ -1,9 +1,8 @@
 package org.linkerz.crawl.topology
 
 import bolt._
-import org.linkerz.core.conf.AppConfig
 import backtype.storm.topology.TopologyBuilder
-import spout.FeedQueueSpout
+import spout.FeedSpout
 import backtype.storm.tuple.Fields
 
 /**
@@ -17,9 +16,9 @@ object CrawlTopology extends Serializable {
 
   def topology = {
     val builder = new TopologyBuilder
-    builder.setSpout("feedQueue", new FeedQueueSpout(AppConfig.rabbitMqHost), 10)
+    builder.setSpout("spout", new FeedSpout)
     builder.setBolt("handler", new HandlerBolt, 10).
-      fieldsGrouping("feedQueue", new Fields("sessionId")).fieldsGrouping("parser", new Fields("sessionId"))
+      fieldsGrouping("spout", new Fields("sessionId")).fieldsGrouping("parser", new Fields("sessionId"))
     builder.setBolt("fetcher", new FetcherBolt, 20).fieldsGrouping("handler", new Fields("sessionId"))
     builder.setBolt("parser", new ParserBolt, 20).shuffleGrouping("fetcher")
     builder.setBolt("metaFetcher", new MetaFetcherBolt, 10).fieldsGrouping("parser", new Fields("sessionId"))
