@@ -16,7 +16,8 @@ object TopologyLocalRunner extends App {
   val localCluster = new LocalCluster
 
   val conf = new Config
-  conf setDebug true
+  conf setDebug false
+  conf setNumWorkers 4
 
   localCluster.submitTopology("recommendation", conf, topology)
 

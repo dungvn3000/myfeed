@@ -17,8 +17,8 @@ object RecommendationTopology extends Serializable {
     val builder = new TopologyBuilder
     builder.setSpout("spout", new RecommendationSpout)
     builder.setBolt("getClicked", new GetClickedLinkBolt).shuffleGrouping("spout")
-    builder.setBolt("merge", new MergeBolt).shuffleGrouping("getClicked")
-    builder.setBolt("correlation", new CorrelationBolt).shuffleGrouping("merge")
+    builder.setBolt("merge", new MergeBolt, 5).shuffleGrouping("getClicked")
+    builder.setBolt("correlation", new CorrelationBolt, 20).shuffleGrouping("merge")
     builder.createTopology()
   }
 

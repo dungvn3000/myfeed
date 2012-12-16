@@ -19,7 +19,7 @@ class GetClickedLinkBolt extends StormBolt(outputFields = List("userId", "event"
       case Seq(userId: ObjectId, Recommendation) => {
         val clickedLinks = NewBoxDao.getUserClicked(userId)
         clickedLinks.foreach(link => {
-          tuple emit GetClickedLink(link)
+          tuple emit(userId, GetClickedLink(link))
         })
       }
     }

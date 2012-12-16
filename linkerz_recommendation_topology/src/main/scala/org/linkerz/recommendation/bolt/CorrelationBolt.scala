@@ -24,6 +24,8 @@ class CorrelationBolt extends StormBolt(outputFields = List("userId", "event")) 
   @transient var pearsonsCorrelation: PearsonsCorrelation = _
   @transient var tokenizer: Tokenizer = _
 
+  var count = 0
+
   setup {
     pearsonsCorrelation = new PearsonsCorrelation
     tokenizer = JavaWordTokenizer ~> StopWordFilter("vi")
@@ -36,7 +38,8 @@ class CorrelationBolt extends StormBolt(outputFields = List("userId", "event")) 
           val text1 = clickedLink.text.get
           val text2 = link.text.get
           val score = sim_pearson(text1, text2)
-          info(score)
+          count +=1
+          info(score + " - " + count)
           tuple emit(clickedLink.id, link.id, score)
         }
       }
