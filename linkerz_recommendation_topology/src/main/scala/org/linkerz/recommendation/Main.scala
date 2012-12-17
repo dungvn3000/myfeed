@@ -18,6 +18,6 @@ object Main extends App {
   conf put (Config.NIMBUS_HOST, AppConfig.nimbusHost)
   conf setNumWorkers 4
 
-  StormSubmitter.submitTopology("crawling", conf, topology)
+  StormSubmitter.submitTopology("recommendation", conf, topology)
 
 }
