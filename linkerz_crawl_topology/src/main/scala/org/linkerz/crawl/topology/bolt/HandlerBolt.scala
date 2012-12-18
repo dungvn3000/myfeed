@@ -12,7 +12,6 @@ import org.linkerz.crawl.topology.event.Ack
 import org.linkerz.crawl.topology.event.Handle
 import org.linkerz.crawl.topology.session.CrawlSession
 import org.linkerz.crawl.topology.event.Start
-import org.apache.commons.lang.StringUtils
 import org.linkerz.crawl.topology.job.CrawlJob
 import java.util.UUID
 import org.linkerz.dao.LinkDao
@@ -65,17 +64,6 @@ class HandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) w
         session.queueUrls add webUrl
 
         tuple emit(session.id, Handle(new CrawlJob(webUrl, subJob)))
-      }
-    } else if (webPage.isRedirect) {
-      val movedUrl = webPage.webUrl.movedToUrl
-      if (StringUtils.isNotBlank(movedUrl)) {
-        val newWebUrl = new WebUrl(movedUrl)
-        if (shouldCrawl(session, newWebUrl)) {
-          session.queueUrls add newWebUrl
-
-          //Because this one just is redirect url, so that is not really is a new job so we just copy this job then change the new url.
-          tuple emit(session.id, Handle(subJob.copy(newWebUrl)))
-        }
       }
     })
 

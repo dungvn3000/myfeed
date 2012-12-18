@@ -6,8 +6,6 @@ import org.linkerz.dao.NewFeedDao
 import com.mongodb.casbah.commons.MongoDBObject
 import org.linkerz.model.{LogCategory, NewFeed}
 import org.linkerz.crawl.topology.parser.CustomParser
-import com.ning.http.client.{AsyncHttpClient, AsyncHttpClientConfig}
-import org.linkerz.crawl.topology.downloader.DefaultDownload
 import org.linkerz.crawl.topology.job.CrawlJob
 import org.apache.commons.lang.StringUtils
 import java.util.UUID
@@ -16,6 +14,7 @@ import grizzled.slf4j.Logging
 import backtype.storm.tuple.Values
 import backtype.storm.spout.SpoutOutputCollector
 import scala.util.control.Breaks._
+import org.linkerz.crawl.topology.factory.DownloadFactory
 
 /**
  * The Class ScheduleActor.
@@ -48,12 +47,7 @@ class ScheduleActor(collector: SpoutOutputCollector) extends Actor with DBLogger
     val parser = CustomParser(feed)
     var error = false
 
-    val cf = new AsyncHttpClientConfig.Builder()
-      .setFollowRedirects(true)
-      .setMaximumNumberOfRedirects(10)
-      .build()
-
-    val downloader = new DefaultDownload(new AsyncHttpClient(cf))
+    val downloader = DownloadFactory.createDownloader()
 
     try {
       breakable {

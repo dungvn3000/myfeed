@@ -80,13 +80,13 @@ object LinkerZBuild extends Build {
 
   lazy val crawlerTopologyDependencies = Seq(
     "org.jsoup" % "jsoup" % "1.7.1",
-    "commons-httpclient" % "commons-httpclient" % "3.1",
-    "org.apache.httpcomponents" % "httpclient" % "4.2.1",
+    "org.apache.httpcomponents" % "httpclient" % "4.2.2",
     "com.ning" % "async-http-client" % "1.7.8",
     "org.apache.tika" % "tika-core" % "1.2",
     "org.apache.tika" % "tika-parsers" % "1.2",
+    "net.htmlparser.jericho" % "jericho-html" % "3.2",
     "net.coobird" % "thumbnailator" % "0.4.2"
-  ) ++ stormDependencies ++ testDependencies ++ rabbitMqDependencies
+  ) ++ stormDependencies ++ testDependencies
 
   lazy val recommendationDependencies = Seq(
     "org.scalanlp" % "breeze-process_2.9.2" % "0.1",
@@ -94,7 +94,7 @@ object LinkerZBuild extends Build {
     "org.apache.mahout" % "mahout-core" % "0.7",
     "org.carrot2" % "carrot2-mini" % "3.6.1",
     "redis.clients" % "jedis" % "2.1.0"
-  ) ++ stormDependencies ++ testDependencies ++ rabbitMqDependencies
+  ) ++ stormDependencies ++ testDependencies
 
   lazy val loggerDependencies = Seq(
   )

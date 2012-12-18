@@ -25,8 +25,6 @@ class WebPage extends Serializable {
 
   var responseCode: Int = _
 
-  var isRedirect = false
-
   //Meta data
   var text: Option[String] = None
   var contentType: String = _

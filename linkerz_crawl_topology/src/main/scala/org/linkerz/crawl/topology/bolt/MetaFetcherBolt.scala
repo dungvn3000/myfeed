@@ -2,7 +2,6 @@ package org.linkerz.crawl.topology.bolt
 
 import storm.scala.dsl.StormBolt
 import org.linkerz.crawl.topology.event.{Parse, MetaFetch}
-import org.linkerz.crawl.topology.downloader.Downloader
 import java.util.UUID
 import org.linkerz.crawl.topology.factory.DownloadFactory
 
@@ -15,15 +14,10 @@ import org.linkerz.crawl.topology.factory.DownloadFactory
  */
 class MetaFetcherBolt extends StormBolt(outputFields = List("sessionId", "event")) {
 
-  private var downloader: Downloader = _
-
-  setup {
-    downloader = DownloadFactory.createImageDownloader()
-  }
-
   execute {
     implicit tuple => tuple matchSeq {
       case Seq(sessionId: UUID, Parse(job)) => {
+        val downloader = DownloadFactory.createImageDownloader()
         try {
           if (job.result.exists(!_.isError)) downloader download job
         } catch {
@@ -31,6 +25,8 @@ class MetaFetcherBolt extends StormBolt(outputFields = List("sessionId", "event"
             job.error(ex.getMessage, getClass.getName, job.webUrl, ex)
             _collector reportError ex
           }
+        } finally {
+          downloader.close()
         }
         tuple emit(sessionId, MetaFetch(job))
       }

@@ -4,12 +4,13 @@
 
 package org.linkerz.crawl.topology.downloader
 
-import com.ning.http.client.AsyncHttpClient
-import org.apache.commons.lang.StringUtils
 import org.linkerz.crawl.topology.job.CrawlJob
 import org.linkerz.crawl.topology.model.WebPage
-import org.apache.commons.httpclient.HttpStatus
-import edu.uci.ics.crawler4j.url.URLCanonicalizer
+import org.apache.http.HttpStatus
+import org.apache.http.client.HttpClient
+import org.apache.http.impl.client.DefaultHttpClient
+import org.apache.http.client.methods.HttpGet
+import org.apache.http.util.EntityUtils
 
 /**
  * The Class DefaultDownload.
@@ -19,33 +20,28 @@ import edu.uci.ics.crawler4j.url.URLCanonicalizer
  *
  */
 
-class DefaultDownload(httpClient: AsyncHttpClient = new AsyncHttpClient) extends Downloader {
+class DefaultDownload(httpClient: HttpClient = new DefaultHttpClient) extends Downloader {
 
   def download(crawlJob: CrawlJob) {
     val webUrl = crawlJob.webUrl
     val webPage = new WebPage
 
-    val response = httpClient.prepareGet(webUrl.url).execute().get()
-    info("Download " + response.getStatusCode + " : " + webUrl.url)
+    val response = httpClient.execute(new HttpGet(webUrl.url))
+    info("Download " + response.getStatusLine.getStatusCode + " : " + webUrl.url)
 
-    if (response.isRedirected) {
-      val location = response.getHeader("Location")
-      if (StringUtils.isNotBlank(location)) {
-        webUrl.movedToUrl = URLCanonicalizer.getCanonicalURL(location, webUrl.baseUrl)
-      }
-    } else if (response.getStatusCode == HttpStatus.SC_OK) {
-      webPage.content = response.getResponseBodyAsBytes
-      webPage.contentType = response.getContentType
+    if (response.getStatusLine.getStatusCode == HttpStatus.SC_OK) {
+      val entity = response.getEntity
+      webPage.content = EntityUtils.toByteArray(entity)
+      webPage.contentType = response.getEntity.getContentType.getValue
     }
 
     webPage.webUrl = webUrl
-    webPage.responseCode = response.getStatusCode
-    webPage.isRedirect = response.isRedirected
+    webPage.responseCode = response.getStatusLine.getStatusCode
 
     crawlJob.result = Some(webPage)
   }
 
   def close() {
-    httpClient.close()
+    httpClient.getConnectionManager.shutdown()
   }
 }

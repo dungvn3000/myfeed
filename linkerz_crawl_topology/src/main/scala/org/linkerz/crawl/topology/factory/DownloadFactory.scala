@@ -4,8 +4,9 @@
 
 package org.linkerz.crawl.topology.factory
 
-import com.ning.http.client.{AsyncHttpClient, AsyncHttpClientConfig}
 import org.linkerz.crawl.topology.downloader.{ImageDownloader, DefaultDownload}
+import org.apache.http.params.{CoreConnectionPNames, CoreProtocolPNames, BasicHttpParams}
+import org.apache.http.impl.client.DefaultHttpClient
 
 /**
  * The Class DefaultDownloadFactory.
@@ -17,19 +18,14 @@ import org.linkerz.crawl.topology.downloader.{ImageDownloader, DefaultDownload}
 
 object DownloadFactory {
 
-  val cf = new AsyncHttpClientConfig.Builder()
-    .setUserAgent("Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
-    .setCompressionEnabled(true)
-    .setAllowPoolingConnection(false)
-    .setFollowRedirects(false)
-//    .setMaximumConnectionsPerHost(5)
-//    .setMaximumConnectionsTotal(50)
-    .setRequestTimeoutInMs(1000 * 30)
-    .setUseRawUrl(true)
-    .build()
+  val httpParams = new BasicHttpParams()
+  httpParams.setParameter(CoreProtocolPNames.USER_AGENT,
+    "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2")
+  //Set time out 30s
+  httpParams.setParameter(CoreConnectionPNames.SO_TIMEOUT, 1000 * 30)
 
-  def createDownloader() = new DefaultDownload(new AsyncHttpClient(cf))
+  def createDownloader() = new DefaultDownload(new DefaultHttpClient(httpParams))
 
-  def createImageDownloader() = new ImageDownloader(new AsyncHttpClient(cf))
+  def createImageDownloader() = new ImageDownloader(new DefaultHttpClient(httpParams))
 
 }

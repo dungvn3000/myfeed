@@ -21,11 +21,6 @@ class WebUrl(_url: String) extends Logging with Serializable {
 
   def urlBuilder = UrlBuilder.fromString(_url)
 
-  /**
-   * Redirect url. in case response code is 301 and 302
-   */
-  var movedToUrl: String = _
-
   def domainName = httpHost.getHostName
 
   def baseUrl = httpHost.toURI
