@@ -28,7 +28,7 @@ class ImageDownloader(httpClient: AsyncHttpClient = new AsyncHttpClient) extends
           && response.getContentType.contains("image")) {
           val outputStream = new ByteArrayOutputStream()
           Thumbnails.of(response.getResponseBodyAsStream)
-            .forceSize(160, 160).toOutputStream(outputStream)
+            .size(200, 200).toOutputStream(outputStream)
           webPage.featureImage = Some(outputStream.toByteArray)
         }
       }
