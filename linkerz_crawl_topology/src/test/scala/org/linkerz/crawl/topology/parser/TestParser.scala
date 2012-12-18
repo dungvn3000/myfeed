@@ -5,16 +5,11 @@
 package org.linkerz.crawl.topology.parser
 
 import grizzled.slf4j.Logging
-import org.apache.tika.Tika
-import java.net.URL
-import org.apache.tika.sax.{BodyContentHandler, TeeContentHandler, LinkContentHandler}
-import java.io.PrintWriter
-import org.apache.tika.parser.html.{DefaultHtmlMapper, HtmlMapper, HtmlParser}
-import org.apache.tika.parser.ParseContext
-import org.apache.tika.metadata.Metadata
-import com.ning.http.client.AsyncHttpClient
+import java.net.{URI, URL}
 import org.junit.Test
-import org.linkerz.crawl.topology.factory.DownloadFactory
+import net.htmlparser.jericho.{HTMLElementName, Source}
+import collection.JavaConversions._
+import org.apache.http.client.utils.URIUtils
 
 /**
  * The Class TestParser.
@@ -25,46 +20,22 @@ import org.linkerz.crawl.topology.factory.DownloadFactory
  */
 class TestParser extends Logging {
 
-  val downloader = DownloadFactory.createDownloader()
-
   @Test
-  def testSimpleParser() {
-    val tika = new Tika
-    val mine = tika.detect(new URL("http://localhost/vnexpress/vnexpress.net/"))
-    println(mine)
-
-    val content = tika.parseToString(new URL("http://localhost/vnexpress/vnexpress.net/"))
-    println(content)
-  }
-
-  @Test
-  def testPdfParser() {
-    val tika = new Tika
-    val mine = tika.detect(new URL("http://localhost/linkerz_test_data/pdf/fw4.pdf"))
-    println(mine)
-
-    val content = tika.parseToString(new URL("http://localhost/linkerz_test_data/pdf/fw4.pdf"))
-    println(content)
-  }
-
   def testHtmlParser() {
-    val httpClient = new AsyncHttpClient
-    val response = httpClient.prepareGet("http://localhost/vnexpress/vnexpress.net/").execute().get()
-    val linkCollector = new LinkContentHandler
-    val handler = new TeeContentHandler(new BodyContentHandler(new PrintWriter(System.out)), linkCollector)
 
-    val metadata = new Metadata
-    val parseContext = new ParseContext
-    parseContext.set(classOf[HtmlMapper], new DefaultHtmlMapper())
-    val htmlParser = new HtmlParser
-    htmlParser.parse(response.getResponseBodyAsStream, handler, metadata, parseContext)
+    val source = new Source(new URL("http://www.tinhte.vn/threads/1747931/"))
 
-    println(metadata.toString)
-    println(metadata.get(Metadata.DESCRIPTION))
-    println(metadata.get(Metadata.SUBJECT))
-    println(metadata.get(Metadata.FORMAT))
-    println(metadata.get(Metadata.TYPE))
-    println(metadata.get("Content-Encoding"))
+    val links = source.getAllElements(HTMLElementName.A)
+
+    links.foreach(link => {
+
+      val href = link.getAttributeValue("href")
+
+      val url = URIUtils.resolve(new URI("http://www.tinhte.vn"), href)
+
+      println(url)
+    })
+
   }
 
 }

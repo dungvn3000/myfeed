@@ -19,7 +19,7 @@ class FetcherBolt extends StormBolt(outputFields = List("sessionId", "event")) w
   execute {
     implicit tuple => tuple matchSeq {
       case Seq(sessionId: UUID, Handle(job)) => {
-        val downloader = DownloadFactory.createDownloader
+        val downloader = DownloadFactory.createDownloader()
         try {
           //Delay time for each job.
           if (job.politenessDelay > 0 && job.parent.isDefined) Utils sleep job.politenessDelay

@@ -4,18 +4,15 @@
 
 package org.linkerz.crawl.topology.parser
 
-import org.apache.tika.parser.html.HtmlParser
-import org.apache.tika.parser.ParseContext
 import org.linkerz.crawl.topology.model.WebUrl
-import org.apache.tika.metadata.Metadata
 import java.io.ByteArrayInputStream
-import collection.JavaConversions._
 import org.linkerz.crawl.topology.job.CrawlJob
-import org.apache.commons.validator.routines.UrlValidator
 import java.util
-import edu.uci.ics.crawler4j.parser.HtmlContentHandler
-import edu.uci.ics.crawler4j.url.URLCanonicalizer
 import org.apache.commons.lang.StringUtils
+import net.htmlparser.jericho.{HTMLElementName, Source}
+import collection.JavaConversions._
+import edu.uci.ics.crawler4j.url.URLCanonicalizer
+import org.apache.commons.validator.routines.UrlValidator
 
 /**
  * The Class DefaultParser.
@@ -30,10 +27,6 @@ class DefaultParser extends Parser {
 
   def parse(crawlJob: CrawlJob) {
 
-    val htmlParser = new HtmlParser
-    val parseContext = new ParseContext
-    val htmlHandler = new HtmlContentHandler
-
     val webUrl = crawlJob.result.get.webUrl
     val webPage = crawlJob.result.get
 
@@ -43,47 +36,39 @@ class DefaultParser extends Parser {
     var webUrls = new util.ArrayList[WebUrl]
 
     if (webPage.content != null) {
-      val metadata = new Metadata
       val inputStream = new ByteArrayInputStream(webPage.content)
-      htmlParser.parse(inputStream, htmlHandler, metadata, parseContext)
 
-      webPage.title = metadata.get(Metadata.TITLE)
-      if (webPage.title == null) webPage.title = webUrl.url
+      val source = new Source(inputStream)
 
-      webPage.contentEncoding = metadata.get("Content-Encoding")
+      webPage.contentEncoding = source.getEncoding
       if (StringUtils.isBlank(webPage.contentEncoding)) {
         //Default encoding
         webPage.contentEncoding = "UTF-8"
       }
 
-      //Extract links in side a website
-      val baseURL = htmlHandler.getBaseUrl
-      var contextURL = webUrl.url
-      if (baseURL != null) {
-        contextURL = baseURL
-      }
-
-      htmlHandler.getOutgoingUrls.foreach(urlAnchorPair => {
-        var href = urlAnchorPair.getHref
-        href = href.trim()
-        if (href.length() != 0) {
-          var hrefWithoutProtocol = href.toLowerCase
-          if (href.startsWith("http://")) {
-            hrefWithoutProtocol = href.substring(7)
-          }
-          if (!hrefWithoutProtocol.contains("javascript:")
-            && !hrefWithoutProtocol.contains("@")
-            && !hrefWithoutProtocol.contains("mailto:")) {
-            val url = URLCanonicalizer.getCanonicalURL(href, contextURL)
-            val urlValidator = new UrlValidator(Array("http","https"))
-            if (url != null && urlValidator.isValid(url)) {
-              webUrls += new WebUrl(url)
+      val links = source.getAllElements(HTMLElementName.A)
+      links.foreach {
+        link => {
+          var href = link.getAttributeValue("href")
+          if (StringUtils.isNotBlank(href)) {
+            href = StringUtils.strip(href)
+            var hrefWithoutProtocol = href
+            if (href.startsWith("http://")) {
+              hrefWithoutProtocol = href.substring(7)
+            }
+            if (!hrefWithoutProtocol.contains("javascript:")
+              && !hrefWithoutProtocol.contains("@")
+              && !hrefWithoutProtocol.contains("mailto:")) {
+              val url = URLCanonicalizer.getCanonicalURL(href, webUrl.baseUrl)
+              val urlValidator = new UrlValidator(Array("http", "https"))
+              if (url != null && urlValidator.isValid(url)) {
+                webUrls += new WebUrl(url)
+              }
             }
           }
         }
-      })
+      }
     }
-
     webPage.webUrls = webUrls
   }
 

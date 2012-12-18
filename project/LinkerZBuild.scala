@@ -81,9 +81,6 @@ object LinkerZBuild extends Build {
   lazy val crawlerTopologyDependencies = Seq(
     "org.jsoup" % "jsoup" % "1.7.1",
     "org.apache.httpcomponents" % "httpclient" % "4.2.2",
-    "com.ning" % "async-http-client" % "1.7.8",
-    "org.apache.tika" % "tika-core" % "1.2",
-    "org.apache.tika" % "tika-parsers" % "1.2",
     "net.htmlparser.jericho" % "jericho-html" % "3.2",
     "net.coobird" % "thumbnailator" % "0.4.2"
   ) ++ stormDependencies ++ testDependencies
