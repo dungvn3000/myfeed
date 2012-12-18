@@ -3,9 +3,11 @@ package org.linkerz.crawl.topology.bolt
 import storm.scala.dsl.StormBolt
 import org.linkerz.crawl.topology.event.{MetaFetch, Persistent}
 import java.util.UUID
-import org.linkerz.dao.{LoggingDao, LinkDao}
+import org.linkerz.dao.{NewBoxDao, UserDao, LoggingDao, LinkDao}
 import java.util.concurrent.TimeoutException
 import grizzled.slf4j.Logging
+import com.mongodb.casbah.commons.MongoDBObject
+import org.linkerz.model.NewBox
 
 /**
  * This bolt is using for persistent data to the database server.
@@ -19,7 +21,24 @@ class PersistentBolt extends StormBolt(outputFields = List("sessionId", "event")
     implicit tuple => tuple matchSeq {
       case Seq(sessionId: UUID, MetaFetch(job)) => {
         job.result.map {
-          webPage => if (!webPage.isError && webPage.parsed) LinkDao.checkAndSave(webPage.asLink)
+          webPage => if (!webPage.isError && webPage.parsed) {
+            val link = LinkDao.checkAndSave(webPage.asLink)
+
+            //Deliver the new to user.
+            if (link.isDefined) {
+
+              val users = UserDao.find(MongoDBObject.empty)
+
+              users.foreach(
+                user => {
+                  NewBoxDao.save(NewBox(
+                    userId = user._id,
+                    linkId = link.get._id
+                  ))
+                }
+              )
+            }
+          }
         }
 
         //Save error for each job.
@@ -28,7 +47,7 @@ class PersistentBolt extends StormBolt(outputFields = List("sessionId", "event")
           error => !error.message.contains(classOf[TimeoutException].getName)
         }
         LoggingDao.insert(errors)
-//        LoggingDao.insert(job.infos)
+        //        LoggingDao.insert(job.infos)
         LoggingDao.insert(job.warns)
 
         tuple emit(sessionId, Persistent(job))

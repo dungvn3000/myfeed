@@ -11,7 +11,7 @@ import org.linkerz.recommendation.RecommendationTopology._
  * @since 12/16/12 4:38 AM
  *
  */
-object TopologyLocalRunner extends App {
+object RecommendationLocalRunner extends App {
 
   val localCluster = new LocalCluster
 

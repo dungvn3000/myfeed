@@ -20,8 +20,8 @@ class LinkDao(override val collection: MongoCollection) extends SalatDAO[Link, O
     val result = findOne(MongoDBObject("url" -> link.url))
     if (result.isEmpty) {
       save(link)
-      true
-    } else false
+      Some(link)
+    } else None
   }
 }
 
