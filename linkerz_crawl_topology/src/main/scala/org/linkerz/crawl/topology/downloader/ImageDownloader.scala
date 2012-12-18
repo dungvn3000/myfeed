@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils
 import net.coobird.thumbnailator.Thumbnails
 import java.io.ByteArrayOutputStream
 import org.apache.commons.httpclient.HttpStatus
+import net.coobird.thumbnailator.resizers.configurations.Antialiasing
 
 /**
  * The Class ImageDownloader.
@@ -28,7 +29,7 @@ class ImageDownloader(httpClient: AsyncHttpClient = new AsyncHttpClient) extends
           && response.getContentType.contains("image")) {
           val outputStream = new ByteArrayOutputStream()
           Thumbnails.of(response.getResponseBodyAsStream)
-            .size(200, 200).toOutputStream(outputStream)
+            .size(300, 300).keepAspectRatio(true).antialiasing(Antialiasing.ON).toOutputStream(outputStream)
           webPage.featureImage = Some(outputStream.toByteArray)
         }
       }
