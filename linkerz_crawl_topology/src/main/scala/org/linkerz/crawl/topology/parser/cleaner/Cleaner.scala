@@ -39,8 +39,6 @@ object Cleaner {
     })
 
     val cleanedSource = new Source(outputDocument.getSourceText)
-    cleanedSource.fullSequentialParse()
-
     cleanedSource
   }
 

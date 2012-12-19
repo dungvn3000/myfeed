@@ -20,7 +20,6 @@ class TestParser extends Logging {
 
   @Test
   def testHtmlParser() {
-
     val urls = List(
       "http://vnexpress.net/gl/khoa-hoc/2012/11/nguoi-mo-dau-the-he-vang-toan-hoc-viet-nam/",
       "http://www.tinhte.vn/threads/1750793/",
@@ -40,6 +39,32 @@ class TestParser extends Logging {
       downloader.download(job)
       parser.parse(job)
     })
+  }
+
+  @Test
+  def testAtHomePage() {
+    val urls = List(
+      "http://www.thanhnien.com.vn/pages/default.aspx",
+      "http://www.tinhte.vn"
+    )
+
+    urls.foreach(url => {
+      val downloader = new DefaultDownload
+      val parser = new AutoDetectContentBlockParser
+      val job = new CrawlJob(url)
+      downloader.download(job)
+      parser.parse(job)
+    })
+  }
+
+  @Test
+  def testSinglePage() {
+    val url = "http://xtyle.vn/x-guide/2012-11/365-cach-uon-danh-cho-toc-bi-hu-ton.html"
+    val downloader = new DefaultDownload
+    val parser = new AutoDetectContentBlockParser
+    val job = new CrawlJob(url)
+    downloader.download(job)
+    parser.parse(job)
   }
 
 }

@@ -28,33 +28,38 @@ class AutoDetectContentBlockParser extends Parser {
     //Step1: Parser the html page.
     val inputStream = new ByteArrayInputStream(crawlJob.result.get.content)
     var source = new Source(inputStream)
-    source.fullSequentialParse()
-
     source = Cleaner.clean(source)
+    source.fullSequentialParse()
 
     val title = TitleExtractor.extract(source)
 
     val potentialBlocks = findPotentialBlock(source.getAllElements)
 
-    val parentMap = new mutable.HashMap[Element, Int].withDefaultValue(1)
-    potentialBlocks.foreach(block => parentMap(block.parent) += 1)
+    if (!potentialBlocks.isEmpty) {
+      val parentMap = new mutable.HashMap[Element, Int].withDefaultValue(1)
+      potentialBlocks.foreach(block => {
+        parentMap(block.parent) += 1
+      })
 
-    val bestParent = parentMap.toList.sortWith(_._2 > _._2).head._1
+      val sortedParent = parentMap.toList.sortWith(_._2 > _._2)
 
-    val imgElement = ImageExtractor.extract(bestParent)
+      val bestParent = sortedParent.head._1
 
-    info("title: " + title)
+      info("title: " + title)
 
-    imgElement.map(img => {
-      info("image: " + img.getAttributeValue("src"))
-    })
+      val imgElement = ImageExtractor.extract(bestParent)
 
-    info(bestParent.getStartTag)
+      imgElement.map(img => {
+        info("image: " + img.getAttributeValue("src"))
+      })
 
-    info(bestParent.getTextExtractor.toString)
+      info(bestParent.getStartTag)
+      info(bestParent.getTextExtractor.toString)
+    }
   }
 
-  def findPotentialBlock(elements: java.util.List[Element]) = {
+
+  private def findPotentialBlock(elements: java.util.List[Element]) = {
     val potentialBlocks = new ListBuffer[TextBlock]
     elements.foreach(el => {
       if (el.getName != HTMLElementName.BODY

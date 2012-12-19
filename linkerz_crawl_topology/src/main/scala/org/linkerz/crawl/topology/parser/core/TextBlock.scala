@@ -35,4 +35,5 @@ case class TextBlock(element: Element) {
   def depth = element.getDepth
 
   def parent = element.getParentElement
+
 }
