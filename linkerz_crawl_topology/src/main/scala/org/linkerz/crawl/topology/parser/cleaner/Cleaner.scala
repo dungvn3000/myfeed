@@ -8,23 +8,40 @@ import java.util.regex.Pattern
  *
  * @author Nguyen Duc Dung
  * @since 12/20/12, 1:30 AM
- * 
+ *
  */
-trait Cleaner {
+object Cleaner {
 
-  def pattern: Pattern
+  val addPattern = Pattern.compile(".*banner.*|.*quangcao.*", Pattern.CASE_INSENSITIVE)
+
+  val commentPattern = Pattern.compile(".*comment.*|user*|.*avatar.*|member.*", Pattern.CASE_INSENSITIVE)
+
+  val navPattern = Pattern.compile("breadcrumb|crumbs|.*navlink.*|pagenav.*|.*page_nav.*|pager|phantrang|.*menu.*",
+    Pattern.CASE_INSENSITIVE)
+
+  val socialPattern = Pattern.compile(".*like.*|.*vote.*|.*share.*|.*facebook.*|.*twitter.*|.*google.*|linkhay|sociable",
+    Pattern.CASE_INSENSITIVE)
+
+  def patterns = List(addPattern, commentPattern, navPattern, socialPattern)
 
   def clean(source: Source) = {
-    val classElements = source.getAllElements("class", pattern)
-    val idElements = source.getAllElements("id", pattern)
-    val nameElements = source.getAllElements("name", pattern)
 
     val outputDocument = new OutputDocument(source)
-    outputDocument.remove(classElements)
-    outputDocument.remove(idElements)
-    outputDocument.remove(nameElements)
 
-    new Source(outputDocument.getSourceText)
+    patterns.foreach(pattern => {
+      val classElements = source.getAllElements("class", pattern)
+      val idElements = source.getAllElements("id", pattern)
+      val nameElements = source.getAllElements("name", pattern)
+
+      outputDocument.remove(classElements)
+      outputDocument.remove(idElements)
+      outputDocument.remove(nameElements)
+    })
+
+    val cleanedSource = new Source(outputDocument.getSourceText)
+    cleanedSource.fullSequentialParse()
+
+    cleanedSource
   }
 
 }

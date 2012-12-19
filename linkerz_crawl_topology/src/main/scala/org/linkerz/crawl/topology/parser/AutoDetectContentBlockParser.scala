@@ -2,6 +2,7 @@ package org.linkerz.crawl.topology.parser
 
 import cleaner._
 import core.TextBlock
+import extractor.TitleExtractor
 import net.htmlparser.jericho.{Element, HTMLElementName, Source}
 import java.io.ByteArrayInputStream
 import org.apache.commons.lang.StringUtils
@@ -27,14 +28,11 @@ class AutoDetectContentBlockParser extends Parser {
     //Step1: Parser the html page.
     val inputStream = new ByteArrayInputStream(crawlJob.result.get.content)
     var source = new Source(inputStream)
-
-    source = CommentCleaner.clean(source)
-    source = SocialCleaner.clean(source)
-    source = IFrameCleaner.clean(source)
-    source = NavigationCleaner.clean(source)
-    source = AddCleaner.clean(source)
-
     source.fullSequentialParse()
+
+    source = Cleaner.clean(source)
+
+    val title = TitleExtractor.extract(source)
 
     val potentialBlocks = findPotentialBlock(source.getAllElements)
 
@@ -42,6 +40,8 @@ class AutoDetectContentBlockParser extends Parser {
     potentialBlocks.foreach(block => parentMap(block.parent) += 1)
 
     val bestParent = parentMap.toList.sortWith(_._2 > _._2).head._1
+
+    info("title: " + title)
 
     info(bestParent.getStartTag)
 
