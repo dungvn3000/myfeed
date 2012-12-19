@@ -2,7 +2,6 @@ package org.linkerz.crawl.topology.parser.extractor
 
 import com.gravity.goose.text.StringSplitter
 import net.htmlparser.jericho.{CharacterReference, HTMLElementName, Source}
-import org.linkerz.crawl.topology.parser.core.StopWordCounter
 
 /**
  * This class is using for extract title from title element.
@@ -12,8 +11,6 @@ import org.linkerz.crawl.topology.parser.core.StopWordCounter
  *
  */
 object TitleExtractor {
-
-  private val _counter = new StopWordCounter("vi")
 
   val DASH_SPLITTER: StringSplitter = new StringSplitter("-")
 
@@ -32,13 +29,17 @@ object TitleExtractor {
     ""
   }
 
+  /**
+   * Get the longest title.
+   * @param potentialTitle
+   * @return
+   */
   private def findSuitableTitle(potentialTitle: List[String]) = {
-    var maxStopWord = 0
+    var maxLength = 0
     var bestTitle = potentialTitle.head
     potentialTitle.foreach(title => {
-      val count = _counter.count(title)
-      if (count > maxStopWord) {
-        maxStopWord = count
+      if (title.length > maxLength) {
+        maxLength = title.length
         bestTitle = title
       }
     })
