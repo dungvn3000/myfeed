@@ -1,13 +1,14 @@
 package org.linkerz.crawl.topology.parser
 
+import cleaner._
 import core.TextBlock
-import org.linkerz.crawl.topology.job.CrawlJob
 import net.htmlparser.jericho.{Element, HTMLElementName, Source}
 import java.io.ByteArrayInputStream
 import org.apache.commons.lang.StringUtils
 import scala.collection.JavaConversions._
 import collection.mutable.ListBuffer
 import collection.mutable
+import org.linkerz.crawl.topology.job.CrawlJob
 
 /**
  * The Class AutoDetectContentBlockParser.
@@ -18,11 +19,21 @@ import collection.mutable
  */
 class AutoDetectContentBlockParser extends Parser {
 
+  val minTextLength = 10
+  val minStopWordCount = 3
+
   def parse(crawlJob: CrawlJob) {
 
     //Step1: Parser the html page.
     val inputStream = new ByteArrayInputStream(crawlJob.result.get.content)
-    val source = new Source(inputStream)
+    var source = new Source(inputStream)
+
+    source = CommentCleaner.clean(source)
+    source = SocialCleaner.clean(source)
+    source = IFrameCleaner.clean(source)
+    source = NavigationCleaner.clean(source)
+    source = AddCleaner.clean(source)
+
     source.fullSequentialParse()
 
     val potentialBlocks = findPotentialBlock(source.getAllElements)
@@ -32,9 +43,9 @@ class AutoDetectContentBlockParser extends Parser {
 
     val bestParent = parentMap.toList.sortWith(_._2 > _._2).head._1
 
-    println(bestParent.getStartTag)
+    info(bestParent.getStartTag)
 
-    println(bestParent.getTextExtractor.toString)
+    info(bestParent.getTextExtractor.toString)
   }
 
   def findPotentialBlock(elements: java.util.List[Element]) = {
@@ -44,8 +55,8 @@ class AutoDetectContentBlockParser extends Parser {
         && el.getName != HTMLElementName.HTML
         && el.getName != HTMLElementName.A) {
         val textBlock = TextBlock(el)
-        if (StringUtils.isNotBlank(textBlock.textEvaluate) && textBlock.textEvaluate.length > 30) {
-          if (textBlock.stopWordCount > 3) {
+        if (StringUtils.isNotBlank(textBlock.textEvaluate) && textBlock.textEvaluate.length > minTextLength) {
+          if (textBlock.stopWordCount > minStopWordCount) {
             potentialBlocks += textBlock
           }
         }
