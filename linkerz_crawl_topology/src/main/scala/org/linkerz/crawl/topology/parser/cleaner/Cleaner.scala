@@ -16,7 +16,7 @@ object Cleaner {
 
   val commentPattern = Pattern.compile(".*comment.*|user*|.*avatar.*|member.*", Pattern.CASE_INSENSITIVE)
 
-  val navPattern = Pattern.compile("breadcrumb|crumbs|.*navlink.*|pagenav.*|.*page_nav.*|pager|phantrang|.*menu.*",
+  val navPattern = Pattern.compile("breadcrumb|crumbs|.*navlink.*|pagenav.*|.*page_nav.*|pager|phantrang|.*menu.*|.*bookmark.*",
     Pattern.CASE_INSENSITIVE)
 
   val socialPattern = Pattern.compile(".*like.*|.*vote.*|.*share.*|.*facebook.*|.*twitter.*|.*google.*|linkhay|sociable",

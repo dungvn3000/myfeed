@@ -2,7 +2,7 @@ package org.linkerz.crawl.topology.parser
 
 import cleaner._
 import core.TextBlock
-import extractor.TitleExtractor
+import extractor.{ImageExtractor, TitleExtractor}
 import net.htmlparser.jericho.{Element, HTMLElementName, Source}
 import java.io.ByteArrayInputStream
 import org.apache.commons.lang.StringUtils
@@ -41,7 +41,13 @@ class AutoDetectContentBlockParser extends Parser {
 
     val bestParent = parentMap.toList.sortWith(_._2 > _._2).head._1
 
+    val imgElement = ImageExtractor.extract(bestParent)
+
     info("title: " + title)
+
+    imgElement.map(img => {
+      info("image: " + img.getAttributeValue("src"))
+    })
 
     info(bestParent.getStartTag)
 
