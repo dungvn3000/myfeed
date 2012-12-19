@@ -5,11 +5,9 @@
 package org.linkerz.crawl.topology.parser
 
 import grizzled.slf4j.Logging
-import java.net.{URI, URL}
 import org.junit.Test
-import net.htmlparser.jericho.{HTMLElementName, Source}
-import collection.JavaConversions._
-import org.apache.http.client.utils.URIUtils
+import org.linkerz.crawl.topology.downloader.DefaultDownload
+import org.linkerz.crawl.topology.job.CrawlJob
 
 /**
  * The Class TestParser.
@@ -23,18 +21,14 @@ class TestParser extends Logging {
   @Test
   def testHtmlParser() {
 
-    val source = new Source(new URL("http://www.tinhte.vn/threads/1747931/"))
 
-    val links = source.getAllElements(HTMLElementName.A)
+    val downloader = new DefaultDownload
+    val parser = new AutoDetectContentBlockParser
+    val job = new CrawlJob("http://www.tinhte.vn/threads/1750793/")
 
-    links.foreach(link => {
+    downloader.download(job)
+    parser.parse(job)
 
-      val href = link.getAttributeValue("href")
-
-      val url = URIUtils.resolve(new URI("http://www.tinhte.vn"), href)
-
-      println(url)
-    })
 
   }
 

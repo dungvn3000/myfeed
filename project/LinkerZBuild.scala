@@ -82,7 +82,8 @@ object LinkerZBuild extends Build {
     "org.jsoup" % "jsoup" % "1.7.1",
     "org.apache.httpcomponents" % "httpclient" % "4.2.2",
     "net.htmlparser.jericho" % "jericho-html" % "3.2",
-    "net.coobird" % "thumbnailator" % "0.4.2"
+    "net.coobird" % "thumbnailator" % "0.4.2",
+    "com.gravity" % "goose" % "2.1.22"
   ) ++ stormDependencies ++ testDependencies
 
   lazy val recommendationDependencies = Seq(
