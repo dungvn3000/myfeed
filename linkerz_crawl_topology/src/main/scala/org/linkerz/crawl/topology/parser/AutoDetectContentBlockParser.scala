@@ -26,18 +26,11 @@ class AutoDetectContentBlockParser extends Parser {
     source.fullSequentialParse()
 
     val potentialBlocks = findPotentialBlock(source.getAllElements)
-    val parentMap = new mutable.HashMap[Element, Int].withDefaultValue(0)
+
+    val parentMap = new mutable.HashMap[Element, Int].withDefaultValue(1)
     potentialBlocks.foreach(block => parentMap(block.parent) += 1)
 
-    val sort = parentMap.toList.sortWith((m1, m2) => {
-      m1._2 > m2._2
-    })
-
-    val bestParent = sort.head._1
-
-    sort.foreach(map => {
-      println(map._1.getStartTag + " " + map._2)
-    })
+    val bestParent = parentMap.toList.sortWith(_._2 > _._2).head._1
 
     println(bestParent.getStartTag)
 
@@ -51,8 +44,8 @@ class AutoDetectContentBlockParser extends Parser {
         && el.getName != HTMLElementName.HTML
         && el.getName != HTMLElementName.A) {
         val textBlock = TextBlock(el)
-        if (StringUtils.isNotBlank(textBlock.text) && textBlock.text.length > 30) {
-          if (textBlock.stopWordCount > 5) {
+        if (StringUtils.isNotBlank(textBlock.textEvaluate) && textBlock.textEvaluate.length > 30) {
+          if (textBlock.stopWordCount > 3) {
             potentialBlocks += textBlock
           }
         }

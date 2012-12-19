@@ -62,6 +62,7 @@ object LinkerZBuild extends Build {
     "commons-collections" % "commons-collections" % "3.2.1",
     "commons-digester" % "commons-digester" % "2.1" exclude("commons-beanutils", "commons-beanutils"),
     "commons-lang" % "commons-lang" % "2.6",
+    "org.apache.commons" % "commons-math3" % "3.0",
     "commons-validator" % "commons-validator" % "1.4.0" exclude("commons-beanutils", "commons-beanutils"),
     "commons-io" % "commons-io" % "2.4",
     "org.scalaz" %% "scalaz-core" % "6.0.4",
@@ -89,7 +90,6 @@ object LinkerZBuild extends Build {
 
   lazy val recommendationDependencies = Seq(
     "org.scalanlp" % "breeze-process_2.9.2" % "0.1",
-    "org.apache.commons" % "commons-math3" % "3.0",
     "org.apache.mahout" % "mahout-core" % "0.7",
     "org.carrot2" % "carrot2-mini" % "3.6.1",
     "redis.clients" % "jedis" % "2.1.0"
