@@ -1,10 +1,11 @@
 package org.linkerz.crawl.topology.parser.extractor
 
-import net.htmlparser.jericho.{CharacterReference, HTMLElementName, Source}
+import net.htmlparser.jericho.{HTMLElementName, Source}
 import scala.collection.JavaConversions._
 import org.apache.commons.lang.StringUtils
 import collection.mutable.ListBuffer
-import org.linkerz.crawl.topology.parser.core.{StringSplitter, StopWordCounter}
+import org.linkerz.crawl.topology.parser.core.{CleanTextExtractor, StringSplitter, StopWordCounter}
+import CleanTextExtractor._
 
 /**
  * This class is using for extract title from title element.
@@ -21,7 +22,7 @@ object TitleExtractor {
   def extract(source: Source): Option[String] = {
     val titleElement = source.getFirstElement(HTMLElementName.TITLE)
     if (titleElement != null) {
-      val title = CharacterReference.decodeCollapseWhiteSpace(titleElement.getContent)
+      val title = titleElement.toCleanText
       val result = findTitleBaseOnPageContent(title, source)
 
       if (result.isEmpty) {
@@ -45,7 +46,7 @@ object TitleExtractor {
     elements.foreach(element => {
       if (element.getName != HTMLElementName.TITLE
         && element.getName != HTMLElementName.HEAD) {
-        val text = element.getTextExtractor.toString
+        val text = element.toCleanText
 
         if (StringUtils.isNotBlank(text) && text.length > minTitleLength
           && title.contains(StringUtils.strip(text))) {
