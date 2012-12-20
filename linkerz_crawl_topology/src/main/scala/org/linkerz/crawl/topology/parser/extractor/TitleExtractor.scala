@@ -26,7 +26,7 @@ object TitleExtractor {
       val result = findTitleBaseOnPageContent(title, source)
 
       if (result.isEmpty) {
-        return findTitleBaseOnItSelf(title, source)
+        return Some(findTitleBaseOnItSelf(title, source))
       } else {
         return result
       }
@@ -63,8 +63,8 @@ object TitleExtractor {
     None
   }
 
-  private def findTitleBaseOnItSelf(title: String, source: Source): Option[String] = {
-    var bestTitle: Option[String] = None
+  private def findTitleBaseOnItSelf(title: String, source: Source): String = {
+    var bestTitle = title
     var candidateTitle = title
     if (StringUtils.isNotBlank(candidateTitle)) {
       candidateTitle = candidateTitle.replaceAll("\\|", "-")
@@ -92,7 +92,7 @@ object TitleExtractor {
 
           if (score > maxScore) {
             maxScore = score
-            bestTitle = Some(potentialTitle.trim)
+            bestTitle = StringUtils.strip(potentialTitle)
           }
         })
       }

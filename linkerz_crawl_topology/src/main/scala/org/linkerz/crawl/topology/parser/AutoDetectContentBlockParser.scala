@@ -57,7 +57,7 @@ class AutoDetectContentBlockParser extends Parser {
         info(bestBlock.text)
       }
     } else {
-      info("Can't extract title form your article, you page might is a home page is not an individual article")
+      info("Can't extract title form your article.")
     }
   }
 
