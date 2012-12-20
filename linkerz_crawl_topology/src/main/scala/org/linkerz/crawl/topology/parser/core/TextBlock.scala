@@ -52,9 +52,20 @@ case class TextBlock(element: Element) {
     var count = 0
 
     elementTexts.foreach(text => {
-      if (words.contains(text)) count +=1
+      if (words.contains(text)) count += 1
     })
 
     count
   }
+
+  override def equals(obj: Any): Boolean = {
+    if (obj.isInstanceOf[TextBlock]) {
+      val element2 = obj.asInstanceOf[TextBlock].element
+      element.equals(element2)
+    } else {
+      false
+    }
+  }
+
+  override def hashCode() = element.hashCode()
 }

@@ -1,6 +1,6 @@
 package org.linkerz.crawl.topology.parser.cleaner
 
-import net.htmlparser.jericho.{OutputDocument, Source}
+import net.htmlparser.jericho.{HTMLElementName, CharStreamSourceUtil, OutputDocument, Source}
 import java.util.regex.Pattern
 
 /**
@@ -16,10 +16,11 @@ object Cleaner {
 
   val commentPattern = Pattern.compile(".*comment.*|user*|.*avatar.*|member.*", Pattern.CASE_INSENSITIVE)
 
-  val navPattern = Pattern.compile("breadcrumb|crumbs|.*navlink.*|pagenav.*|.*page_nav.*|pager|phantrang|.*menu.*|.*bookmark.*",
+  val navPattern = Pattern.compile(".*breadcrumb.*|crumbs|.*navlink.*|pagenav.*|.*page_nav.*|pager|" +
+    "phantrang|.*menu.*|.*bookmark.*|.*header.*|.*footer.*|.*navigation.*",
     Pattern.CASE_INSENSITIVE)
 
-  val socialPattern = Pattern.compile(".*like.*|.*vote.*|.*share.*|.*facebook.*|.*twitter.*|.*google.*|linkhay|sociable",
+  val socialPattern = Pattern.compile(".*like.*|.*vote.*|.*share.*|.*rating.*|.*facebook.*|.*twitter.*|.*google.*|linkhay|sociable",
     Pattern.CASE_INSENSITIVE)
 
   def patterns = List(addPattern, commentPattern, navPattern, socialPattern)
@@ -38,7 +39,12 @@ object Cleaner {
       outputDocument.remove(nameElements)
     })
 
-    val cleanedSource = new Source(outputDocument.getSourceText)
+    //Remove iframe, cause most of them is adv.
+    val iframeElements = source.getAllElements(HTMLElementName.IFRAME)
+    outputDocument.remove(iframeElements)
+
+    val reader = CharStreamSourceUtil.getReader(outputDocument)
+    val cleanedSource = new Source(reader)
     cleanedSource
   }
 

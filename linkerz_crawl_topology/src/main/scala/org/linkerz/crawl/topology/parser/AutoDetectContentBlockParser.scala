@@ -21,7 +21,7 @@ import org.linkerz.crawl.topology.job.CrawlJob
 class AutoDetectContentBlockParser extends Parser {
 
   val minTextLength = 10
-  val minStopWordCount = 3
+  val minStopWordCount = 2
   val minTitleCount = 1
 
   def parse(crawlJob: CrawlJob) {
@@ -71,7 +71,7 @@ class AutoDetectContentBlockParser extends Parser {
    */
   private def findTheBestBlock(sortedParent: List[TextBlock], title: String): TextBlock = {
     sortedParent.foreach(block => {
-      if (block.count(title) > minTitleCount) {
+      if (block.count(title) >= minTitleCount) {
         return block
       }
     })
@@ -90,7 +90,7 @@ class AutoDetectContentBlockParser extends Parser {
         && el.getName != HTMLElementName.A) {
         val textBlock = TextBlock(el)
         if (StringUtils.isNotBlank(textBlock.textEvaluate) && textBlock.textEvaluate.length > minTextLength) {
-          if (textBlock.stopWordCount > minStopWordCount) {
+          if (textBlock.stopWordCount >= minStopWordCount) {
             potentialBlocks += textBlock
           }
         }
