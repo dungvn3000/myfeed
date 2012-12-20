@@ -22,6 +22,7 @@ class AutoDetectContentBlockParser extends Parser {
 
   val minTextLength = 10
   val minStopWordCount = 3
+  val minTitleCount = 1
 
   def parse(crawlJob: CrawlJob) {
 
@@ -37,29 +38,44 @@ class AutoDetectContentBlockParser extends Parser {
       val potentialBlocks = findPotentialBlock(source.getAllElements)
 
       if (!potentialBlocks.isEmpty) {
-        val parentMap = new mutable.HashMap[Element, Int].withDefaultValue(1)
+        val parentMap = new mutable.HashMap[TextBlock, Int].withDefaultValue(0)
         potentialBlocks.foreach(block => {
-          parentMap(block.parent) += 1
+          parentMap(TextBlock(block.parent)) += 1
         })
 
-        val sortedParent = parentMap.toList.sortWith(_._2 > _._2)
+        val sortedParent = parentMap.toList.sortWith(_._2 > _._2).map(_._1)
 
-        val bestParent = sortedParent.head._1
+        val bestBlock = findTheBestBlock(sortedParent, title.get)
 
         info("title: " + title.get)
 
-        val imgElement = ImageExtractor.extract(bestParent)
+        val imgElement = ImageExtractor.extract(bestBlock.element)
 
         imgElement.map(img => {
           info("image: " + img.getAttributeValue("src"))
         })
 
-        info(bestParent.getStartTag)
-        info(bestParent.getTextExtractor.toString)
+        info(bestBlock.element.getStartTag)
+        info(bestBlock.text)
       }
     } else {
       info("Can't extract title form your article, you page might is a home page is not an individual article")
     }
+  }
+
+  /**
+   * Base on the title, make sure the content has some thing relate with the title.
+   * @param sortedParent
+   * @param title
+   * @return
+   */
+  private def findTheBestBlock(sortedParent: List[TextBlock], title: String): TextBlock = {
+    sortedParent.foreach(block => {
+      if (block.count(title) > minTitleCount) {
+        return block
+      }
+    })
+    sortedParent.head
   }
 
 
@@ -68,6 +84,9 @@ class AutoDetectContentBlockParser extends Parser {
     elements.foreach(el => {
       if (el.getName != HTMLElementName.BODY
         && el.getName != HTMLElementName.HTML
+        && el.getName != HTMLElementName.TITLE
+        && el.getName != HTMLElementName.HEAD
+        && el.getName != HTMLElementName.META
         && el.getName != HTMLElementName.A) {
         val textBlock = TextBlock(el)
         if (StringUtils.isNotBlank(textBlock.textEvaluate) && textBlock.textEvaluate.length > minTextLength) {
