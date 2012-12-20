@@ -11,6 +11,7 @@ import org.apache.http.client.HttpClient
 import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.util.EntityUtils
+import org.apache.http.client.entity.GzipDecompressingEntity
 
 /**
  * The Class DefaultDownload.
@@ -30,7 +31,13 @@ class DefaultDownload(httpClient: HttpClient = new DefaultHttpClient) extends Do
     info("Download " + response.getStatusLine.getStatusCode + " : " + webUrl.url)
 
     if (response.getStatusLine.getStatusCode == HttpStatus.SC_OK) {
-      val entity = response.getEntity
+      var entity = response.getEntity
+      if (entity.getContentEncoding != null) {
+        if (entity.getContentEncoding.toString.contains("gzip")) {
+          entity = new GzipDecompressingEntity(entity)
+        }
+      }
+
       webPage.content = EntityUtils.toByteArray(entity)
       webPage.contentType = response.getEntity.getContentType.getValue
     }
