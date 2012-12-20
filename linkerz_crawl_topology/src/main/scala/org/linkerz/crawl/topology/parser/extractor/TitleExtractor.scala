@@ -5,7 +5,7 @@ import scala.collection.JavaConversions._
 import org.apache.commons.lang.StringUtils
 import collection.mutable.ListBuffer
 import org.linkerz.crawl.topology.parser.core.{StringSplitter, StopWordCounter}
-import CleanTextExtractor._
+import TitleTextExtractor._
 
 /**
  * This class is using for extract title from title element.
@@ -22,7 +22,7 @@ object TitleExtractor {
   def extract(source: Source): Option[String] = {
     val titleElement = source.getFirstElement(HTMLElementName.TITLE)
     if (titleElement != null) {
-      val title = titleElement.toCleanText
+      val title = titleElement.toTitle
       val result = findTitleBaseOnPageContent(title, source)
 
       if (result.isEmpty) {
@@ -46,7 +46,7 @@ object TitleExtractor {
     elements.foreach(element => {
       if (element.getName != HTMLElementName.TITLE
         && element.getName != HTMLElementName.HEAD) {
-        val text = element.toCleanText
+        val text = element.toTitle
 
         if (StringUtils.isNotBlank(text) && text.length > minTitleLength
           && title.contains(StringUtils.strip(text))) {
