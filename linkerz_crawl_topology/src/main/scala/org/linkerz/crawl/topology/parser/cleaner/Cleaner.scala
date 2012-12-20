@@ -12,16 +12,17 @@ import java.util.regex.Pattern
  */
 object Cleaner {
 
-  val addPattern = Pattern.compile(".*banner.*|.*quangcao.*", Pattern.CASE_INSENSITIVE)
+  val addPattern = Pattern.compile(".*banner.*|.*quangcao.*|.*copyright.*", Pattern.CASE_INSENSITIVE)
 
-  val commentPattern = Pattern.compile(".*comment.*|user*|.*avatar.*|member.*", Pattern.CASE_INSENSITIVE)
+  val commentPattern = Pattern.compile(".*comment|userchat.*|.*useravatar.*|.*memberlist.*" +
+    "|.*memberavatar.*", Pattern.CASE_INSENSITIVE)
 
   val navPattern = Pattern.compile(".*breadcrumb.*|crumbs|.*navlink.*|pagenav.*|.*page_nav.*|pager|" +
     "phantrang|.*menu.*|.*bookmark.*|header|.*footer.*|.*navigation.*",
     Pattern.CASE_INSENSITIVE)
 
-  val socialPattern = Pattern.compile(".*like.*|.*vote.*|.*share.*|.*rating.*|.*facebook.*|.*twitter.*|.*google.*|linkhay|sociable",
-    Pattern.CASE_INSENSITIVE)
+  val socialPattern = Pattern.compile(".*like.*|.*vote.*|.*share.*|.*rating.*|.*facebook.*|.*twitter.*|.*google.*|" +
+    "linkhay|sociable|.*chat_popup.*",Pattern.CASE_INSENSITIVE)
 
   def patterns = List(addPattern, commentPattern, navPattern, socialPattern)
 
