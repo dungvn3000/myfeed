@@ -8,6 +8,8 @@ import grizzled.slf4j.Logging
 import org.junit.Test
 import org.linkerz.crawl.topology.downloader.DefaultDownload
 import org.linkerz.crawl.topology.job.CrawlJob
+import net.htmlparser.jericho.{Renderer, Source}
+import java.net.URL
 
 /**
  * The Class TestParser.
@@ -59,7 +61,7 @@ class TestParser extends Logging {
 
   @Test
   def testSinglePage() {
-    val url = "http://xtyle.vn/x-guide/2012-11/365-cach-uon-danh-cho-toc-bi-hu-ton.html"
+    val url = "http://www.thanhnien.com.vn/pages/20121219/5-bong-hong-buon-ma-tuy-lanh-an.aspx"
     val downloader = new DefaultDownload
     val parser = new AutoDetectContentBlockParser
     val job = new CrawlJob(url)

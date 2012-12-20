@@ -4,6 +4,7 @@ import net.htmlparser.jericho.{TextExtractor, HTMLElementName, StartTag, Element
 import org.apache.commons.lang.StringUtils
 import breeze.text.tokenize.JavaWordTokenizer
 import breeze.text.transform.StopWordFilter
+import org.linkerz.crawl.topology.parser.extractor.TextBlockExtractor._
 
 /**
  * This class represent for a text block inside a html page.
@@ -17,12 +18,8 @@ case class TextBlock(element: Element) {
 
   private val _counter = new StopWordCounter("vi")
   private val _tokenizer = JavaWordTokenizer
-  private val _tokenizerWithStopWord = JavaWordTokenizer ~> StopWordFilter("vi")
 
-  private val _extractor = new TextExtractor(element) {
-    override def excludeElement(startTag: StartTag) = startTag.getName == HTMLElementName.A
-  }
-  private val _st = _extractor.toString.trim
+  private val _st = element.extractText
 
   var stopWordCount = 0
   var wordCount = 0
@@ -33,7 +30,7 @@ case class TextBlock(element: Element) {
     wordCount = _tokenizer(_st).size
   }
 
-  def textEvaluate = _extractor.toString
+  def textEvaluate = _st
 
   def text = element.getTextExtractor.toString
 
@@ -42,21 +39,10 @@ case class TextBlock(element: Element) {
   def parent = element.getParentElement
 
   /**
-   * Remove stop word and count how many time the word appear in side the element content.
-   * @param st
+   * Score to evaluate this block.
    * @return
    */
-  def count(st: String) = {
-    val elementTexts = _tokenizerWithStopWord(element.getTextExtractor.toString)
-    val words = _tokenizerWithStopWord(st).toList
-    var count = 0
-
-    elementTexts.foreach(text => {
-      if (words.contains(text)) count += 1
-    })
-
-    count
-  }
+  def score = wordCount * stopWordCount
 
   override def equals(obj: Any): Boolean = {
     if (obj.isInstanceOf[TextBlock]) {

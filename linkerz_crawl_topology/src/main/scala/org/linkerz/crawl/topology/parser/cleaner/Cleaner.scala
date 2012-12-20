@@ -43,6 +43,18 @@ object Cleaner {
     val iframeElements = source.getAllElements(HTMLElementName.IFRAME)
     outputDocument.remove(iframeElements)
 
+    //Remove script tag
+    val scriptElements = source.getAllElements(HTMLElementName.SCRIPT)
+    outputDocument.remove(scriptElements)
+
+    //Remove noscript tag
+    val noscriptElements = source.getAllElements(HTMLElementName.NOSCRIPT)
+    outputDocument.remove(noscriptElements)
+
+    //Remove style tag
+    val styleElements = source.getAllElements(HTMLElementName.STYLE)
+    outputDocument.remove(styleElements)
+
     val reader = CharStreamSourceUtil.getReader(outputDocument)
     val cleanedSource = new Source(reader)
     cleanedSource

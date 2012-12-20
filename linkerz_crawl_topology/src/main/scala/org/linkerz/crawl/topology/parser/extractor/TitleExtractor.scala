@@ -4,7 +4,7 @@ import net.htmlparser.jericho.{HTMLElementName, Source}
 import scala.collection.JavaConversions._
 import org.apache.commons.lang.StringUtils
 import collection.mutable.ListBuffer
-import org.linkerz.crawl.topology.parser.core.{CleanTextExtractor, StringSplitter, StopWordCounter}
+import org.linkerz.crawl.topology.parser.core.{StringSplitter, StopWordCounter}
 import CleanTextExtractor._
 
 /**

@@ -1,4 +1,4 @@
-package org.linkerz.crawl.topology.parser.core
+package org.linkerz.crawl.topology.parser.extractor
 
 import net.htmlparser.jericho.{Segment, TextExtractor}
 

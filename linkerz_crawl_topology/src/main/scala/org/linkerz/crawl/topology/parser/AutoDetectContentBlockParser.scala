@@ -40,12 +40,10 @@ class AutoDetectContentBlockParser extends Parser {
       if (!potentialBlocks.isEmpty) {
         val parentMap = new mutable.HashMap[TextBlock, Int].withDefaultValue(0)
         potentialBlocks.foreach(block => {
-          parentMap(TextBlock(block.parent)) += 1
+          parentMap(TextBlock(block.parent)) += block.score
         })
 
-        val sortedParent = parentMap.toList.sortWith(_._2 > _._2).map(_._1)
-
-        val bestBlock = findTheBestBlock(sortedParent, title.get)
+        val bestBlock = parentMap.toList.sortWith(_._2 > _._2).map(_._1).head
 
         info("title: " + title.get)
 
@@ -62,22 +60,6 @@ class AutoDetectContentBlockParser extends Parser {
       info("Can't extract title form your article, you page might is a home page is not an individual article")
     }
   }
-
-  /**
-   * Base on the title, make sure the content has some thing relate with the title.
-   * @param sortedParent
-   * @param title
-   * @return
-   */
-  private def findTheBestBlock(sortedParent: List[TextBlock], title: String): TextBlock = {
-    sortedParent.foreach(block => {
-      if (block.count(title) >= minTitleCount) {
-        return block
-      }
-    })
-    sortedParent.head
-  }
-
 
   private def findPotentialBlock(elements: java.util.List[Element]) = {
     val potentialBlocks = new ListBuffer[TextBlock]
