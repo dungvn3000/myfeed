@@ -33,28 +33,32 @@ class AutoDetectContentBlockParser extends Parser {
 
     val title = TitleExtractor.extract(source)
 
-    val potentialBlocks = findPotentialBlock(source.getAllElements)
+    if (title.isDefined) {
+      val potentialBlocks = findPotentialBlock(source.getAllElements)
 
-    if (!potentialBlocks.isEmpty) {
-      val parentMap = new mutable.HashMap[Element, Int].withDefaultValue(1)
-      potentialBlocks.foreach(block => {
-        parentMap(block.parent) += 1
-      })
+      if (!potentialBlocks.isEmpty) {
+        val parentMap = new mutable.HashMap[Element, Int].withDefaultValue(1)
+        potentialBlocks.foreach(block => {
+          parentMap(block.parent) += 1
+        })
 
-      val sortedParent = parentMap.toList.sortWith(_._2 > _._2)
+        val sortedParent = parentMap.toList.sortWith(_._2 > _._2)
 
-      val bestParent = sortedParent.head._1
+        val bestParent = sortedParent.head._1
 
-      info("title: " + title)
+        info("title: " + title.get)
 
-      val imgElement = ImageExtractor.extract(bestParent)
+        val imgElement = ImageExtractor.extract(bestParent)
 
-      imgElement.map(img => {
-        info("image: " + img.getAttributeValue("src"))
-      })
+        imgElement.map(img => {
+          info("image: " + img.getAttributeValue("src"))
+        })
 
-      info(bestParent.getStartTag)
-      info(bestParent.getTextExtractor.toString)
+        info(bestParent.getStartTag)
+        info(bestParent.getTextExtractor.toString)
+      }
+    } else {
+      info("Can't extract title form your article, you page might is a home page is not an individual article")
     }
   }
 
