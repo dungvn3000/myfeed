@@ -11,11 +11,7 @@ import net.htmlparser.jericho._
  */
 class TextBlockExtractor(segment: Segment) extends TextExtractor(segment) {
   override def excludeElement(startTag: StartTag) = startTag != segment.getFirstStartTag &&
-    startTag.getName != HTMLElementName.P &&
-    startTag.getName != HTMLElementName.SPAN &&
-    startTag.getName != HTMLElementName.B &&
-    startTag.getName != HTMLElementName.STRONG &&
-    startTag.getName != HTMLElementName.I
+    !HTMLElements.getInlineLevelElementNames.contains(startTag.getName)
 
   def extractText = this.toString
 }

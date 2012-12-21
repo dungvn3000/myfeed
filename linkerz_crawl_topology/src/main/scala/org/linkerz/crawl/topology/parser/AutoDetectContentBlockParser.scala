@@ -3,7 +3,7 @@ package org.linkerz.crawl.topology.parser
 import cleaner._
 import core.TextBlock
 import extractor.{ImageExtractor, TitleExtractor}
-import net.htmlparser.jericho.{Element, HTMLElementName, Source}
+import net.htmlparser.jericho.{HTMLElements, Element, HTMLElementName, Source}
 import java.io.ByteArrayInputStream
 import org.apache.commons.lang.StringUtils
 import scala.collection.JavaConversions._
@@ -69,7 +69,8 @@ class AutoDetectContentBlockParser extends Parser {
         && el.getName != HTMLElementName.TITLE
         && el.getName != HTMLElementName.HEAD
         && el.getName != HTMLElementName.META
-        && el.getName != HTMLElementName.A) {
+        && el.getName != HTMLElementName.A
+        && !HTMLElements.getInlineLevelElementNames.contains(el.getName)) {
         val textBlock = TextBlock(el)
         if (StringUtils.isNotBlank(textBlock.textEvaluate) && textBlock.textEvaluate.length > minTextLength) {
           if (textBlock.stopWordCount >= minStopWordCount) {
