@@ -8,6 +8,7 @@
 userchat.*
 .*useravatar.*
 .*memberlist.*
+box_suervey
 
 #nav
 .*breadcrumb.*
@@ -22,6 +23,7 @@ phantrang
 header
 .*footer.*
 .*navigation.*
+list_news
 
 #scocail
 .*like.*
