@@ -5,6 +5,9 @@
 
 #comment
 .*comment
+comment1
+comment2
+comment3
 userchat.*
 .*useravatar.*
 .*memberlist.*

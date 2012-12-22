@@ -1,10 +1,8 @@
 package org.linkerz.crawl.topology.parser.core
 
-import net.htmlparser.jericho.{TextExtractor, HTMLElementName, StartTag, Element}
+import net.htmlparser.jericho.{HTMLElements, TextExtractor, StartTag, Element}
 import org.apache.commons.lang.StringUtils
 import breeze.text.tokenize.JavaWordTokenizer
-import breeze.text.transform.StopWordFilter
-import org.linkerz.crawl.topology.parser.extractor.TextBlockExtractor._
 
 /**
  * This class represent for a text block inside a html page.
@@ -18,19 +16,24 @@ case class TextBlock(element: Element) {
 
   private val _counter = new StopWordCounter("vi")
   private val _tokenizer = JavaWordTokenizer
+  private val _extractor = new TextExtractor(element) {
+    //Extract text with out child element
+    override def excludeElement(startTag: StartTag) = startTag != element.getFirstStartTag &&
+      !HTMLElements.getInlineLevelElementNames.contains(startTag.getName)
+  }
 
-  private val _st = element.extractText
+  private val _textWithoutChild = _extractor.toString
 
   var stopWordCount = 0
   var wordCount = 0
+  var isPotentialBlock = false
 
-
-  if (StringUtils.isNotBlank(_st)) {
-    stopWordCount = _counter.count(_st)
-    wordCount = _tokenizer(_st).size
+  if (StringUtils.isNotBlank(_textWithoutChild)) {
+    stopWordCount = _counter.count(_textWithoutChild)
+    wordCount = _tokenizer(_textWithoutChild).size
   }
 
-  def textEvaluate = _st
+  def textWithoutChild = _textWithoutChild
 
   def text = element.getTextExtractor.toString
 
