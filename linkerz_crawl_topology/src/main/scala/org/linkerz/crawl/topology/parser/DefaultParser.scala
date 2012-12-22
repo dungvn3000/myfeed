@@ -6,7 +6,6 @@ package org.linkerz.crawl.topology.parser
 
 import org.linkerz.crawl.topology.model.WebUrl
 import org.linkerz.crawl.topology.job.CrawlJob
-import java.util
 
 /**
  * The Class DefaultParser.
@@ -27,7 +26,7 @@ class DefaultParser extends Parser {
     info("Parse: " + webUrl.url)
 
     //Using java list for better performance.
-    var webUrls = new util.ArrayList[WebUrl]
+    var webUrls = new java.util.ArrayList[WebUrl]
 
 //    if (webPage.content != null) {
 //      val inputStream = new ByteArrayInputStream(webPage.content)

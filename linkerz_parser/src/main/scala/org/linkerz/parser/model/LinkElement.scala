@@ -1,4 +1,4 @@
-package org.linkerz.crawl.topology.parser.core
+package org.linkerz.parser.model
 
 import org.jsoup.nodes.Element
 

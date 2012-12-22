@@ -47,6 +47,12 @@ object LinkerZBuild extends Build {
     linkerZCore, linkerZModel, linkerZLogger, scalaStorm, urlBuilder
   )
 
+  lazy val linkerZParser = Project("linkerz_parser", file("linkerz_parser"), settings = sharedSetting).settings {
+    libraryDependencies ++= parserDependencies ++ testDependencies
+  }.dependsOn(
+    linkerZCore, linkerZLogger
+  )
+
   lazy val scalaStorm = Project("scala_storm", file("scala_storm"), settings = sharedSetting).settings {
     libraryDependencies ++= stormDependencies ++ rabbitMqDependencies ++ testDependencies
   }
@@ -95,6 +101,11 @@ object LinkerZBuild extends Build {
   ) ++ stormDependencies ++ testDependencies
 
   lazy val loggerDependencies = Seq(
+  )
+
+  lazy val parserDependencies = Seq(
+    "org.jsoup" % "jsoup" % "1.7.1",
+    "org.scalanlp" % "breeze-process_2.9.2" % "0.1"
   )
 
   lazy val stormDependencies = Seq(

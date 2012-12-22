@@ -1,7 +1,8 @@
-package org.linkerz.crawl.topology.parser.core
+package org.linkerz.parser.model
 
 import breeze.text.tokenize.JavaWordTokenizer
 import org.jsoup.nodes.Element
+import org.linkerz.crawl.topology.parser.util.StopWordCounter
 
 /**
  * This class represent for a text block inside a html page.

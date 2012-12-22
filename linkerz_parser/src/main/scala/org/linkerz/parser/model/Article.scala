@@ -1,4 +1,5 @@
-package org.linkerz.crawl.topology.parser.core
+package org.linkerz.parser.model
+
 
 /**
  * The Class Article.

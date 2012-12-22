@@ -1,6 +1,5 @@
 package org.linkerz.crawl.topology.parser.filter
 
-import org.linkerz.crawl.topology.parser.core.TextElement
 
 /**
  * This filter will base on the number of word.
