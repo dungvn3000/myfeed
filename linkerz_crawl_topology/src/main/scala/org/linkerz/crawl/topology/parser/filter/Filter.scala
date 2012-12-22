@@ -1,6 +1,6 @@
 package org.linkerz.crawl.topology.parser.filter
 
-import org.linkerz.crawl.topology.parser.core.TextBlock
+import org.linkerz.crawl.topology.parser.core.TextElement
 
 /**
  * The Class Filter.
@@ -11,6 +11,6 @@ import org.linkerz.crawl.topology.parser.core.TextBlock
  */
 trait Filter {
 
-  def filter(textBlock: List[TextBlock])
+  def filter(textBlock: List[TextElement])
 
 }

@@ -1,6 +1,6 @@
 package org.linkerz.crawl.topology.parser.filter
 
-import org.linkerz.crawl.topology.parser.core.TextBlock
+import org.linkerz.crawl.topology.parser.core.TextElement
 
 /**
  * This filter will base on the number of word.
@@ -14,11 +14,7 @@ object NumberOfWordRuleFilter extends Filter {
   val minNumbOfWord = 10
   val minNumbOfStopWord = 1
 
-  def filter(textBlocks: List[TextBlock]) {
-    textBlocks.foreach(block => {
-      if (block.stopWordCount > minNumbOfStopWord && block.wordCount > minNumbOfWord) {
-        block.isPotentialBlock = true
-      }
-    })
+  def filter(textBlocks: List[TextElement]) {
+
   }
 }
