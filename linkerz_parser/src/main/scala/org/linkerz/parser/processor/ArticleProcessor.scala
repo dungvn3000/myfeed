@@ -18,7 +18,7 @@ import org.linkerz.parser.model.TextElement
  * @since 12/23/12 3:26 AM
  *
  */
-object ArticleProcessor extends Processor {
+class ArticleProcessor extends Processor {
 
   def process(article: Article) {
     val articleElements = new ListBuffer[ArticleElement]

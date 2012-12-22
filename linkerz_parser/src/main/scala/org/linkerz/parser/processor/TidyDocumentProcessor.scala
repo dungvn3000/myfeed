@@ -12,7 +12,7 @@ import org.apache.commons.lang.StringUtils
  * @since 12/23/12 3:58 AM
  *
  */
-object TidyDocumentProcessor extends Processor {
+class TidyDocumentProcessor extends Processor {
   def process(article: Article) {
     val doc = article.doc
     val elements = doc.getAllElements

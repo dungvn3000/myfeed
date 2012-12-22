@@ -12,13 +12,13 @@ import org.jsoup.nodes.Document
  */
 case class Article(doc: Document) {
 
-  var titleElement: Option[TitleElement] = None
+  def titleElement: Option[TitleElement] = elements.find(_.isInstanceOf[TitleElement]).map(_.asInstanceOf[TitleElement])
 
-  var textElements: List[TextElement] = Nil
+  def textElements: List[TextElement] = elements.filter(_.isInstanceOf[TextElement]).map(_.asInstanceOf[TextElement])
 
-  var imageElements: List[ImageElement] = Nil
+  def imageElements: List[ImageElement] = elements.filter(_.isInstanceOf[ImageElement]).map(_.asInstanceOf[ImageElement])
 
-  var linkElements: List[LinkElement] = Nil
+  def linkElements: List[LinkElement] = elements.filter(_.isInstanceOf[LinkElement]).map(_.asInstanceOf[LinkElement])
 
   var elements: List[ArticleElement] = Nil
 

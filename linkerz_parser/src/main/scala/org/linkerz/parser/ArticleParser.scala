@@ -14,8 +14,13 @@ import org.jsoup.nodes.Document
 class ArticleParser {
 
   val processors = new Processors <~ List(
-    TidyDocumentProcessor,
-    ArticleProcessor
+    //Step1: Find bad tag and try to fix it.
+    new TidyDocumentProcessor,
+    //Step2: Process the article.
+    new ArticleProcessor,
+    //Step3: Try to find potential element.
+    new NumbOfWordFilter
+    //Step4: Clean dirty element
   )
 
   /**
@@ -24,16 +29,8 @@ class ArticleParser {
    * @return
    */
   def parse(doc: Document) = {
-
     val article = Article(doc.normalise())
-
-    //Step1: Process the article.
     processors.process(article)
-
-    //Step2: Try to find potential element.
-
-    //Step4: Clean dirty element
-
     article
   }
 
