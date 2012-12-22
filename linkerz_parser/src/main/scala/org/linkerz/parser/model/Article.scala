@@ -1,5 +1,7 @@
 package org.linkerz.parser.model
 
+import org.jsoup.nodes.Document
+
 
 /**
  * The Class Article.
@@ -8,7 +10,7 @@ package org.linkerz.parser.model
  * @since 12/23/12 1:00 AM
  *
  */
-class Article {
+case class Article(doc: Document) {
 
   var titleElement: Option[TitleElement] = None
 
@@ -17,5 +19,7 @@ class Article {
   var imageElements: List[ImageElement] = Nil
 
   var linkElements: List[LinkElement] = Nil
+
+  var elements: List[ArticleElement] = Nil
 
 }

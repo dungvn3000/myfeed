@@ -12,25 +12,25 @@ import org.linkerz.crawl.topology.parser.util.StopWordCounter
  * @since 12/19/12, 6:11 PM
  */
 
-case class TextElement(element: Element) {
+case class TextElement(element: Element) extends ArticleElement {
 
   private val _counter = new StopWordCounter("vi")
   private val _tokenizer = JavaWordTokenizer
 
-//  private val _textWithoutChild = {
-//    _extractor.toString
-//  }
+  //  private val _textWithoutChild = {
+  //    _extractor.toString
+  //  }
 
   var stopWordCount = 0
   var wordCount = 0
   var isPotentialBlock = false
 
-//  if (StringUtils.isNotBlank(_textWithoutChild)) {
-//    stopWordCount = _counter.count(_textWithoutChild)
-//    wordCount = _tokenizer(_textWithoutChild).size
-//  }
+  //  if (StringUtils.isNotBlank(_textWithoutChild)) {
+  //    stopWordCount = _counter.count(_textWithoutChild)
+  //    wordCount = _tokenizer(_textWithoutChild).size
+  //  }
 
-//  def textWithoutChild = _textWithoutChild
+  //  def textWithoutChild = _textWithoutChild
 
   /**
    * Score to evaluate this block.

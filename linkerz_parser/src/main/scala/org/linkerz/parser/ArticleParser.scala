@@ -1,6 +1,6 @@
 package org.linkerz.parser
 
-import extractor.TitleExtractor
+import processor._
 import model.Article
 import org.jsoup.nodes.Document
 
@@ -13,23 +13,24 @@ import org.jsoup.nodes.Document
  */
 class ArticleParser {
 
+  val processors = new Processors <~ List(
+    TidyDocumentProcessor,
+    ArticleProcessor
+  )
+
   /**
    * Parse a html document to an article
    * @param doc
    * @return
    */
   def parse(doc: Document) = {
-    val article = new Article
 
-    //Step1: Extract title.
+    val article = Article(doc.normalise())
 
-    article.titleElement = TitleExtractor.extract(doc)
+    //Step1: Process the article.
+    processors.process(article)
 
-    println(article.titleElement.get.getTitle.get)
-
-    //Step2: Convent html element to article element
-
-    //Step3: Try to find potential element.
+    //Step2: Try to find potential element.
 
     //Step4: Clean dirty element
 

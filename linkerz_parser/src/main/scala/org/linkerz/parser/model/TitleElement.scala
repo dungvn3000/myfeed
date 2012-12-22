@@ -13,7 +13,7 @@ import org.linkerz.crawl.topology.parser.util.StopWordCounter
  * @since 12/23/12 1:05 AM
  *
  */
-case class TitleElement(element: Element) {
+case class TitleElement(element: Element) extends ArticleElement {
 
   var minTitleLength = 3
 

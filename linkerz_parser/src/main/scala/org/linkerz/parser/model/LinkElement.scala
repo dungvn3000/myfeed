@@ -9,6 +9,6 @@ import org.jsoup.nodes.Element
  * @since 12/23/12 1:06 AM
  *
  */
-case class LinkElement(element: Element) {
+case class LinkElement(element: Element) extends ArticleElement {
 
 }
