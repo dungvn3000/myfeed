@@ -15,6 +15,8 @@ import org.linkerz.crawl.topology.parser.util.StopWordCounter
  */
 case class TitleElement(element: Element) {
 
+  var minTitleLength = 3
+
   /**
    * This method to get the title base on element content. In most of case the title will appear in two places,
    * the first one is in document title and the second one on top of the article content. But the title in the title tag is
@@ -22,58 +24,59 @@ case class TitleElement(element: Element) {
    * So we try to get title in document title and search inside the document to find the correct title.
    * @return
    */
-  def getTitleBaseOnPageContent: Option[String] = {
-    val potentialTitle = new ListBuffer[String]
+  def getTitle: Option[String] = {
+    val potentialTitles = new ListBuffer[String]
     val elements = element.ownerDocument().getAllElements
     val title = element.ownerDocument.title()
 
+    //Step1: Try to find potential by checking page content.
     elements.foreach(element => {
       if (element.tagName() != "title"
         && element.tagName() != "head") {
-        val text = element.text.trim
-        if (StringUtils.isNotBlank(text) && title.contains(text)) {
-          potentialTitle += text
+        val text = StringUtils.strip(element.text)
+        if (StringUtils.isNotBlank(text)
+          && title.contains(text) && text.length > minTitleLength) {
+          potentialTitles += text
         }
       }
     })
-    if (!potentialTitle.isEmpty) {
-      val title = potentialTitle.sortWith(_.length > _.length).head
-      return Some(title)
-    }
 
-    None
-  }
+    //Step2: Find potential title by split the title. Just in case step 1 can't found any potential title.
+    if (potentialTitles.isEmpty) {
+      var candidateTitle = title
+      if (StringUtils.isNotBlank(candidateTitle)) {
+        candidateTitle = candidateTitle.replaceAll("\\|", "-")
+        candidateTitle = candidateTitle.replaceAll("\\/", "-")
+        candidateTitle = candidateTitle.replaceAll("\\\\", "-")
+        candidateTitle = candidateTitle.replaceAll("\\//", "-")
+        candidateTitle = candidateTitle.replaceAll("»", "-")
+        candidateTitle = candidateTitle.replaceAll(":", "-")
 
-  /**
-   * Get title base on stop word and length of the title
-   * @return
-   */
-  def getTitleBaseOnStopWord: String = {
-    var bestTitle = element.ownerDocument.title()
-    var candidateTitle = bestTitle
-    if (StringUtils.isNotBlank(candidateTitle)) {
-      candidateTitle = candidateTitle.replaceAll("\\|", "-")
-      candidateTitle = candidateTitle.replaceAll("\\/", "-")
-      candidateTitle = candidateTitle.replaceAll("\\\\", "-")
-      candidateTitle = candidateTitle.replaceAll("\\//", "-")
-      candidateTitle = candidateTitle.replaceAll("»", "-")
-
-      if (candidateTitle.contains("-")) {
-        val potentialTitles = candidateTitle.split("-")
-
-        val counter = new StopWordCounter("vi")
-        var maxScore = 0
-
-        potentialTitles.foreach(potentialTitle => {
-          val score = (counter.count(potentialTitle) + 1) * potentialTitle.length
-          if (score > maxScore) {
-            maxScore = score
-            bestTitle = StringUtils.strip(potentialTitle)
-          }
-        })
+        if (candidateTitle.contains("-")) {
+          potentialTitles ++= candidateTitle.split("-")
+        }
       }
     }
-    bestTitle
+
+    //Step3: Find the best title base on stop word.
+    val bestTitle = getTitleByStopWord(potentialTitles.toList)
+
+    if (StringUtils.isNotBlank(bestTitle)) Some(bestTitle) else None
+  }
+
+  private def getTitleByStopWord(potentialTitles: List[String]) = {
+    var bestTitle = element.ownerDocument.title()
+    val counter = new StopWordCounter("vi")
+    var maxScore = 0
+
+    potentialTitles.foreach(potentialTitle => {
+      val score = (counter.count(potentialTitle) + 1) * potentialTitle.length
+      if (score > maxScore) {
+        maxScore = score
+        bestTitle = potentialTitle
+      }
+    })
+    StringUtils.strip(bestTitle)
   }
 
 }

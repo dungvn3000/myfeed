@@ -25,8 +25,7 @@ class ArticleParser {
 
     article.titleElement = TitleExtractor.extract(doc)
 
-    println(article.titleElement.get.getTitleBaseOnPageContent)
-    println(article.titleElement.get.getTitleBaseOnStopWord)
+    println(article.titleElement.get.getTitle.get)
 
     //Step2: Convent html element to article element
 

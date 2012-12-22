@@ -1,5 +1,6 @@
-package org.linkerz.crawl.topology.parser.filter
+package org.linkerz.parser.filter
 
+import org.linkerz.parser.model.TextElement
 
 /**
  * The Class Filter.
