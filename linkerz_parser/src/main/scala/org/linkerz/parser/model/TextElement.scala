@@ -4,7 +4,6 @@ import breeze.text.tokenize.JavaWordTokenizer
 import org.jsoup.nodes.Element
 import org.linkerz.crawl.topology.parser.util.StopWordCounter
 import org.apache.commons.lang.StringUtils
-import collection.JavaConversions._
 import ElementWrapper._
 
 /**
@@ -19,13 +18,7 @@ case class TextElement(element: Element) extends ArticleElement {
 
   private val _counter = new StopWordCounter("vi")
   private val _tokenizer = JavaWordTokenizer
-  private val _text = {
-    if (element.isBlock && !element.ownText.isEmpty) {
-      //In case this block has own text, to avoid duplicate.
-      element.getAllElements.foreach(_.isSkipParser = true)
-      element.text()
-    } else element.ownText()
-  }
+  private val _text = if (element.shouldGetText) element.text() else element.ownText()
 
   var stopWordCount = 0
   var wordCount = 0

@@ -1,6 +1,7 @@
 package org.linkerz.parser.model
 
 import org.jsoup.nodes.Element
+import collection.JavaConversions._
 
 /**
  * The Class to warp jsoup element to add more function to it.
@@ -16,11 +17,23 @@ class ElementWrapper(element: Element) {
    * will be skip when parsing.
    * @return
    */
-  def isSkipParser = element.attr("skip-parser") == "true"
+  def shouldSkipParse = element.attr("skip-parse") == "true"
 
-  def isSkipParser_=(skip: Boolean) {
-    element.attr("skip-parser", skip.toString)
+  def shouldSkipParse_=(skip: Boolean) {
+    element.attr("skip-parse", skip.toString)
   }
+
+  /**
+   * Check this element whether should get it's text or it's own text.
+   * @return
+   */
+  def shouldGetText = element.isBlock && !element.ownText.isEmpty
+
+  /**
+   * Same with method getAllElements but exclude it's self.
+   * @return
+   */
+  def getInnerAllElements = element.getAllElements.filter(_ != element)
 }
 
 object ElementWrapper {

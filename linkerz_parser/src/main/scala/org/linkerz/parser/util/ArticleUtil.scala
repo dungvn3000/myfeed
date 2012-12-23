@@ -16,6 +16,7 @@ object ArticleUtil {
     tag.getName != "meta" &&
     tag.getName != "script" &&
     tag.getName != "style" &&
+    tag.getName != "link" &&
     tag.isBlock
 
 }
