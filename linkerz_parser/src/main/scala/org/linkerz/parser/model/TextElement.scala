@@ -37,6 +37,8 @@ case class TextElement(element: Element) extends ArticleElement {
 
   def text = _text
 
+  def hasText = StringUtils.isNotBlank(text)
+
   /**
    * Score to evaluate this block.
    * @return

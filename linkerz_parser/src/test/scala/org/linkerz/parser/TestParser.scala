@@ -7,6 +7,7 @@ package org.linkerz.parser
 import grizzled.slf4j.Logging
 import org.junit.Test
 import org.jsoup.Jsoup
+import com.gravity.goose.{Goose, Configuration}
 
 
 /**
@@ -50,4 +51,12 @@ class TestParser extends Logging {
     parser.parse(doc)
   }
 
+  @Test
+  def testParser5() {
+    val url = "http://www.tinhte.vn/threads/1739393/"
+    val goose = new Goose(new Configuration)
+    val article = goose.extractContent(url)
+    article
+    println(article.cleanedArticleText)
+  }
 }

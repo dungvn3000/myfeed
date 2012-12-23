@@ -105,6 +105,7 @@ object LinkerZBuild extends Build {
 
   lazy val parserDependencies = Seq(
     "org.jsoup" % "jsoup" % "1.7.1",
+    "com.gravity" % "goose" % "2.1.22",
     "org.scalanlp" % "breeze-process_2.9.2" % "0.1"
   )
 
