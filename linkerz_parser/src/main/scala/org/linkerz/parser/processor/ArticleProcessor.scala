@@ -4,12 +4,12 @@ import collection.mutable.ListBuffer
 import org.linkerz.parser.model._
 import collection.JavaConversions._
 import org.jsoup.nodes.Element
-import org.apache.commons.lang.StringUtils
 import org.linkerz.parser.util.ArticleUtil._
 import org.linkerz.parser.model.LinkElement
 import scala.Some
 import org.linkerz.parser.model.Article
 import org.linkerz.parser.model.TextElement
+import ElementWrapper._
 
 /**
  * The Class ArticleExtractor.
@@ -24,7 +24,7 @@ class ArticleProcessor extends Processor {
     val articleElements = new ListBuffer[ArticleElement]
     val elements = article.doc.getAllElements
 
-    elements.foreach(element => element.tagName match {
+    elements.foreach(element => if(!element.isSkipParser) element.tagName match {
       case "title" => handleTitleElement(element).map(articleElements += _)
       case "a" => handleAElement(element).map(articleElements += _)
       case "img" => handleImgElement(element).map(articleElements += _)
@@ -46,7 +46,7 @@ class ArticleProcessor extends Processor {
 
   private def handleElement(element: Element) = {
     var textElement: Option[TextElement] = None
-    if (isArticleContentTag(element.tag) && StringUtils.isNotBlank(element.ownText())) {
+    if (isArticleContentTag(element.tag)) {
       textElement = Some(TextElement(element))
     }
     textElement

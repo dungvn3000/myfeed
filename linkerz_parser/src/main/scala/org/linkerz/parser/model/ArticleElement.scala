@@ -9,4 +9,7 @@ package org.linkerz.parser.model
  */
 trait ArticleElement {
 
+  var isPotentialBlock = false
+
+
 }

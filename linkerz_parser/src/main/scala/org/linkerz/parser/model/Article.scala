@@ -20,6 +20,8 @@ case class Article(doc: Document) {
 
   def linkElements: List[LinkElement] = elements.filter(_.isInstanceOf[LinkElement]).map(_.asInstanceOf[LinkElement])
 
+  def potentialElements: List[ArticleElement] = elements.filter(_.isPotentialBlock)
+
   var elements: List[ArticleElement] = Nil
 
 }

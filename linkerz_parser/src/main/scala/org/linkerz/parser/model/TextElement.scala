@@ -4,6 +4,8 @@ import breeze.text.tokenize.JavaWordTokenizer
 import org.jsoup.nodes.Element
 import org.linkerz.crawl.topology.parser.util.StopWordCounter
 import org.apache.commons.lang.StringUtils
+import collection.JavaConversions._
+import ElementWrapper._
 
 /**
  * This class represent for a text block inside a html page.
@@ -17,19 +19,23 @@ case class TextElement(element: Element) extends ArticleElement {
 
   private val _counter = new StopWordCounter("vi")
   private val _tokenizer = JavaWordTokenizer
-  private val _textWithoutChild = element.ownText()
+  private val _text = {
+    if (element.isBlock && !element.ownText.isEmpty) {
+      //In case this block has own text, to avoid duplicate.
+      element.getAllElements.foreach(_.isSkipParser = true)
+      element.text()
+    } else element.ownText()
+  }
 
   var stopWordCount = 0
   var wordCount = 0
-  var isPotentialBlock = false
 
-
-  if (StringUtils.isNotBlank(_textWithoutChild)) {
-    stopWordCount = _counter.count(_textWithoutChild)
-    wordCount = _tokenizer(_textWithoutChild).size
+  if (StringUtils.isNotBlank(_text)) {
+    stopWordCount = _counter.count(_text)
+    wordCount = _tokenizer(_text).size
   }
 
-  def textWithoutChild = _textWithoutChild
+  def text = _text
 
   /**
    * Score to evaluate this block.

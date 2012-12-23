@@ -13,7 +13,9 @@ object ArticleUtil {
 
   def isArticleContentTag(tag: Tag) = tag.getName != "title" &&
     tag.getName != "head" &&
+    tag.getName != "meta" &&
     tag.getName != "script" &&
+    tag.getName != "style" &&
     tag.isBlock
 
 }
