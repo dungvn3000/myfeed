@@ -24,7 +24,8 @@ class ArticleParser {
     //Step3: Only keep high score elements.
     new RemoveLowerScoreElementFilter,
     //Step4: Find image for the article.
-    new RemoveDirtyImageFilter
+    new RemoveDirtyImageFilter,
+    new RemoveHighLinkDensityElement
   )
 
   /**

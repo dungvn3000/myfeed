@@ -38,6 +38,20 @@ case class TextElement(_jsoupElement: Element) extends ArticleElement(_jsoupElem
    */
   def score = wordCount * stopWordCount
 
+  /**
+   * Checks the density of links within this element
+   */
+  def isHighLinkDensity: Boolean = {
+    val linksElement = _jsoupElement.select("a")
+    if (!linksElement.isEmpty) {
+      val numberWordInLink: Double = _tokenizer(linksElement.text()).size
+      val score = (numberWordInLink / wordCount) * 100
+      //If word in link more than 70% then return true
+      if (score > 70) return true
+    }
+    false
+  }
+
   override def equals(obj: Any): Boolean = {
     if (obj.isInstanceOf[TextElement]) {
       val element2 = obj.asInstanceOf[TextElement].jsoupElement
