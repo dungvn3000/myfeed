@@ -27,7 +27,7 @@ class ElementWrapper(element: Element) {
    * Check this element whether should get it's text or it's own text.
    * @return
    */
-  def shouldGetText = element.isBlock && !element.ownText.isEmpty
+  def detectTextBlock = element.isBlock && !element.ownText.isEmpty
 
   /**
    * Same with method getAllElements but exclude it's self.

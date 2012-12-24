@@ -18,7 +18,7 @@ case class TextElement(element: Element) extends ArticleElement {
 
   private val _counter = new StopWordCounter("vi")
   private val _tokenizer = JavaWordTokenizer
-  private val _text = if (element.shouldGetText) element.text() else element.ownText()
+  private val _text = if (element.detectTextBlock) element.text() else element.ownText()
 
   var stopWordCount = 0
   var wordCount = 0

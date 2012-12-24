@@ -13,7 +13,7 @@ class NumbOfWordFilter(minNumbOfStopWord: Int = 2, minNumbOfWord: Int = 10) exte
   def process(article: Article) {
     article.textElements.foreach(el => {
       if (el.stopWordCount >= minNumbOfStopWord && el.wordCount >= minNumbOfWord) {
-        el.isPotentialBlock = true
+        el.isPotential = true
       }
     })
   }

@@ -9,7 +9,12 @@ package org.linkerz.parser.model
  */
 trait ArticleElement {
 
-  var isPotentialBlock = false
+  /**
+   * Index of this element inside an article.
+   */
+  var index = 0
+
+  var isPotential = false
 
 
 }
