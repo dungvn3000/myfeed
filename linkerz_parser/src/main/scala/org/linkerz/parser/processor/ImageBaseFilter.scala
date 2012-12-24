@@ -9,7 +9,7 @@ import org.linkerz.parser.model.{ArticleElement, ImageElement, Article}
  * @since 12/24/12 9:07 AM
  *
  */
-class ImageBaseFilter extends Processor {
+class ImageBaseFilter(minImageTitleLength: Int = 2) extends Processor {
   def process(article: Article) {
     var previous: Option[ArticleElement] = None
     var next: Option[ArticleElement] = None
@@ -22,6 +22,11 @@ class ImageBaseFilter extends Processor {
       if (!element.isPotential && element.isInstanceOf[ImageElement]) {
         previous.map(prevElement => if (prevElement.isPotential) element.isPotential = true)
         next.map(nextElement => if (nextElement.isPotential) element.isPotential = true)
+      }
+
+      if (element.isPotential && element.isInstanceOf[ImageElement]) {
+        //The image title should mark as a potential element.
+        next.map(nextElement => if (element.isPotential && nextElement.text.length >= minImageTitleLength) nextElement.isPotential = true)
       }
     }
   }

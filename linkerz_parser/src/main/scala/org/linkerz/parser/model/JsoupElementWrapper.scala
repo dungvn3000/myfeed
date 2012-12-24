@@ -10,7 +10,7 @@ import collection.JavaConversions._
  * @since 12/23/12 11:28 PM
  *
  */
-class ElementWrapper(element: Element) {
+class JsoupElementWrapper(element: Element) {
 
   /**
    * Which an element has attribute skip-parser is true, was marked by processor,
@@ -33,11 +33,11 @@ class ElementWrapper(element: Element) {
    * Same with method getAllElements but exclude it's self.
    * @return
    */
-  def getInnerAllElements = element.getAllElements.filter(_ != element)
+  def innerAllElements = element.getAllElements.filter(_ != element)
 }
 
-object ElementWrapper {
+object JsoupElementWrapper {
 
-  implicit def warp(element: Element) = new ElementWrapper(element)
+  implicit def warp(element: Element) = new JsoupElementWrapper(element)
 
 }

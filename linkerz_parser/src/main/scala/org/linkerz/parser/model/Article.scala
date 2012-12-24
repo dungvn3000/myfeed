@@ -1,6 +1,6 @@
 package org.linkerz.parser.model
 
-import org.jsoup.nodes.Document
+import org.jsoup.nodes.{Element, Document}
 
 
 /**
@@ -22,6 +22,9 @@ case class Article(doc: Document) {
 
   def potentialElements: List[ArticleElement] = elements.filter(_.isPotential)
 
+  def jsoupElements = elements.map(_.jsoupElement)
+
   var elements: List[ArticleElement] = Nil
 
+  var contentElement: Option[Element] = None
 }

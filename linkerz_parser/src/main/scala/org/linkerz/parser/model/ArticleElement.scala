@@ -1,5 +1,7 @@
 package org.linkerz.parser.model
 
+import org.jsoup.nodes.Element
+
 /**
  * The Class ArticleElement.
  *
@@ -7,7 +9,7 @@ package org.linkerz.parser.model
  * @since 12/23/12 3:24 AM
  *
  */
-trait ArticleElement {
+abstract class ArticleElement(_jsoupElement: Element) {
 
   /**
    * Index of this element inside an article.
@@ -17,5 +19,7 @@ trait ArticleElement {
   var isPotential = false
 
   def text: String
+
+  def jsoupElement = _jsoupElement
 
 }

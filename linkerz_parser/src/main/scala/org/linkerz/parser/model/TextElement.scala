@@ -3,7 +3,7 @@ package org.linkerz.parser.model
 import breeze.text.tokenize.JavaWordTokenizer
 import org.jsoup.nodes.Element
 import org.apache.commons.lang.StringUtils
-import ElementWrapper._
+import JsoupElementWrapper._
 import org.linkerz.parser.util.StopWordCounter
 
 /**
@@ -14,11 +14,11 @@ import org.linkerz.parser.util.StopWordCounter
  * @since 12/19/12, 6:11 PM
  */
 
-case class TextElement(element: Element) extends ArticleElement {
+case class TextElement(_jsoupElement: Element) extends ArticleElement(_jsoupElement) {
 
   private val _counter = new StopWordCounter("vi")
   private val _tokenizer = JavaWordTokenizer
-  private val _text = if (element.detectTextBlock) element.text() else element.ownText()
+  private val _text = if (jsoupElement.detectTextBlock) jsoupElement.text() else jsoupElement.ownText()
 
   var stopWordCount = 0
   var wordCount = 0
@@ -40,12 +40,12 @@ case class TextElement(element: Element) extends ArticleElement {
 
   override def equals(obj: Any): Boolean = {
     if (obj.isInstanceOf[TextElement]) {
-      val element2 = obj.asInstanceOf[TextElement].element
-      element.equals(element2)
+      val element2 = obj.asInstanceOf[TextElement].jsoupElement
+      jsoupElement.equals(element2)
     } else {
       false
     }
   }
 
-  override def hashCode() = element.hashCode()
+  override def hashCode() = jsoupElement.hashCode()
 }

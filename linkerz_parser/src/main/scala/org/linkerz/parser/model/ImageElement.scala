@@ -9,6 +9,6 @@ import org.jsoup.nodes.Element
  * @since 12/23/12 1:04 AM
  *
  */
-case class ImageElement(element: Element) extends ArticleElement {
+case class ImageElement(_jsoupElement: Element) extends ArticleElement(_jsoupElement) {
   def text = ""
 }

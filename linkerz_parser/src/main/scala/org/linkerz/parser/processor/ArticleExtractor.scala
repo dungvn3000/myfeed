@@ -8,7 +8,7 @@ import org.linkerz.parser.util.ArticleUtil._
 import org.linkerz.parser.model.LinkElement
 import org.linkerz.parser.model.Article
 import org.linkerz.parser.model.TextElement
-import ElementWrapper._
+import JsoupElementWrapper._
 
 /**
  * The Class ArticleExtractor.
@@ -59,7 +59,7 @@ class ArticleExtractor extends Processor {
     if (isArticleContentTag(element.tag)) {
       if (element.detectTextBlock) {
         //In case this block has own text, to avoid duplicate.
-        element.getInnerAllElements.foreach(_.shouldSkipParse = true)
+        element.innerAllElements.foreach(_.shouldSkipParse = true)
       }
 
       val textElement = TextElement(element)

@@ -20,8 +20,9 @@ class ArticleParser {
     new TitleBaseFilter,
     new NumbOfWordFilter,
     new ImageBaseFilter,
-    new DistanceBaseFilter
-    //Step3: Clean dirty element
+    new DistanceBaseFilter,
+    //Step3: Find the content element
+    new ContentElementDetector
   )
 
   /**

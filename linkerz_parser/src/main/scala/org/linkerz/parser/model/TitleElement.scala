@@ -13,7 +13,7 @@ import org.linkerz.parser.util.StopWordCounter
  * @since 12/23/12 1:05 AM
  *
  */
-case class TitleElement(element: Element) extends ArticleElement {
+case class TitleElement(_jsoupElement: Element) extends ArticleElement(_jsoupElement) {
 
   var minTitleLength = 3
 
@@ -29,8 +29,8 @@ case class TitleElement(element: Element) extends ArticleElement {
    */
   def title: Option[String] = {
     val potentialTitles = new ListBuffer[String]
-    val elements = element.ownerDocument().getAllElements
-    val title = element.ownerDocument.title()
+    val elements = jsoupElement.ownerDocument().getAllElements
+    val title = jsoupElement.ownerDocument.title()
 
     //Step1: Try to find potential by checking page content.
     elements.foreach(element => {
@@ -68,7 +68,7 @@ case class TitleElement(element: Element) extends ArticleElement {
   }
 
   private def getTitleByStopWord(potentialTitles: List[String]) = {
-    var bestTitle = element.ownerDocument.title()
+    var bestTitle = jsoupElement.ownerDocument.title()
     val counter = new StopWordCounter("vi")
     var maxScore = 0
 
