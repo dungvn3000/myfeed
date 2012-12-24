@@ -16,5 +16,6 @@ trait ArticleElement {
 
   var isPotential = false
 
+  def text: String
 
 }

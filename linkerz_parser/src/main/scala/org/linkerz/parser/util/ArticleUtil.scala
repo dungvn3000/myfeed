@@ -17,6 +17,6 @@ object ArticleUtil {
     tag.getName != "script" &&
     tag.getName != "style" &&
     tag.getName != "link" &&
-    tag.isBlock
+    tag.getName != "iframe"
 
 }

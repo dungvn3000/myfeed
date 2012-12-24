@@ -17,6 +17,9 @@ case class TitleElement(element: Element) extends ArticleElement {
 
   var minTitleLength = 3
 
+
+  def text = title.getOrElse("")
+
   /**
    * This method to get the title base on element content. In most of case the title will appear in two places,
    * the first one is in document title and the second one on top of the article content. But the title in the title tag is
@@ -24,7 +27,7 @@ case class TitleElement(element: Element) extends ArticleElement {
    * So we try to get title in document title and search inside the document to find the correct title.
    * @return
    */
-  def getTitle: Option[String] = {
+  def title: Option[String] = {
     val potentialTitles = new ListBuffer[String]
     val elements = element.ownerDocument().getAllElements
     val title = element.ownerDocument.title()

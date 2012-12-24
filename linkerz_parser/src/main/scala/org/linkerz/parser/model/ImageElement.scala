@@ -10,5 +10,5 @@ import org.jsoup.nodes.Element
  *
  */
 case class ImageElement(element: Element) extends ArticleElement {
-
+  def text = ""
 }

@@ -17,7 +17,9 @@ class ArticleParser {
     //Step1: Process the article.
     new ArticleProcessor,
     //Step2: Try to find potential element.
-    new NumbOfWordFilter
+    new TitleBaseFilter,
+    new NumbOfWordFilter,
+    new DistanceBaseFilter
     //Step3: Clean dirty element
   )
 
