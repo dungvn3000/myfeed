@@ -11,4 +11,6 @@ import org.jsoup.nodes.Element
  */
 case class ImageElement(_jsoupElement: Element) extends ArticleElement(_jsoupElement) {
   def text = ""
+
+  def src = _jsoupElement.attr("src")
 }
