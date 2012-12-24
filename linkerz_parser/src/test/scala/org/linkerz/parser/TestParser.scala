@@ -44,9 +44,34 @@ class TestParser extends Logging {
 
  @Test
   def testParser4() {
-    val url = "http://localhost/test.html"
+    val url = "http://hcm.24h.com.vn/giao-duc-du-hoc/dot-nhap-lo-luyen-thi-cong-chuc-han-quoc-c216a508182.html"
     val doc = Jsoup.connect(url).get()
     val parser = new ArticleParser
     parser.parse(doc)
   }
+
+  @Test
+  def testParser5() {
+    val url = "http://vnexpress.net/gl/ban-doc-viet/tam-su/2012/12/vo-ngoai-tinh-sau-nhung-lan-bi-toi-danh-dap-da-man/"
+    val doc = Jsoup.connect(url).get()
+    val parser = new ArticleParser
+    parser.parse(doc)
+  }
+
+  @Test
+  def testParser6() {
+    val url = "http://ione.vnexpress.net/tin-tuc/vui-la/anh/2012/12/41584-nhung-nguoi-kho-hanh-vi-bot-la.html"
+    val doc = Jsoup.connect(url).get()
+    val parser = new ArticleParser
+    parser.parse(doc)
+  }
+
+  @Test
+  def testParser7() {
+    val url = "http://genk.vn/internet/amazon-ke-lao-luyen-day-chien-luoc-trong-cuoc-chien-cong-nghe-2012122104231130.chn"
+    val doc = Jsoup.connect(url).get()
+    val parser = new ArticleParser
+    parser.parse(doc)
+  }
+
 }

@@ -3,6 +3,7 @@ package org.linkerz.parser
 import processor._
 import model.Article
 import org.jsoup.nodes.Document
+import util.DocumentCleaner
 
 /**
  * The Class ArticleParser.
@@ -34,7 +35,7 @@ class ArticleParser {
    * @return
    */
   def parse(doc: Document) = {
-    val article = Article(doc.normalise())
+    val article = Article(DocumentCleaner.clean(doc))
     processors.process(article)
     println("Title: " + article.title)
     println(article.prettyText)

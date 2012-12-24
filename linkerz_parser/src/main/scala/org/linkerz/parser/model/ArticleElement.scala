@@ -1,6 +1,7 @@
 package org.linkerz.parser.model
 
 import org.jsoup.nodes.Element
+import org.apache.commons.lang.StringUtils
 
 /**
  * The Class ArticleElement.
@@ -19,6 +20,8 @@ abstract class ArticleElement(_jsoupElement: Element) {
   var isPotential = false
 
   def text: String
+
+  def hasText = StringUtils.isNotBlank(text)
 
   def jsoupElement = _jsoupElement
 

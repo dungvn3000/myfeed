@@ -30,8 +30,6 @@ case class TextElement(_jsoupElement: Element) extends ArticleElement(_jsoupElem
 
   def text = _text
 
-  def hasText = StringUtils.isNotBlank(text)
-
   /**
    * Score to evaluate this block.
    * @return
