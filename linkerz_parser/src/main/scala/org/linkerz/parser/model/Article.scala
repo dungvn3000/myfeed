@@ -13,7 +13,8 @@ import org.linkerz.parser.util.DirtyImagePattern
  */
 case class Article(doc: Document) {
 
-  def titleElement: Option[TitleElement] = elements.find(_.isInstanceOf[TitleElement]).map(_.asInstanceOf[TitleElement])
+  //Title element will not inside elements list.
+  var titleElement: Option[TitleElement] = None
 
   def textElements: List[TextElement] = elements.filter(_.isInstanceOf[TextElement]).map(_.asInstanceOf[TextElement])
 
@@ -44,7 +45,7 @@ case class Article(doc: Document) {
     sb.toString()
   }
 
-  def title = titleElement.getOrElse("")
+  def title = titleElement.map(_.text).getOrElse("")
 
   def images = {
     val dirtyImagePattern = new DirtyImagePattern("vi")
@@ -61,6 +62,9 @@ case class Article(doc: Document) {
     images.toList
   }
 
+  /**
+   * Article element list without title element.
+   */
   var elements: List[ArticleElement] = Nil
 
 }

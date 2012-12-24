@@ -36,7 +36,7 @@ class ArticleParser {
   def parse(doc: Document) = {
     val article = Article(doc.normalise())
     processors.process(article)
-    println(article.title)
+    println("Title: " + article.title)
     println(article.prettyText)
     article.images.foreach(println)
     article

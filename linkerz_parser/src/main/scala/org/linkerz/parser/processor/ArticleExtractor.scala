@@ -24,7 +24,12 @@ class ArticleExtractor extends Processor {
     val elements = article.doc.getAllElements
 
     elements.foreach(element => if (!element.shouldSkipParse) element.tagName match {
-      case "title" => handleTitleElement(element)
+      case "title" => {
+        val titleElement = element.ownerDocument.select("title").first()
+        if (titleElement != null) {
+          article.titleElement = Some(TitleElement(titleElement))
+        }
+      }
       case "a" => handleAElement(element)
       case "img" => handleImgElement(element)
       case _ => handleElement(element)
@@ -46,13 +51,6 @@ class ArticleExtractor extends Processor {
   private def handleImgElement(element: Element)(implicit articleElements: ListBuffer[ArticleElement]) {
     val imgElement = ImageElement(element)
     addToArticle(imgElement)
-  }
-
-  private def handleTitleElement(element: Element)(implicit articleElements: ListBuffer[ArticleElement]) {
-    val titleElement = element.ownerDocument.select("title").first()
-    if (titleElement != null) {
-      addToArticle(TitleElement(titleElement))
-    }
   }
 
   private def handleElement(element: Element)(implicit articleElements: ListBuffer[ArticleElement]) {
