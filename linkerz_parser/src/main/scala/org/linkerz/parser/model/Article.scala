@@ -1,6 +1,6 @@
 package org.linkerz.parser.model
 
-import org.jsoup.nodes.{Element, Document}
+import org.jsoup.nodes.Document
 
 
 /**
@@ -24,7 +24,29 @@ case class Article(doc: Document) {
 
   def jsoupElements = elements.map(_.jsoupElement)
 
+  def text = {
+    val sb = new StringBuilder
+    textElements.foreach(element => sb.append(element.text))
+    sb.toString()
+  }
+
+  /**
+   * This is using for debugging.
+   * @return
+   */
+  def prettyText = {
+    val sb = new StringBuilder
+    textElements.foreach(element => {
+      sb.append(element.text)
+      sb.append("\n")
+    })
+    sb.toString()
+  }
+
+  def title = titleElement.getOrElse("")
+
+  def images = imageElements
+
   var elements: List[ArticleElement] = Nil
 
-  var contentElement: Option[Element] = None
 }

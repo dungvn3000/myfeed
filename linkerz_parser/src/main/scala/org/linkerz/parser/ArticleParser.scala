@@ -21,8 +21,8 @@ class ArticleParser {
     new NumbOfWordFilter,
     new ImageBaseFilter,
     new DistanceBaseFilter,
-    //Step3: Find the content element
-    new ContentElementDetector
+    //Step3: Only keep high score elements.
+    new RemoveLowerScoreElementFilter
   )
 
   /**
@@ -33,7 +33,9 @@ class ArticleParser {
   def parse(doc: Document) = {
     val article = Article(doc.normalise())
     processors.process(article)
-    article.potentialElements
+    println(article.title)
+    println(article.prettyText)
+    article.images.foreach(println)
     article
   }
 
