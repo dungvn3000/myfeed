@@ -1,4 +1,4 @@
-package org.linkerz.crawl.topology.parser.util
+package org.linkerz.parser.util
 
 import breeze.text.tokenize.JavaWordTokenizer
 import io.Source

@@ -1,0 +1,2 @@
+#This list contain most of common article end pattern
+#The ArticleEndPatternFilter will using this list and name list to find the element is end of article, and mark the rest of element is not potential.

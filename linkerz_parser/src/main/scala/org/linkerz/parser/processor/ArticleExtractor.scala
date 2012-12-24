@@ -17,7 +17,7 @@ import ElementWrapper._
  * @since 12/23/12 3:26 AM
  *
  */
-class ArticleProcessor extends Processor {
+class ArticleExtractor extends Processor {
 
   def process(article: Article) {
     implicit val articleElements = new ListBuffer[ArticleElement]

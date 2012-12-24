@@ -4,7 +4,7 @@ import org.jsoup.nodes.Element
 import collection.mutable.ListBuffer
 import collection.JavaConversions._
 import org.apache.commons.lang.StringUtils
-import org.linkerz.crawl.topology.parser.util.StopWordCounter
+import org.linkerz.parser.util.StopWordCounter
 
 /**
  * The Class TitleBlock.

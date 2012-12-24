@@ -14,11 +14,12 @@ import org.jsoup.nodes.Document
 class ArticleParser {
 
   val processors = new Processors <~ List(
-    //Step1: Process the article.
-    new ArticleProcessor,
+    //Step1: Extract article elements.
+    new ArticleExtractor,
     //Step2: Try to find potential element.
     new TitleBaseFilter,
     new NumbOfWordFilter,
+    new ImageBaseFilter,
     new DistanceBaseFilter
     //Step3: Clean dirty element
   )
