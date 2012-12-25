@@ -15,5 +15,15 @@ class DocumentCleaner extends Processor {
     val cleanedHtml = doc.html.replaceAll("&nbsp;"," ")
     doc.html(cleanedHtml)
     doc.normalise()
+
+    //Remove noscript tag
+    val noScriptElement = doc.select("noscript")
+    noScriptElement.remove()
+
+    val scriptElement = doc.select("script")
+    scriptElement.remove()
+
+    val iframeElement = doc.select("iframe")
+    iframeElement.remove()
   }
 }
