@@ -121,4 +121,28 @@ class TestParser extends Logging {
     val parser = new ArticleParser
     parser.parse(doc)
   }
+
+  @Test
+  def testParser14() {
+    val url = "http://www.scala-lang.org/node/26632"
+    val doc = Jsoup.connect(url).get()
+    val parser = new ArticleParser
+    parser.parse(doc)
+  }
+
+  @Test
+  def testParser15() {
+    val url = "http://www.bbc.co.uk/news/world-us-canada-20838925"
+    val doc = Jsoup.connect(url).get()
+    val parser = new ArticleParser
+    parser.parse(doc)
+  }
+
+  @Test
+  def testParser17() {
+    val url = "http://edition.cnn.com/2010/POLITICS/08/13/democrats.social.security/index.html"
+    val doc = Jsoup.connect(url).get()
+    val parser = new ArticleParser
+    parser.parse(doc)
+  }
 }
