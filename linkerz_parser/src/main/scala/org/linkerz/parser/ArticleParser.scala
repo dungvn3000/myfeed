@@ -3,7 +3,6 @@ package org.linkerz.parser
 import processor._
 import model.Article
 import org.jsoup.nodes.Document
-import util.DocumentCleaner
 
 /**
  * The Class ArticleParser.
@@ -15,6 +14,7 @@ import util.DocumentCleaner
 class ArticleParser {
 
   val processors = new Processors <~ List(
+    new DocumentCleaner,
     new LanguageDetector,
     new RemoveHiddenElement,
     //Step1: Extract article elements.
@@ -37,7 +37,7 @@ class ArticleParser {
    * @return
    */
   def parse(doc: Document) = {
-    val article = Article(DocumentCleaner.clean(doc))
+    val article = Article(doc)
     processors.process(article)
     println("Title: " + article.title)
     println(article.prettyText)

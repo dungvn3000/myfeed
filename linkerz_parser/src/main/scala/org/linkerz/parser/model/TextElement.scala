@@ -16,7 +16,7 @@ import org.linkerz.parser.util.StopWordCounter
 
 case class TextElement(override val jsoupElement: Element)(implicit article: Article) extends ArticleElement(jsoupElement) {
 
-  private val _counter = new StopWordCounter("vi")
+  private val _counter = new StopWordCounter(article.languageCode)
   private val _tokenizer = JavaWordTokenizer
   private val _text = if (jsoupElement.detectTextBlock) jsoupElement.text() else jsoupElement.ownText()
 

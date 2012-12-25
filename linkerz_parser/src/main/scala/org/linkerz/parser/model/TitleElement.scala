@@ -17,6 +17,7 @@ case class TitleElement(override val jsoupElement: Element)(implicit article: Ar
 
   var minTitleLength = 3
 
+  val counter = new StopWordCounter(article.languageCode)
 
   def text = title.getOrElse("")
 
@@ -66,10 +67,8 @@ case class TitleElement(override val jsoupElement: Element)(implicit article: Ar
 
     if (StringUtils.isNotBlank(bestTitle)) Some(bestTitle) else None
   }
-
   private def getTitleByStopWord(potentialTitles: List[String]) = {
     var bestTitle = jsoupElement.ownerDocument.title()
-    val counter = new StopWordCounter("vi")
     var maxScore = 0
 
     potentialTitles.foreach(potentialTitle => {
