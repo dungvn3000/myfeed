@@ -10,7 +10,7 @@ import collection.mutable
  * @since 12/24/12 2:17 PM
  *
  */
-class RemoveLowerScoreElementFilter extends Processor {
+class LowerScoreElementFilter extends Processor {
   def process(implicit article: Article) {
     //Clustering potential elements has continuous index.
     if (!article.potentialElements.isEmpty) {
@@ -34,8 +34,9 @@ class RemoveLowerScoreElementFilter extends Processor {
 
       val highestKey = scoreMap.toList.sortWith(_._2 > _._2).head._1
 
-      //Reset article element.
-      article.elements = elementMap(highestKey).reverse
+      scoreMap.foreach(score => if (score._1 != highestKey) {
+        elementMap(score._1).foreach(_.isPotential = false)
+      })
     }
   }
 }

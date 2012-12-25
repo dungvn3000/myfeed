@@ -3,6 +3,10 @@
 .*_ico.*
 .*/icon/.*
 .*/icons/.*
+.*/avatars/.*
+.*/avatar/.*
+.*/themes/.*
+.*/theme/.*
 .*/print.png.*
 .*/print.jpg.*
 .*/print.gif.*
@@ -33,6 +37,9 @@
 .*/view_more.png.*
 .*/view_more.jpg.*
 .*/view_more.gif.*
+.*/bttn_close.gif.*
+.*/bttn_close.png.*
+.*/bttn_close.jpg.*
 .*/1px.gif.*
 .*/1px.png.*
 .*/1px.jpg.*
@@ -42,15 +49,7 @@
 .*/3px.gif.*
 .*/3px.png.*
 .*/3px.jpg.*
-.*/1.gif.*
-.*/1.png.*
-.*/1.jpg.*
-.*/2.jpg.*
-.*/2.png.*
-.*/2.gif.*
-.*/3.jpg.*
-.*/3.png.*
-.*/3.gif.*
+#Domain
 .*reddit.com.*
 .*facebook.com.*
 .*google.com.*

@@ -28,7 +28,7 @@ case class Article(doc: Document) {
 
   def text = {
     val sb = new StringBuilder
-    textElements.foreach(element => sb.append(element.text))
+    textElements.filter(_.isPotential).foreach(element => sb.append(element.text))
     sb.toString()
   }
 
@@ -38,7 +38,7 @@ case class Article(doc: Document) {
    */
   def prettyText = {
     val sb = new StringBuilder
-    textElements.foreach(element => {
+    textElements.filter(_.isPotential).foreach(element => {
       sb.append(element.text)
       sb.append("\n")
     })
@@ -47,7 +47,7 @@ case class Article(doc: Document) {
 
   def title = titleElement.map(_.text).getOrElse("")
 
-  def images = imageElements.map(_.jsoupElement)
+  def images = imageElements.filter(_.isPotential)
 
   /**
    * Article element list without title element.

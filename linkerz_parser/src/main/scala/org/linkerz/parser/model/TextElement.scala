@@ -40,7 +40,7 @@ case class TextElement(override val jsoupElement: Element)(implicit article: Art
     if (!linksElement.isEmpty) {
       val numberWordInLink: Double = _tokenizer(linksElement.text()).size
       val score = (numberWordInLink / wordCount) * 100
-      //If word in link more than 70% then return true
+      //If word in link more than 40% then return true
       if (score > 40) return true
     }
     false

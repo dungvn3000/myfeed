@@ -9,15 +9,12 @@ import org.linkerz.parser.model.Article
  * @since 12/24/12 10:32 PM
  *
  */
-class RemoveHighLinkDensityElement extends Processor {
+class HighLinkDensityElementFilter extends Processor {
   def process(implicit article: Article) {
-    val elements = article.elements.toBuffer
     article.textElements.foreach(element => {
       if (element.isHighLinkDensity) {
-        elements -= element
+        element.isPotential = false
       }
     })
-
-    article.elements = elements.toList
   }
 }

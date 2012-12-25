@@ -25,10 +25,10 @@ class ArticleParser {
     new ImageBaseFilter,
     new DistanceBaseFilter,
     //Step3: Only keep high score elements.
-    new RemoveLowerScoreElementFilter,
+    new LowerScoreElementFilter,
     //Step4: Find image for the article.
-    new RemoveDirtyImageFilter,
-    new RemoveHighLinkDensityElement
+    new DirtyImageFilter,
+    new HighLinkDensityElementFilter
   )
 
   /**

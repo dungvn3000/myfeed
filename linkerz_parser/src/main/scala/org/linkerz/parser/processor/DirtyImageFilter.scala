@@ -10,18 +10,16 @@ import org.linkerz.parser.util.DirtyImagePattern
  * @since 12/24/12 9:15 PM
  *
  */
-class RemoveDirtyImageFilter extends Processor {
+class DirtyImageFilter extends Processor {
 
   val dirtyImagePattern = new DirtyImagePattern
 
   def process(implicit article: Article) {
-    val elements = article.elements.toBuffer
     article.imageElements.foreach(element => {
       if (dirtyImagePattern.matches(element.src)) {
-        elements -= element
+        element.isPotential = false
       }
     })
 
-    article.elements = elements.toList
   }
 }
