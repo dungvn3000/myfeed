@@ -57,7 +57,7 @@ class ArticleExtractor extends Processor {
     if (isArticleContentTag(element.tag)) {
       if (element.detectTextBlock) {
         //In case this block has own text, to avoid duplicate.
-        element.innerAllElements.foreach(_.shouldSkipParse = true)
+        element.innerAllElements.foreach(inner => if(inner.tagName != "img") inner.shouldSkipParse = true)
       }
 
       val textElement = TextElement(element)

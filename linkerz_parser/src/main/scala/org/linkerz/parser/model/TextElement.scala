@@ -14,7 +14,7 @@ import org.linkerz.parser.util.StopWordCounter
  * @since 12/19/12, 6:11 PM
  */
 
-case class TextElement(_jsoupElement: Element) extends ArticleElement(_jsoupElement) {
+case class TextElement(override val jsoupElement: Element) extends ArticleElement(jsoupElement) {
 
   private val _counter = new StopWordCounter("vi")
   private val _tokenizer = JavaWordTokenizer
@@ -30,17 +30,13 @@ case class TextElement(_jsoupElement: Element) extends ArticleElement(_jsoupElem
 
   def text = _text
 
-  /**
-   * Score to evaluate this block.
-   * @return
-   */
-  def score = wordCount * stopWordCount
+  override def score = wordCount * (stopWordCount + 1)
 
   /**
    * Checks the density of links within this element
    */
   def isHighLinkDensity: Boolean = {
-    val linksElement = _jsoupElement.select("a")
+    val linksElement = jsoupElement.select("a")
     if (!linksElement.isEmpty) {
       val numberWordInLink: Double = _tokenizer(linksElement.text()).size
       val score = (numberWordInLink / wordCount) * 100

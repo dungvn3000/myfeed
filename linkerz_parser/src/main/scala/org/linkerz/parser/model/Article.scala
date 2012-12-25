@@ -1,8 +1,6 @@
 package org.linkerz.parser.model
 
 import org.jsoup.nodes.Document
-import JsoupElementWrapper._
-import org.linkerz.parser.util.DirtyImagePattern
 
 /**
  * The Class Article.
@@ -47,20 +45,7 @@ case class Article(doc: Document) {
 
   def title = titleElement.map(_.text).getOrElse("")
 
-  def images = {
-    val dirtyImagePattern = new DirtyImagePattern("vi")
-    val images = imageElements.map(_.jsoupElement).toBuffer
-    //Text element can contains image, try to get them all.
-    textElements.map(_.jsoupElement).foreach(textElement => {
-      textElement.innerAllElements.foreach(innerElement => {
-        if (innerElement.tagName == "img"
-          && !dirtyImagePattern.matches(innerElement.attr("src"))) {
-          images += innerElement
-        }
-      })
-    })
-    images.toList
-  }
+  def images = imageElements.map(_.jsoupElement)
 
   /**
    * Article element list without title element.

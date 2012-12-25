@@ -10,7 +10,7 @@ import org.apache.commons.lang.StringUtils
  * @since 12/23/12 3:24 AM
  *
  */
-abstract class ArticleElement(_jsoupElement: Element) {
+abstract case class ArticleElement(jsoupElement: Element) {
 
   /**
    * Index of this element inside an article.
@@ -23,6 +23,10 @@ abstract class ArticleElement(_jsoupElement: Element) {
 
   def hasText = StringUtils.isNotBlank(text)
 
-  def jsoupElement = _jsoupElement
+  /**
+   * Score to evaluate this element.
+   * @return
+   */
+  def score: Double = 0
 
 }

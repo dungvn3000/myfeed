@@ -9,8 +9,14 @@ import org.jsoup.nodes.Element
  * @since 12/23/12 1:04 AM
  *
  */
-case class ImageElement(_jsoupElement: Element) extends ArticleElement(_jsoupElement) {
+case class ImageElement(override val jsoupElement: Element) extends ArticleElement(jsoupElement) {
   def text = ""
 
-  def src = _jsoupElement.attr("src")
+  def src = jsoupElement.attr("src")
+
+  /**
+   * @return 100 when the element is potential.
+   */
+  override def score = if (isPotential) 100 else super.score
+
 }

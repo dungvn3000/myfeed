@@ -15,7 +15,7 @@ class RemoveLowerScoreElementFilter extends Processor {
     //Clustering potential elements has continuous index.
     if (!article.potentialElements.isEmpty) {
       val elementMap = new mutable.HashMap[Int, List[ArticleElement]].withDefaultValue(Nil)
-      val scoreMap = new mutable.HashMap[Int, Int].withDefaultValue(0)
+      val scoreMap = new mutable.HashMap[Int, Double].withDefaultValue(0)
       var key = 0
       var lastIndex = article.potentialElements.head.index
       article.potentialElements.foreach(element => {
