@@ -44,8 +44,12 @@ class ArticleExtractor extends Processor {
   }
 
   private def handleAElement(element: Element)(implicit articleElements: ListBuffer[ArticleElement], article: Article) {
-    val linkElement = LinkElement(element)
-    addToArticle(linkElement)
+    val imageElements = element.select("a")
+    //If a link content an image then treat it like an image
+    if (imageElements.isEmpty) {
+      val linkElement = LinkElement(element)
+      addToArticle(linkElement)
+    }
   }
 
   private def handleImgElement(element: Element)(implicit articleElements: ListBuffer[ArticleElement], article: Article) {
@@ -64,7 +68,7 @@ class ArticleExtractor extends Processor {
         element.innerAllElements.foreach(inner => if (inner.tagName != "img") inner.isSkipParse = true)
       }
 
-      if(!element.isHidden) {
+      if (!element.isHidden) {
         val textElement = TextElement(element)
         if (textElement.hasText) {
           addToArticle(textElement)

@@ -35,8 +35,8 @@ case class TitleElement(override val jsoupElement: Element)(implicit article: Ar
 
     //Step1: Try to find potential by checking page content.
     elements.foreach(element => {
-      if (element.tagName() != "title"
-        && element.tagName() != "head") {
+      if (element.tagName != "title"
+        && element.tagName != "head") {
         val text = StringUtils.strip(element.text)
         if (StringUtils.isNotBlank(text)
           && title.contains(text) && text.length > minTitleLength) {

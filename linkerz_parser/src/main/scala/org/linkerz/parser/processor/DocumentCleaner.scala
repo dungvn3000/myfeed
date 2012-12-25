@@ -12,7 +12,7 @@ import org.linkerz.parser.model.Article
 class DocumentCleaner extends Processor {
   def process(implicit article: Article) {
     val doc = article.doc
-    val cleanedHtml = doc.html.replaceAll("&nbsp;","")
+    val cleanedHtml = doc.html.replaceAll("&nbsp;"," ")
     doc.html(cleanedHtml)
     doc.normalise()
   }
