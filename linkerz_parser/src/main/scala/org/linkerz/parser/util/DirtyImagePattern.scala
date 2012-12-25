@@ -10,13 +10,13 @@ import java.util.regex.Pattern
  * @since 12/24/12 9:50 PM
  *
  */
-class DirtyImagePattern(language: String) {
+class DirtyImagePattern {
 
   lazy val regex = {
     val strm = try {
-      this.getClass.getClassLoader.getResourceAsStream("image/dirty_image_" + language.toLowerCase + ".lst")
+      this.getClass.getClassLoader.getResourceAsStream("image/dirty_image.lst")
     } catch {
-      case _: Throwable => throw new IllegalArgumentException("Unavailable file dirty_image_" + language.toLowerCase + ".lst")
+      case _: Throwable => throw new IllegalArgumentException("Unavailable file dirty_image.lst")
     }
     val src = Source.fromInputStream(strm)
 
