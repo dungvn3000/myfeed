@@ -18,7 +18,7 @@ case class TextElement(override val jsoupElement: Element)(implicit article: Art
 
   private val _counter = new StopWordCounter(article.languageCode)
   private val _tokenizer = JavaWordTokenizer
-  private val _text = if (jsoupElement.detectTextBlock) jsoupElement.text() else jsoupElement.ownText()
+  private val _text = if (jsoupElement.detectTextBlock) jsoupElement.text else jsoupElement.ownText()
 
   var stopWordCount = 0
   var wordCount = 0
@@ -41,7 +41,7 @@ case class TextElement(override val jsoupElement: Element)(implicit article: Art
       val numberWordInLink: Double = _tokenizer(linksElement.text()).size
       val score = (numberWordInLink / wordCount) * 100
       //If word in link more than 70% then return true
-      if (score > 70) return true
+      if (score > 40) return true
     }
     false
   }
