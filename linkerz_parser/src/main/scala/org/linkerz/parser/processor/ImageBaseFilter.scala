@@ -10,7 +10,7 @@ import org.linkerz.parser.model.{ArticleElement, ImageElement, Article}
  *
  */
 class ImageBaseFilter(minImageTitleLength: Int = 2) extends Processor {
-  def process(article: Article) {
+  def process(implicit article: Article) {
     var previous: Option[ArticleElement] = None
     var next: Option[ArticleElement] = None
     for (i <- 0 to article.elements.size - 1) {

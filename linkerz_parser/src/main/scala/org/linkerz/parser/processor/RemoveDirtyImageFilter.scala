@@ -14,7 +14,7 @@ class RemoveDirtyImageFilter extends Processor {
 
   val dirtyImagePattern = new DirtyImagePattern("vi")
 
-  def process(article: Article) {
+  def process(implicit article: Article) {
     val elements = article.elements.toBuffer
     article.imageElements.foreach(element => {
       if (dirtyImagePattern.matches(element.src)) {

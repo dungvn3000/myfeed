@@ -15,6 +15,8 @@ import util.DocumentCleaner
 class ArticleParser {
 
   val processors = new Processors <~ List(
+    new LanguageDetector,
+    new RemoveHiddenElement,
     //Step1: Extract article elements.
     new ArticleExtractor,
     //Step2: Try to find potential element.

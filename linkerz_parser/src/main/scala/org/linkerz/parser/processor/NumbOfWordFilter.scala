@@ -10,7 +10,7 @@ import org.linkerz.parser.model.Article
  *
  */
 class NumbOfWordFilter(minNumbOfStopWord: Int = 2, minNumbOfWord: Int = 10) extends Processor {
-  def process(article: Article) {
+  def process(implicit article: Article) {
     article.textElements.foreach(el => {
       if (el.stopWordCount >= minNumbOfStopWord && el.wordCount >= minNumbOfWord) {
         el.isPotential = true

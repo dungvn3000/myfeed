@@ -11,6 +11,8 @@ import org.jsoup.nodes.Document
  */
 case class Article(doc: Document) {
 
+  var languageCode = "vi"
+
   //Title element will not inside elements list.
   var titleElement: Option[TitleElement] = None
 

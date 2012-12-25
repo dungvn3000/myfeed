@@ -14,7 +14,7 @@ import java.util.regex.Pattern
 class JsoupElementWrapper(element: Element) {
 
   val hiddenStyle = Pattern.compile(".*display: none.*|" +
-    ".*visibility: hidden.*|.*bottom: -.*px.*|.*left: -.*px.*|.*top: -.*px.*", Pattern.CASE_INSENSITIVE)
+    ".*visibility: hidden.*|.*bottom: -.*px.*|.*left: -.*px.*|.*top: -.*px.*|.*right: -.*px.*", Pattern.CASE_INSENSITIVE)
 
   /**
    * Which an element has attribute skip-parser is true, was marked by processor,

@@ -11,7 +11,7 @@ import collection.mutable
  *
  */
 class RemoveLowerScoreElementFilter extends Processor {
-  def process(article: Article) {
+  def process(implicit article: Article) {
     //Clustering potential elements has continuous index.
     if (!article.potentialElements.isEmpty) {
       val elementMap = new mutable.HashMap[Int, List[ArticleElement]].withDefaultValue(Nil)

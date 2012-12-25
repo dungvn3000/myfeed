@@ -13,7 +13,7 @@ import org.linkerz.parser.util.StopWordCounter
  * @since 12/23/12 1:05 AM
  *
  */
-case class TitleElement(override val jsoupElement: Element) extends ArticleElement(jsoupElement) {
+case class TitleElement(override val jsoupElement: Element)(implicit article: Article) extends ArticleElement(jsoupElement) {
 
   var minTitleLength = 3
 

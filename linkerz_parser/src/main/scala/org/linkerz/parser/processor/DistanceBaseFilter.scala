@@ -12,7 +12,7 @@ import org.linkerz.parser.model.{ArticleElement, Article}
  *
  */
 class DistanceBaseFilter(maxDistance: Int = 2) extends Processor {
-  def process(article: Article) {
+  def process(implicit article: Article) {
     var lastPotentialElement: Option[ArticleElement] = None
     article.elements.foreach(element => {
       if (element.isPotential) {

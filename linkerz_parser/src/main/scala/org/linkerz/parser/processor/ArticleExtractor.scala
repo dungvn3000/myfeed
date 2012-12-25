@@ -19,7 +19,7 @@ import JsoupElementWrapper._
  */
 class ArticleExtractor extends Processor {
 
-  def process(article: Article) {
+  def process(implicit article: Article) {
     implicit val articleElements = new ListBuffer[ArticleElement]
     val elements = article.doc.getAllElements
 
@@ -43,17 +43,17 @@ class ArticleExtractor extends Processor {
     articleElements += element
   }
 
-  private def handleAElement(element: Element)(implicit articleElements: ListBuffer[ArticleElement]) {
+  private def handleAElement(element: Element)(implicit articleElements: ListBuffer[ArticleElement], article: Article) {
     val linkElement = LinkElement(element)
     addToArticle(linkElement)
   }
 
-  private def handleImgElement(element: Element)(implicit articleElements: ListBuffer[ArticleElement]) {
+  private def handleImgElement(element: Element)(implicit articleElements: ListBuffer[ArticleElement], article: Article) {
     val imgElement = ImageElement(element)
     addToArticle(imgElement)
   }
 
-  private def handleElement(element: Element)(implicit articleElements: ListBuffer[ArticleElement]) {
+  private def handleElement(element: Element)(implicit articleElements: ListBuffer[ArticleElement], article: Article) {
     if (isArticleContentTag(element.tag)) {
 
       if (element.isHidden) {

@@ -10,5 +10,5 @@ import org.linkerz.parser.model.Article
  *
  */
 trait Processor {
-  def process(article: Article)
+  def process(implicit article: Article)
 }

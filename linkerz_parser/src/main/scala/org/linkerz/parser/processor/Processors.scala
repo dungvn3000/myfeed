@@ -10,12 +10,12 @@ import collection.mutable.ListBuffer
  * @since 12/23/12 3:37 AM
  *
  */
-class Processors extends Processor{
+class Processors extends Processor {
 
   val processors = new ListBuffer[Processor]
 
-  def process(article: Article) {
-    processors.foreach(_.process(article))
+  def process(implicit article: Article) {
+    processors.foreach(_.process)
   }
 
   def <~(processor: Processor) = {

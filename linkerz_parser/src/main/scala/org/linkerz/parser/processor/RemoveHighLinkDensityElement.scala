@@ -10,7 +10,7 @@ import org.linkerz.parser.model.Article
  *
  */
 class RemoveHighLinkDensityElement extends Processor {
-  def process(article: Article) {
+  def process(implicit article: Article) {
     val elements = article.elements.toBuffer
     article.textElements.foreach(element => {
       if (element.isHighLinkDensity) {
