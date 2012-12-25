@@ -44,7 +44,7 @@ class ArticleExtractor extends Processor {
   }
 
   private def handleAElement(element: Element)(implicit articleElements: ListBuffer[ArticleElement], article: Article) {
-    val imageElements = element.select("a")
+    val imageElements = element.select("img")
     //If a link content an image then treat it like an image
     if (imageElements.isEmpty) {
       val linkElement = LinkElement(element)
