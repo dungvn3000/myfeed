@@ -17,6 +17,7 @@ object ArticleUtil {
     tag.getName != "script" &&
     tag.getName != "style" &&
     tag.getName != "link" &&
-    tag.getName != "iframe"
+    tag.getName != "iframe" &&
+    tag.getName != "noscript"
 
 }
