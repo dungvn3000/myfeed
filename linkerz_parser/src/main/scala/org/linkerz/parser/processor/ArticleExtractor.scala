@@ -23,7 +23,7 @@ class ArticleExtractor extends Processor {
     implicit val articleElements = new ListBuffer[ArticleElement]
     val elements = article.doc.getAllElements
 
-    elements.foreach(element => if (!element.shouldSkipParse) element.tagName match {
+    elements.foreach(element => if (!element.isSkipParse) element.tagName match {
       case "title" => {
         val titleElement = element.ownerDocument.select("title").first()
         if (titleElement != null) {
@@ -55,15 +55,22 @@ class ArticleExtractor extends Processor {
 
   private def handleElement(element: Element)(implicit articleElements: ListBuffer[ArticleElement]) {
     if (isArticleContentTag(element.tag)) {
-      if (element.detectTextBlock) {
+
+      if (element.isHidden) {
+        //If it is hidden skip parse all children.
+        element.getAllElements.foreach(_.isSkipParse = true)
+      } else if (element.detectTextBlock) {
         //In case this block has own text, to avoid duplicate.
-        element.innerAllElements.foreach(inner => if(inner.tagName != "img") inner.shouldSkipParse = true)
+        element.innerAllElements.foreach(inner => if (inner.tagName != "img") inner.isSkipParse = true)
       }
 
-      val textElement = TextElement(element)
-      if (textElement.hasText) {
-        addToArticle(textElement)
+      if(!element.isHidden) {
+        val textElement = TextElement(element)
+        if (textElement.hasText) {
+          addToArticle(textElement)
+        }
       }
+
     }
   }
 

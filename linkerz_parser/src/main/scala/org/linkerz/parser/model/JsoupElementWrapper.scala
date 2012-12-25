@@ -2,6 +2,7 @@ package org.linkerz.parser.model
 
 import org.jsoup.nodes.Element
 import collection.JavaConversions._
+import java.util.regex.Pattern
 
 /**
  * The Class to warp jsoup element to add more function to it.
@@ -12,14 +13,17 @@ import collection.JavaConversions._
  */
 class JsoupElementWrapper(element: Element) {
 
+  val hiddenStyle = Pattern.compile(".*display: none.*|" +
+    ".*visibility: hidden.*|.*bottom: -.*px.*|.*left: -.*px.*|.*top: -.*px.*", Pattern.CASE_INSENSITIVE)
+
   /**
    * Which an element has attribute skip-parser is true, was marked by processor,
    * will be skip when parsing.
    * @return
    */
-  def shouldSkipParse = element.attr("skip-parse") == "true"
+  def isSkipParse = element.attr("skip-parse") == "true"
 
-  def shouldSkipParse_=(skip: Boolean) {
+  def isSkipParse_=(skip: Boolean) {
     element.attr("skip-parse", skip.toString)
   }
 
@@ -28,6 +32,13 @@ class JsoupElementWrapper(element: Element) {
    * @return
    */
   def detectTextBlock = !element.ownText.isEmpty
+
+
+  /**
+   * Check whether the element is hidden or not.
+   * @return
+   */
+  def isHidden = hiddenStyle.matcher(element.attr("style")).matches()
 
   /**
    * Same with method getAllElements but exclude it's self.
