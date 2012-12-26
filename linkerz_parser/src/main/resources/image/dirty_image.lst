@@ -40,6 +40,9 @@
 .*/bttn_close.gif.*
 .*/bttn_close.png.*
 .*/bttn_close.jpg.*
+.*/widget-comment.png.*
+.*/widget-comment.jpg.*
+.*/widget-comment.gif.*
 .*/1px.gif.*
 .*/1px.png.*
 .*/1px.jpg.*
@@ -49,6 +52,9 @@
 .*/3px.gif.*
 .*/3px.png.*
 .*/3px.jpg.*
+.*/linkhay_logo_small2.png.*
+.*/linkhay_logo_small2.jpg.*
+.*/linkhay_logo_small2.gif.*
 #Domain
 .*reddit.com.*
 .*facebook.com.*

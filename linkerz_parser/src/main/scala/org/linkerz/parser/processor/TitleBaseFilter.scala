@@ -12,8 +12,9 @@ import org.linkerz.parser.model.Article
 class TitleBaseFilter extends Processor {
   def process(implicit article: Article) {
     article.titleElement.map(title => {
-      article.elements.foreach(element => if (element.text == title.text && element != title) {
+      article.elements.foreach(element => if (element.text == title.text) {
         element.isPotential = true
+        element.isTitle = true
       })
     })
   }

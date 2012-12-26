@@ -31,7 +31,15 @@ class JsoupElementWrapper(element: Element) {
    * Check this element whether should get it's text or it's own text.
    * @return
    */
-  def detectTextBlock = !element.ownText.isEmpty
+  def detectTextBlock = {
+    var allIsInLineElement = true
+    element.children.foreach(child => {
+      if (child.isBlock || child.tagName == "a") {
+        allIsInLineElement = false
+      }
+    })
+    !element.ownText.isEmpty || allIsInLineElement
+  }
 
 
   /**

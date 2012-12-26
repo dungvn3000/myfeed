@@ -22,13 +22,15 @@ class ArticleParser {
     //Step2: Try to find potential element.
     new TitleBaseFilter,
     new NumbOfWordFilter,
+    new TagBaseFilter,
     new ImageBaseFilter,
     new DistanceBaseFilter,
     //Step4: Find image for the article.
     new DirtyImageFilter,
-    new HighLinkDensityElementFilter,
+    new HighLinkDensityFilter,
     //Step3: Only keep high score elements.
-    new HighestScoreElementFilter
+    new HighestScoreElementFilter,
+    new ExpandTitleToContentFilter
   )
 
   /**

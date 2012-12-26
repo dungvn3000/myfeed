@@ -17,7 +17,18 @@ abstract case class ArticleElement(jsoupElement: Element)(implicit article: Arti
    */
   var index = 0
 
+  /**
+   * This attribute mean this element might is a part of content.
+   */
   var isPotential = false
+
+  var isContent = false
+
+  var isTitle = false
+
+  def tag = jsoupElement.tag()
+
+  def className = jsoupElement.attr("class")
 
   def text: String
 

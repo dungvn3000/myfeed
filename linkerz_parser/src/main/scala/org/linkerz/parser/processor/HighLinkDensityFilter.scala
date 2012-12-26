@@ -9,7 +9,7 @@ import org.linkerz.parser.model.Article
  * @since 12/24/12 10:32 PM
  *
  */
-class HighLinkDensityElementFilter extends Processor {
+class HighLinkDensityFilter extends Processor {
   def process(implicit article: Article) {
     article.textElements.foreach(element => {
       if (element.isHighLinkDensity) {
