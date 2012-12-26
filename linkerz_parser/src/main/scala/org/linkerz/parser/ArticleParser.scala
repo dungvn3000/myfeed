@@ -14,22 +14,23 @@ import org.jsoup.nodes.Document
 class ArticleParser {
 
   val processors = new Processors <~ List(
+    //Step1: Remove hidden element , clean document.
     new DocumentCleaner,
     new LanguageDetector,
     new RemoveHiddenElement,
-    //Step1: Extract article elements.
+    //Step2: Extract article elements.
     new ArticleExtractor,
     new TitleExtractor,
-    //Step2: Try to find potential element.
+    //Step3: Try to find potential element.
     new TitleBaseFilter,
     new NumbOfWordFilter,
     new TagBaseFilter,
     new ImageBaseFilter,
     new DistanceBaseFilter,
-    //Step4: Find image for the article.
+    //Step4: Remove bad quality element.
     new DirtyImageFilter,
     new HighLinkDensityFilter,
-    //Step3: Only keep high score elements.
+    //Step5: Only keep high score elements.
     new HighestScoreElementFilter,
     new ExpandTitleToContentFilter
   )
@@ -43,7 +44,7 @@ class ArticleParser {
     val article = Article(doc)
     processors.process(article)
     println("Title: " + article.title)
-    println(article.prettyText)
+    println(article.prettyText())
     article.images.foreach(println)
     article
   }

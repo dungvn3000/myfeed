@@ -28,7 +28,9 @@ abstract case class ArticleElement(jsoupElement: Element)(implicit article: Arti
 
   def tag = jsoupElement.tag()
 
-  def className = jsoupElement.attr("class")
+  def tagName = jsoupElement.tagName()
+
+  def className = jsoupElement.className()
 
   /**
    * Check similarity class name between two elements

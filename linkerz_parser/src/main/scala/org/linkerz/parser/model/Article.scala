@@ -28,11 +28,13 @@ case class Article(doc: Document) {
 
   def contentElements: List[ArticleElement] = elements.filter(_.isContent)
 
+  def textContentElements: List[ArticleElement] = textElements.filter(_.isContent)
+
   def jsoupElements = elements.map(_.jsoupElement)
 
   def text = {
     val sb = new StringBuilder
-    textElements.filter(_.isContent).foreach(element => sb.append(element.text))
+    textContentElements.foreach(element => sb.append(element.text))
     sb.toString()
   }
 
@@ -40,10 +42,18 @@ case class Article(doc: Document) {
    * This is using for debugging.
    * @return
    */
-  def prettyText = {
+  def prettyText(wordInLine: Int = 20) = {
     val sb = new StringBuilder
-    textElements.filter(_.isContent).foreach(element => {
-      sb.append(element.text)
+    textContentElements.foreach(element => {
+      var count = 0
+      element.text.split(" ").foreach(word => {
+        sb.append(word + " ")
+        if (count > wordInLine) {
+          sb.append("\n")
+          count = 0
+        }
+        count += 1
+      })
       sb.append("\n")
     })
     sb.toString()
