@@ -18,6 +18,8 @@ object ArticleUtil {
     tag.getName != "style" &&
     tag.getName != "link" &&
     tag.getName != "iframe" &&
+    tag.getName != "select" &&
+    tag.getName != "option" &&
     tag.getName != "noscript"
 
 }

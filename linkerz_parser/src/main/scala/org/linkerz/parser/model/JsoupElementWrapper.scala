@@ -34,7 +34,7 @@ class JsoupElementWrapper(element: Element) {
   def detectTextBlock = {
     var allIsInLineElement = true
     element.children.foreach(child => {
-      if (child.isBlock || child.tagName == "a") {
+      if (child.isBlock || child.tagName == "a" || child.tagName == "select") {
         allIsInLineElement = false
       }
     })

@@ -16,5 +16,5 @@ case class LinkElement(override val jsoupElement: Element)(implicit article: Art
    * Link element should be minus score
    * @return
    */
-  override def score = -100
+  override def score = -200
 }

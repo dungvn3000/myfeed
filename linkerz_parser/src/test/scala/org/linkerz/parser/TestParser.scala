@@ -164,7 +164,7 @@ class TestParser extends Logging {
 
   @Test
   def testParser20() {
-    val url = "http://xem8.net/2012/12/bo-anh-chup-len-ba-chi-ho-cuc-hay/"
+    val url = "http://nld.com.vn/20121226051446379p0c1019/thieu-tien-hui-xach-dao-di-noi-chuyen-voi-chu-no.htm"
     val doc = Jsoup.connect(url).get()
     val parser = new ArticleParser
     parser.parse(doc)
