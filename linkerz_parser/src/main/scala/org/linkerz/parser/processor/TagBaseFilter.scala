@@ -18,7 +18,7 @@ class TagBaseFilter extends Processor {
       article.elements.foreach(el => {
         if (el.tag.getName == tagName
           && el.className == elementClass
-          && StringUtils.isNotBlank(elementClass)
+          && (StringUtils.isNotBlank(elementClass) || el.parent == potentialElement.parent)
           && el.hasText) {
           el.isPotential = true
         }

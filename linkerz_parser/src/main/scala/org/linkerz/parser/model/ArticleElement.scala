@@ -30,6 +30,8 @@ abstract case class ArticleElement(jsoupElement: Element)(implicit article: Arti
 
   def className = jsoupElement.attr("class")
 
+  def parent = jsoupElement.parent()
+
   def text: String
 
   def hasText = StringUtils.isNotBlank(text)
