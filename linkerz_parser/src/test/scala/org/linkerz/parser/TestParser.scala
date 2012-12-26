@@ -70,7 +70,7 @@ class TestParser extends Logging {
   @Test
   def testParser7() {
     val url = "http://genk.vn/internet/amazon-ke-lao-luyen-day-chien-luoc-trong-cuoc-chien-cong-nghe-2012122104231130.chn"
-    val doc = Jsoup.connect(url).get()
+    val doc = Jsoup.parse(getResourceAsStream("genk1.html"), "utf-8", url)
     val parser = new ArticleParser
     parser.parse(doc)
   }
@@ -78,7 +78,7 @@ class TestParser extends Logging {
   @Test
   def testParser8() {
     val url = "http://news.zing.vn/xa-hoi/moi-nga-duong-ve-nha-tho-tac-nghn-dem-giang-sinh/a293004.html#home_noibat1"
-    val doc = Jsoup.connect(url).get()
+    val doc = Jsoup.parse(getResourceAsStream("zing1.html"), "utf-8", url)
     val parser = new ArticleParser
     parser.parse(doc)
   }
@@ -86,7 +86,7 @@ class TestParser extends Logging {
   @Test
   def testParser9() {
     val url = "http://xinhxinh.com.vn/phong-cach/20121224150720142/4-buoc-mix-do-giup-ban-tu-tin-toa-sang-dem-noel.xinh"
-    val doc = Jsoup.connect(url).get()
+    val doc = Jsoup.parse(getResourceAsStream("xinh1.html"), "utf-8", url)
     val parser = new ArticleParser
     parser.parse(doc)
   }
@@ -94,7 +94,7 @@ class TestParser extends Logging {
   @Test
   def testParser10() {
     val url = "http://dantri.com.vn/su-kien/chot-lich-nghi-le-tet-2013-cua-cong-chuc-vien-chuc-677792.htm"
-    val doc = Jsoup.connect(url).get()
+    val doc = Jsoup.parse(getResourceAsStream("dantri1.html"), "utf-8", url)
     val parser = new ArticleParser
     parser.parse(doc)
   }
@@ -102,7 +102,7 @@ class TestParser extends Logging {
   @Test
   def testParser11() {
     val url = "http://java.dzone.com/articles/10-software-process-management"
-    val doc = Jsoup.connect(url).get()
+    val doc = Jsoup.parse(getResourceAsStream("dzone1.html"), "utf-8", url)
     val parser = new ArticleParser
     parser.parse(doc)
   }
@@ -110,7 +110,7 @@ class TestParser extends Logging {
   @Test
   def testParser12() {
     val url = "http://java.dzone.com/articles/4-most-important-skills"
-    val doc = Jsoup.connect(url).get()
+    val doc = Jsoup.parse(getResourceAsStream("dzone2.html"), "utf-8", url)
     val parser = new ArticleParser
     parser.parse(doc)
   }
@@ -118,7 +118,7 @@ class TestParser extends Logging {
   @Test
   def testParser13() {
     val url = "http://ekramalikazi.wordpress.com/eclipse/eclipse-settings/"
-    val doc = Jsoup.connect(url).get()
+    val doc = Jsoup.parse(getResourceAsStream("eclipse1.html"), "utf-8", url)
     val parser = new ArticleParser
     parser.parse(doc)
   }
@@ -126,7 +126,7 @@ class TestParser extends Logging {
   @Test
   def testParser14() {
     val url = "http://www.scala-lang.org/node/26632"
-    val doc = Jsoup.connect(url).get()
+    val doc = Jsoup.parse(getResourceAsStream("scala1.html"), "utf-8", url)
     val parser = new ArticleParser
     parser.parse(doc)
   }
@@ -134,7 +134,7 @@ class TestParser extends Logging {
   @Test
   def testParser15() {
     val url = "http://www.bbc.co.uk/news/world-us-canada-20838925"
-    val doc = Jsoup.connect(url).get()
+    val doc = Jsoup.parse(getResourceAsStream("bbc1.html"), "utf-8", url)
     val parser = new ArticleParser
     parser.parse(doc)
   }
@@ -142,7 +142,7 @@ class TestParser extends Logging {
   @Test
   def testParser17() {
     val url = "http://edition.cnn.com/2010/POLITICS/08/13/democrats.social.security/index.html"
-    val doc = Jsoup.connect(url).get()
+    val doc = Jsoup.parse(getResourceAsStream("cnn2.html"), "utf-8", url)
     val parser = new ArticleParser
     parser.parse(doc)
   }
@@ -150,7 +150,7 @@ class TestParser extends Logging {
   @Test
   def testParser18() {
     val url = "http://soha.vn/giai-tri/can-lo-lo-la-loi-voi-khan-tam-20121225102525545.htm"
-    val doc = Jsoup.connect(url).get()
+    val doc = Jsoup.parse(getResourceAsStream("soha1.html"), "utf-8", url)
     val parser = new ArticleParser
     parser.parse(doc)
   }
@@ -158,7 +158,7 @@ class TestParser extends Logging {
   @Test
   def testParser19() {
     val url = "http://teen9x.net/bai-viet/bep-nuc/83-boy-vao-bep-che-banh-tinh-yeu-690.html"
-    val doc = Jsoup.connect(url).get()
+    val doc = Jsoup.parse(getResourceAsStream("teen9x1.html"), "utf-8", url)
     val parser = new ArticleParser
     parser.parse(doc)
   }
@@ -166,7 +166,7 @@ class TestParser extends Logging {
   @Test
   def testParser20() {
     val url = "http://nld.com.vn/20121226051446379p0c1019/thieu-tien-hui-xach-dao-di-noi-chuyen-voi-chu-no.htm"
-    val doc = Jsoup.connect(url).get()
+    val doc = Jsoup.parse(getResourceAsStream("nld1.html"), "utf-8", url)
     val parser = new ArticleParser
     parser.parse(doc)
   }
@@ -174,7 +174,15 @@ class TestParser extends Logging {
   @Test
   def testParser21() {
     val url = "http://edition.cnn.com/2012/05/14/living/top-baby-names/index.html"
-    val doc = Jsoup.connect(url).get()
+    val doc = Jsoup.parse(getResourceAsStream("cnn1.html"), "utf-8", url)
+    val parser = new ArticleParser
+    parser.parse(doc)
+  }
+
+  @Test
+  def testParser22() {
+    val url = "localhost"
+    val doc = Jsoup.parse(getResourceAsStream("empty.html"), "utf-8", url)
     val parser = new ArticleParser
     parser.parse(doc)
   }

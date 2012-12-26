@@ -1,0 +1,335 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Functional Programming Principles in Scala: Impressions and Statistics | The Scala Programming Language</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="/sites/default/files/favicon.gif" type="image/x-icon" />
+    <link rel="alternate" type="application/rss+xml" title="The Scala Language (Featured News Only)" href="/featured/rss.xml" />
+
+    <link type="text/css" rel="stylesheet" media="all" href="/sites/all/modules/views/css/views.css?k" />
+    <link type="text/css" rel="stylesheet" media="all" href="/sites/default/files/css/f8a0a548009cabd7720999a9af885f4d.css" />
+    <script type="text/javascript" src="/sites/default/files/js/23fd552848e9c3d3c26e7fa4714e622f.js"></script>
+    <script type="text/javascript">jQuery.extend(Drupal.settings, { "basePath": "/", "extlink": { "extTarget": 0, "extClass": "ext", "extSubdomains": 1, "mailtoClass": "mailto" }, "fivestar": { "titleUser": "Your rating: ", "titleAverage": "Average: ", "feedbackSavingVote": "Saving your vote...", "feedbackVoteSaved": "Your vote has been saved.", "feedbackDeletingVote": "Deleting your vote...", "feedbackVoteDeleted": "Your vote has been deleted." }, "spamspan": { "m": "spamspan", "u": "u", "d": "d", "t": "t" } });</script>
+    <script type="text/javascript">var BASE_URL = "/";</script>
+    <script type="text/javascript"> </script>
+    <style type="text/css">
+        #page {
+            width : 950px;
+        }
+    </style>
+    <style type="text/css">
+        body.sidebar-left #main {
+            margin-left: -200px;
+        }
+        body.sidebars #main {
+            margin-left: -200px;
+        }
+        body.sidebar-left #squeeze {
+            margin-left: 200px;
+        }
+        body.sidebars #squeeze {
+            margin-left: 200px;
+        }
+        #sidebar-left {
+            width: 200px;
+        }
+    </style>
+    <style type="text/css">
+        body.sidebar-right #main {
+            margin-right: -200px;
+        }
+        body.sidebars #main {
+            margin-right: -200px;
+        }
+        body.sidebar-right #squeeze {
+            margin-right: 200px;
+        }
+        body.sidebars #squeeze {
+            margin-right: 200px;
+        }
+        #sidebar-right {
+            width: 200px;
+        }
+    </style>
+    <style type="text/css">
+        body {
+            font-family : Custom;
+        }
+    </style>
+    <style type="text/css">
+        body {
+            font-family : "Helvetica neue", Arial, Verdana, sans-serif;
+        }
+    </style>
+    <!--[if lte IE 6]>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(document).pngFix();
+        });
+    </script>
+    <![endif]-->
+    <!--[if IE]>
+    <style type="text/css" media="all">@import "/sites/all/themes/newsflash/css/ie.css";</style>
+    <![endif]-->
+    <script type="text/javascript" src="http://www.scala-lang.org/sites/all/themes/newsflash/js/pickstyle.js"></script>
+</head>
+<body class="sidebar-right">
+<div id="page">
+<div id="header" class="clear-block">
+    <div id="logo-title">
+        <a href="/" title="Home"> <img src="/sites/default/files/newsflash_logo.png" alt="Home" id="logo" /> </a>
+    </div><!-- /logo-title -->
+    <div id="name-and-slogan">
+    </div><!-- /name-and-slogan -->
+    <form action="/node/26632"  accept-charset="UTF-8" method="post" id="search-theme-form">
+        <div><div id="search" class="container-inline">
+            <div class="form-item" id="edit-search-theme-form-1-wrapper">
+                <label for="edit-search-theme-form-1">Search this site: </label>
+                <input type="text" maxlength="128" name="search_theme_form" id="edit-search-theme-form-1" size="15" value="" title="Enter the terms you wish to search for." class="form-text" />
+            </div>
+            <input type="submit" name="op" id="edit-submit" value="Search"  class="form-submit" />
+            <input type="hidden" name="form_build_id" id="form-64f377175bb73e5febf0b366b6fa4974" value="form-64f377175bb73e5febf0b366b6fa4974"  />
+            <input type="hidden" name="form_id" id="edit-search-theme-form" value="search_theme_form"  />
+        </div>
+
+        </div></form>
+    <div id="primarymenu">
+
+    </div>
+    <div style="clear:both"></div>
+    <div id="suckerfishmenu" class="clear-block"> <div class="block block-menu" id="block-menu-primary-links">
+        <h2 class="title">Scala Main Menu</h2>  <div class="content"><ul class="menu"><li class="expanded first"><a href="/node/273" title="">About Scala</a><ul class="menu"><li class="leaf first"><a href="/node/25" title="">Introduction</a></li>
+        <li class="leaf"><a href="/node/1658" title="Scala in the Enterprise">In the Enterprise</a></li>
+        <li class="expanded"><a href="/node/1707" title="">Scala Community</a><ul class="menu"><li class="expanded first"><a href="/node/199" title="">Mailing Lists</a><ul class="menu"><li class="leaf first"><a href="/node/199#scala" title="">scala</a></li>
+            <li class="leaf"><a href="/node/199#scala-announce" title="">scala-announce</a></li>
+            <li class="leaf"><a href="/node/199#scala-user" title="">scala-user</a></li>
+            <li class="leaf"><a href="/node/199#scala-debate" title="">scala-debate</a></li>
+            <li class="leaf"><a href="/node/199#scala-tools" title="">scala-tools</a></li>
+            <li class="leaf"><a href="/node/199#scala-internals" title="">scala-internals</a></li>
+            <li class="leaf"><a href="/node/199#scala-xml" title="">scala-xml</a></li>
+            <li class="leaf last"><a href="/node/199#scala-sips" title="">scala-sips</a></li>
+        </ul></li>
+            <li class="leaf"><a href="/node/813" title="The Scala IRC Channel">IRC Channel</a></li>
+            <li class="leaf"><a href="/node/1707#blogs" title="">Blogs &amp; News</a></li>
+            <li class="leaf"><a href="http://scala.sygneca.com/" title="">Sygneca Wiki</a></li>
+            <li class="leaf last"><a href="http://issues.scala-lang.org" title="">Scala Jira</a></li>
+        </ul></li>
+        <li class="expanded"><a href="/node/143" title="">Language Research</a><ul class="menu"><li class="leaf first"><a href="http://www.scala-lang.org/node/143#grants" title="">Grants</a></li>
+            <li class="leaf"><a href="/node/143#papers" title="">Papers</a></li>
+            <li class="leaf"><a href="/node/143#talks" title="">Talks</a></li>
+            <li class="leaf"><a href="/node/143#theses" title="">Theses</a></li>
+            <li class="leaf"><a href="/node/203" title="">Courses</a></li>
+            <li class="leaf last"><a href="/node/207" title="">Presentations</a></li>
+        </ul></li>
+        <li class="expanded"><a href="/node/202" title="">In the Press</a><ul class="menu"><li class="leaf first"><a href="/node/205" title="">Articles</a></li>
+            <li class="leaf"><a href="/node/206" title="">Interviews and Panel Talks</a></li>
+            <li class="leaf last"><a href="/archive" title="">News Archive</a></li>
+        </ul></li>
+        <li class="leaf"><a href="/node/89" title="">The Scala Team</a></li>
+        <li class="leaf"><a href="/node/239" title="">Scala&#039;s Prehistory</a></li>
+        <li class="leaf last"><a href="/node/188" title="">Contact Us</a></li>
+    </ul></li>
+        <li class="expanded"><a href="/node/197" title="">Documentation</a><ul class="menu"><li class="leaf first"><a href="/node/1305" title="">Learning Scala</a></li>
+            <li class="leaf"><a href="/node/104" title="">Tour of Scala</a></li>
+            <li class="expanded"><a href="/node/198" title="">Manuals</a><ul class="menu"><li class="leaf first"><a href="http://www.scala-lang.org/sites/default/files/linuxsoft_archives/docu/files/ScalaTutorial.pdf" title="">A Brief Scala Tutorial</a></li>
+                <li class="leaf"><a href="http://www.scala-lang.org/sites/default/files/linuxsoft_archives/docu/files/ScalaByExample.pdf" title="">Scala by Example</a></li>
+                <li class="leaf"><a href="http://www.scala-lang.org/sites/default/files/linuxsoft_archives/docu/files/ScalaOverview.pdf" title="">Scala Overview</a></li>
+                <li class="leaf"><a href="http://www.scala-lang.org/sites/default/files/linuxsoft_archives/docu/files/ScalaReference.pdf" title="">Scala Language Specification</a></li>
+                <li class="leaf"><a href="http://scala.github.com/sips/index.html" title="">Scala Improvement Process</a></li>
+                <li class="leaf"><a href="/node/274" title="">Translations</a></li>
+                <li class="leaf last"><a href="https://wiki.scala-lang.org/display/SW/Scaladoc" title="contains information on how to use the Scaladoc tool for browswing API documentation, writing your own documentation with Scaladoc, and developing Scaladoc.">Scaladoc 2 Manual</a></li>
+            </ul></li>
+            <li class="leaf"><a href="/node/959" title="Books on Scala">Books</a></li>
+            <li class="expanded"><a href="/node/216" title="">Scala API</a><ul class="menu"><li class="leaf first"><a href="http://www.scala-lang.org/api" title="">scaladoc (stable)</a></li>
+                <li class="leaf"><a href="http://www.scala-lang.org/archives/downloads/distrib/files/nightly/docs/library/index.html" title="">scaladoc (nightly)</a></li>
+                <li class="leaf"><a href="http://www.scala-lang.org/archives/downloads/distrib/files/nightly/docs/compiler/index.html" title="The Scala compiler API, built on the current trunk.">compiler API (nightly)</a></li>
+                <li class="leaf last"><a href="/downloads#api" title="">Download locally</a></li>
+            </ul></li>
+            <li class="expanded"><a href="/node/201" title="">Setup &amp; Getting Started</a><ul class="menu"><li class="leaf first"><a href="/node/166" title="">Getting Started with Scala</a></li>
+                <li class="leaf"><a href="/node/960" title="Java to Scala with the Help of Experts">Java to Scala</a></li>
+                <li class="leaf"><a href="/node/310" title="">Windows Mini-Guide</a></li>
+                <li class="leaf"><a href="/node/330" title="">Setting PATH on Windows</a></li>
+                <li class="leaf last"><a href="/node/294" title="">fsc and the OSX firewall</a></li>
+            </ul></li>
+            <li class="expanded"><a href="/node/1908#programming" title="">Programming Guides</a><ul class="menu"><li class="leaf first"><a href="/node/242" title="">Scala Actors</a></li>
+                <li class="leaf"><a href="/node/160" title="">Scala on Android</a></li>
+                <li class="leaf"><a href="/node/168" title="">Scala on Microsoft .NET</a></li>
+                <li class="leaf last"><a href="/node/1826" title="Scala on Google App Engine">Scala on Google App Engine</a></li>
+            </ul></li>
+            <li class="expanded"><a href="/node/1909#other" title="">Other Guides</a><ul class="menu"><li class="leaf first"><a href="/node/345" title="">Maven for Beginners</a></li>
+                <li class="leaf"><a href="/node/363" title="">Scala and JUnit on Eclipse</a></li>
+                <li class="leaf last"><a href="/node/354" title="">Scala, Emacs and Yasnippet</a></li>
+            </ul></li>
+            <li class="leaf last"><a href="/faq" title="">FAQs</a></li>
+        </ul></li>
+        <li class="expanded"><a href="/node/219" title="">Code Examples</a><ul class="menu"><li class="leaf first"><a href="/node/166" title="">Hello world!</a></li>
+            <li class="leaf"><a href="/node/220" title="">Simple Snippets</a></li>
+            <li class="leaf last"><a href="/node/44" title="">Advanced Examples</a></li>
+        </ul></li>
+        <li class="expanded"><a href="/node/210" title="">Software</a><ul class="menu"><li class="expanded first"><a href="/downloads" title="">Download Scala</a><ul class="menu"><li class="leaf first"><a href="/downloads" title="">Latest Stable Release</a></li>
+            <li class="leaf"><a href="/node/165" title="">Previous Releases</a></li>
+            <li class="leaf"><a href="/node/212" title="">Nightly Builds</a></li>
+            <li class="leaf"><a href="https://github.com/scala/scala" title="">Git Repository</a></li>
+            <li class="leaf last"><a href="/node/36" title="">Distribution Content</a></li>
+        </ul></li>
+            <li class="expanded"><a href="/node/91" title="">IDE and Editor plugins</a><ul class="menu"><li class="leaf first"><a href="/node/91#ide_plugins" title="">IDE Plugins</a></li>
+                <li class="leaf last"><a href="/node/91#tool_support" title="">Tool Support</a></li>
+            </ul></li>
+            <li class="expanded"><a href="/node/1209" title="">Libraries and Tools</a><ul class="menu"><li class="leaf first"><a href="/node/1209#libraries" title="">Libraries</a></li>
+                <li class="leaf"><a href="/node/1209#development_tools" title="">Development Tools</a></li>
+                <li class="leaf"><a href="/node/1209#program_testing" title="">Program Testing</a></li>
+                <li class="leaf last"><a href="/node/1209#other_scala_related" title="">Other Scala-Related</a></li>
+            </ul></li>
+            <li class="leaf last"><a href="/node/146" title="">Scala License</a></li>
+        </ul></li>
+        <li class="expanded last"><a href="/node/214" title="">Scala Developers</a><ul class="menu"><li class="expanded first"><a href="/node/215" title="">Developer&#039;s Guides</a><ul class="menu"><li class="leaf first"><a href="/node/217" title="">Build Scala from the Source</a></li>
+            <li class="leaf"><a href="/node/140" title="">Writing Compiler Plugins</a></li>
+            <li class="leaf"><a href="/node/98" title="">Scala Ant Tasks</a></li>
+            <li class="leaf"><a href="/node/598" title="">Compiler Internals</a></li>
+            <li class="leaf last"><a href="/node/233" title="Scala Improvement Documents">Improvement Documents</a></li>
+        </ul></li>
+            <li class="expanded"><a href="/node/218" title="">Bug Tracking &amp; Testing</a><ul class="menu"><li class="leaf first"><a href="https://issues.scala-lang.org" title="">Scala Bugtracker</a></li>
+                <li class="leaf"><a href="http://scala-webapps.epfl.ch/jenkins/" title="">Scala Jenkins</a></li>
+                <li class="leaf last"><a href="https://codereview.scala-lang.org" title="">Code Review</a></li>
+            </ul></li>
+            <li class="expanded"><a href="/node/237" title="">Codebase Progress</a><ul class="menu"><li class="leaf first"><a href="/node/43" title="">Language Changes</a></li>
+                <li class="leaf last"><a href="/node/309" title="">Download Stats</a></li>
+            </ul></li>
+            <li class="leaf"><a href="/node/292" title="">Maintainers</a></li>
+            <li class="leaf last"><a href="http://www.scala-lang.org/sites/default/files/contributor_agreement.pdf" title="">Contributor Agreement</a></li>
+        </ul></li>
+    </ul></div></div>
+    </div>
+</div><!-- /header -->
+<div id="middlecontainer">
+    <div id="main">
+        <div id="squeeze">
+            <div id="breadcrumb"> <div class="breadcrumb"><a href="/">Home</a> » Functional Programming Principles in Scala: Impressions and Statistics</div> </div>
+            <div id="squeeze-content">
+                <div id="inner-content">
+                    <h1 class="title">Functional Programming Principles in Scala: Impressions and Statistics</h1>
+                    <div class="tabs"></div>
+                    <div class="node">
+
+
+      <span class="submitted">
+    Created by heathermiller on 2012-12-20.
+    Updated: 2012-12-21, 23:42    </span>
+
+
+                        <div class="content"><span class='print-link'></span><p>In this post, we discuss our experience giving the popular MOOC Functional Programming Principles in Scala, and provide some insight into who our course participants were, how, overall, students performed in the course, and how students felt about the course. We visualize a lot of these statistics in a number of interactive plots, and we go on to publicly release the data and the code to generate these plots within a fun Scala-based project aimed at allowing you to manipulate these statistics with functional programming in Scala, to generate HTML/Javascript for easily visualizing and sharing them. We encourage you to share what you find with us&mdash; we'll share a number of your plots in a follow-up post!&nbsp;<a href="http://docs.scala-lang.org/news/functional-programming-principles-in-scala-impressions-and-statistics.html"><strong>Go see the article!</strong></a></p><p>&nbsp;</p></div>
+                        <div class="clear-block clear"></div>
+
+                        <div class="links"><ul class="links inline"><li class="comment_forbidden first"><span><a href="/user/login?destination=comment/reply/26632%2523comment-form">Login</a> or <a href="/user/register?destination=comment/reply/26632%2523comment-form">register</a> to post comments</span></li>
+                            <li class="print_html last"><a href="/print/26632" title="Display a printer-friendly version of this page." class="print-page" rel="nofollow"><img src="/sites/all/modules/print/icons/print_icon.gif" alt="Printer-friendly version" title="Printer-friendly version" width="16" height="16" class="print-icon print-icon-margin" />Printer-friendly version</a></li>
+                        </ul></div>
+                        <div class="clear-block clear"></div>
+
+                    </div>
+                    <div id="comments">
+                    </div>
+
+                </div><!-- /inner-content -->
+            </div><!-- /squeeze-content -->
+        </div><!-- /squeeze -->
+    </div><!-- /main -->
+    <div id="sidebar-right"><div class="block block-menu" id="block-menu-secondary-links">
+        <h2 class="title">Scala Quick Links</h2>  <div class="content"><ul class="menu"><li class="leaf first"><a href="/downloads" title="Download the Scala compiler and Tools">Download Scala</a></li>
+        <li class="leaf"><a href="/node/198" title="">Reference Manuals</a></li>
+        <li class="leaf"><a href="/node/216" title="">Scala API</a></li>
+        <li class="leaf"><a href="/node/308" title="Submitting a Story">Submit a Story</a></li>
+        <li class="leaf"><a href="/archive" title="Archive of scala-lang.org front page news stories">News Archive</a></li>
+        <li class="leaf"><a href="/faq" title="">FAQs</a></li>
+        <li class="leaf"><a href="/menutree" title="Map of the site content">Site map</a></li>
+        <li class="leaf"><a href="/node/188" title="Contact Us">Contact Us</a></li>
+        <li class="leaf"><a href="http://www.scala-lang.org/shop" title="">The Scala Shop</a></li>
+        <li class="leaf"><a href="http://days2012.scala-lang.org/" title="">Scala Days 2012</a></li>
+        <li class="leaf"><a href="http://docs.scala-lang.org/" title="">Documentation Site</a></li>
+        <li class="leaf last"><a href="/gsoc2012" title="Summer of Code 2012 Scala Projects">Summer of Code 2012</a></li>
+    </ul></div></div>
+        <div class="block block-views" id="block-views-featuredNews-block_1">
+            <h2 class="title">Featured News</h2>  <div class="content"><div class="view view-featuredNews view-id-featuredNews view-display-id-block_1 view-dom-id-1">
+            <div class="view-header">
+                <style type="text/css">
+                    .view-id-featuredNews.view-display-id-block_1 ul {
+                        position:relative;
+                        left:.75em;
+                    }
+                    .view-id-featuredNews.view-display-id-block_1 ul li {
+                        list-style-type: circle;
+                    }
+                    #block-views-featuredNews-block_1 {
+                        position: relative;
+                    }
+                    #block-views-featuredNews-block_1  .feed-icon {
+                        position:absolute;
+                        bottom:2px;
+                        right:2px;
+                    }
+                </style>    </div>
+
+
+
+            <div class="view-content">
+                <div class="item-list">
+                    <ul>
+                        <li class="views-row views-row-1 views-row-odd views-row-first">
+                            <div class="views-field-title">
+                                <span class="field-content"><a href="/node/12603">Scala 2.9.2 final</a></span>
+                            </div>
+                        </li>
+                        <li class="views-row views-row-2 views-row-even views-row-last">
+                            <div class="views-field-title">
+                                <span class="field-content"><a href="/node/12560">Akka 2.0 Released!</a></span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>    </div>
+
+
+
+
+
+            <div class="feed-icon">
+                <a href="/featured/rss.xml" class="feed-icon"><img src="/misc/feed.png" alt="Syndicate content" title="The Scala Language (Featured News Only)" width="16" height="16" /></a>    </div>
+
+        </div> </div></div>
+        <div class="block block-block" id="block-block-5">
+            <h2 class="title">User login</h2>  <div class="content">  <form action="https://www.scala-lang.org/user?destination=node%2F26632    " method="post" id="user-login-form"><div class="form-item" id="edit-name-wrapper"><label for="edit-name">Username: <span class="form-required" title="This field is required.">*</span></label>  <input type="text" maxlength="60" name="name" id="edit-name" size="15" value="" class="form-text required" /></div>     <div class="form-item" id="edit-pass-wrapper"><label for="edit-pass">Password: <span class="form-required" title="This field is required.">*</span></label>   <input type="password" name="pass" id="edit-pass" maxlength="60" size="15" class="form-text required" /><br />     <span style="font-size: smaller;">will be sent securely</span></div>     <input type="submit" name="op" id="edit-submit-custom" value="Log in" tabindex="3" class="form-submit" /> <br />     <p><a title="Create new account" href="/user/register">Create new account</a></p>     <p><a title="Retrieve lost password" href="/user/password">Retrieve lost password</a></p>     <input type="hidden" name="form_id" id="edit-user-login" value="user_login" /></form> </div></div>
+        <div class="block block-block" id="block-block-3">
+            <div class="content"><ul>
+                <li><a href="https://www.scala-lang.org/node/959"><img width="95" height="353" alt="" src="/sites/default/files/books1.png" /></a></li>
+                <li><a href="https://www.scala-lang.org/node/959"><img width="95" height="353" alt="" src="/sites/default/files/books2.png" /></a></li>
+                <li><a href="https://www.scala-lang.org/node/959"><img width="95" height="353" alt="" src="/sites/default/files/books3.png" /></a></li>
+                <li><a href="https://www.scala-lang.org/node/959"><img width="95" height="353" alt="" src="/sites/default/files/books4.png" /></a></li>
+                <li><a href="https://www.scala-lang.org/node/959"><img width="95" height="353" alt="" src="/sites/default/files/books5.png" /></a></li>
+                <li><a href="https://www.scala-lang.org/node/959"><img width="95" height="353" alt="" src="/sites/default/files/books6.png" /></a></li>
+                <li><a href="https://www.scala-lang.org/node/959"><img width="95" height="353" alt="" src="/sites/default/files/books7.png" /></a></li>
+                <li><a href="https://www.scala-lang.org/node/959"><img width="95" height="353" alt="" src="/sites/default/files/books8.png" /></a></li>
+                <li><a href="https://www.scala-lang.org/node/959"><img width="95" height="353" alt="" src="/sites/default/files/books9.png" /></a></li>
+                <li><a href="https://www.scala-lang.org/node/959"><img width="95" height="353" alt="" src="/sites/default/files/books10.png" /></a></li>
+                <li><a href="https://www.scala-lang.org/node/959"><img width="95" height="353" alt="" src="/sites/default/files/books1.png" /></a></li>
+            </ul>
+            </div></div>
+    </div>
+</div><!-- /middle-container -->
+<div style="clear:both"></div>
+<div class="clear-block clr" id="section2">
+    <div class="sections">
+        <div class="section width99"><div class="block block-block" id="block-block-2">
+            <div class="content"><p style="text-align: center;">Copyright &copy; 2012 &Eacute;cole Polytechnique F&eacute;d&eacute;rale de Lausanne (EPFL), Lausanne, Switzerland</p></div></div>
+        </div>
+    </div>
+    <div style="clear:both"></div>
+</div><!-- /section2 -->
+<div id="footer">
+
+
+
+</div><!-- /footer -->
+<div style="clear:both"></div>
+</div> <!-- /page -->
+</body>
+</html>
