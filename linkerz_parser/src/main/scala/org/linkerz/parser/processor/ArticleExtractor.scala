@@ -44,12 +44,15 @@ class ArticleExtractor extends Processor {
       val linkElement = LinkElement(element)
       addToArticle(linkElement)
     } else {
-      //Skip parse a element content except img element
-      element.innerAllElements.foreach(inner => {
-        if (inner.tagName != "img") {
-          inner.isSkipParse = true
-        }
-      })
+      //If not
+      val imageElements = element.select("img")
+      if (imageElements.isEmpty) {
+        val linkElement = LinkElement(element)
+        addToArticle(linkElement)
+
+        //Skip parse a element content except img element
+        element.innerAllElements.foreach(_.isSkipParse = true)
+      }
     }
   }
 
