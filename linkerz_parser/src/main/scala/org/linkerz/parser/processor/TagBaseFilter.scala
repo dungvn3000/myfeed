@@ -22,6 +22,13 @@ class TagBaseFilter extends Processor {
           && el.hasText) {
           el.isPotential = true
         }
+
+        if (el.tag.getName == tagName
+          && el.parent == potentialElement.parent
+          && el.isSimilarClassName(potentialElement)) {
+          el.isPotential = true
+        }
+
       })
     })
   }

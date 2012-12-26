@@ -30,6 +30,29 @@ abstract case class ArticleElement(jsoupElement: Element)(implicit article: Arti
 
   def className = jsoupElement.attr("class")
 
+  /**
+   * Check similarity class name between two elements
+   * @param otherElement
+   * @return if two element has more than one same class name.
+   */
+  def isSimilarClassName(otherElement: ArticleElement) = {
+    var similar = false
+
+    val otherClassNames = otherElement.className.split(" ")
+    val classNames = className.split(" ")
+
+    otherClassNames.foreach(otherName => {
+      classNames.foreach(name => {
+        if (StringUtils.equalsIgnoreCase(otherName.trim, name.trim)
+          && StringUtils.isNotBlank(otherName)) {
+          similar = true
+        }
+      })
+    })
+
+    similar
+  }
+
   def parent = jsoupElement.parent()
 
   def text: String
