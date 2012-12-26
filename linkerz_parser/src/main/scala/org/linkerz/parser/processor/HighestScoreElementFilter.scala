@@ -1,6 +1,6 @@
 package org.linkerz.parser.processor
 
-import org.linkerz.parser.model.{TextElement, ArticleElement, Article}
+import org.linkerz.parser.model.{ArticleElement, Article}
 import collection.mutable
 
 /**
@@ -27,9 +27,7 @@ class HighestScoreElementFilter extends Processor {
       //Sum all child element score to find the best block.
       elementMap.foreach(item => {
         val elements = item._2
-        elements.foreach(element => if (element.isInstanceOf[TextElement]) {
-          scoreMap(item._1) += element.asInstanceOf[TextElement].score
-        })
+        elements.foreach(scoreMap(item._1) += _.score)
       })
 
       val highestKey = scoreMap.toList.sortWith(_._2 > _._2).head._1

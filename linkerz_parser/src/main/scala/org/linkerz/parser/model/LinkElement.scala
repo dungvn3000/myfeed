@@ -11,4 +11,10 @@ import org.jsoup.nodes.Element
  */
 case class LinkElement(override val jsoupElement: Element)(implicit article: Article) extends ArticleElement(jsoupElement) {
   def text = jsoupElement.text()
+
+  /**
+   * Link element should be minus score
+   * @return
+   */
+  override def score = -100
 }

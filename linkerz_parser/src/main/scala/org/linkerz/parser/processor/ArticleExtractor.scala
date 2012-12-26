@@ -24,7 +24,7 @@ class ArticleExtractor extends Processor {
     val elements = article.doc.getAllElements
 
     elements.foreach(element => if (!element.isSkipParse) element.tagName match {
-      case "title" => //ignore
+      case "title" => //Ignore
       case "a" => handleAElement(element)
       case "img" => handleImgElement(element)
       case _ => handleElement(element)
@@ -39,11 +39,17 @@ class ArticleExtractor extends Processor {
   }
 
   private def handleAElement(element: Element)(implicit articleElements: ListBuffer[ArticleElement], article: Article) {
-    val imageElements = element.select("img")
-    //If a link content an image then treat it like an image
-    if (imageElements.isEmpty) {
+    //A link element should be empty
+    if (element.children.isEmpty) {
       val linkElement = LinkElement(element)
       addToArticle(linkElement)
+    } else {
+      //Skip parse a element content except img element
+      element.innerAllElements.foreach(inner => {
+        if (inner.tagName != "img") {
+          inner.isSkipParse = true
+        }
+      })
     }
   }
 
