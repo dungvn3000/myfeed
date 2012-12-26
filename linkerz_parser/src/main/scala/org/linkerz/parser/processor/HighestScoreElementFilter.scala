@@ -10,7 +10,7 @@ import collection.mutable
  * @since 12/24/12 2:17 PM
  *
  */
-class LowerScoreElementFilter extends Processor {
+class HighestScoreElementFilter extends Processor {
   def process(implicit article: Article) {
     //Clustering potential elements has continuous index.
     if (!article.potentialElements.isEmpty) {

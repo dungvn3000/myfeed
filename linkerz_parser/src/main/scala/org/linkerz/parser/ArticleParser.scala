@@ -24,11 +24,11 @@ class ArticleParser {
     new NumbOfWordFilter,
     new ImageBaseFilter,
     new DistanceBaseFilter,
-    //Step3: Only keep high score elements.
-    new LowerScoreElementFilter,
     //Step4: Find image for the article.
     new DirtyImageFilter,
-    new HighLinkDensityElementFilter
+    new HighLinkDensityElementFilter,
+    //Step3: Only keep high score elements.
+    new HighestScoreElementFilter
   )
 
   /**
