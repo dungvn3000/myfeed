@@ -11,10 +11,12 @@ import org.jsoup.nodes.Document
  */
 case class Article(doc: Document) {
 
+  /**
+   * Default is vi.
+   */
   var languageCode = "vi"
 
-  //Title element will not inside elements list.
-  var titleElement: Option[TitleElement] = None
+  var title = ""
 
   def textElements: List[TextElement] = elements.filter(_.isInstanceOf[TextElement]).map(_.asInstanceOf[TextElement])
 
@@ -46,8 +48,6 @@ case class Article(doc: Document) {
     })
     sb.toString()
   }
-
-  def title = titleElement.map(_.text).getOrElse("")
 
   def images = imageElements.filter(_.isContent)
 

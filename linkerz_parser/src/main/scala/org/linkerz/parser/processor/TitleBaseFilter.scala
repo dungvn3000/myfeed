@@ -1,6 +1,7 @@
 package org.linkerz.parser.processor
 
 import org.linkerz.parser.model.Article
+import org.apache.commons.lang.StringUtils
 
 /**
  * This class will base on the title to find potential element.
@@ -11,11 +12,11 @@ import org.linkerz.parser.model.Article
  */
 class TitleBaseFilter extends Processor {
   def process(implicit article: Article) {
-    article.titleElement.map(title => {
-      article.elements.foreach(element => if (element.text == title.text) {
+    if (StringUtils.isNotBlank(article.title)) {
+      article.elements.foreach(element => if (element.text == article.title) {
         element.isPotential = true
         element.isTitle = true
       })
-    })
+    }
   }
 }

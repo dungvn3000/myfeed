@@ -1,25 +1,19 @@
-package org.linkerz.parser.model
+package org.linkerz.parser.processor
 
-import org.jsoup.nodes.Element
+import org.linkerz.parser.model.Article
+import org.apache.commons.lang.StringUtils
 import collection.mutable.ListBuffer
 import collection.JavaConversions._
-import org.apache.commons.lang.StringUtils
 import org.linkerz.parser.util.StopWordCounter
 
 /**
- * The Class TitleBlock.
+ * The Class TitleExtractor.
  *
  * @author Nguyen Duc Dung
- * @since 12/23/12 1:05 AM
+ * @since 12/26/12 2:51 PM
  *
  */
-case class TitleElement(override val jsoupElement: Element)(implicit article: Article) extends ArticleElement(jsoupElement) {
-
-  var minTitleLength = 3
-
-  val counter = new StopWordCounter(article.languageCode)
-
-  def text = title.getOrElse("")
+class TitleExtractor(minTitleLength: Int = 3) extends Processor {
 
   /**
    * This method to get the title base on element content. In most of case the title will appear in two places,
@@ -28,10 +22,12 @@ case class TitleElement(override val jsoupElement: Element)(implicit article: Ar
    * So we try to get title in document title and search inside the document to find the correct title.
    * @return
    */
-  def title: Option[String] = {
+  def process(implicit article: Article) {
+    val counter = new StopWordCounter(article.languageCode)
+
     val potentialTitles = new ListBuffer[String]
-    val elements = jsoupElement.ownerDocument().getAllElements
-    val title = jsoupElement.ownerDocument.title()
+    val elements = article.doc.getAllElements
+    val title = article.doc.title()
 
     //Step1: Try to find potential by checking page content.
     elements.foreach(element => {
@@ -40,7 +36,14 @@ case class TitleElement(override val jsoupElement: Element)(implicit article: Ar
         val text = StringUtils.strip(element.text)
         if (StringUtils.isNotBlank(text)
           && title.contains(text) && text.length > minTitleLength) {
-          potentialTitles += text
+          //In case element is h element, we will pick it as the title and stop searching.
+          if ((element.tagName.contains("h") || element.attr("class").toLowerCase.contains("title"))
+            && element.children.isEmpty) {
+            article.title = text
+            return
+          } else {
+            potentialTitles += text
+          }
         }
       }
     })
@@ -63,12 +66,15 @@ case class TitleElement(override val jsoupElement: Element)(implicit article: Ar
     }
 
     //Step3: Find the best title base on stop word.
-    val bestTitle = getTitleByStopWord(potentialTitles.toList)
+    val bestTitle = getTitleByStopWord(potentialTitles.toList, title, counter)
 
-    if (StringUtils.isNotBlank(bestTitle)) Some(bestTitle) else None
+    if (StringUtils.isNotBlank(bestTitle)) {
+      article.title = bestTitle
+    }
   }
-  private def getTitleByStopWord(potentialTitles: List[String]) = {
-    var bestTitle = jsoupElement.ownerDocument.title()
+
+  private def getTitleByStopWord(potentialTitles: List[String], title: String, counter: StopWordCounter) = {
+    var bestTitle = title
     var maxScore = 0
 
     potentialTitles.foreach(potentialTitle => {
@@ -80,5 +86,4 @@ case class TitleElement(override val jsoupElement: Element)(implicit article: Ar
     })
     StringUtils.strip(bestTitle)
   }
-
 }

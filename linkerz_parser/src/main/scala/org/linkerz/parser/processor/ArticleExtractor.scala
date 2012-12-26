@@ -24,12 +24,7 @@ class ArticleExtractor extends Processor {
     val elements = article.doc.getAllElements
 
     elements.foreach(element => if (!element.isSkipParse) element.tagName match {
-      case "title" => {
-        val titleElement = element.ownerDocument.select("title").first()
-        if (titleElement != null) {
-          article.titleElement = Some(TitleElement(titleElement))
-        }
-      }
+      case "title" => //ignore
       case "a" => handleAElement(element)
       case "img" => handleImgElement(element)
       case _ => handleElement(element)

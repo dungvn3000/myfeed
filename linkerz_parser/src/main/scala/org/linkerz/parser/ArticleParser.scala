@@ -19,6 +19,7 @@ class ArticleParser {
     new RemoveHiddenElement,
     //Step1: Extract article elements.
     new ArticleExtractor,
+    new TitleExtractor,
     //Step2: Try to find potential element.
     new TitleBaseFilter,
     new NumbOfWordFilter,
