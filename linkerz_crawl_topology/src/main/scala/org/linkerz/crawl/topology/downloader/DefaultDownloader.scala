@@ -12,6 +12,7 @@ import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.util.EntityUtils
 import org.apache.http.client.entity.GzipDecompressingEntity
+import org.apache.http.entity.ContentType
 
 /**
  * The Class DefaultDownload.
@@ -40,8 +41,9 @@ class DefaultDownloader(httpClient: HttpClient = new DefaultHttpClient) extends 
 
       webPage.content = EntityUtils.toByteArray(entity)
       webPage.contentType = response.getEntity.getContentType.getValue
-      if (response.getEntity.getContentEncoding != null) {
-        webPage.contentEncoding = response.getEntity.getContentEncoding.getValue
+
+      if (ContentType.getOrDefault(entity).getCharset != null) {
+        webPage.contentEncoding = ContentType.getOrDefault(entity).getCharset.name()
       }
     }
 

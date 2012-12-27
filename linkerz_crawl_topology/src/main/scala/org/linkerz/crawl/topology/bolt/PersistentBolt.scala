@@ -3,8 +3,7 @@ package org.linkerz.crawl.topology.bolt
 import storm.scala.dsl.StormBolt
 import org.linkerz.crawl.topology.event.{MetaFetch, Persistent}
 import java.util.UUID
-import org.linkerz.dao.{NewBoxDao, UserDao, LoggingDao, LinkDao}
-import java.util.concurrent.TimeoutException
+import org.linkerz.dao.{NewBoxDao, UserDao, LinkDao}
 import grizzled.slf4j.Logging
 import com.mongodb.casbah.commons.MongoDBObject
 import org.linkerz.model.NewBox
@@ -43,12 +42,12 @@ class PersistentBolt extends StormBolt(outputFields = List("sessionId", "event")
 
         //Save error for each job.
         //We will not save TimeOutException, because it so common.
-        val errors = job.errors.filter {
-          error => !error.message.contains(classOf[TimeoutException].getName)
-        }
-        LoggingDao.insert(errors)
-        //        LoggingDao.insert(job.infos)
-        LoggingDao.insert(job.warns)
+//        val errors = job.errors.filter {
+//          error => !error.message.contains(classOf[TimeoutException].getName)
+//        }
+//        LoggingDao.insert(errors)
+//        //        LoggingDao.insert(job.infos)
+//        LoggingDao.insert(job.warns)
 
         tuple emit(sessionId, Persistent(job))
       }
