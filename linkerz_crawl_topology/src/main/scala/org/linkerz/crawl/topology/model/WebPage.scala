@@ -27,10 +27,10 @@ class WebPage extends Serializable {
 
   //Meta data
   var text: Option[String] = None
+  var description: Option[String] = None
   var contentType: String = _
   var contentEncoding: String = "UTF-8"
   var title: String = _
-  //  var description: Option[String] = None
   var featureImageUrl: Option[String] = None
   var featureImage: Option[Array[Byte]] = None
 
@@ -52,7 +52,7 @@ class WebPage extends Serializable {
     url = webUrl.url,
     title = title,
     text = text,
-    //    description = description,
+    description = description,
     featureImageUrl = featureImageUrl,
     contentEncoding = contentEncoding,
     responseCode = responseCode,

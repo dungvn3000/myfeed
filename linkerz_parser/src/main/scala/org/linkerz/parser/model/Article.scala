@@ -34,9 +34,14 @@ case class Article(doc: Document) {
 
   def text = {
     val sb = new StringBuilder
-    textContentElements.foreach(element => sb.append(element.text))
+    textContentElements.foreach(element => {
+      sb.append(element.text)
+      sb.append("\n")
+    })
     sb.toString()
   }
+
+  def fullText = doc.text()
 
   /**
    * This is using for debugging.

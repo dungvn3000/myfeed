@@ -24,9 +24,9 @@ case class Link
 
   //Metadata
   text: Option[String] = None,
+  description: Option[String] = None,
   contentEncoding: String,
   title: String,
-  //  description: Option[String] = None,
   featureImageUrl: Option[String] = None,
   //Feature Image
   featureImage: Option[Array[Byte]] = None,
