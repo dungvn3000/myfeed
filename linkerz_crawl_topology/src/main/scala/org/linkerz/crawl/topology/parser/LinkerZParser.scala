@@ -17,6 +17,7 @@ import collection.mutable.ListBuffer
 import org.imgscalr.Scalr
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
+import org.apache.commons.validator.routines.UrlValidator
 
 /**
  * The this class using two parser LinksParse and ArticleParser.
@@ -50,11 +51,12 @@ class LinkerZParser extends Parser {
           webPage.description = Some(article.text)
         }
         val potentialImages = new mutable.HashSet[String]
+        val urlValidator = new UrlValidator(Array("http", "https"))
         article.images.foreach(image => {
           val imgSrc = UrlBuilder.fromString(image.src).toString
           if (StringUtils.isNotBlank(imgSrc)) {
             val url = URLCanonicalizer.getCanonicalURL(imgSrc, webPage.webUrl.baseUrl)
-            if (StringUtils.isNotBlank(url)) {
+            if (StringUtils.isNotBlank(url) && urlValidator.isValid(url)) {
               potentialImages += url
             }
           }
