@@ -55,6 +55,9 @@
 .*/linkhay_logo_small2.png.*
 .*/linkhay_logo_small2.jpg.*
 .*/linkhay_logo_small2.gif.*
+.*/icon_googleplus.png.*
+.*/icon_googleplus.jpg.*
+.*/icon_googleplus.gif.*
 #Domain
 .*reddit.com.*
 .*facebook.com.*
