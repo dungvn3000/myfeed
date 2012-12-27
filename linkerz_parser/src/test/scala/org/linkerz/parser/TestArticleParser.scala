@@ -22,10 +22,12 @@ class TestArticleParser extends FunSuite {
     val url = "http://www.thanhnien.com.vn/pages/20121219/5-bong-hong-buon-ma-tuy-lanh-an.aspx"
     val doc = Jsoup.parse(getResourceAsStream("thanhnien1.html"), "utf-8", url)
     val parser = new ArticleParser
+
     val article = parser.parse(doc)
-    assert(article.title.length == 33)
-    assert(article.text.length == 1009)
-    assert(article.images.size == 1)
+
+    expect(article.title.length)(33)
+    expect(article.text.length)(1017)
+    expect(article.images.size)(1)
   }
 
   test("parse ngoisao1.html") {
@@ -33,9 +35,10 @@ class TestArticleParser extends FunSuite {
     val doc = Jsoup.parse(getResourceAsStream("ngoisao1.html"), "utf-8", url)
     val parser = new ArticleParser
     val article = parser.parse(doc)
-    assert(article.title.length == 48)
-    assert(article.text.length == 1157)
-    assert(article.images.size == 13)
+
+    expect(article.title.length)(48)
+    expect(article.text.length)(1168)
+    expect(article.images.size)(13)
   }
 
   test("parse tinhte1.html") {
@@ -44,9 +47,9 @@ class TestArticleParser extends FunSuite {
     val parser = new ArticleParser
     val article = parser.parse(doc)
 
-    assert(article.title.length == 42)
-    assert(article.text.length == 1042)
-    assert(article.images.size == 3)
+    expect(article.title.length)(42)
+    expect(article.text.length)(1044)
+    expect(article.images.size)(3)
   }
 
   test("parse 24h1.html") {
@@ -55,9 +58,9 @@ class TestArticleParser extends FunSuite {
     val parser = new ArticleParser
     val article = parser.parse(doc)
 
-    assert(article.title.length == 40)
-    assert(article.text.length == 793)
-    assert(article.images.size == 12)
+    expect(article.title.length)(40)
+    expect(article.text.length)(803)
+    expect(article.images.size)(12)
   }
 
   test("parser vnexpress1.html") {
@@ -66,9 +69,9 @@ class TestArticleParser extends FunSuite {
     val parser = new ArticleParser
     val article = parser.parse(doc)
 
-    assert(article.title.length == 50)
-    assert(article.text.length == 6804)
-    assert(article.images.size == 0)
+    expect(article.title.length)(50)
+    expect(article.text.length)(6808)
+    expect(article.images.size)(0)
   }
 
   test("parse vnexpress2.html") {
@@ -77,9 +80,9 @@ class TestArticleParser extends FunSuite {
     val parser = new ArticleParser
     val article = parser.parse(doc)
 
-    assert(article.title.length == 30)
-    assert(article.text.length == 2727)
-    assert(article.images.size == 5)
+    expect(article.title.length)(30)
+    expect(article.text.length)(2745)
+    expect(article.images.size)(5)
   }
 
   test("parse genk1.html") {
@@ -88,9 +91,9 @@ class TestArticleParser extends FunSuite {
     val parser = new ArticleParser
     val article = parser.parse(doc)
 
-    assert(article.title.length == 62)
-    assert(article.text.length == 19968)
-    assert(article.images.size == 8)
+    expect(article.title.length)(62)
+    expect(article.text.length)(20035)
+    expect(article.images.size)(8)
   }
 
   test("parse zing1.html") {
@@ -99,9 +102,9 @@ class TestArticleParser extends FunSuite {
     val parser = new ArticleParser
     val article = parser.parse(doc)
 
-    assert(article.title.length == 49)
-    assert(article.text.length == 4150)
-    assert(article.images.size == 21)
+    expect(article.title.length)(49)
+    expect(article.text.length)(4182)
+    expect(article.images.size)(21)
   }
 
   test("parse zing2.html") {
@@ -110,9 +113,9 @@ class TestArticleParser extends FunSuite {
     val parser = new ArticleParser
     val article = parser.parse(doc)
 
-    assert(article.title.length == 52)
-    assert(article.text.length == 7489)
-    assert(article.images.length == 2)
+    expect(article.title.length)(52)
+    expect(article.text.length)(7523)
+    expect(article.images.length)(2)
   }
 
   test("parse xinh1.html") {
@@ -121,9 +124,9 @@ class TestArticleParser extends FunSuite {
     val parser = new ArticleParser
     val article = parser.parse(doc)
 
-    assert(article.title.length == 47)
-    assert(article.text.length == 6359)
-    assert(article.images.size == 46)
+    expect(article.title.length)(47)
+    expect(article.text.length)(6408)
+    expect(article.images.size)(46)
   }
 
   test("parse dantri1.html") {
@@ -132,9 +135,9 @@ class TestArticleParser extends FunSuite {
     val parser = new ArticleParser
     val article = parser.parse(doc)
 
-    assert(article.title.length == 51)
-    assert(article.text.length == 2922)
-    assert(article.images.size == 6)
+    expect(article.title.length)(51)
+    expect(article.text.length)(2936)
+    expect(article.images.size)(6)
   }
 
   test("parse dzone1.html") {
@@ -143,9 +146,9 @@ class TestArticleParser extends FunSuite {
     val parser = new ArticleParser
     val article = parser.parse(doc)
 
-    assert(article.title.length == 45)
-    assert(article.text.length == 4659)
-    assert(article.images.size == 1)
+    expect(article.title.length)(45)
+    expect(article.text.length)(4663)
+    expect(article.images.size)(1)
   }
 
   test("parse dzone2.html") {
@@ -154,9 +157,9 @@ class TestArticleParser extends FunSuite {
     val parser = new ArticleParser
     val article = parser.parse(doc)
 
-    assert(article.title.length == 52)
-    assert(article.text.length == 8562)
-    assert(article.images.size == 5)
+    expect(article.title.length)(52)
+    expect(article.text.length)(8566)
+    expect(article.images.size)(5)
   }
 
   test("parse eclipse1.html") {
@@ -165,9 +168,9 @@ class TestArticleParser extends FunSuite {
     val parser = new ArticleParser
     val article = parser.parse(doc)
 
-    assert(article.title.length == 16)
-    assert(article.text.length == 378)
-    assert(article.images.size == 5)
+    expect(article.title.length)(16)
+    expect(article.text.length)(384)
+    expect(article.images.size)(5)
   }
 
   test("parse scala1.html") {
@@ -176,9 +179,9 @@ class TestArticleParser extends FunSuite {
     val parser = new ArticleParser
     val article = parser.parse(doc)
 
-    assert(article.title.length == 70)
-    assert(article.text.length == 976)
-    assert(article.images.size == 0)
+    expect(article.title.length)(70)
+    expect(article.text.length)(981)
+    expect(article.images.size)(0)
   }
 
   test("parse bbc1.html") {
@@ -187,9 +190,9 @@ class TestArticleParser extends FunSuite {
     val parser = new ArticleParser
     val article = parser.parse(doc)
 
-    assert(article.title.length == 55)
-    assert(article.text.length == 4084)
-    assert(article.images.size == 2)
+    expect(article.title.length)(55)
+    expect(article.text.length)(4119)
+    expect(article.images.size)(2)
   }
 
   test("parse cnn2.html") {
@@ -198,9 +201,9 @@ class TestArticleParser extends FunSuite {
     val parser = new ArticleParser
     val article = parser.parse(doc)
 
-    assert(article.title.length == 54)
-    assert(article.text.length == 6337)
-    assert(article.images.size == 2)
+    expect(article.title.length)(54)
+    expect(article.text.length)(6373)
+    expect(article.images.size)(2)
   }
 
   test("parse soha1.html") {
@@ -209,9 +212,9 @@ class TestArticleParser extends FunSuite {
     val parser = new ArticleParser
     val article = parser.parse(doc)
 
-    assert(article.title.length == 29)
-    assert(article.text.length == 936)
-    assert(article.images.size == 14)
+    expect(article.title.length)(29)
+    expect(article.text.length)(945)
+    expect(article.images.size)(14)
   }
 
   test("parse teen9x1.html") {
@@ -220,9 +223,9 @@ class TestArticleParser extends FunSuite {
     val parser = new ArticleParser
     val article = parser.parse(doc)
 
-    assert(article.title.length == 33)
-    assert(article.text.length == 1339)
-    assert(article.images.size == 13)
+    expect(article.title.length)(33)
+    expect(article.text.length)(1363)
+    expect(article.images.size)(13)
   }
 
   test("parse nld1.html") {
@@ -230,10 +233,10 @@ class TestArticleParser extends FunSuite {
     val doc = Jsoup.parse(getResourceAsStream("nld1.html"), "utf-8", url)
     val parser = new ArticleParser
     val article = parser.parse(doc)
-    
-    assert(article.title.length == 51)
-    assert(article.text.length == 1218)
-    assert(article.images.size == 1)
+
+    expect(article.title.length)(51)
+    expect(article.text.length)(1229)
+    expect(article.images.size)(1)
   }
 
   test("parse cnn1.html") {
@@ -242,9 +245,9 @@ class TestArticleParser extends FunSuite {
     val parser = new ArticleParser
     val article = parser.parse(doc)
 
-    assert(article.title.length == 60)
-    assert(article.text.length == 2577)
-    assert(article.images.size == 1)
+    expect(article.title.length)(60)
+    expect(article.text.length)(2602)
+    expect(article.images.size)(1)
   }
 
   test("parse empty.html") {
@@ -253,9 +256,9 @@ class TestArticleParser extends FunSuite {
     val parser = new ArticleParser
     val article = parser.parse(doc)
 
-    assert(article.title.length == 0)
-    assert(article.text.length == 0)
-    assert(article.images.size == 0)
+    expect(article.title.length)(0)
+    expect(article.text.length)(0)
+    expect(article.images.size)(0)
   }
 
   test("parse soha.vn home page") {
@@ -300,7 +303,7 @@ class TestArticleParser extends FunSuite {
     val article = parser.parse(doc)
   }
 
-  test("parse single page") {
+  ignore("parse single page") {
     val url = "http://tuoitre.vn/Chinh-tri-Xa-hoi/524325/Nguoi-mat-95-hot-kim-cuong%C2%A0nhan%C2%A0nu-trang-35-trieu-dong.html"
     val doc = Jsoup.connect(url).get()
     val parser = new ArticleParser
