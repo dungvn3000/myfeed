@@ -17,7 +17,7 @@ class TestDefaultDownloader {
   def testDownloader() {
     val downloader = new DefaultDownloader()
     val parser = new LinkerZParser
-    val crawlJob = new CrawlJob("http://genk.vn/internet/facebook-mac-ao-moi-cho-tinh-nang-tin-nhan-chen-quang-cao-vao-ket-qua-truy-van-cua-nguoi-dung-20120824122528171.chn")
+    val crawlJob = new CrawlJob("http://tuoitre.vn/Can-biet/san-pham-dich-vu/527001/Bo-tui-bi-kip-du-lich-duong-dai-chang-ngai-say-xe.html")
     downloader.download(crawlJob)
     parser.parse(crawlJob)
 

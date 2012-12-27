@@ -23,18 +23,7 @@ case class NewFeed
   enable: Boolean,
 
   urlRegex: String,
-  excludeUrl: List[String] = Nil,
-
-  titleSelection: String,
-  contentSelection: String,
-  imgSelection: String,
-  defaultImgUrl: String,
-
-  urlTests: List[String] = Nil,
-  titles: List[String] = Nil,
-  validateTexts: List[String] = Nil,
-  imageUrls: List[String] = Nil
-
+  excludeUrl: List[String] = Nil
   ) {
 
   def id = _id.toString

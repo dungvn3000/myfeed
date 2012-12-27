@@ -25,12 +25,12 @@ class AutoDetectParser(parsers: List[CustomParser]) extends Parser {
    * @param crawlJob
    */
   def parse(crawlJob: CrawlJob) {
-    parsers.foreach(plugin => {
-      if (plugin.isMatch(crawlJob.webUrl.url)) {
-        plugin.parse(crawlJob)
-        return
-      }
-    })
+//    parsers.foreach(plugin => {
+//      if (plugin.isMatch(crawlJob.webUrl.url)) {
+//        plugin.parse(crawlJob)
+//        return
+//      }
+//    })
     defaultParser.parse(crawlJob)
   }
 }
