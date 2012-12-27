@@ -4,7 +4,7 @@
 
 package org.linkerz.crawl.topology.factory
 
-import org.linkerz.crawl.topology.downloader.{ImageDownloader, DefaultDownload}
+import org.linkerz.crawl.topology.downloader.{ImageDownloader, DefaultDownloader}
 import org.apache.http.params.{CoreConnectionPNames, CoreProtocolPNames, BasicHttpParams}
 import org.apache.http.impl.client.DefaultHttpClient
 
@@ -24,7 +24,7 @@ object DownloadFactory {
   //Set time out 30s
   httpParams.setParameter(CoreConnectionPNames.SO_TIMEOUT, 1000 * 30)
 
-  def createDownloader() = new DefaultDownload(new DefaultHttpClient(httpParams))
+  def createDownloader() = new DefaultDownloader(new DefaultHttpClient(httpParams))
 
   def createImageDownloader() = new ImageDownloader(new DefaultHttpClient(httpParams))
 

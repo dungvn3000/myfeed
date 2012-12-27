@@ -44,7 +44,7 @@ object LinkerZBuild extends Build {
     jarName in assembly := "linkerz_crawl_topology.jar",
     libraryDependencies ++= crawlerTopologyDependencies
   ).dependsOn(
-    linkerZCore, linkerZModel, linkerZLogger, scalaStorm, urlBuilder
+    linkerZCore, linkerZModel, linkerZLogger, scalaStorm, urlBuilder, linkerZParser
   )
 
   lazy val linkerZParser = Project("linkerz_parser", file("linkerz_parser"), settings = sharedSetting).settings {

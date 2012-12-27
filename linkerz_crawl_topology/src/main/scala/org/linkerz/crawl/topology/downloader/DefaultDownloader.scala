@@ -21,7 +21,7 @@ import org.apache.http.client.entity.GzipDecompressingEntity
  *
  */
 
-class DefaultDownload(httpClient: HttpClient = new DefaultHttpClient) extends Downloader {
+class DefaultDownloader(httpClient: HttpClient = new DefaultHttpClient) extends Downloader {
 
   def download(crawlJob: CrawlJob) {
     val webUrl = crawlJob.webUrl
@@ -40,6 +40,9 @@ class DefaultDownload(httpClient: HttpClient = new DefaultHttpClient) extends Do
 
       webPage.content = EntityUtils.toByteArray(entity)
       webPage.contentType = response.getEntity.getContentType.getValue
+      if (response.getEntity.getContentEncoding != null) {
+        webPage.contentEncoding = response.getEntity.getContentEncoding.getValue
+      }
     }
 
     webPage.webUrl = webUrl

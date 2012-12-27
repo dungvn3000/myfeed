@@ -16,7 +16,7 @@ import org.scalatest.FunSuite
  * @since 8/3/12, 10:58 PM
  *
  */
-class TestParser extends FunSuite {
+class TestArticleParser extends FunSuite {
 
   test("parse thanhnien1.html") {
     val url = "http://www.thanhnien.com.vn/pages/20121219/5-bong-hong-buon-ma-tuy-lanh-an.aspx"
