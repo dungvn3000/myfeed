@@ -246,4 +246,25 @@ class TestParser extends FunSuite {
     assert(article.text.length == 0)
     assert(article.images.size == 0)
   }
+
+  test("parse soha.vn home page") {
+    val url = "http://soha.vn/"
+    val doc = Jsoup.parse(getResourceAsStream("soha.homepage.html"), "utf-8", url)
+    val parser = new ArticleParser
+    val article = parser.parse(doc)
+  }
+
+  test("parse vnexpress.net home page") {
+    val url = "http://vnexpress.net/"
+    val doc = Jsoup.parse(getResourceAsStream("vnexpress.hompage.html"), "utf-8", url)
+    val parser = new ArticleParser
+    val article = parser.parse(doc)
+  }
+
+  test("parse thanhnien.com.vn home page") {
+    val url = "http://www.thanhnien.com.vn/"
+    val doc = Jsoup.parse(getResourceAsStream("thanhnien.homepage.html"), "utf-8", url)
+    val parser = new ArticleParser
+    val article = parser.parse(doc)
+  }
 }
