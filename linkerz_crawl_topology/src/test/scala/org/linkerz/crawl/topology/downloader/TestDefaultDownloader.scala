@@ -17,16 +17,13 @@ class TestDefaultDownloader {
   def testDownloader() {
     val downloader = new DefaultDownloader()
     val parser = new LinkerZParser
-    val crawlJob = new CrawlJob("http://soha.vn/xa-hoi/xuan-da-ve-som-tren-vuon-dao-nhat-tan-20121227101219859.htm")
+    val crawlJob = new CrawlJob("http://genk.vn/internet/facebook-mac-ao-moi-cho-tinh-nang-tin-nhan-chen-quang-cao-vao-ket-qua-truy-van-cua-nguoi-dung-20120824122528171.chn")
     downloader.download(crawlJob)
     parser.parse(crawlJob)
 
     assert(crawlJob.result.get.responseCode == 200)
-    println(crawlJob.result.get.webUrls.size())
     println(crawlJob.result.get.title)
     println(crawlJob.result.get.description.get)
-
-    crawlJob.result.get.potentialImagesUrl.foreach(println)
   }
 
 }

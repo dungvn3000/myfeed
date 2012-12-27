@@ -15,6 +15,7 @@ object LinkerZBuild extends Build {
       "Typesafe Repository" at "http://repo.akka.io/releases/",
       "twitter4j" at "http://twitter4j.org/maven2",
       "clojars.org" at "http://clojars.org/repo",
+      "thischwa-repro" at "http://maven-repo.thischwa.de/",
       "Local Maven Repository" at "file://" + Path.userHome.absolutePath + "/.m2/repository",
       Resolver.file("Local Repository", file(Path.userHome.absolutePath + "/.ivy2/local"))(Resolver.ivyStylePatterns)
     )
@@ -89,8 +90,10 @@ object LinkerZBuild extends Build {
     "org.jsoup" % "jsoup" % "1.7.1",
     "org.apache.httpcomponents" % "httpclient" % "4.2.2",
     "net.coobird" % "thumbnailator" % "0.4.2",
+    "org.imgscalr" % "imgscalr-lib" % "4.2",
     "com.gravity" % "goose" % "2.1.22",
-    "org.scalanlp" % "breeze-process_2.9.2" % "0.1"
+    "org.scalanlp" % "breeze-process_2.9.2" % "0.1",
+    "de.thischwa.jii" % "java-image-info" % "0.5"
   ) ++ stormDependencies ++ testDependencies
 
   lazy val recommendationDependencies = Seq(

@@ -42,19 +42,19 @@ case class CustomParser(data: NewFeed) extends DefaultParser with Logging {
   def afterParse(crawlJob: CrawlJob, doc: Document) {
     val webPage = crawlJob.result.get
 
-    if (webPage.featureImageUrl.isEmpty || StringUtils.isBlank(webPage.featureImageUrl.get)) {
-      //Set default image if the article has no image.
-      webPage.featureImageUrl = Some(data.defaultImgUrl)
-    }
+//    if (webPage.featureImageUrl.isEmpty || StringUtils.isBlank(webPage.featureImageUrl.get)) {
+//      //Set default image if the article has no image.
+//      webPage.featureImageUrl = Some(data.defaultImgUrl)
+//    }
 
     //Log error
     if (StringUtils.isBlank(webPage.title)) {
       crawlJob.error("Can not parse the title", getClass.getName, crawlJob.webUrl)
     }
 
-    if (webPage.featureImageUrl.isEmpty || StringUtils.isBlank(webPage.featureImageUrl.get)) {
-      crawlJob.error("Can not parse the image", getClass.getName, crawlJob.webUrl)
-    }
+//    if (webPage.featureImageUrl.isEmpty || StringUtils.isBlank(webPage.featureImageUrl.get)) {
+//      crawlJob.error("Can not parse the image", getClass.getName, crawlJob.webUrl)
+//    }
 
     if (webPage.text.isEmpty || StringUtils.isBlank(webPage.text.get)) {
       crawlJob.error("Can not parse the content", getClass.getName, crawlJob.webUrl)
@@ -112,7 +112,7 @@ case class CustomParser(data: NewFeed) extends DefaultParser with Logging {
       imgSrc = UrlBuilder.fromString(img.attr("src")).toString
       if (StringUtils.isNotBlank(imgSrc)) {
         val url = URLCanonicalizer.getCanonicalURL(imgSrc, webPage.webUrl.baseUrl)
-        if (StringUtils.isNotBlank(url)) webPage.featureImageUrl = Some(url)
+//        if (StringUtils.isNotBlank(url)) webPage.featureImageUrl = Some(url)
       }
     }
 

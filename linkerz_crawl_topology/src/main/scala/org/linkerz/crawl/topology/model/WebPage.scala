@@ -31,9 +31,7 @@ class WebPage extends Serializable {
   var contentType: String = _
   var contentEncoding: String = "UTF-8"
   var title: String = _
-  var featureImageUrl: Option[String] = None
   var featureImage: Option[Array[Byte]] = None
-  var potentialImagesUrl: List[String] = Nil
 
   /**
    * Check the is any error on this page.
@@ -52,7 +50,6 @@ class WebPage extends Serializable {
     title = title,
     text = text,
     description = description,
-    featureImageUrl = featureImageUrl,
     contentEncoding = contentEncoding,
     responseCode = responseCode,
     featureImage = featureImage,

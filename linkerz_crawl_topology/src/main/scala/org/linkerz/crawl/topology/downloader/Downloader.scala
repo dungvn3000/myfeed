@@ -6,6 +6,7 @@ package org.linkerz.crawl.topology.downloader
 
 import grizzled.slf4j.Logging
 import org.linkerz.crawl.topology.job.CrawlJob
+import org.apache.http.HttpResponse
 
 /**
  * The Class Downloader.
@@ -22,6 +23,9 @@ trait Downloader extends Logging {
    * @param crawlJob
    */
   def download(crawlJob: CrawlJob)
+
+
+  def download(url: String): HttpResponse
 
   /**
    * Close all connection used by this downloader.

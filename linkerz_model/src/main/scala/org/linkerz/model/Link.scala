@@ -27,7 +27,6 @@ case class Link
   description: Option[String] = None,
   contentEncoding: String,
   title: String,
-  featureImageUrl: Option[String] = None,
   //Feature Image
   featureImage: Option[Array[Byte]] = None,
 

@@ -4,9 +4,7 @@
 
 package org.linkerz.crawl.topology.factory
 
-import org.linkerz.dao.NewFeedDao
-import com.mongodb.casbah.commons.MongoDBObject
-import org.linkerz.crawl.topology.parser.{CustomParser, AutoDetectParser}
+import org.linkerz.crawl.topology.parser.LinkerZParser
 
 /**
  * The Class DefaultParserFactory.
@@ -17,11 +15,5 @@ import org.linkerz.crawl.topology.parser.{CustomParser, AutoDetectParser}
  */
 
 object ParserFactory {
-
-  val feed = NewFeedDao.find(MongoDBObject("enable" -> true)).toList
-  val parsers = feed.map(CustomParser(_))
-
-  def createParser() = {
-    new AutoDetectParser(parsers)
-  }
+  def createParser() = new LinkerZParser
 }

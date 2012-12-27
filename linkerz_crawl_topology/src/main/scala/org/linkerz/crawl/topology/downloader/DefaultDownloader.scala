@@ -51,6 +51,8 @@ class DefaultDownloader(httpClient: HttpClient = new DefaultHttpClient) extends 
     crawlJob.result = Some(webPage)
   }
 
+  def download(url: String) = httpClient.execute(new HttpGet(url))
+
   def close() {
     httpClient.getConnectionManager.shutdown()
   }

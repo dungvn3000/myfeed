@@ -77,15 +77,15 @@ class ScheduleActor(collector: SpoutOutputCollector) extends Actor with DBLogger
               error = true
             }
 
-            webPage.featureImageUrl map {
-              url => if (url != feed.imageUrls(i)) {
-                storeError("The image url do not match with the test case", url = feed.url, category = LogCategory.TestCase)
-                error = true
-              }
-            } getOrElse {
-              storeError("Can't parse the image url", url = feed.url, category = LogCategory.TestCase)
-              error = true
-            }
+//            webPage.featureImageUrl map {
+//              url => if (url != feed.imageUrls(i)) {
+//                storeError("The image url do not match with the test case", url = feed.url, category = LogCategory.TestCase)
+//                error = true
+//              }
+//            } getOrElse {
+//              storeError("Can't parse the image url", url = feed.url, category = LogCategory.TestCase)
+//              error = true
+//            }
 
           } getOrElse {
             storeError("Download error", url = feed.urlTests(i), category = LogCategory.TestCase)
