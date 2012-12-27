@@ -299,4 +299,15 @@ class TestParser extends FunSuite {
     val parser = new ArticleParser
     val article = parser.parse(doc)
   }
+
+  test("parse single page") {
+    val url = "http://tuoitre.vn/Chinh-tri-Xa-hoi/524325/Nguoi-mat-95-hot-kim-cuong%C2%A0nhan%C2%A0nu-trang-35-trieu-dong.html"
+    val doc = Jsoup.connect(url).get()
+    val parser = new ArticleParser
+    val article = parser.parse(doc)
+
+    println(article.title)
+    println(article.prettyText())
+    article.images.foreach(println)
+  }
 }

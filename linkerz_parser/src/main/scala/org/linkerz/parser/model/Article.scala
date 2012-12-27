@@ -66,4 +66,5 @@ case class Article(doc: Document) {
    */
   var elements: List[ArticleElement] = Nil
 
+  override def toString = text
 }

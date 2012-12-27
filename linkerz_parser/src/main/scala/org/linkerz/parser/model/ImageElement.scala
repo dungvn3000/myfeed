@@ -19,4 +19,5 @@ case class ImageElement(override val jsoupElement: Element)(implicit article: Ar
    */
   override def score = if (isPotential) 100 else super.score
 
+  override def toString = src
 }

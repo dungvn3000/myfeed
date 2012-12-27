@@ -46,14 +46,5 @@ case class TextElement(override val jsoupElement: Element)(implicit article: Art
     false
   }
 
-  override def equals(obj: Any): Boolean = {
-    if (obj.isInstanceOf[TextElement]) {
-      val element2 = obj.asInstanceOf[TextElement].jsoupElement
-      jsoupElement.equals(element2)
-    } else {
-      false
-    }
-  }
-
-  override def hashCode() = jsoupElement.hashCode()
+  override def toString = text
 }

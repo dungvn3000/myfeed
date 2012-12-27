@@ -17,4 +17,6 @@ case class LinkElement(override val jsoupElement: Element)(implicit article: Art
    * @return
    */
   override def score = -200
+
+  override def toString = jsoupElement.attr("href")
 }
