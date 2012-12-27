@@ -267,4 +267,25 @@ class TestParser extends FunSuite {
     val parser = new ArticleParser
     val article = parser.parse(doc)
   }
+
+  test("parse genk.vn home page") {
+    val url = "http://genk.vn/"
+    val doc = Jsoup.parse(getResourceAsStream("genkvn.homepage.html"), "utf-8", url)
+    val parser = new ArticleParser
+    val article = parser.parse(doc)
+  }
+
+  test("parse bbc.co.uk home page") {
+    val url = "http://www.bbc.co.uk/"
+    val doc = Jsoup.parse(getResourceAsStream("bbc.homepage.html"), "utf-8", url)
+    val parser = new ArticleParser
+    val article = parser.parse(doc)
+  }
+
+  test("parse cnn.com home page") {
+    val url = "http://edition.cnn.com/"
+    val doc = Jsoup.parse(getResourceAsStream("cnn.homepage.html"), "utf-8", url)
+    val parser = new ArticleParser
+    val article = parser.parse(doc)
+  }
 }
