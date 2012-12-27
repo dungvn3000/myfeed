@@ -25,9 +25,9 @@ case class Logging
   def id = _id.toString
 }
 
-object LogCategory extends Enumeration("testcase", "crawling", "system") {
+object LogCategory extends Enumeration("crawling", "system") {
   type LogCategory = Value
-  val TestCase, Crawling, System = Value
+  val Crawling, System = Value
 }
 
 object LogType extends Enumeration("error", "info", "warn") {

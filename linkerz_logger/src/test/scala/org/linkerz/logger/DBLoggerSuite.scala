@@ -17,7 +17,7 @@ class DBLoggerSuite extends FunSuite with DBLogger {
 
   test("store an error into the database") {
     storeError("test error1", LogCategory.System)
-    storeError("test error1", "example.com", new Exception, LogCategory.TestCase)
+    storeError("test error1", "example.com", new Exception, LogCategory.Crawling)
 
     Assert.assertEquals(false, LoggingDao.find(MongoDBObject("message" -> "test error1")).isEmpty)
     LoggingDao.remove(MongoDBObject("message" -> "test error1"))
