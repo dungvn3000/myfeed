@@ -17,7 +17,7 @@ class TestDefaultDownloader {
   def testDownloader() {
     val downloader = new DefaultDownloader()
     val parser = new LinkerZParser
-    val crawlJob = new CrawlJob("http://soha.vn/xa-hoi/nu-sinh-16-tuoi-bi-xe-ao-hanh-hung-den-ngat-xiu-201011140937671.htm")
+    val crawlJob = new CrawlJob("http://soha.vn/xa-hoi/xuan-da-ve-som-tren-vuon-dao-nhat-tan-20121227101219859.htm")
     downloader.download(crawlJob)
     parser.parse(crawlJob)
 
@@ -25,7 +25,8 @@ class TestDefaultDownloader {
     println(crawlJob.result.get.webUrls.size())
     println(crawlJob.result.get.title)
     println(crawlJob.result.get.description.get)
-    println(crawlJob.result.get.text.get)
+
+    crawlJob.result.get.potentialImagesUrl.foreach(println)
   }
 
 }

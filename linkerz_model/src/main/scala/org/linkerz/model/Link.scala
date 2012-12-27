@@ -31,8 +31,6 @@ case class Link
   //Feature Image
   featureImage: Option[Array[Byte]] = None,
 
-  parsed: Boolean = false,
-
   indexDate: Date = new Date
 
   ) {

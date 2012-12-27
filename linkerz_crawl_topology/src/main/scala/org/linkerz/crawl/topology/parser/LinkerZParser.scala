@@ -7,6 +7,9 @@ import org.jsoup.Jsoup
 import collection.JavaConversions._
 import org.linkerz.crawl.topology.model.WebUrl
 import org.apache.commons.lang.StringUtils
+import gumi.builders.UrlBuilder
+import edu.uci.ics.crawler4j.url.URLCanonicalizer
+import collection.mutable.ListBuffer
 
 /**
  * The this class using two parser LinksParse and ArticleParser.
@@ -39,6 +42,18 @@ class LinkerZParser extends Parser {
         if (StringUtils.isNotBlank(article.text)) {
           webPage.description = Some(article.text)
         }
+        val potentialImages = new ListBuffer[String]
+        article.images.foreach(image => {
+          val imgSrc = UrlBuilder.fromString(image.src).toString
+          if (StringUtils.isNotBlank(imgSrc)) {
+            val url = URLCanonicalizer.getCanonicalURL(imgSrc, webPage.webUrl.baseUrl)
+            if (StringUtils.isNotBlank(url)) {
+              potentialImages += url
+            }
+          }
+        })
+
+        webPage.potentialImagesUrl = potentialImages.toList
       }
     })
   }

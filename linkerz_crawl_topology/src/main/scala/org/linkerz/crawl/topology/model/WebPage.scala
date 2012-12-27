@@ -33,8 +33,7 @@ class WebPage extends Serializable {
   var title: String = _
   var featureImageUrl: Option[String] = None
   var featureImage: Option[Array[Byte]] = None
-
-  var parsed: Boolean = false
+  var potentialImagesUrl: List[String] = Nil
 
   /**
    * Check the is any error on this page.
@@ -57,7 +56,6 @@ class WebPage extends Serializable {
     contentEncoding = contentEncoding,
     responseCode = responseCode,
     featureImage = featureImage,
-    parsed = parsed,
     indexDate = new util.Date
   )
 }

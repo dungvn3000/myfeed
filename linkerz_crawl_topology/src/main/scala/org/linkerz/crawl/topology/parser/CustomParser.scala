@@ -60,7 +60,7 @@ case class CustomParser(data: NewFeed) extends DefaultParser with Logging {
       crawlJob.error("Can not parse the content", getClass.getName, crawlJob.webUrl)
     }
 
-    webPage.parsed = !crawlJob.isError
+//    webPage.parsed = !crawlJob.isError
 
     onFinished(crawlJob)
   }
