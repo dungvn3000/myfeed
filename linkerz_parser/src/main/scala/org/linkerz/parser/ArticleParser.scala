@@ -32,6 +32,7 @@ class ArticleParser {
     new HighLinkDensityFilter,
     //Step5: Only keep high score elements.
     new HighestScoreElementFilter,
+    new ContainerElementDetector,
     new ExpandTitleToContentFilter
   )
 

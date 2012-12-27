@@ -1,6 +1,6 @@
 package org.linkerz.parser.model
 
-import org.jsoup.nodes.Document
+import org.jsoup.nodes.{Element, Document}
 
 /**
  * The Class Article.
@@ -17,6 +17,9 @@ case class Article(doc: Document) {
   var languageCode = "vi"
 
   var title = ""
+
+  //This element will contain all text content element. Default is body element.
+  var containerElement: Element = doc.body()
 
   def textElements: List[TextElement] = elements.filter(_.isInstanceOf[TextElement]).map(_.asInstanceOf[TextElement])
 
