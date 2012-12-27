@@ -58,6 +58,8 @@
 .*/icon_googleplus.png.*
 .*/icon_googleplus.jpg.*
 .*/icon_googleplus.gif.*
+http://tuoitre.vn/Images/Trans.gif
+http://tuoitre.vn/Images/bookmark/.*
 #Domain
 .*reddit.com.*
 .*facebook.com.*
