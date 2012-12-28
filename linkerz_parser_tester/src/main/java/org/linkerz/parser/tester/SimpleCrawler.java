@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -33,13 +32,12 @@ import java.util.regex.Pattern;
 public class SimpleCrawler {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-    private Set<String> urls = new HashSet<>();
     private Downloader downloader = DownloadFactory.createDownloader();
 
     private Pattern filterPattern = Pattern.compile(".*(\\.(css|js|bmp|gif|jpe?g|png|tiff?|mid|mp2|mp3|mp4|wav|avi|mov|mpeg|ram|m4v|pdf|exe|msi|jar|flv|doc|docx|xls|xlsx|ppt|pptx|rm|smil|wmv|swf|wma|zip|rar|gz))$");
 
-    public Set<String> crawl(String url, String selection, JLabel statusLbl) throws IOException, URISyntaxException {
-        urls.clear();
+    public void crawl(String url, String selection, JLabel statusLbl, JTextArea urlList) throws IOException, URISyntaxException {
+        urlList.setText("");
         LinksParser linksParser = new LinksParser();
         HttpEntity entity = download(url, statusLbl);
         Set<String> testUrls = Collections.emptySet();
@@ -61,8 +59,9 @@ public class SimpleCrawler {
                         if (testEntity != null) {
                             Document doc = Jsoup.parse(testEntity.getContent(), "UTF-8", testUrl);
                             Elements elements = doc.select(selection);
-                            if (elements.isEmpty()) {
-                                urls.add(testUrl);
+                            if (!elements.isEmpty()) {
+                                urlList.append(testUrl + " - " + doc.title());
+                                urlList.append("\n");
                             }
                         }
                     } catch (Exception ex) {
@@ -71,8 +70,6 @@ public class SimpleCrawler {
                 }
             }
         }
-
-        return urls;
     }
 
     private HttpEntity download(String url, JLabel statusLbl) throws IOException {

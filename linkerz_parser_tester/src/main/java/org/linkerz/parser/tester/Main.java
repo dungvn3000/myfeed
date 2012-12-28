@@ -17,8 +17,9 @@ public class Main extends JFrame {
         setTitle("LinkerZ Parser Tester Tool");
         add(new ParserPanel());
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setSize(700,700);
         setLocationRelativeTo(null);
+        setSize(700, 700);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setVisible(true);
     }
 }

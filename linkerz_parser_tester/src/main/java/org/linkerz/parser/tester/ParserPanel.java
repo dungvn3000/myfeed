@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Set;
 
 /**
  * The Class ParserPanel.
@@ -54,11 +53,7 @@ public class ParserPanel extends JPanel implements ActionListener {
             @Override
             public void run() {
                 try {
-                    Set<String> urls = crawler.crawl(urlTxt.getText(), selectionTxt.getText(), statusLbl);
-                    for (String url : urls) {
-                        urlList.append(url);
-                        urlList.append("\n");
-                    }
+                    crawler.crawl(urlTxt.getText(), selectionTxt.getText(), statusLbl, urlList);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 } finally {
