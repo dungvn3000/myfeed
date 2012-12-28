@@ -57,7 +57,7 @@ object LinkerZBuild extends Build {
   lazy val linkerZParserTester = Project("linkerz_parser_tester", file("linkerz_parser_tester"), settings = sharedSetting).settings {
     libraryDependencies ++= parserTesterDependencies ++ testDependencies
   }.dependsOn(
-    linkerZCore, linkerZLogger, linkerZParser
+    linkerZCore, linkerZLogger, linkerZParser, linkerZCrawlTopology, urlBuilder
   )
 
   lazy val scalaStorm = Project("scala_storm", file("scala_storm"), settings = sharedSetting).settings {

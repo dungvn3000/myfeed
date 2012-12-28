@@ -1,8 +1,13 @@
 package org.linkerz.parser.tester;
 
 import net.miginfocom.swing.MigLayout;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Set;
 
 /**
  * The Class ParserPanel.
@@ -10,13 +15,16 @@ import javax.swing.*;
  * @author Nguyen Duc Dung
  * @since 12/29/12 12:26 AM
  */
-public class ParserPanel extends JPanel {
+public class ParserPanel extends JPanel implements ActionListener {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private JButton startBtn = new JButton("Start");
     private JTextField urlTxt = new JTextField();
     private JTextField selectionTxt = new JTextField();
-    private DefaultListModel<String> listModel = new DefaultListModel<String>();
-    private JList<String> urlList = new JList<String>(listModel);
+    private JTextArea urlList = new JTextArea();
+    private JScrollPane scrollingArea = new JScrollPane(urlList);
+    private SimpleCrawler crawler = new SimpleCrawler();
 
     public ParserPanel() {
         initComponent();
@@ -29,6 +37,24 @@ public class ParserPanel extends JPanel {
         add(new JLabel("Content Selection:"));
         add(selectionTxt, "grow, wrap");
         add(startBtn, "skip 1, wrap, w 20");
-        add(urlList, "span, grow");
+        add(scrollingArea, "span, grow");
+        urlList.setEditable(false);
+
+        startBtn.addActionListener(this);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        logger.info("Begin testing");
+        urlList.setText("");
+        try {
+            Set<String> urls = crawler.crawl(urlTxt.getText(), selectionTxt.getText());
+            for (String url: urls) {
+                urlList.append(url);
+                urlList.append("\n");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }
