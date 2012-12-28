@@ -5,7 +5,6 @@ import org.linkerz.crawl.topology.event.{MetaFetch, Persistent}
 import java.util.UUID
 import org.linkerz.dao.{LoggingDao, LinkDao}
 import grizzled.slf4j.Logging
-import java.util.concurrent.TimeoutException
 
 /**
  * This bolt is using for persistent data to the database server.
@@ -26,19 +25,11 @@ class PersistentBolt extends StormBolt(outputFields = List("sessionId", "event")
 
         //Save error for each job.
         //We will not save TimeOutException, because it so common.
-        val errors = job.errors.filter {
-          error => {
-            if (error.message == null) {
-              error
-            }
-            !error.message.contains(classOf[TimeoutException].getName)
-          }
+        if (!job.errors.isEmpty) {
+          LoggingDao.insert(job.errors)
         }
-        if(!errors.isEmpty) {
-          LoggingDao.insert(errors)
-        }
-//        //        LoggingDao.insert(job.infos)
-//        LoggingDao.insert(job.warns)
+        //LoggingDao.insert(job.infos)
+        //LoggingDao.insert(job.warns)
 
         tuple emit(sessionId, Persistent(job))
       }
