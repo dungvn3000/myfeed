@@ -67,8 +67,8 @@ class ImageDownloader(httpClient: HttpClient = new DefaultHttpClient()) extends 
         val bestImage = scoreImage.sortBy(-_._2).head._1
         val outputStream = new ByteArrayOutputStream
         try {
-          val resizeImage = Scalr.resize(bestImage, Scalr.Method.QUALITY, Scalr.Mode.FIT_TO_WIDTH, 300, Scalr.OP_ANTIALIAS)
-          ImageIO.write(resizeImage, "jpg", outputStream)
+          val resizeImage = Scalr.resize(bestImage, Scalr.Method.AUTOMATIC, Scalr.Mode.AUTOMATIC, 300, Scalr.OP_ANTIALIAS)
+          ImageIO.write(resizeImage, "png", outputStream)
           outputStream.flush()
           webPage.featureImage = Some(outputStream.toByteArray)
         } catch {
