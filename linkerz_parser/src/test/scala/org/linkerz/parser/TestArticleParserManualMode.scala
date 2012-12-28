@@ -37,6 +37,18 @@ class TestArticleParserManualMode extends FunSuite {
     expect(0)(article.images.size)
   }
 
+  test("parser vnexpress3.html") {
+    val url = "http://vnexpress.net/gl/ban-doc-viet/anh/2012/12/dong-nuoc-doc-tren-canh-dong-ha-noi/"
+    val doc = Jsoup.parse(getResourceAsStream("vnexpress3.html"), "utf-8", url)
+    val parser = new ArticleParser
+    val article = parser.parse(doc, ".cxtLeft").get
+
+    expect("Dòng nước độc trên cánh đồng Hà Nội")(article.title)
+    assert(article.text.contains("Dòng nước bốc lên lớp hơi bụi trắng khiến cây"))
+    assert(article.text.contains("Nguyễn Đình Quân"))
+    expect(2)(article.images.size)
+  }
+
   test("parse vnexpress.net home page") {
     val url = "http://vnexpress.net/"
     val doc = Jsoup.parse(getResourceAsStream("vnexpress.hompage.html"), "utf-8", url)
