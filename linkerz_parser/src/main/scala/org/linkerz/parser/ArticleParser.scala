@@ -13,7 +13,7 @@ import org.jsoup.nodes.Document
  */
 class ArticleParser {
 
-  val processors = new Processors <~ List(
+  val processorsForAutoMode = new Processors <~ List(
     //Step1: Remove hidden element , clean document.
     new DocumentCleaner,
     new LanguageDetector,
@@ -36,15 +36,44 @@ class ArticleParser {
     new ExpandTitleToContentFilter
   )
 
+  val processorsForManualMode = new Processors <~ List(
+    new DocumentCleaner,
+    new LanguageDetector,
+    new RemoveHiddenElement,
+    new ArticleExtractor,
+    new TitleExtractor,
+    new MarkEveryThingIsPotentialFilter,
+    new DirtyImageFilter,
+    new HighLinkDensityFilter,
+    new MarkPotentialIsContentFilter
+  )
+
   /**
    * Parse a html document to an article
    * @param doc
    * @return
    */
   def parse(doc: Document) = {
-    val article = Article(doc)
-    processors.process(article)
+    val article = Article(doc.normalise())
+    processorsForAutoMode.process(article)
     article
+  }
+
+
+  /**
+   * Parse a html document to an article
+   * @param doc
+   * @param contentSelection
+   * @return
+   */
+  def parse(doc: Document, contentSelection: String): Option[Article] = {
+    val containerElement = doc.select(contentSelection).first()
+    if (containerElement != null) {
+      val article = Article(doc, Some(containerElement))
+      processorsForManualMode.process(article)
+      return Some(article)
+    }
+    None
   }
 
 }

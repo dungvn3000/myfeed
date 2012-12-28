@@ -23,7 +23,9 @@ case class NewFeed
   enable: Boolean,
 
   urlRegex: String,
-  excludeUrl: List[String] = Nil
+  excludeUrl: List[String] = Nil,
+
+  contentSelection: String
   ) {
 
   def id = _id.toString

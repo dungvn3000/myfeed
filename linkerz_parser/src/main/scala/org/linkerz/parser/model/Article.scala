@@ -9,7 +9,7 @@ import org.jsoup.nodes.{Element, Document}
  * @since 12/23/12 1:00 AM
  *
  */
-case class Article(doc: Document) {
+case class Article(doc: Document, private val _containerElement: Option[Element] = None) {
 
   /**
    * Default is vi.
@@ -19,7 +19,7 @@ case class Article(doc: Document) {
   var title = ""
 
   //This element will contain all text content element. Default is body element.
-  var containerElement: Element = doc.body()
+  var containerElement: Element = _containerElement.getOrElse(doc.body())
 
   def textElements: List[TextElement] = elements.filter(_.isInstanceOf[TextElement]).map(_.asInstanceOf[TextElement])
 

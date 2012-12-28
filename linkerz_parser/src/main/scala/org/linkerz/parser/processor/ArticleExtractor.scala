@@ -21,7 +21,7 @@ class ArticleExtractor extends Processor {
 
   def process(implicit article: Article) {
     implicit val articleElements = new ListBuffer[ArticleElement]
-    val elements = article.doc.getAllElements
+    val elements = article.containerElement.getAllElements
 
     elements.foreach(element => if (!element.isSkipParse) element.tagName match {
       case "title" => //Ignore

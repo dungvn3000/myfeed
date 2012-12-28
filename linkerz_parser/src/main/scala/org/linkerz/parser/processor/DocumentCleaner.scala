@@ -11,19 +11,18 @@ import org.linkerz.parser.model.Article
  */
 class DocumentCleaner extends Processor {
   def process(implicit article: Article) {
-    val doc = article.doc
-    val cleanedHtml = doc.html.replaceAll("&nbsp;"," ")
-    doc.html(cleanedHtml)
-    doc.normalise()
+    val containerElement = article.containerElement
+    val cleanedHtml = containerElement.html.replaceAll("&nbsp;"," ")
+    containerElement.html(cleanedHtml)
 
     //Remove noscript tag
-    val noScriptElement = doc.select("noscript")
+    val noScriptElement = containerElement.select("noscript")
     noScriptElement.remove()
 
-    val scriptElement = doc.select("script")
+    val scriptElement = containerElement.select("script")
     scriptElement.remove()
 
-    val iframeElement = doc.select("iframe")
+    val iframeElement = containerElement.select("iframe")
     iframeElement.remove()
   }
 }
