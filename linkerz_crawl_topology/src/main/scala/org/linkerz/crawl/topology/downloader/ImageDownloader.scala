@@ -7,6 +7,14 @@ package org.linkerz.crawl.topology.downloader
 import org.linkerz.crawl.topology.job.CrawlJob
 import org.apache.http.client.HttpClient
 import org.apache.http.impl.client.DefaultHttpClient
+import collection.mutable.ListBuffer
+import java.awt.image.BufferedImage
+import org.apache.http.HttpStatus
+import javax.imageio.ImageIO
+import org.apache.http.client.methods.HttpGet
+import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
+import org.imgscalr.Scalr
+import org.apache.http.util.EntityUtils
 
 /**
  * The Class ImageDownloader.
@@ -16,27 +24,67 @@ import org.apache.http.impl.client.DefaultHttpClient
  *
  */
 class ImageDownloader(httpClient: HttpClient = new DefaultHttpClient()) extends Downloader {
+
   def download(crawlJob: CrawlJob) {
-//    crawlJob.result map {
-//      webPage => val imgUrl = webPage.featureImageUrl
-//      if (imgUrl.isDefined && StringUtils.isNotBlank(imgUrl.get)) {
-//        val response = httpClient.execute(new HttpGet(imgUrl.get))
-//        val entity = response.getEntity
-//        if (response.getStatusLine.getStatusCode == HttpStatus.SC_OK && entity.getContentLength > 0
-//          && entity.getContentType.getValue.contains("image")) {
-//          val outputStream = new ByteArrayOutputStream()
-//          Thumbnails.of(entity.getContent)
-//            .size(300, 300).keepAspectRatio(true).antialiasing(Antialiasing.ON).toOutputStream(outputStream)
-//          webPage.featureImage = Some(outputStream.toByteArray)
-//        }
-//      }
-//    }
+    crawlJob.result.map(webPage => {
+      val scoreImage = new ListBuffer[(BufferedImage, Double)]
+      val potentialImages = webPage.potentialImages
+
+      var skip = false
+      potentialImages.toList.sortBy(-_.length).foreach(imageUrl => if (!skip) {
+        try {
+          val response = httpClient.execute(new HttpGet(imageUrl))
+          val entity = response.getEntity
+          if (response.getStatusLine.getStatusCode == HttpStatus.SC_OK
+            && entity.getContentType.getValue.contains("image")) {
+            try {
+              val bytes = EntityUtils.toByteArray(entity)
+              val inputStream = new ByteArrayInputStream(bytes)
+              val image = ImageIO.read(inputStream)
+              val score = image.getWidth + image.getHeight
+              if (score >= 300) {
+                scoreImage += image -> score
+              }
+
+              //Avoid download too much image, if the image score is 600, definitely it is good.
+              if (score >= 600) {
+                skip = true
+              }
+            } catch {
+              case ex: Exception => {
+                crawlJob.error(ex.getMessage, getClass.getName, crawlJob.webUrl, ex)
+              }
+            }
+          }
+        } catch {
+          case ex: Exception => {
+            crawlJob.error(ex.getMessage, getClass.getName, crawlJob.webUrl, ex)
+          }
+        }
+      })
+
+      if (!scoreImage.isEmpty) {
+        val bestImage = scoreImage.sortBy(-_._2).head._1
+        val outputStream = new ByteArrayOutputStream
+        try {
+          val resizeImage = Scalr.resize(bestImage, Scalr.Method.QUALITY, Scalr.Mode.FIT_TO_WIDTH, 300, Scalr.OP_ANTIALIAS)
+          ImageIO.write(resizeImage, "jpg", outputStream)
+          outputStream.flush()
+          webPage.featureImage = Some(outputStream.toByteArray)
+        } catch {
+          case ex: Exception => {
+            crawlJob.error(ex.getMessage, getClass.getName, crawlJob.webUrl, ex)
+          }
+        } finally {
+          outputStream.close()
+        }
+      }
+    })
+
   }
 
 
-  def download(url: String) = {
-    null
-  }
+  def download(url: String) = throw new UnsupportedOperationException()
 
   def close() {
     httpClient.getConnectionManager.shutdown()

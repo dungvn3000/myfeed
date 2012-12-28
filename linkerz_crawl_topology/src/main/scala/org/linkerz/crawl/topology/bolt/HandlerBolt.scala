@@ -27,7 +27,7 @@ import org.linkerz.dao.LinkDao
  */
 class HandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) with Logging {
 
-  private var sessions = List[CrawlSession]()
+  private var sessions: List[CrawlSession] = Nil
 
   execute {
     implicit tuple => tuple matchSeq {

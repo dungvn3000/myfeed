@@ -5,6 +5,7 @@ import org.linkerz.crawl.topology.job.CrawlJob
 import org.linkerz.crawl.topology.parser.LinkerZParser
 import org.linkerz.dao.NewFeedDao
 import com.mongodb.casbah.commons.MongoDBObject
+import org.linkerz.crawl.topology.factory.DownloadFactory
 
 /**
  * The Class TestDefaultDownloader.
@@ -17,12 +18,14 @@ class TestDefaultDownloader {
 
   @Test
   def testDownloader() {
-    val downloader = new DefaultDownloader()
+    val downloader = DownloadFactory.createDownloader()
+    val imageDownloader = DownloadFactory.createImageDownloader()
     val feeds = NewFeedDao.find(MongoDBObject.empty).toList
     val parser = new LinkerZParser(feeds)
-    val crawlJob = new CrawlJob("http://news.zing.vn/xa-hoi/nguoi-thanh-pho-bat-dau-do-ve-que-an-tet-duong/a293843.html#home_noibat1")
+    val crawlJob = new CrawlJob("http://news.zing.vn/xa-hoi/tap-doan-moc-tui-xuong-pho-sai-gon/a293547.html")
     downloader.download(crawlJob)
     parser.parse(crawlJob)
+    imageDownloader.download(crawlJob)
 
     assert(crawlJob.result.get.responseCode == 200)
     if (crawlJob.result.get.isArticle) {

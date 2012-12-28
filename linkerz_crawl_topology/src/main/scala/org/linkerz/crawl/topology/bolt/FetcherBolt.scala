@@ -6,6 +6,7 @@ import org.linkerz.crawl.topology.factory.DownloadFactory
 import backtype.storm.utils.Utils
 import grizzled.slf4j.Logging
 import java.util.UUID
+import org.linkerz.crawl.topology.downloader.Downloader
 
 /**
  * This bolt is simply download a url and emit it to a parser.
@@ -16,10 +17,16 @@ import java.util.UUID
  */
 class FetcherBolt extends StormBolt(outputFields = List("sessionId", "event")) with Logging {
 
+  @transient
+  private var downloader: Downloader = _
+
+  setup {
+    downloader = DownloadFactory.createDownloader()
+  }
+
   execute {
     implicit tuple => tuple matchSeq {
       case Seq(sessionId: UUID, Handle(job)) => {
-        val downloader = DownloadFactory.createDownloader()
         try {
           //Delay time for each job.
           if (job.politenessDelay > 0 && job.parent.isDefined) Utils sleep job.politenessDelay
@@ -29,8 +36,6 @@ class FetcherBolt extends StormBolt(outputFields = List("sessionId", "event")) w
             job.error(ex.getMessage, getClass.getName, job.webUrl, ex)
             _collector reportError ex
           }
-        } finally {
-          downloader.close()
         }
         tuple emit(sessionId, Fetch(job))
       }
