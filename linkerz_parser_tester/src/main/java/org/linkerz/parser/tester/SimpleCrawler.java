@@ -15,6 +15,7 @@ import org.linkerz.parser.LinksParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -37,10 +38,10 @@ public class SimpleCrawler {
 
     private Pattern filterPattern = Pattern.compile(".*(\\.(css|js|bmp|gif|jpe?g|png|tiff?|mid|mp2|mp3|mp4|wav|avi|mov|mpeg|ram|m4v|pdf|exe|msi|jar|flv|doc|docx|xls|xlsx|ppt|pptx|rm|smil|wmv|swf|wma|zip|rar|gz))$");
 
-    public Set<String> crawl(String url, String selection) throws IOException, URISyntaxException {
+    public Set<String> crawl(String url, String selection, JLabel statusLbl) throws IOException, URISyntaxException {
         urls.clear();
         LinksParser linksParser = new LinksParser();
-        HttpEntity entity = download(url);
+        HttpEntity entity = download(url, statusLbl);
         Set<String> testUrls = Collections.emptySet();
         if (entity != null) {
             Document doc = Jsoup.parse(entity.getContent(), "UTF-8", url);
@@ -56,7 +57,7 @@ public class SimpleCrawler {
                 String testDomainName = testHttpHost.getHostName();
                 if (domainName.equals(testDomainName)) {
                     try {
-                        HttpEntity testEntity = download(testUrl);
+                        HttpEntity testEntity = download(testUrl, statusLbl);
                         if (testEntity != null) {
                             Document doc = Jsoup.parse(testEntity.getContent(), "UTF-8", testUrl);
                             Elements elements = doc.select(selection);
@@ -74,9 +75,10 @@ public class SimpleCrawler {
         return urls;
     }
 
-    private HttpEntity download(String url) throws IOException {
+    private HttpEntity download(String url, JLabel statusLbl) throws IOException {
         HttpResponse response = downloader.download(url);
         logger.info("Download " + response.getStatusLine().getStatusCode() + ": " + url);
+        statusLbl.setText("Download " + response.getStatusLine().getStatusCode() + ": " + url);
         HttpEntity entity = response.getEntity();
         if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
             if (entity.getContentEncoding() != null && entity.getContentEncoding().getValue().contains("gzip")) {
