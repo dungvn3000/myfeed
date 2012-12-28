@@ -20,7 +20,7 @@ class WebPage extends Serializable {
 
   var webUrl: WebUrl = _
   //Using java list for better performance.
-  var webUrls: java.util.List[WebUrl] = _
+  var webUrls: java.util.List[WebUrl] = new util.ArrayList[WebUrl]()
   var content: Array[Byte] = Array.empty[Byte]
 
   var responseCode: Int = _
@@ -32,6 +32,9 @@ class WebPage extends Serializable {
   var contentEncoding: String = "UTF-8"
   var title: String = _
   var featureImage: Option[Array[Byte]] = None
+  var potentialImages: List[String] = Nil
+
+  var isArticle = false
 
   /**
    * Check the is any error on this page.
