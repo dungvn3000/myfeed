@@ -6,7 +6,6 @@ package org.linkerz.crawl.topology.job
 
 import org.linkerz.crawl.topology.model.{WebPage, WebUrl}
 import scala.Some
-import java.util.regex.Pattern
 import org.linkerz.model.{LogCategory, LogType, NewFeed, Logging}
 import collection.mutable.ListBuffer
 
@@ -57,6 +56,11 @@ case class CrawlJob(webUrl: WebUrl) {
   var maxSubJob: Int = -1
 
   /**
+   * The result of this job will has this attribute.
+   */
+  var tags: String = _
+
+  /**
    * String url.
    * @param url
    */
@@ -78,6 +82,8 @@ case class CrawlJob(webUrl: WebUrl) {
     if (!newFeed.excludeUrl.isEmpty) {
       excludeUrl = newFeed.excludeUrl
     }
+
+    tags = newFeed.group
   }
 
   /**
@@ -97,6 +103,7 @@ case class CrawlJob(webUrl: WebUrl) {
     this.maxSubJob = parentJob.maxSubJob
     this.politenessDelay = parentJob.politenessDelay
     this.onlyCrawlInSameDomain = parentJob.onlyCrawlInSameDomain
+    this.tags = parentJob.tags
   }
 
   /**

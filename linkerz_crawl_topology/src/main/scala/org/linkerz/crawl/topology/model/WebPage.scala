@@ -33,6 +33,7 @@ class WebPage extends Serializable {
   var title: String = _
   var featureImage: Option[Array[Byte]] = None
   var potentialImages: List[String] = Nil
+  var tags: String = _
 
   var isArticle = false
 
@@ -56,6 +57,7 @@ class WebPage extends Serializable {
     contentEncoding = contentEncoding,
     responseCode = responseCode,
     featureImage = featureImage,
+    tags = tags,
     indexDate = new util.Date
   )
 }

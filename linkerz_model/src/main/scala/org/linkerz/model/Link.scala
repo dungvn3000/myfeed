@@ -29,6 +29,7 @@ case class Link
   title: String,
   //Feature Image
   featureImage: Option[Array[Byte]] = None,
+  tags: String,
 
   indexDate: Date = new Date
 
