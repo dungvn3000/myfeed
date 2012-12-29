@@ -40,12 +40,12 @@ class ArticleParser {
     new DocumentCleaner,
     new LanguageDetector,
     new RemoveHiddenElement,
+    new RemoveDirtyElementFilter,
     new ArticleExtractor,
     new TitleExtractor,
     new MarkEveryThingIsPotentialFilter,
     new DirtyImageFilter,
     new HighLinkDensityFilter,
-    new RemoveDirtyElementFilter,
     new MarkPotentialIsContentFilter
   )
 
