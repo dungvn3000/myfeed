@@ -40,8 +40,8 @@ class LinkerZParser(feeds: List[NewFeed]) extends Parser {
         feeds.find(feed => matcher(webUrl.url, feed.urlRegex)).map(feed => {
           articleParser.parse(doc, feed.contentSelection).map(article => {
             webPage.title = article.title
-            if (StringUtils.isNotBlank(article.description)) {
-              webPage.description = Some(article.description)
+            if (StringUtils.isNotBlank(article.description())) {
+              webPage.description = Some(article.description())
             }
             if (StringUtils.isNotBlank(article.text)) {
               webPage.text = Some(article.text)
