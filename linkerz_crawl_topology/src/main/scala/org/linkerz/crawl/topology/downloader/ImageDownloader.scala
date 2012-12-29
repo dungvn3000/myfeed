@@ -41,7 +41,7 @@ class ImageDownloader(httpClient: HttpClient = new DefaultHttpClient()) extends 
               val inputStream = new ByteArrayInputStream(bytes)
               val image = ImageIO.read(inputStream)
               val score = image.getWidth + image.getHeight
-              if (score >= 200) {
+              if (score >= 300) {
                 scoreImage += image -> score
               }
 
@@ -66,7 +66,11 @@ class ImageDownloader(httpClient: HttpClient = new DefaultHttpClient()) extends 
         val bestImage = scoreImage.sortBy(-_._2).head._1
         val outputStream = new ByteArrayOutputStream
         try {
-          val resizeImage = Scalr.resize(bestImage, Scalr.Method.AUTOMATIC, Scalr.Mode.AUTOMATIC, 300, Scalr.OP_ANTIALIAS)
+          var preferHeight = 500
+          if (bestImage.getHeight > 1000) {
+            preferHeight = bestImage.getHeight * 30 / 100
+          }
+          val resizeImage = Scalr.resize(bestImage, Scalr.Method.AUTOMATIC, Scalr.Mode.AUTOMATIC, 300, preferHeight, Scalr.OP_ANTIALIAS)
           ImageIO.write(resizeImage, "png", outputStream)
           outputStream.flush()
           webPage.featureImage = Some(outputStream.toByteArray)
