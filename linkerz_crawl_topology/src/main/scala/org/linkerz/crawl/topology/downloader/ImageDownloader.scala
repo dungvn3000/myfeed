@@ -35,8 +35,7 @@ class ImageDownloader(httpClient: HttpClient = new DefaultHttpClient()) extends 
         try {
           val response = httpClient.execute(new HttpGet(imageUrl))
           val entity = response.getEntity
-          if (response.getStatusLine.getStatusCode == HttpStatus.SC_OK
-            && entity.getContentType.getValue.contains("image")) {
+          if (response.getStatusLine.getStatusCode == HttpStatus.SC_OK) {
             try {
               val bytes = EntityUtils.toByteArray(entity)
               val inputStream = new ByteArrayInputStream(bytes)
