@@ -42,7 +42,7 @@ class ImageDownloader(httpClient: HttpClient = new DefaultHttpClient()) extends 
               val inputStream = new ByteArrayInputStream(bytes)
               val image = ImageIO.read(inputStream)
               val score = image.getWidth + image.getHeight
-              if (score >= 300) {
+              if (score >= 200) {
                 scoreImage += image -> score
               }
 
