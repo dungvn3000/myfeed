@@ -26,6 +26,8 @@ abstract case class ArticleElement(jsoupElement: Element)(implicit article: Arti
 
   var isTitle = false
 
+  def id = jsoupElement.id()
+
   def tag = jsoupElement.tag()
 
   def tagName = jsoupElement.tagName()

@@ -45,6 +45,7 @@ class ArticleParser {
     new MarkEveryThingIsPotentialFilter,
     new DirtyImageFilter,
     new HighLinkDensityFilter,
+    new RemoveDirtyElementFilter,
     new MarkPotentialIsContentFilter
   )
 

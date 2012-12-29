@@ -44,7 +44,25 @@ case class Article(doc: Document, private val _containerElement: Option[Element]
     sb.toString()
   }
 
-  def fullText = doc.text()
+  /**
+   * The short description text for the article. Find the longest block and split it to a description.
+   * @return
+   */
+  def description = {
+    var bestDescription: String = ""
+    val maxLength = 200
+    if (!textContentElements.isEmpty) {
+      bestDescription = textContentElements.sortBy(-_.text.length).head.text
+      val sentences = bestDescription.split('.')
+      bestDescription = ""
+      sentences.foreach(sentence => {
+        if (bestDescription.length < maxLength) {
+          bestDescription += sentence
+        }
+      })
+    }
+    bestDescription
+  }
 
   /**
    * This is using for debugging.
