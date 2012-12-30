@@ -1,4 +1,4 @@
-package org.linkerz.parser.tester;
+package org.linkerz.parser.helper;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;

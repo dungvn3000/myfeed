@@ -1,4 +1,4 @@
-package org.linkerz.parser.tester;
+package org.linkerz.parser.helper;
 
 import net.miginfocom.swing.MigLayout;
 import org.slf4j.Logger;

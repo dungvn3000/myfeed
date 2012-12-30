@@ -1,4 +1,4 @@
-package org.linkerz.parser.tester;
+package org.linkerz.parser.helper;
 
 import javax.swing.*;
 
