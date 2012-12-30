@@ -45,7 +45,7 @@ class ImageDownloader(httpClient: HttpClient = new DefaultHttpClient()) extends 
                 scoreImage += image -> score
               }
 
-              //Avoid download too much image, if the image score is 600, definitely it is good.
+              //Avoid download too much images, if the image score is 600, definitely it is good.
               if (score >= 600) {
                 skip = true
               }

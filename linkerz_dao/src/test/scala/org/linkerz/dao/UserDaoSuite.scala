@@ -2,12 +2,11 @@
  * Copyright (C) 2012 - 2013 LinkerZ (Searching and Sharing)
  */
 
-package linkerz.model
+package org.linkerz.dao
 
 import org.scalatest.FunSuite
-import org.linkerz.model.{User}
+import org.linkerz.model.User
 import com.mongodb.casbah.commons.MongoDBObject
-import org.linkerz.dao.UserDao
 
 /**
  * The Class UserDaoSuite.

@@ -22,7 +22,8 @@ object LinkerZBuild extends Build {
   )
 
   lazy val linkerZ = Project("linkerz", file("."), settings = sharedSetting).aggregate(
-    linkerZCore, linkerZModel, linkerZRecommendation, linkerZLogger, scalaStorm, urlBuilder, linkerZCrawlTopology, linkerZParser, linkerZParserTester
+    linkerZCore, linkerZModel, linkerZRecommendation, linkerZLogger,
+    scalaStorm, urlBuilder, linkerZCrawlTopology, linkerZParser, linkerZParserTester, linkerZDao
   )
 
   lazy val linkerZCore = Project("linkerz_core", file("linkerz_core"), settings = sharedSetting).settings(
@@ -30,22 +31,26 @@ object LinkerZBuild extends Build {
   )
 
   lazy val linkerZModel = Project("linkerz_model", file("linkerz_model"), settings = sharedSetting).settings(
-    libraryDependencies ++= modelDependencies ++ testDependencies
+    libraryDependencies ++= testDependencies
   ).dependsOn(linkerZCore)
+
+  lazy val linkerZDao = Project("linkerz_dao", file("linkerz_dao"), settings = sharedSetting).settings(
+    libraryDependencies ++= daoDependencies ++ testDependencies
+  ).dependsOn(linkerZCore, linkerZModel)
 
   lazy val linkerZRecommendation = Project("linkerz_recommendation_topology", file("linkerz_recommendation_topology"), settings = sharedSetting).settings(
     libraryDependencies ++= recommendationDependencies
-  ).dependsOn(linkerZCore, linkerZModel, scalaStorm, linkerZLogger)
+  ).dependsOn(linkerZCore, linkerZDao, scalaStorm, linkerZLogger)
 
   lazy val linkerZLogger = Project("linkerz_logger", file("linkerz_logger"), settings = sharedSetting).settings(
-    libraryDependencies ++= loggerDependencies ++ testDependencies
-  ).dependsOn(linkerZCore, linkerZModel)
+    libraryDependencies ++= testDependencies
+  ).dependsOn(linkerZCore, linkerZDao)
 
   lazy val linkerZCrawlTopology = Project("linkerz_crawl_topology", file("linkerz_crawl_topology"), settings = sharedSetting ++ assemblySettings).settings(
     jarName in assembly := "linkerz_crawl_topology.jar",
     libraryDependencies ++= crawlerTopologyDependencies
   ).dependsOn(
-    linkerZCore, linkerZModel, linkerZLogger, scalaStorm, urlBuilder, linkerZParser
+    linkerZCore, linkerZDao, linkerZLogger, scalaStorm, urlBuilder, linkerZParser
   )
 
   lazy val linkerZParser = Project("linkerz_parser", file("linkerz_parser"), settings = sharedSetting).settings {
@@ -88,7 +93,7 @@ object LinkerZBuild extends Build {
     "org.scalatest" %% "scalatest" % "1.8" % "test"
   )
 
-  lazy val modelDependencies = Seq(
+  lazy val daoDependencies = Seq(
     "com.novus" %% "salat" % "1.9.1"
   )
 
@@ -108,9 +113,6 @@ object LinkerZBuild extends Build {
     "org.carrot2" % "carrot2-mini" % "3.6.1",
     "redis.clients" % "jedis" % "2.1.0"
   ) ++ stormDependencies ++ testDependencies
-
-  lazy val loggerDependencies = Seq(
-  )
 
   lazy val parserDependencies = Seq(
     "org.jsoup" % "jsoup" % "1.7.1",
