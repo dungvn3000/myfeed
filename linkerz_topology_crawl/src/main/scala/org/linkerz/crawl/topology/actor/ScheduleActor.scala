@@ -2,7 +2,7 @@ package org.linkerz.crawl.topology.actor
 
 import org.linkerz.logger.DBLogger
 import akka.actor.Actor
-import org.linkerz.dao.NewFeedDao
+import org.linkerz.dao.FeedDao
 import com.mongodb.casbah.commons.MongoDBObject
 import org.linkerz.crawl.topology.job.CrawlJob
 import java.util.UUID
@@ -22,7 +22,7 @@ class ScheduleActor(collector: SpoutOutputCollector) extends Actor with DBLogger
 
   protected def receive = {
     case "run" => {
-      val newFeeds = NewFeedDao.find(MongoDBObject("enable" -> true)).toList
+      val newFeeds = FeedDao.find(MongoDBObject("enable" -> true)).toList
       newFeeds.foreach(feed => {
         val job = new CrawlJob(feed)
         job.maxDepth = 1 // Set level is 2 because we will get related link.

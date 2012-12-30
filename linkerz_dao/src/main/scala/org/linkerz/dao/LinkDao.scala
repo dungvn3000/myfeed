@@ -12,7 +12,7 @@ import org.linkerz.model.Link
  * @since 11/22/12 1:07 PM
  *
  */
-class LinkDao(override val collection: MongoCollection) extends SalatDAO[Link, ObjectId](collection) {
+object LinkDao extends SalatDAO[Link, ObjectId](mongo("link")) {
 
   def findByUrl(url: String) = findOne(MongoDBObject("url" -> url))
 
@@ -23,8 +23,4 @@ class LinkDao(override val collection: MongoCollection) extends SalatDAO[Link, O
       Some(link)
     } else None
   }
-}
-
-object LinkDao extends LinkDao(mongo("link")) {
-
 }

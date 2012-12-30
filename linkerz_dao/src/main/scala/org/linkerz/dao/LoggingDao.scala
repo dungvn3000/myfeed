@@ -11,8 +11,6 @@ import org.linkerz.model.Logging
  * @since 11/22/12 1:07 PM
  *
  */
-class LoggingDao(override val collection: MongoCollection) extends SalatDAO[Logging, ObjectId](collection) {
+object LoggingDao extends SalatDAO[Logging, ObjectId](mongo("logging")) {
 
 }
-
-object LoggingDao extends LoggingDao(mongo("logging"))

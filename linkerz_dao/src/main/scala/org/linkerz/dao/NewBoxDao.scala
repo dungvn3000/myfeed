@@ -14,7 +14,7 @@ import org.linkerz.model.NewBox
  * @since 11/22/12 1:07 PM
  *
  */
-class NewBoxDao(override val collection: MongoCollection) extends SalatDAO[NewBox, ObjectId](collection) {
+object NewBoxDao extends SalatDAO[NewBox, ObjectId](mongo("newbox")) {
 
   def findByUserId(userId: ObjectId): List[Link] = {
     val newBox = find(MongoDBObject("userId" -> userId)).toList
@@ -42,5 +42,3 @@ class NewBoxDao(override val collection: MongoCollection) extends SalatDAO[NewBo
       "linkId" -> linkId
     )).isEmpty
 }
-
-object NewBoxDao extends NewBoxDao(mongo("newbox"))

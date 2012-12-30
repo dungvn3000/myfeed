@@ -5,15 +5,12 @@ import com.mongodb.casbah.Imports._
 import org.linkerz.model.Feed
 
 /**
- * The Class NewFeedDao.
+ * The Class FeedDao.
  *
  * @author Nguyen Duc Dung
  * @since 11/22/12 1:07 PM
  *
  */
-class NewFeedDao(override val collection: MongoCollection) extends SalatDAO[Feed, ObjectId](collection) {
+object FeedDao extends SalatDAO[Feed, ObjectId](mongo("feed")) {
 
 }
-
-
-object NewFeedDao extends NewFeedDao(mongo("newfeed"))
