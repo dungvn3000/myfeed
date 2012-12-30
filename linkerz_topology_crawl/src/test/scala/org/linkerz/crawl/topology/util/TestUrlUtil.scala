@@ -7,6 +7,7 @@ package org.linkerz.crawl.topology.util
 import edu.uci.ics.crawler4j.url.URLCanonicalizer
 import java.net.URI
 import org.apache.http.client.utils.URIUtils
+import org.junit.Test
 
 /**
  * The Class TestUrlUtil.

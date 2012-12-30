@@ -5,6 +5,7 @@ import org.linkerz.crawl.topology.parser.LinkerZParser
 import org.linkerz.dao.NewFeedDao
 import com.mongodb.casbah.commons.MongoDBObject
 import org.linkerz.crawl.topology.factory.DownloadFactory
+import org.junit.Test
 
 /**
  * The Class TestDefaultDownloader.

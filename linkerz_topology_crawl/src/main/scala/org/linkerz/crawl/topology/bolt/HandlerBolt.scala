@@ -6,13 +6,14 @@ import org.linkerz.crawl.topology.model.WebUrl
 import org.linkerz.core.matcher.SimpleRegexMatcher
 import grizzled.slf4j.Logging
 import backtype.storm.tuple.Tuple
-import org.linkerz.crawl.topology.event.Ack
+import org.linkerz.crawl.topology.event._
+import org.linkerz.crawl.topology.session.RichSession._
+import java.util.UUID
+import org.linkerz.dao.LinkDao
 import org.linkerz.crawl.topology.event.Handle
 import org.linkerz.crawl.topology.session.CrawlSession
 import org.linkerz.crawl.topology.event.Start
 import org.linkerz.crawl.topology.job.CrawlJob
-import java.util.UUID
-import org.linkerz.dao.LinkDao
 
 /**
  * The mission of this bolt will receive job from the feed spot and emit it to a fetcher. On the other hand this bolt

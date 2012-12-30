@@ -9,6 +9,7 @@ import org.linkerz.logger.DBLogger
 import org.linkerz.crawl.topology.actor.ScheduleActor
 import akka.actor.Props
 import org.linkerz.core.actor.Akka
+import org.linkerz.crawl.topology.event.{Fail, Ack}
 
 /**
  * This spout will loop the feed list for every 15 minutes.
