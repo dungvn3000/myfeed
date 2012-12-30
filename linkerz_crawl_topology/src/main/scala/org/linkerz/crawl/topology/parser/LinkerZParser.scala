@@ -11,7 +11,7 @@ import gumi.builders.UrlBuilder
 import edu.uci.ics.crawler4j.url.URLCanonicalizer
 import collection.mutable
 import org.apache.commons.validator.routines.UrlValidator
-import org.linkerz.model.NewFeed
+import org.linkerz.model.Feed
 import org.linkerz.core.matcher.SimpleRegexMatcher._
 
 /**
@@ -21,7 +21,7 @@ import org.linkerz.core.matcher.SimpleRegexMatcher._
  * @since 12/27/12 6:15 PM
  *
  */
-class LinkerZParser(feeds: List[NewFeed]) extends Parser {
+class LinkerZParser(feeds: List[Feed]) extends Parser {
 
   val linksParser = new LinksParser
   val articleParser = new ArticleParser
@@ -60,7 +60,7 @@ class LinkerZParser(feeds: List[NewFeed]) extends Parser {
             })
             webPage.potentialImages = potentialImages.toList
 
-            webPage.tags = crawlJob.tags
+            webPage.feedId = crawlJob.feedId
 
             webPage.isArticle = true
           })

@@ -18,6 +18,7 @@ import java.util.Date
 case class Link
 (
   _id: ObjectId = new ObjectId,
+  feedId: ObjectId,
 
   url: String,
   responseCode: Int,
@@ -29,7 +30,6 @@ case class Link
   title: String,
   //Feature Image
   featureImage: Option[Array[Byte]] = None,
-  tags: String,
 
   indexDate: Date = new Date
 

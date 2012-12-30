@@ -2,7 +2,7 @@ package org.linkerz.dao
 
 import com.novus.salat.dao.SalatDAO
 import com.mongodb.casbah.Imports._
-import org.linkerz.model.NewFeed
+import org.linkerz.model.Feed
 
 /**
  * The Class NewFeedDao.
@@ -11,7 +11,7 @@ import org.linkerz.model.NewFeed
  * @since 11/22/12 1:07 PM
  *
  */
-class NewFeedDao(override val collection: MongoCollection) extends SalatDAO[NewFeed, ObjectId](collection) {
+class NewFeedDao(override val collection: MongoCollection) extends SalatDAO[Feed, ObjectId](collection) {
 
 }
 

@@ -14,11 +14,11 @@ import org.bson.types.ObjectId
  *
  */
 
-case class NewFeed
+case class Feed
 (
   _id: ObjectId = new ObjectId,
+  groupId: ObjectId,
 
-  group: String,
   url: String,
   enable: Boolean,
 

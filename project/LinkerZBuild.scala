@@ -31,11 +31,11 @@ object LinkerZBuild extends Build {
   )
 
   lazy val linkerZModel = Project("linkerz_model", file("linkerz_model"), settings = sharedSetting).settings(
-    libraryDependencies ++= testDependencies
+    libraryDependencies ++= modelDependencies ++ testDependencies
   ).dependsOn(linkerZCore)
 
   lazy val linkerZDao = Project("linkerz_dao", file("linkerz_dao"), settings = sharedSetting).settings(
-    libraryDependencies ++= daoDependencies ++ testDependencies
+    libraryDependencies ++= testDependencies
   ).dependsOn(linkerZCore, linkerZModel)
 
   lazy val linkerZRecommendation = Project("linkerz_recommendation_topology", file("linkerz_recommendation_topology"), settings = sharedSetting).settings(
@@ -93,7 +93,7 @@ object LinkerZBuild extends Build {
     "org.scalatest" %% "scalatest" % "1.8" % "test"
   )
 
-  lazy val daoDependencies = Seq(
+  lazy val modelDependencies = Seq(
     "com.novus" %% "salat" % "1.9.1"
   )
 
