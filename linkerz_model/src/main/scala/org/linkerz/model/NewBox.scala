@@ -1,11 +1,7 @@
 package org.linkerz.model
 
 import org.bson.types.ObjectId
-import com.novus.salat.dao.SalatDAO
-import com.mongodb.casbah.commons.MongoDBObject
-import collection.mutable.ListBuffer
 import java.util.Date
-import org.linkerz.dao.LinkDao
 
 /**
  * The Class NewBox.

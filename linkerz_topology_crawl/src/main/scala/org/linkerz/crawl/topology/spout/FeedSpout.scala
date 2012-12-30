@@ -2,7 +2,6 @@ package org.linkerz.crawl.topology.spout
 
 import akka.util.duration._
 import grizzled.slf4j.Logging
-import org.linkerz.crawl.topology.event._
 import java.util.UUID
 import storm.scala.dsl.StormSpout
 import backtype.storm.utils.Utils

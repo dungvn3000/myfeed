@@ -23,7 +23,7 @@ object LinkerZBuild extends Build {
 
   lazy val linkerZ = Project("linkerz", file("."), settings = sharedSetting).aggregate(
     linkerZCore, linkerZModel, linkerZRecommendation, linkerZLogger,
-    scalaStorm, urlBuilder, linkerZCrawlTopology, linkerZParser, linkerZParserHelper, linkerZDao
+    scalaStorm, urlBuilder, linkerZTopologyCrawl, linkerZParser, linkerZParserHelper, linkerZDao
   )
 
   lazy val linkerZCore = Project("linkerz_core", file("linkerz_core"), settings = sharedSetting).settings(
@@ -38,7 +38,7 @@ object LinkerZBuild extends Build {
     libraryDependencies ++= testDependencies
   ).dependsOn(linkerZCore, linkerZModel)
 
-  lazy val linkerZRecommendation = Project("linkerz_recommendation_topology", file("linkerz_recommendation_topology"), settings = sharedSetting).settings(
+  lazy val linkerZRecommendation = Project("linkerz_topology_recommendation", file("linkerz_topology_recommendation"), settings = sharedSetting).settings(
     libraryDependencies ++= recommendationDependencies
   ).dependsOn(linkerZCore, linkerZDao, scalaStorm, linkerZLogger)
 
@@ -46,7 +46,7 @@ object LinkerZBuild extends Build {
     libraryDependencies ++= testDependencies
   ).dependsOn(linkerZCore, linkerZDao)
 
-  lazy val linkerZCrawlTopology = Project("linkerz_crawl_topology", file("linkerz_crawl_topology"), settings = sharedSetting ++ assemblySettings).settings(
+  lazy val linkerZTopologyCrawl = Project("linkerz_topology_crawl", file("linkerz_topology_crawl"), settings = sharedSetting ++ assemblySettings).settings(
     jarName in assembly := "linkerz_crawl_topology.jar",
     libraryDependencies ++= crawlerTopologyDependencies
   ).dependsOn(
@@ -62,7 +62,7 @@ object LinkerZBuild extends Build {
   lazy val linkerZParserHelper = Project("linkerz_parser_helper", file("linkerz_parser_helper"), settings = sharedSetting).settings {
     libraryDependencies ++= parserHelperDependencies ++ testDependencies
   }.dependsOn(
-    linkerZCore, linkerZLogger, linkerZParser, linkerZCrawlTopology, urlBuilder
+    linkerZCore, linkerZLogger, linkerZParser, linkerZTopologyCrawl, urlBuilder
   )
 
   lazy val scalaStorm = Project("scala_storm", file("scala_storm"), settings = sharedSetting).settings {

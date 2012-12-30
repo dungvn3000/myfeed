@@ -1,6 +1,5 @@
 package org.linkerz.crawl.topology.downloader
 
-import org.junit.Test
 import org.linkerz.crawl.topology.job.CrawlJob
 import org.linkerz.crawl.topology.parser.LinkerZParser
 import org.linkerz.dao.NewFeedDao

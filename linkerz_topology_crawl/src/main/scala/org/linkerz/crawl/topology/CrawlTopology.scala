@@ -1,6 +1,5 @@
 package org.linkerz.crawl.topology
 
-import bolt._
 import backtype.storm.topology.TopologyBuilder
 import spout.FeedSpout
 import backtype.storm.tuple.Fields

@@ -1,12 +1,10 @@
 package org.linkerz.crawl.topology.bolt
 
 import storm.scala.dsl.StormBolt
-import org.linkerz.crawl.topology.event._
 import collection.JavaConversions._
 import org.linkerz.crawl.topology.model.WebUrl
 import org.linkerz.core.matcher.SimpleRegexMatcher
 import grizzled.slf4j.Logging
-import org.linkerz.crawl.topology.session.RichSession._
 import backtype.storm.tuple.Tuple
 import org.linkerz.crawl.topology.event.Ack
 import org.linkerz.crawl.topology.event.Handle
