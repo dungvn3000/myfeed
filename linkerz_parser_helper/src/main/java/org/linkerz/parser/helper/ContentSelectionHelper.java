@@ -44,7 +44,7 @@ public class ContentSelectionHelper extends JFrame implements ActionListener {
 
         startBtn.addActionListener(this);
 
-        add(contentPanel);
+        setContentPane(contentPanel);
     }
 
     @Override

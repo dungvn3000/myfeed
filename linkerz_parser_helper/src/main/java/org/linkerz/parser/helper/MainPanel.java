@@ -30,8 +30,20 @@ public class MainPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 ContentSelectionHelper contentSelectionHelper = new ContentSelectionHelper();
                 contentSelectionHelper.setLocationRelativeTo(null);
+                contentSelectionHelper.setSize(500, 500);
                 contentSelectionHelper.setExtendedState(JFrame.MAXIMIZED_BOTH);
                 contentSelectionHelper.setVisible(true);
+            }
+        });
+
+        parserHelperBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ParserHelper parserHelper = new ParserHelper();
+                parserHelper.setLocationRelativeTo(null);
+                parserHelper.setSize(500, 500);
+                parserHelper.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                parserHelper.setVisible(true);
             }
         });
     }
