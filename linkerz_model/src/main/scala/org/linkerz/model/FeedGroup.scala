@@ -14,4 +14,7 @@ case class FeedGroup
   _id: ObjectId = new ObjectId,
   name: String
 
-  )
+  ) {
+  //Convenience method to convert _id to String.
+  def id = _id.toString
+}

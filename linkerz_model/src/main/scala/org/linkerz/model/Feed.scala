@@ -19,13 +19,15 @@ case class Feed
   _id: ObjectId = new ObjectId,
   groupId: ObjectId,
 
+  name: String,
   url: String,
   enable: Boolean,
 
   urlRegex: String,
   excludeUrl: List[String] = Nil,
 
-  contentSelection: String
+  contentSelection: String,
+  removeSelections: List[String]
   ) {
 
   def id = _id.toString
