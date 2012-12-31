@@ -38,7 +38,7 @@ class LinkerZParser(feeds: List[Feed]) extends Parser {
         links.foreach(webPage.webUrls += new WebUrl(_))
 
         feeds.find(feed => matcher(webUrl.url, feed.urlRegex)).map(feed => {
-          articleParser.parse(doc, feed.contentSelection).map(article => {
+          articleParser.parse(doc, feed.contentSelection, feed.removeSelections).map(article => {
             webPage.title = article.title
             if (StringUtils.isNotBlank(article.description())) {
               webPage.description = Some(article.description())

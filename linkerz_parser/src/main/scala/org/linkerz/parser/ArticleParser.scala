@@ -65,9 +65,12 @@ class ArticleParser {
    * Parse a html document to an article
    * @param doc
    * @param contentSelection
+   * @param removeSelections
    * @return
    */
-  def parse(doc: Document, contentSelection: String): Option[Article] = {
+  def parse(doc: Document, contentSelection: String, removeSelections: List[String] = Nil): Option[Article] = {
+    //Remove unused selections.
+    removeSelections.foreach(doc.select(_).remove())
     val containerElement = doc.select(contentSelection).first()
     if (containerElement != null) {
       val article = Article(doc, Some(containerElement))
