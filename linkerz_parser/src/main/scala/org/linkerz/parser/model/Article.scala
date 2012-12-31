@@ -1,6 +1,7 @@
 package org.linkerz.parser.model
 
 import org.jsoup.nodes.{Element, Document}
+import collection.JavaConverters._
 
 /**
  * The Class Article.
@@ -89,6 +90,9 @@ case class Article(doc: Document, private val _containerElement: Option[Element]
   }
 
   def images = imageElements.filter(_.isContent)
+
+  //For java api
+  def imagesAsJavaList = imageElements.filter(_.isContent).asJava
 
   /**
    * Article element list without title element.

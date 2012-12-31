@@ -3,6 +3,8 @@ package org.linkerz.parser
 import processor._
 import model.Article
 import org.jsoup.nodes.Document
+import collection.JavaConversions._
+import org.apache.commons.lang.StringUtils
 
 /**
  * The Class ArticleParser.
@@ -60,6 +62,14 @@ class ArticleParser {
     article
   }
 
+  /**
+   * Support java api.
+   * @param doc
+   * @param contentSelection
+   * @param removeSelections
+   * @return
+   */
+  def parse(doc: Document, contentSelection: String, removeSelections: java.util.List[String]): Article  = parse(doc, contentSelection, removeSelections.toList).getOrElse(null)
 
   /**
    * Parse a html document to an article
@@ -70,7 +80,9 @@ class ArticleParser {
    */
   def parse(doc: Document, contentSelection: String, removeSelections: List[String] = Nil): Option[Article] = {
     //Remove unused selections.
-    removeSelections.foreach(doc.select(_).remove())
+    removeSelections.foreach(select => if (StringUtils.isNotBlank(select)) {
+      doc.select(select).remove()
+    })
     val containerElement = doc.select(contentSelection).first()
     if (containerElement != null) {
       val article = Article(doc, Some(containerElement))

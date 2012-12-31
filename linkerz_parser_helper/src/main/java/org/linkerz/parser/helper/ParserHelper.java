@@ -1,8 +1,14 @@
 package org.linkerz.parser.helper;
 
 import net.miginfocom.swing.MigLayout;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The Class ParserHelper.
@@ -10,7 +16,9 @@ import javax.swing.*;
  * @author Nguyen Duc Dung
  * @since 12/31/12 6:22 PM
  */
-public class ParserHelper extends JFrame {
+public class ParserHelper extends JFrame implements ActionListener {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private JPanel contentPanel = new JPanel(new MigLayout("inset 20", "[40][grow]"));
     private JButton startBtn = new JButton("Start");
@@ -22,7 +30,7 @@ public class ParserHelper extends JFrame {
     private JTextArea resultTxt = new JTextArea();
     private JScrollPane scrollingArea = new JScrollPane(resultTxt);
     private JLabel statusLbl = new JLabel("Status: ");
-
+    private SimpleCrawler crawler = new SimpleCrawler();
 
     public ParserHelper() {
         initComponent();
@@ -46,6 +54,31 @@ public class ParserHelper extends JFrame {
         contentPanel.add(statusLbl, "span, growx");
 
         setContentPane(contentPanel);
+
+        startBtn.addActionListener(this);
     }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        logger.info("Begin testing");
+        startBtn.setEnabled(false);
+        resultTxt.setText("");
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    List<String> removeSelections = new ArrayList<>();
+                    removeSelections.add(removeText1.getText());
+                    removeSelections.add(removeText2.getText());
+                    removeSelections.add(removeText3.getText());
+                    crawler.crawl(urlTxt.getText(), selectionTxt.getText(), removeSelections, statusLbl, resultTxt);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                } finally {
+                    startBtn.setEnabled(true);
+                }
+            }
+        });
+        thread.start();
+    }
 }

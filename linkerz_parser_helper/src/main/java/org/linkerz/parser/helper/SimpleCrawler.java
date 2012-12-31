@@ -11,7 +11,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.linkerz.crawl.topology.downloader.Downloader;
 import org.linkerz.crawl.topology.factory.DownloadFactory;
+import org.linkerz.parser.ArticleParser;
 import org.linkerz.parser.LinksParser;
+import org.linkerz.parser.model.Article;
+import org.linkerz.parser.model.ImageElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +23,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -37,15 +41,9 @@ public class SimpleCrawler {
     private Pattern filterPattern = Pattern.compile(".*(\\.(css|js|bmp|gif|jpe?g|png|tiff?|mid|mp2|mp3|mp4|wav|avi|mov|mpeg|ram|m4v|pdf|exe|msi|jar|flv|doc|docx|xls|xlsx|ppt|pptx|rm|smil|wmv|swf|wma|zip|rar|gz))$");
 
     public void crawl(String url, String selection, JLabel statusLbl, JTextArea urlList) throws IOException, URISyntaxException {
-        urlList.setText("");
-        LinksParser linksParser = new LinksParser();
-        HttpEntity entity = download(url, statusLbl);
-        Set<String> testUrls = Collections.emptySet();
-        if (entity != null) {
-            Document doc = Jsoup.parse(entity.getContent(), "UTF-8", url);
-            testUrls = linksParser.parse(doc);
-        }
+        Set<String> testUrls = getTestUrls(url, statusLbl);
 
+        urlList.setText("");
         HttpHost httpHost = URIUtils.extractHost(new URI(url));
         String domainName = httpHost.getHostName();
 
@@ -62,6 +60,7 @@ public class SimpleCrawler {
                             if (!elements.isEmpty()) {
                                 urlList.append(testUrl + " - " + doc.title());
                                 urlList.append("\n");
+                                urlList.setCaretPosition(urlList.getDocument().getLength());
                             }
                         }
                     } catch (Exception ex) {
@@ -70,6 +69,57 @@ public class SimpleCrawler {
                 }
             }
         }
+    }
+
+    public void crawl(String url, String contentSelection, List<String> removeSelections, JLabel statusLbl, JTextArea resultTxt) throws IOException, URISyntaxException {
+        Set<String> testUrls = getTestUrls(url, statusLbl);
+        ArticleParser articleParser = new ArticleParser();
+        resultTxt.setText("");
+        HttpHost httpHost = URIUtils.extractHost(new URI(url));
+        String domainName = httpHost.getHostName();
+
+        for (String testUrl : testUrls) {
+            if (!filterPattern.matcher(testUrl).matches()) {
+                HttpHost testHttpHost = URIUtils.extractHost(new URI(testUrl));
+                String testDomainName = testHttpHost.getHostName();
+                if (domainName.equals(testDomainName)) {
+                    try {
+                        HttpEntity testEntity = download(testUrl, statusLbl);
+                        if (testEntity != null) {
+                            Document doc = Jsoup.parse(testEntity.getContent(), "UTF-8", testUrl);
+                            Article article = articleParser.parse(doc, contentSelection, removeSelections);
+                            if (article != null) {
+                                resultTxt.append(testUrl);
+                                resultTxt.append("\n");
+                                resultTxt.append(article.title());
+                                resultTxt.append("\n");
+                                resultTxt.append(article.description(30));
+                                resultTxt.append("\n");
+                                for(ImageElement element : article.imagesAsJavaList()) {
+                                    resultTxt.append(element.src());
+                                    resultTxt.append("\n");
+                                }
+                                resultTxt.append("\n=========================================================================\n");
+                                resultTxt.setCaretPosition(resultTxt.getDocument().getLength());
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
+    private Set<String> getTestUrls(String url, JLabel statusLbl) throws IOException {
+        Set<String> testUrls = Collections.emptySet();
+        LinksParser linksParser = new LinksParser();
+        HttpEntity entity = download(url, statusLbl);
+        if (entity != null) {
+            Document doc = Jsoup.parse(entity.getContent(), "UTF-8", url);
+            testUrls = linksParser.parse(doc);
+        }
+        return testUrls;
     }
 
     private HttpEntity download(String url, JLabel statusLbl) throws IOException {
