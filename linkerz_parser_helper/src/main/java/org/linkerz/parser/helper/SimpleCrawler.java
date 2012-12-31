@@ -8,7 +8,6 @@ import org.apache.http.client.entity.GzipDecompressingEntity;
 import org.apache.http.client.utils.URIUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 import org.linkerz.crawl.topology.downloader.Downloader;
 import org.linkerz.crawl.topology.factory.DownloadFactory;
 import org.linkerz.parser.ArticleParser;
@@ -40,44 +39,15 @@ public class SimpleCrawler {
 
     private Pattern filterPattern = Pattern.compile(".*(\\.(css|js|bmp|gif|jpe?g|png|tiff?|mid|mp2|mp3|mp4|wav|avi|mov|mpeg|ram|m4v|pdf|exe|msi|jar|flv|doc|docx|xls|xlsx|ppt|pptx|rm|smil|wmv|swf|wma|zip|rar|gz))$");
 
-    public void crawl(String url, String selection, JLabel statusLbl, JTextArea urlList) throws IOException, URISyntaxException {
-        Set<String> testUrls = getTestUrls(url, statusLbl);
-
-        urlList.setText("");
-        HttpHost httpHost = URIUtils.extractHost(new URI(url));
-        String domainName = httpHost.getHostName();
-
-        for (String testUrl : testUrls) {
-            if (!filterPattern.matcher(testUrl).matches()) {
-                HttpHost testHttpHost = URIUtils.extractHost(new URI(testUrl));
-                String testDomainName = testHttpHost.getHostName();
-                if (domainName.equals(testDomainName)) {
-                    try {
-                        HttpEntity testEntity = download(testUrl, statusLbl);
-                        if (testEntity != null) {
-                            Document doc = Jsoup.parse(testEntity.getContent(), "UTF-8", testUrl);
-                            Elements elements = doc.select(selection);
-                            if (!elements.isEmpty()) {
-                                urlList.append(testUrl + " - " + doc.title());
-                                urlList.append("\n");
-                                urlList.setCaretPosition(urlList.getDocument().getLength());
-                            }
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            }
-        }
-    }
-
-    public void crawl(String url, String contentSelection, List<String> removeSelections, JLabel statusLbl, JTextArea resultTxt) throws IOException, URISyntaxException {
+    public void crawl(String url, String contentSelection, List<String> removeSelections, JLabel statusLbl, JTextArea resultTxt, Configuration configuration) throws IOException, URISyntaxException {
         Set<String> testUrls = getTestUrls(url, statusLbl);
         ArticleParser articleParser = new ArticleParser();
         resultTxt.setText("");
         HttpHost httpHost = URIUtils.extractHost(new URI(url));
         String domainName = httpHost.getHostName();
 
+        int count = 0;
+        long time = System.currentTimeMillis();
         for (String testUrl : testUrls) {
             if (!filterPattern.matcher(testUrl).matches()) {
                 HttpHost testHttpHost = URIUtils.extractHost(new URI(testUrl));
@@ -89,16 +59,32 @@ public class SimpleCrawler {
                             Document doc = Jsoup.parse(testEntity.getContent(), "UTF-8", testUrl);
                             Article article = articleParser.parse(doc, contentSelection, removeSelections);
                             if (article != null) {
+                                count += 1;
                                 resultTxt.append(testUrl);
                                 resultTxt.append("\n");
-                                resultTxt.append(article.title());
-                                resultTxt.append("\n");
-                                resultTxt.append(article.description(30));
-                                resultTxt.append("\n");
-                                for(ImageElement element : article.imagesAsJavaList()) {
-                                    resultTxt.append(element.src());
+
+                                if(configuration.isShowTitle()) {
+                                    resultTxt.append(article.title());
                                     resultTxt.append("\n");
                                 }
+
+                                if(configuration.isShowDescription()) {
+                                    resultTxt.append(article.description(30));
+                                    resultTxt.append("\n");
+                                }
+
+                                if(configuration.isShowText()) {
+                                    resultTxt.append(article.text());
+                                    resultTxt.append("\n");
+                                }
+
+                                if(configuration.isShowImage()) {
+                                    for (ImageElement element : article.imagesAsJavaList()) {
+                                        resultTxt.append(element.src());
+                                        resultTxt.append("\n");
+                                    }
+                                }
+
                                 resultTxt.append("\n=========================================================================\n");
                                 resultTxt.setCaretPosition(resultTxt.getDocument().getLength());
                             }
@@ -109,6 +95,8 @@ public class SimpleCrawler {
                 }
             }
         }
+        time = System.currentTimeMillis() - time;
+        statusLbl.setText("Downloaded: " + count + " websites in " + time + " ms");
     }
 
     private Set<String> getTestUrls(String url, JLabel statusLbl) throws IOException {

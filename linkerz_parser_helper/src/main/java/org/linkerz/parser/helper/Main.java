@@ -8,17 +8,13 @@ import javax.swing.*;
  * @author Nguyen Duc Dung
  * @since 12/29/12 12:17 AM
  */
-public class Main extends JFrame {
+public class Main {
     public static void main(String[] args) {
-        new Main();
-    }
-
-    public Main() {
-        setTitle("LinkerZ Parser Tester Tool");
-        add(new MainPanel());
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setSize(500, 100);
-        setVisible(true);
+        ParserHelper parserHelper = new ParserHelper();
+        parserHelper.setLocationRelativeTo(null);
+        parserHelper.setSize(500, 500);
+        parserHelper.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        parserHelper.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        parserHelper.setVisible(true);
     }
 }

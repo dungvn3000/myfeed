@@ -27,6 +27,10 @@ public class ParserHelper extends JFrame implements ActionListener {
     private JTextField removeText1 = new JTextField();
     private JTextField removeText2 = new JTextField();
     private JTextField removeText3 = new JTextField();
+    private JCheckBox showTitleCb = new JCheckBox("Show Title");
+    private JCheckBox showDescriptionCb = new JCheckBox("Show Description");
+    private JCheckBox showTextCb = new JCheckBox("Show Text");
+    private JCheckBox showImageCb = new JCheckBox("Show Image");
     private JTextArea resultTxt = new JTextArea();
     private JScrollPane scrollingArea = new JScrollPane(resultTxt);
     private JLabel statusLbl = new JLabel("Status: ");
@@ -48,6 +52,11 @@ public class ParserHelper extends JFrame implements ActionListener {
         contentPanel.add(removeText2, "wrap, grow");
         contentPanel.add(new JLabel("Remove selection: "));
         contentPanel.add(removeText3, "wrap, grow");
+        contentPanel.add(new JLabel("Options: "));
+        contentPanel.add(showTitleCb, "split 4");
+        contentPanel.add(showDescriptionCb);
+        contentPanel.add(showTextCb);
+        contentPanel.add(showImageCb, "wrap, grow");
         contentPanel.add(startBtn, "skip 1, wrap");
 
         contentPanel.add(scrollingArea, "span, grow, h 90%, wrap");
@@ -71,7 +80,12 @@ public class ParserHelper extends JFrame implements ActionListener {
                     removeSelections.add(removeText1.getText());
                     removeSelections.add(removeText2.getText());
                     removeSelections.add(removeText3.getText());
-                    crawler.crawl(urlTxt.getText(), selectionTxt.getText(), removeSelections, statusLbl, resultTxt);
+                    Configuration configuration = new Configuration();
+                    configuration.setShowDescription(showDescriptionCb.isSelected());
+                    configuration.setShowText(showTextCb.isSelected());
+                    configuration.setShowTitle(showTitleCb.isSelected());
+                    configuration.setShowImage(showImageCb.isSelected());
+                    crawler.crawl(urlTxt.getText(), selectionTxt.getText(), removeSelections, statusLbl, resultTxt, configuration);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 } finally {
