@@ -14,7 +14,7 @@ import java.awt.event.ActionListener;
  * @author Nguyen Duc Dung
  * @since 12/29/12 12:26 AM
  */
-public class ParserPanel extends JPanel implements ActionListener {
+public class ContentSelectionHelper extends JFrame implements ActionListener {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -25,23 +25,26 @@ public class ParserPanel extends JPanel implements ActionListener {
     private JScrollPane scrollingArea = new JScrollPane(urlList);
     private JLabel statusLbl = new JLabel("Status: ");
     private SimpleCrawler crawler = new SimpleCrawler();
+    private JPanel contentPanel = new JPanel(new MigLayout("inset 20", "[40][grow]", "[][][][fill, grow][]"));
 
-    public ParserPanel() {
+    public ContentSelectionHelper() {
         initComponent();
     }
 
     public void initComponent() {
-        setLayout(new MigLayout("inset 20", "[40][grow]", "[][][][fill, grow][]"));
-        add(new JLabel("Url:"));
-        add(urlTxt, "grow, wrap");
-        add(new JLabel("Content Selection:"));
-        add(selectionTxt, "grow, wrap");
-        add(startBtn, "skip 1, wrap, w 20");
-        add(scrollingArea, "span, grow, wrap");
-        add(statusLbl, "span, growx");
+        setTitle("Content Selection Helper");
+        contentPanel.add(new JLabel("Url:"));
+        contentPanel.add(urlTxt, "grow, wrap");
+        contentPanel.add(new JLabel("Content Selection:"));
+        contentPanel.add(selectionTxt, "grow, wrap");
+        contentPanel.add(startBtn, "skip 1, wrap, w 20");
+        contentPanel.add(scrollingArea, "span, grow, wrap");
+        contentPanel.add(statusLbl, "span, growx");
         urlList.setEditable(false);
 
         startBtn.addActionListener(this);
+
+        add(contentPanel);
     }
 
     @Override

@@ -15,11 +15,10 @@ public class Main extends JFrame {
 
     public Main() {
         setTitle("LinkerZ Parser Tester Tool");
-        add(new ParserPanel());
+        add(new MainPanel());
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setSize(700, 700);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setSize(500, 100);
         setVisible(true);
     }
 }
