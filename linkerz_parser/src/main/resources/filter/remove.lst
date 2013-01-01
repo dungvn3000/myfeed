@@ -3,8 +3,11 @@
 comment
 Sociable
 email-print
-share .*
+share
 mingid-comment
 timestamp
 share_buttons
 tinlienquan
+tags
+share_buttons
+more_news
