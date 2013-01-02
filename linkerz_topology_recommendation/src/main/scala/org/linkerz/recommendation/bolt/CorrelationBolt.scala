@@ -11,7 +11,6 @@ import collection.immutable.HashSet
 import org.apache.commons.math3.stat.Frequency
 import collection.mutable.ListBuffer
 import grizzled.slf4j.Logging
-import org.linkerz.model.NewBox
 import org.linkerz.dao.NewBoxDao
 
 /**
@@ -44,10 +43,10 @@ class CorrelationBolt extends StormBolt(outputFields = List("userId", "event")) 
 
           if (score > 0.55 && score < 0.8 && !NewBoxDao.isUserClicked(userId, link._id)) {
             info(score + " - " + clickedLink.title + " - " + link.title)
-            NewBoxDao.save(NewBox(
-              userId = userId,
-              linkId = link._id
-            ))
+//            NewBoxDao.save(NewBox(
+//              userId = userId,
+//              linkId = link._id
+//            ))
           }
 
           tuple emit(clickedLink.id, link.id, score)
