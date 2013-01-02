@@ -6,6 +6,7 @@ import collection.mutable.ListBuffer
 import com.mongodb.casbah.Imports._
 import org.linkerz.model.Link
 import org.linkerz.model.NewBox
+import java.util.Date
 
 /**
  * The Class NewBoxDao.
@@ -15,6 +16,18 @@ import org.linkerz.model.NewBox
  *
  */
 object NewBoxDao extends SalatDAO[NewBox, ObjectId](mongo("newbox")) {
+
+  def getLastTime(userId: ObjectId): Option[Date] = {
+    val newBox = find(MongoDBObject.empty).sort(MongoDBObject("createdDate" -> -1)).limit(1).toList
+    if (!newBox.isEmpty) {
+      val linkId = newBox.head.linkId
+      val link = LinkDao.findOneById(linkId)
+      if (link.isDefined) {
+        return Some(link.get.indexDate)
+      }
+    }
+    None
+  }
 
   def findByUserId(userId: ObjectId): List[Link] = {
     val newBox = find(MongoDBObject("userId" -> userId)).toList

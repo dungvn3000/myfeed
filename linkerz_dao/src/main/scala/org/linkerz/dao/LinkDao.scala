@@ -4,6 +4,7 @@ import com.novus.salat.dao.SalatDAO
 import com.mongodb.casbah.commons.MongoDBObject
 import com.mongodb.casbah.Imports._
 import org.linkerz.model.Link
+import java.util.Date
 
 /**
  * The Class LinkDao.
@@ -22,5 +23,10 @@ object LinkDao extends SalatDAO[Link, ObjectId](mongo("link")) {
       save(link)
       Some(link)
     } else None
+  }
+
+  def getAfter(time: Date) = {
+    val links = find(MongoDBObject("indexDate" -> MongoDBObject("$gt" -> time))).toList
+    links
   }
 }
