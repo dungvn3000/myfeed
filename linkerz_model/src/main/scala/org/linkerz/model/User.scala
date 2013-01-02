@@ -1,7 +1,6 @@
 package org.linkerz.model
 
 import org.bson.types.ObjectId
-import com.novus.salat.dao.SalatDAO
 
 /**
  * The Class User.
@@ -17,6 +16,3 @@ case class User
   userName: String,
   passWord: String
   )
-
-
-

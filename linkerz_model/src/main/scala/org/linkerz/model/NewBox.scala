@@ -19,4 +19,3 @@ case class NewBox
   click: Boolean = false,
   createdDate: Date = new Date()
   )
-
