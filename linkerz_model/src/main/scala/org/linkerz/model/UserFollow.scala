@@ -12,6 +12,6 @@ import org.bson.types.ObjectId
 case class UserFollow
 (
   _id: ObjectId = new ObjectId,
-  groupId: ObjectId,
-  feedIds: List[ObjectId]
+  userId: ObjectId,
+  feedId: ObjectId
   )

@@ -15,6 +15,7 @@ case class NewBox
   _id: ObjectId = new ObjectId(),
   userId: ObjectId,
   linkId: ObjectId,
+  feedId: ObjectId,
   click: Boolean = false,
   createdDate: Date = new Date()
   )
