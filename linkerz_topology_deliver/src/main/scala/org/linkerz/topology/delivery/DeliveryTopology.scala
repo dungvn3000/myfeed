@@ -1,5 +1,9 @@
 package org.linkerz.topology.delivery
 
+import backtype.storm.topology.TopologyBuilder
+import bolt.{DeliveryBolt, GetNewsBolt}
+import spout.ScheduleSpout
+
 /**
  * The Class DeliveryTopology.
  *
@@ -8,5 +12,13 @@ package org.linkerz.topology.delivery
  *
  */
 object DeliveryTopology extends Serializable {
+
+  def topology = {
+    val builder = new TopologyBuilder
+    builder.setSpout("scheduleSpout", new ScheduleSpout)
+    builder.setBolt("getnews", new GetNewsBolt, 3)
+    builder.setBolt("delivery", new DeliveryBolt, 3)
+    builder.createTopology()
+  }
 
 }

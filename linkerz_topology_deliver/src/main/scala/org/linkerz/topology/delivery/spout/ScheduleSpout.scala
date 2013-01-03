@@ -9,13 +9,13 @@ import org.linkerz.topology.delivery.actor.ScheduleActor
 import akka.util.duration._
 
 /**
- * The Class DeliverySpout.
+ * The Class ScheduleSpout.
  *
  * @author Nguyen Duc Dung
  * @since 1/3/13 12:54 AM
  *
  */
-class DeliverySpout extends StormSpout(outputFields = List("userId", "event")) with Logging {
+class ScheduleSpout extends StormSpout(outputFields = List("userId", "event")) with Logging {
 
   setup {
     val scheduleActor = Akka.system.actorOf(Props(new ScheduleActor(_collector)))
