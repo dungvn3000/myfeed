@@ -16,7 +16,7 @@ object DeliveryLocalRunner extends App {
   val localCluster = new LocalCluster
 
   val conf = new Config
-  conf setDebug false
+  conf setDebug true
   conf setNumWorkers 2
 
   localCluster.submitTopology("delivery", conf, topology)

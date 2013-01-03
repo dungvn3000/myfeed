@@ -16,8 +16,8 @@ object DeliveryTopology extends Serializable {
   def topology = {
     val builder = new TopologyBuilder
     builder.setSpout("scheduleSpout", new ScheduleSpout)
-    builder.setBolt("getnews", new GetNewsBolt, 3)
-    builder.setBolt("delivery", new DeliveryBolt, 3)
+    builder.setBolt("getNews", new GetNewsBolt, 3).shuffleGrouping("scheduleSpout")
+    builder.setBolt("delivery", new DeliveryBolt, 3).shuffleGrouping("getNews")
     builder.createTopology()
   }
 

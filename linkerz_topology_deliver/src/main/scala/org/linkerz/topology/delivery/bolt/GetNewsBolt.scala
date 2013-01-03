@@ -3,8 +3,10 @@ package org.linkerz.topology.delivery.bolt
 import storm.scala.dsl.StormBolt
 import grizzled.slf4j.Logging
 import org.linkerz.topology.delivery.event.{GetNews, Start}
-import org.linkerz.dao.{LinkDao, NewBoxDao}
+import org.linkerz.dao.{UserFollowDao, LinkDao, NewBoxDao}
 import org.bson.types.ObjectId
+import org.linkerz.model.Link
+import com.mongodb.casbah.commons.MongoDBObject
 
 /**
  * The Class GetNewsBolt.
@@ -17,12 +19,19 @@ class GetNewsBolt extends StormBolt(outputFields = List("userId", "event")) with
 
   execute(tuple => tuple matchSeq {
     case Seq(userId: ObjectId, Start) => {
-      NewBoxDao.getLastTime(userId).map(lastTime => {
-        val links = LinkDao.getAfter(lastTime)
-        if (!links.isEmpty) {
-          tuple emit (userId, GetNews(links))
-        }
-      })
+      val feedIds = UserFollowDao.findUserFollowByUserID(userId).map(_.feedId)
+      val lastTime = NewBoxDao.getLastTime(userId)
+
+      val links: List[Link] = if (lastTime.isDefined) {
+        LinkDao.getAfter(lastTime.get).filter(link => feedIds.contains(link.feedId))
+      } else {
+        LinkDao.find(MongoDBObject.empty).toList.filter(link => feedIds.contains(link.feedId))
+      }
+
+      if (!links.isEmpty) {
+        tuple emit (userId, GetNews(links))
+      }
+
     }
   })
 

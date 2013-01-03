@@ -23,7 +23,7 @@ class DeliveryBolt extends StormBolt(outputFields = List("userId", "event")) wit
         val newBox = NewBox(
           userId = userId,
           linkId = link._id,
-          groupName = group.name
+          groupName = group.name.toLowerCase
         )
         NewBoxDao.save(newBox)
       })
