@@ -17,9 +17,14 @@ import java.net.URI
  */
 class LinksParser {
 
+  /**
+   *
+   * @param doc
+   * @return Duplicate urls will be removed.
+   */
   def parse(doc: Document) = {
     //Using java list for better performance.
-    var webUrls = new java.util.HashSet[String]
+    var webUrls = new java.util.ArrayList[String]
     val httpHost = URIUtils.extractHost(new URI(doc.baseUri()))
     val baseUrl = httpHost.toURI
 
@@ -39,12 +44,13 @@ class LinksParser {
             val url = URLCanonicalizer.getCanonicalURL(href, baseUrl)
             val urlValidator = new UrlValidator(Array("http", "https"))
             if (url != null && urlValidator.isValid(url)) {
-              webUrls += url
+              if (!webUrls.contains(url)) webUrls += url
             }
           }
         }
       }
     }
+
     webUrls
   }
 

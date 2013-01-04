@@ -23,7 +23,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -40,7 +39,7 @@ public class SimpleCrawler {
     private Pattern filterPattern = Pattern.compile(".*(\\.(css|js|bmp|gif|jpe?g|png|tiff?|mid|mp2|mp3|mp4|wav|avi|mov|mpeg|ram|m4v|pdf|exe|msi|jar|flv|doc|docx|xls|xlsx|ppt|pptx|rm|smil|wmv|swf|wma|zip|rar|gz))$");
 
     public void crawl(String url, String contentSelection, List<String> removeSelections, JLabel statusLbl, JTextArea resultTxt, Configuration configuration) throws IOException, URISyntaxException {
-        Set<String> testUrls = getTestUrls(url, statusLbl);
+        List<String> testUrls = getTestUrls(url, statusLbl);
         ArticleParser articleParser = new ArticleParser();
         resultTxt.setText("");
         HttpHost httpHost = URIUtils.extractHost(new URI(url));
@@ -99,8 +98,8 @@ public class SimpleCrawler {
         statusLbl.setText("Downloaded: " + count + " websites in " + time + " ms");
     }
 
-    private Set<String> getTestUrls(String url, JLabel statusLbl) throws IOException {
-        Set<String> testUrls = Collections.emptySet();
+    private List<String> getTestUrls(String url, JLabel statusLbl) throws IOException {
+        List<String> testUrls = Collections.emptyList();
         LinksParser linksParser = new LinksParser();
         HttpEntity entity = download(url, statusLbl);
         if (entity != null) {
