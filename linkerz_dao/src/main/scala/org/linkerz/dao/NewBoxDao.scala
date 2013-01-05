@@ -5,7 +5,7 @@ import com.mongodb.casbah.commons.MongoDBObject
 import collection.mutable.ListBuffer
 import com.mongodb.casbah.Imports._
 import org.linkerz.model.Link
-import org.linkerz.model.NewBox
+import org.linkerz.model.NewsBox
 import java.util.Date
 
 /**
@@ -15,7 +15,7 @@ import java.util.Date
  * @since 11/22/12 1:07 PM
  *
  */
-object NewBoxDao extends SalatDAO[NewBox, ObjectId](mongo("newbox")) {
+object NewBoxDao extends SalatDAO[NewsBox, ObjectId](mongo("newbox")) {
 
   def getLastTime(userId: ObjectId): Option[Date] = {
     val newBox = find(MongoDBObject.empty).sort(MongoDBObject("createdDate" -> -1)).limit(1).toList

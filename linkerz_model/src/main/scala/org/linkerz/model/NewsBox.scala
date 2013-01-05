@@ -4,13 +4,13 @@ import org.bson.types.ObjectId
 import java.util.Date
 
 /**
- * The Class NewBox.
+ * The Class NewsBox.
  *
  * @author Nguyen Duc Dung
  * @since 11/11/12 2:25 AM
  *
  */
-case class NewBox
+case class NewsBox
 (
   _id: ObjectId = new ObjectId(),
   userId: ObjectId,
