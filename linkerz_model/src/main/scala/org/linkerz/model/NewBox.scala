@@ -16,6 +16,7 @@ case class NewBox
   userId: ObjectId,
   linkId: ObjectId,
   groupName: String,
+  ratting: Double,
   click: Boolean = false,
   createdDate: Date = new Date()
   )
