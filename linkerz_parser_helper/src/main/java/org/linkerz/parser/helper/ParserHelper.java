@@ -62,6 +62,8 @@ public class ParserHelper extends JFrame implements ActionListener {
         contentPanel.add(scrollingArea, "span, grow, h 90%, wrap");
         contentPanel.add(statusLbl, "span, growx");
 
+        resultTxt.setEditable(false);
+
         setContentPane(contentPanel);
 
         startBtn.addActionListener(this);
