@@ -108,6 +108,7 @@ object LinkerZBuild extends Build {
     "org.imgscalr" % "imgscalr-lib" % "4.2",
     "com.gravity" % "goose" % "2.1.22",
     "org.scalanlp" % "breeze-process_2.9.2" % "0.1",
+    "com.google.code.crawler-commons" % "crawler-commons" % "0.1",
     "de.thischwa.jii" % "java-image-info" % "0.5"
   ) ++ stormDependencies ++ testDependencies
 
@@ -129,7 +130,7 @@ object LinkerZBuild extends Build {
   )
 
   lazy val stormDependencies = Seq(
-    "storm" % "storm" % "0.8.1" % "provided"
+    "storm" % "storm" % "0.8.2" % "provided"
   )
 
   lazy val rabbitMqDependencies = Seq(

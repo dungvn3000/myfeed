@@ -20,12 +20,12 @@ class DeliveryBolt extends StormBolt(outputFields = List("userId", "event")) wit
     case Seq(userId: ObjectId, GetNews(links)) => {
       links.foreach(link => {
         val group = FeedDao.getFeedGroup(link.feedId).getOrElse(throw new Exception("Something goes wrong"))
-//        val newBox = NewsBox(
-//          userId = userId,
-//          linkId = link._id,
-//          groupName = group.name.toLowerCase
-//        )
-//        NewBoxDao.save(newBox)
+        val newBox = NewsBox(
+          userId = userId,
+          linkId = link._id,
+          groupName = group.name.toLowerCase
+        )
+        NewBoxDao.save(newBox)
       })
     }
   })

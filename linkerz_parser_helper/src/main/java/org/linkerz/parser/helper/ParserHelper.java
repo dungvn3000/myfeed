@@ -78,7 +78,7 @@ public class ParserHelper extends JFrame implements ActionListener {
             @Override
             public void run() {
                 try {
-                    List<String> removeSelections = new ArrayList<>();
+                    List<String> removeSelections = new ArrayList<String>();
                     removeSelections.add(removeText1.getText());
                     removeSelections.add(removeText2.getText());
                     removeSelections.add(removeText3.getText());

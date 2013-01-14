@@ -16,7 +16,6 @@ case class NewsBox
   userId: ObjectId,
   linkId: ObjectId,
   groupName: String,
-  ratting: Double,
   click: Boolean = false,
   createdDate: Date = new Date()
   )
