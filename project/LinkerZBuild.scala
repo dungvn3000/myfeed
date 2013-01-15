@@ -22,8 +22,8 @@ object LinkerZBuild extends Build {
   )
 
   lazy val linkerZ = Project("linkerz", file("."), settings = sharedSetting).aggregate(
-    linkerZCore, linkerZModel, linkerZRecommendation, linkerZLogger,
-    scalaStorm, urlBuilder, linkerZTopologyCrawl, linkerZParser, linkerZParserHelper, linkerZDao, linkerZDeliver
+    linkerZCore, linkerZModel, linkerZLogger, scalaStorm, urlBuilder,
+    linkerZTopologyCrawl, linkerZParser, linkerZParserHelper, linkerZDao
   )
 
   lazy val linkerZCore = Project("linkerz_core", file("linkerz_core"), settings = sharedSetting).settings(
@@ -37,14 +37,6 @@ object LinkerZBuild extends Build {
   lazy val linkerZDao = Project("linkerz_dao", file("linkerz_dao"), settings = sharedSetting).settings(
     libraryDependencies ++= testDependencies
   ).dependsOn(linkerZCore, linkerZModel)
-
-  lazy val linkerZRecommendation = Project("linkerz_topology_recommendation", file("linkerz_topology_recommendation"), settings = sharedSetting).settings(
-    libraryDependencies ++= recommendationDependencies
-  ).dependsOn(linkerZCore, linkerZDao, scalaStorm, linkerZLogger)
-
-  lazy val linkerZDeliver = Project("linkerz_topology_deliver", file("linkerz_topology_deliver"), settings = sharedSetting).settings(
-    libraryDependencies ++= stormDependencies ++ testDependencies
-  ).dependsOn(linkerZCore, linkerZDao, scalaStorm, linkerZLogger)
 
   lazy val linkerZLogger = Project("linkerz_logger", file("linkerz_logger"), settings = sharedSetting).settings(
     libraryDependencies ++= testDependencies
@@ -87,7 +79,6 @@ object LinkerZBuild extends Build {
     "org.apache.commons" % "commons-math3" % "3.0",
     "commons-validator" % "commons-validator" % "1.4.0" exclude("commons-beanutils", "commons-beanutils"),
     "commons-io" % "commons-io" % "2.4",
-    "org.scalaz" %% "scalaz-core" % "6.0.4",
     "com.typesafe" % "config" % "1.0.0",
     "com.typesafe.akka" % "akka-actor" % "2.0.3"
   )
@@ -113,10 +104,7 @@ object LinkerZBuild extends Build {
   ) ++ stormDependencies ++ testDependencies
 
   lazy val recommendationDependencies = Seq(
-    "org.scalanlp" % "breeze-process_2.9.2" % "0.1",
-    "org.apache.mahout" % "mahout-core" % "0.7",
-    "org.carrot2" % "carrot2-mini" % "3.6.1",
-    "redis.clients" % "jedis" % "2.1.0"
+    "org.apache.mahout" % "mahout-core" % "0.7"
   ) ++ stormDependencies ++ testDependencies
 
   lazy val parserDependencies = Seq(
