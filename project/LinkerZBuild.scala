@@ -12,11 +12,11 @@ object LinkerZBuild extends Build {
     scalaVersion := "2.9.1",
     scalacOptions += "-Yresolve-term-conflict:package",
     resolvers ++= Seq(
+      "ClouderaRepo" at "https://repository.cloudera.com/content/repositories/releases",
       "Typesafe Repository" at "http://repo.akka.io/releases/",
       "twitter4j" at "http://twitter4j.org/maven2",
       "clojars.org" at "http://clojars.org/repo",
       "thischwa-repro" at "http://maven-repo.thischwa.de/",
-      "Local Maven Repository" at "file://" + Path.userHome.absolutePath + "/.m2/repository",
       Resolver.file("Local Repository", file(Path.userHome.absolutePath + "/.ivy2/local"))(Resolver.ivyStylePatterns)
     )
   )
@@ -89,7 +89,13 @@ object LinkerZBuild extends Build {
   )
 
   lazy val modelDependencies = Seq(
-    "com.novus" %% "salat" % "1.9.1"
+    "com.novus" %% "salat" % "1.9.1",
+    "com.gravity" % "gravity-hpaste" % "0.1.11" excludeAll(
+      ExclusionRule("org.apache.hbase", "hbase"),
+      ExclusionRule("org.apache.hadoop", "hadoop-core")
+      ),
+    "org.apache.hadoop" % "hadoop-core" % "1.0.1",
+    "org.apache.hbase" % "hbase" % "0.92.0"
   )
 
   lazy val crawlerTopologyDependencies = Seq(
