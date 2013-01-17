@@ -1,8 +1,10 @@
 package org.linkerz.model
 
-import com.gravity.hbase.schema.{HRow, DeserializedResult, HbaseTable, Schema}
+import com.gravity.hbase.schema._
 import org.apache.hadoop.hbase.HBaseConfiguration
 import org.joda.time.DateTime
+import com.gravity.hbase.schema.DeserializedResult
+import com.gravity.hbase.AnyNotSupportedException
 
 /**
  * The Class WebCrawlingSchema.
@@ -14,6 +16,11 @@ import org.joda.time.DateTime
 object WebCrawlingSchema extends Schema {
 
   implicit val conf = HBaseConfiguration.create()
+
+  implicit object ByteArrayConverter extends ByteConverter[Array[Byte]] {
+    def toBytes(t: Array[Byte]) = t
+    def fromBytes(bytes: Array[Byte], offset: Int, length: Int) = bytes
+  }
 
   class WebTable extends HbaseTable[WebTable, String, WebTableRow](tableName = "webtable", rowKeyClass = classOf[String]) {
 
