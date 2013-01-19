@@ -10,9 +10,4 @@ import org.bson.types.ObjectId
  *
  */
 
-case class User
-(
-  _id: ObjectId = new ObjectId,
-  userName: String,
-  passWord: String
-  )
+case class User(id: String, password: String)

@@ -25,6 +25,13 @@ object UserSchema extends Schema {
     val domain = column(userFollow, "domain", classOf[String])
   }
 
-  class UserTableRow(table: UserTable, result: DeserializedResult) extends HRow[UserTable, String](result, table)
+  class UserTableRow(table: UserTable, result: DeserializedResult) extends HRow[UserTable, String](result, table) {
+
+    def toUser = User(
+      id = rowid,
+      password = column(_.password).getOrElse(throw new Exception("User has no password column"))
+    )
+
+  }
 
 }

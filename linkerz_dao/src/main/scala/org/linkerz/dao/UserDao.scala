@@ -11,6 +11,6 @@ import org.bson.types.ObjectId
  * @since 11/22/12 1:07 PM
  *
  */
-object UserDao extends SalatDAO[User, ObjectId](mongo("user")) {
+object UserDao {
 
 }

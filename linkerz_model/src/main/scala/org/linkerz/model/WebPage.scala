@@ -14,6 +14,7 @@ case class WebPage(
                     crawledDate: DateTime,
                     domain: String,
                     contentEncoding: Option[String],
+                    score: Option[Double],
                     title: Option[String],
                     text: Option[String],
                     description: Option[String],
