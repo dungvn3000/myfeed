@@ -9,7 +9,6 @@ import backtype.storm.tuple.Tuple
 import org.linkerz.crawl.topology.event._
 import org.linkerz.crawl.topology.session.RichSession._
 import java.util.UUID
-import org.linkerz.dao.LinkDao
 import org.linkerz.crawl.topology.event.Handle
 import org.linkerz.crawl.topology.session.CrawlSession
 import org.linkerz.crawl.topology.event.Start
@@ -107,9 +106,9 @@ class HandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) w
       || (job.onlyCrawlInSameDomain && webUrl.domainName == session.domainName)) {
       //Make sure the url is not in the queue
       if (!session.queueUrls.contains(webUrl)) {
-        if (LinkDao.findByUrl(webUrl.url).isEmpty) {
-          return true
-        }
+//        if (LinkDao.findByUrl(webUrl.url).isEmpty) {
+//          return true
+//        }
       }
     }
 
