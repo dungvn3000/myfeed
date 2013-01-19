@@ -10,4 +10,4 @@ import org.bson.types.ObjectId
  *
  */
 
-case class User(id: String, password: String)
+case class User(id: String, password: String, followDomains: Seq[String] = Nil)

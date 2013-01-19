@@ -1,6 +1,7 @@
 package org.linkerz.model
 
 import com.gravity.hbase.schema.{DeserializedResult, HbaseTable, HRow, Schema}
+import exception.ColumnNotFoundException
 import org.apache.hadoop.hbase.HBaseConfiguration
 
 /**
@@ -14,22 +15,23 @@ object UserSchema extends Schema {
 
   implicit val conf = HBaseConfiguration.create()
 
-  class UserTable extends HbaseTable[UserTable, String, UserTableRow](tableName = "usertable", rowKeyClass = classOf[String]) {
+  class UserTable extends HbaseTable[UserTable, String, UserTableRow](tableName = "UserTable", rowKeyClass = classOf[String]) {
 
     def rowBuilder(result: DeserializedResult) = new UserTableRow(this, result)
 
     val info = family[String, String, Any]("info")
     val password = column(info, "password", classOf[String])
 
-    val userFollow = family[String, String, Any]("userfollow")
-    val domain = column(userFollow, "domain", classOf[String])
+    val userFollow = family[String, String, Any]("userFollow")
+    val followDomains = column(userFollow, "followDomains", classOf[Seq[String]])
   }
 
   class UserTableRow(table: UserTable, result: DeserializedResult) extends HRow[UserTable, String](result, table) {
 
     def toUser = User(
       id = rowid,
-      password = column(_.password).getOrElse(throw new Exception("User has no password column"))
+      password = column(_.password).getOrElse(throw new ColumnNotFoundException(table.tableName, table.password.getQualifier)),
+      followDomains = column(_.followDomains).getOrElse(Nil)
     )
 
   }
