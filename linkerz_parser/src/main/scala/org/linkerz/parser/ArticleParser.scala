@@ -78,7 +78,7 @@ class ArticleParser {
    * @param removeSelections
    * @return
    */
-  def parse(doc: Document, contentSelection: String, removeSelections: List[String] = Nil): Option[Article] = {
+  def parse(doc: Document, contentSelection: String, removeSelections: Seq[String] = Nil): Option[Article] = {
     //Remove unused selections.
     removeSelections.foreach(select => if (StringUtils.isNotBlank(select)) {
       doc.select(select).remove()

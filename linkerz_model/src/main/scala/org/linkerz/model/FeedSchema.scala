@@ -1,0 +1,50 @@
+package org.linkerz.model
+
+import com.gravity.hbase.schema.{HbaseTable, HRow, DeserializedResult, Schema}
+import exception.ColumnNotFoundException
+import org.apache.hadoop.hbase.HBaseConfiguration
+
+/**
+ * The Class FeedSchema.
+ *
+ * @author Nguyen Duc Dung
+ * @since 1/20/13 1:10 AM
+ *
+ */
+object FeedSchema extends Schema {
+
+  implicit val conf = HBaseConfiguration.create()
+
+  class FeedTable extends HbaseTable[FeedTable, String, FeedTableRow](tableName = "FeedTable", rowKeyClass = classOf[String]) {
+
+    def rowBuilder(result: DeserializedResult) = new FeedTableRow(this, result)
+
+    val info = family[String, String, Any]("info")
+    val name = column(info, "name", classOf[String])
+    val enable = column(info, "enable", classOf[Boolean])
+    val urlRegex = column(info, "urlRegex", classOf[String])
+    val excludeUrl = column(info, "excludeUrl", classOf[Seq[String]])
+    val contentSelection = column(info, "contentSelection", classOf[String])
+    val removeSelections = column(info, "removeSelections", classOf[Seq[String]])
+
+    val group = family[String, String, Any]("group")
+    val groupId = column(group, "groupId", classOf[String])
+
+  }
+
+  class FeedTableRow(table: FeedTable, result: DeserializedResult) extends HRow[FeedTable, String](result, table) {
+    def toFeed = Feed(
+      id = rowid,
+      groupId = column(_.groupId).getOrElse(throw new ColumnNotFoundException(tableName, table.groupId.getQualifier)),
+      name = column(_.name).getOrElse(throw new ColumnNotFoundException(tableName, table.name.getQualifier)),
+      enable = column(_.enable).getOrElse(throw new ColumnNotFoundException(tableName, table.enable.getQualifier)),
+      urlRegex = column(_.urlRegex).getOrElse(throw new ColumnNotFoundException(tableName, table.urlRegex.getQualifier)),
+      excludeUrl = column(_.excludeUrl).getOrElse(Nil),
+      contentSelection = column(_.contentSelection).getOrElse(throw new ColumnNotFoundException(tableName, table.contentSelection.getQualifier)),
+      removeSelections = column(_.removeSelections).getOrElse(Nil)
+    )
+  }
+
+  val FeedTable = table(new FeedTable)
+
+}

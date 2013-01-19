@@ -45,8 +45,8 @@ object WebCrawlingSchema extends Schema {
   class WebTableRow(table: WebTable, result: DeserializedResult) extends HRow[WebTable, String](result, table) {
     def toWebPage = WebPage(
       id = rowid,
-      crawledDate = column(_.crawledDate).getOrElse(throw new ColumnNotFoundException(table.tableName, table.crawledDate.getQualifier)),
-      domain = column(_.domain).getOrElse(throw new ColumnNotFoundException(table.tableName, table.domain.getQualifier)),
+      crawledDate = column(_.crawledDate).getOrElse(throw new ColumnNotFoundException(tableName, table.crawledDate.getQualifier)),
+      domain = column(_.domain).getOrElse(throw new ColumnNotFoundException(tableName, table.domain.getQualifier)),
       contentEncoding = column(_.contentEncoding),
       score = column(_.score),
       title = column(_.title),

@@ -27,13 +27,13 @@ object UserSchema extends Schema {
   }
 
   class UserTableRow(table: UserTable, result: DeserializedResult) extends HRow[UserTable, String](result, table) {
-
     def toUser = User(
       id = rowid,
-      password = column(_.password).getOrElse(throw new ColumnNotFoundException(table.tableName, table.password.getQualifier)),
+      password = column(_.password).getOrElse(throw new ColumnNotFoundException(tableName, table.password.getQualifier)),
       followDomains = column(_.followDomains).getOrElse(Nil)
     )
-
   }
+
+  val UserTable = table(new UserTable)
 
 }

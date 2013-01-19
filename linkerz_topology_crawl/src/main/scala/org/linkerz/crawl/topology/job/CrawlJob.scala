@@ -36,7 +36,7 @@ case class CrawlJob(webUrl: WebUrl) {
   /**
    * For those of url match with this regex will not be crawl.
    */
-  var excludeUrl: List[String] = Nil
+  var excludeUrl: Seq[String] = Nil
 
   /**
    * Max depth for a crawl job, default is unlimited.
@@ -68,7 +68,7 @@ case class CrawlJob(webUrl: WebUrl) {
    * @param newFeed
    */
   def this(newFeed: Feed) {
-    this(newFeed.url)
+    this(newFeed.id)
 
     if (!newFeed.urlRegex.isEmpty) {
       urlRegex = Some(newFeed.urlRegex)

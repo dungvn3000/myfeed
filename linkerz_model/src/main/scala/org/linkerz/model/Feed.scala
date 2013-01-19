@@ -18,12 +18,11 @@ case class Feed(
                  groupId: String,
 
                  name: String,
-                 url: String,
                  enable: Boolean,
 
                  urlRegex: String,
-                 excludeUrl: List[String] = Nil,
+                 excludeUrl: Seq[String] = Nil,
 
                  contentSelection: String,
-                 removeSelections: List[String]
+                 removeSelections: Seq[String]
                  )
