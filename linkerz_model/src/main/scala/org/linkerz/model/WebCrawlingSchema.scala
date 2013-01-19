@@ -28,7 +28,7 @@ object WebCrawlingSchema extends Schema {
 
     //Metadata Family
     val metadata = family[String, String, Any]("metadata")
-    val crawledDate = column(metadata, "crawleddate", classOf[DateTime])
+    val crawledDate = column(metadata, "crawledDate", classOf[DateTime])
     val domain = column(metadata, "domain", classOf[String])
     val contentEncoding = column(metadata, "contentEncoding", classOf[String])
 
@@ -40,7 +40,18 @@ object WebCrawlingSchema extends Schema {
     val featureImage = column(content, "featureImage", classOf[Array[Byte]])
   }
 
-  class WebTableRow(table: WebTable, result: DeserializedResult) extends HRow[WebTable, String](result, table)
+  class WebTableRow(table: WebTable, result: DeserializedResult) extends HRow[WebTable, String](result, table) {
+    def toWebPage = WebPage(
+      id = rowid,
+      crawledDate = column(_.crawledDate).getOrElse(throw new Exception("WebPage has no crawledDate column")),
+      domain = column(_.domain).getOrElse(throw new Exception("WebPage has no domain column")),
+      contentEncoding = column(_.contentEncoding),
+      title = column(_.title),
+      text = column(_.text),
+      description = column(_.description),
+      featureImage = column(_.featureImage)
+    )
+  }
 
   val WebTable = table(new WebTable)
 
