@@ -4,7 +4,6 @@
 
 package org.linkerz.model
 
-import org.bson.types.ObjectId
 
 /**
  * The Class Feeds.
@@ -14,23 +13,17 @@ import org.bson.types.ObjectId
  *
  */
 
-case class Feed
-(
-  _id: ObjectId = new ObjectId,
-  groupId: ObjectId,
+case class Feed(
+                 id: String,
+                 groupId: String,
 
-  name: String,
-  url: String,
-  enable: Boolean,
+                 name: String,
+                 url: String,
+                 enable: Boolean,
 
-  urlRegex: String,
-  excludeUrl: List[String] = Nil,
+                 urlRegex: String,
+                 excludeUrl: List[String] = Nil,
 
-  contentSelection: String,
-  removeSelections: List[String]
-  ) {
-
-  def id = _id.toString
-
-}
-
+                 contentSelection: String,
+                 removeSelections: List[String]
+                 )

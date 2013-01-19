@@ -1,6 +1,5 @@
 package org.linkerz.model
 
-import org.bson.types.ObjectId
 import java.util.Date
 
 /**
@@ -12,9 +11,9 @@ import java.util.Date
  */
 case class NewsBox
 (
-  _id: ObjectId = new ObjectId(),
-  userId: ObjectId,
-  linkId: ObjectId,
+  id: String,
+  userId: String,
+  linkId: String,
   groupName: String,
   click: Boolean = false,
   createdDate: Date = new Date()

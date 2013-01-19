@@ -1,6 +1,5 @@
 package org.linkerz.model
 
-import org.bson.types.ObjectId
 
 /**
  * The Class FeedGroup.
@@ -9,12 +8,7 @@ import org.bson.types.ObjectId
  * @since 12/30/12 5:04 PM
  *
  */
-case class FeedGroup
-(
-  _id: ObjectId = new ObjectId,
-  name: String
-
-  ) {
-  //Convenience method to convert _id to String.
-  def id = _id.toString
-}
+case class FeedGroup(
+                      id: String,
+                      name: String
+                      )

@@ -89,7 +89,6 @@ object LinkerZBuild extends Build {
   )
 
   lazy val modelDependencies = Seq(
-    "com.novus" %% "salat" % "1.9.1",
     "com.gravity" % "gravity-hpaste" % "0.1.11" excludeAll(
       ExclusionRule("org.apache.hbase", "hbase"),
       ExclusionRule("org.apache.hadoop", "hadoop-core")
@@ -104,7 +103,6 @@ object LinkerZBuild extends Build {
     "net.coobird" % "thumbnailator" % "0.4.2",
     "org.imgscalr" % "imgscalr-lib" % "4.2",
     "com.gravity" % "goose" % "2.1.22",
-    "org.scalanlp" % "breeze-process_2.9.2" % "0.1",
     "com.google.code.crawler-commons" % "crawler-commons" % "0.1",
     "de.thischwa.jii" % "java-image-info" % "0.5"
   ) ++ stormDependencies ++ testDependencies

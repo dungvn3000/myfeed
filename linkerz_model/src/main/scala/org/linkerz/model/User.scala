@@ -1,6 +1,5 @@
 package org.linkerz.model
 
-import org.bson.types.ObjectId
 
 /**
  * The Class User.
