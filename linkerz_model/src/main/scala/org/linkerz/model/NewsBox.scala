@@ -1,6 +1,7 @@
 package org.linkerz.model
 
 import java.util.Date
+import org.joda.time.DateTime
 
 /**
  * The Class NewsBox.
@@ -9,12 +10,11 @@ import java.util.Date
  * @since 11/11/12 2:25 AM
  *
  */
-case class NewsBox
-(
-  id: String,
-  userId: String,
-  linkId: String,
-  groupName: String,
-  click: Boolean = false,
-  createdDate: Date = new Date()
-  )
+case class NewsBox(
+                    id: String,
+                    userId: String,
+                    webPageId: String,
+                    feedGroupId: String,
+                    clicked: Boolean = false,
+                    createdDate: DateTime = new DateTime()
+                    )
