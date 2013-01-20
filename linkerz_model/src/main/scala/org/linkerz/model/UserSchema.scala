@@ -36,4 +36,15 @@ object UserSchema extends Schema {
 
   val UserTable = table(new UserTable)
 
+  /**
+   * Convenient method, to save an entity to the database
+   * @param user
+   */
+  def save(user: User) {
+    UserTable.put(user.id)
+      .value(_.password, user.password)
+      .value(_.followDomains, user.followDomains)
+      .execute()
+  }
+
 }

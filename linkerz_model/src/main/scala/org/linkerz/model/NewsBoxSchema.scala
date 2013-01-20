@@ -39,4 +39,18 @@ object NewsBoxSchema extends Schema {
   }
 
   val NewsBoxTable = table(new NewsBoxTable)
+
+  /**
+   * Convenient method, to same an entity to database
+   * @param newsBox
+   */
+  def save(newsBox: NewsBox) {
+    NewsBoxTable.put(newsBox.id)
+      .value(_.userId, newsBox.userId)
+      .value(_.webPageId, newsBox.webPageId)
+      .value(_.groupName, newsBox.groupName)
+      .value(_.clicked, newsBox.clicked)
+      .value(_.createdDate, newsBox.createdDate)
+      .execute()
+  }
 }

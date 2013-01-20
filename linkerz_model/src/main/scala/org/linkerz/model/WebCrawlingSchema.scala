@@ -20,6 +20,7 @@ object WebCrawlingSchema extends Schema {
 
   implicit object ByteArrayConverter extends ByteConverter[Array[Byte]] {
     def toBytes(t: Array[Byte]) = t
+
     def fromBytes(bytes: Array[Byte], offset: Int, length: Int) = bytes
   }
 
@@ -28,14 +29,14 @@ object WebCrawlingSchema extends Schema {
     def rowBuilder(result: DeserializedResult) = new WebTableRow(this, result)
 
     //Metadata Family
-    val metadata = family[String, String, Any]("metadata")
-    val crawledDate = column(metadata, "crawledDate", classOf[DateTime])
-    val domain = column(metadata, "domain", classOf[String])
-    val contentEncoding = column(metadata, "contentEncoding", classOf[String])
-    val score = column(metadata, "score", classOf[Double])
+    val info = family[String, String, Any]("info")
+    val crawledDate = column(info, "crawledDate", classOf[DateTime])
+    val domain = column(info, "domain", classOf[String])
+    val contentEncoding = column(info, "contentEncoding", classOf[String])
+    val score = column(info, "score", classOf[Double])
 
     //Content Family
-    val content = family[String, String, Any]("content", compressed = true)
+    val content = family[String, String, Any]("content")
     val title = column(content, "title", classOf[String])
     val text = column(content, "text", classOf[String])
     val description = column(content, "description", classOf[String])
@@ -57,5 +58,24 @@ object WebCrawlingSchema extends Schema {
   }
 
   val WebTable = table(new WebTable)
+
+  /**
+   * Convenient method, to same an entity to database
+   * @param webPage
+   */
+  def save(webPage: WebPage) {
+    val puts = WebTable.put(webPage.id)
+      .value(_.crawledDate, webPage.crawledDate)
+      .value(_.domain, webPage.domain)
+
+    webPage.contentEncoding.map(puts.value(_.contentEncoding, _))
+    webPage.score.map(puts.value(_.score, _))
+    webPage.title.map(puts.value(_.title, _))
+    webPage.text.map(puts.value(_.text, _))
+    webPage.description.map(puts.value(_.description, _))
+    webPage.featureImage.map(puts.value(_.featureImage, _))
+
+    puts.execute()
+  }
 
 }
