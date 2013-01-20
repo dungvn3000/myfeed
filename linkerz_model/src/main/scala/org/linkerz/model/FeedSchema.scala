@@ -1,8 +1,8 @@
 package org.linkerz.model
 
-import com.gravity.hbase.schema.{HbaseTable, HRow, DeserializedResult, Schema}
-import exception.{KeyNotFoundException, ColumnNotFoundException}
-import org.apache.hadoop.hbase.HBaseConfiguration
+import com.gravity.hbase.schema.{HbaseTable, HRow, DeserializedResult}
+import exception.ColumnNotFoundException
+import util.RichSchema
 
 /**
  * The Class FeedSchema.
@@ -11,7 +11,7 @@ import org.apache.hadoop.hbase.HBaseConfiguration
  * @since 1/20/13 1:10 AM
  *
  */
-object FeedSchema extends Schema {
+object FeedSchema extends RichSchema {
 
   class FeedTable extends HbaseTable[FeedTable, String, FeedTableRow](tableName = "FeedTable", rowKeyClass = classOf[String]) {
     def rowBuilder(result: DeserializedResult) = new FeedTableRow(this, result)

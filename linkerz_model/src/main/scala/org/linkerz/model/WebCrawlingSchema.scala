@@ -2,10 +2,9 @@ package org.linkerz.model
 
 import com.gravity.hbase.schema._
 import exception.ColumnNotFoundException
-import org.apache.hadoop.hbase.HBaseConfiguration
 import org.joda.time.DateTime
 import com.gravity.hbase.schema.DeserializedResult
-import com.gravity.hbase.AnyNotSupportedException
+import util.RichSchema
 
 /**
  * The Class WebCrawlingSchema.
@@ -14,7 +13,7 @@ import com.gravity.hbase.AnyNotSupportedException
  * @since 1/17/13 3:54 AM
  *
  */
-object WebCrawlingSchema extends Schema {
+object WebCrawlingSchema extends RichSchema {
 
   class WebTable extends HbaseTable[WebTable, String, WebTableRow](tableName = "WebTable", rowKeyClass = classOf[String]) {
     def rowBuilder(result: DeserializedResult) = new WebTableRow(this, result)

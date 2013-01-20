@@ -1,9 +1,9 @@
 package org.linkerz.model
 
-import com.gravity.hbase.schema.{HbaseTable, HRow, DeserializedResult, Schema}
-import exception.{KeyNotFoundException, ColumnNotFoundException}
-import org.apache.hadoop.hbase.HBaseConfiguration
+import com.gravity.hbase.schema.{HbaseTable, HRow, DeserializedResult}
+import exception.ColumnNotFoundException
 import org.joda.time.DateTime
+import util.RichSchema
 
 /**
  * The Class NewsBoxSchema.
@@ -12,7 +12,7 @@ import org.joda.time.DateTime
  * @since 1/20/13 2:26 PM
  *
  */
-object NewsBoxSchema extends Schema {
+object NewsBoxSchema extends RichSchema {
 
   class NewsBoxTable extends HbaseTable[NewsBoxTable, String, NewsBoxTableRow](tableName = "NewsBoxTable", rowKeyClass = classOf[String]) {
     def rowBuilder(result: DeserializedResult) = new NewsBoxTableRow(this, result)

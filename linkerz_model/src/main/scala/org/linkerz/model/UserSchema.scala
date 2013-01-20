@@ -1,8 +1,8 @@
 package org.linkerz.model
 
-import com.gravity.hbase.schema.{DeserializedResult, HbaseTable, HRow, Schema}
+import com.gravity.hbase.schema.{DeserializedResult, HbaseTable, HRow}
 import exception.ColumnNotFoundException
-import org.apache.hadoop.hbase.HBaseConfiguration
+import util.RichSchema
 
 /**
  * The Class UserSchema.
@@ -11,7 +11,7 @@ import org.apache.hadoop.hbase.HBaseConfiguration
  * @since 1/17/13 5:08 AM
  *
  */
-object UserSchema extends Schema {
+object UserSchema extends RichSchema {
 
   class UserTable extends HbaseTable[UserTable, String, UserTableRow](tableName = "UserTable", rowKeyClass = classOf[String]) {
     def rowBuilder(result: DeserializedResult) = new UserTableRow(this, result)
