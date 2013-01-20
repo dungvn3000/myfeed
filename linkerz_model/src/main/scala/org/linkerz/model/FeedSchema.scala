@@ -1,7 +1,7 @@
 package org.linkerz.model
 
 import com.gravity.hbase.schema.{HbaseTable, HRow, DeserializedResult, Schema}
-import exception.ColumnNotFoundException
+import exception.{KeyNotFoundException, ColumnNotFoundException}
 import org.apache.hadoop.hbase.HBaseConfiguration
 
 /**
@@ -35,7 +35,11 @@ object FeedSchema extends Schema {
   class FeedTableRow(table: FeedTable, result: DeserializedResult) extends HRow[FeedTable, String](result, table) {
     def toFeed = Feed(
       id = rowid,
-      groupId = column(_.groupId).getOrElse(throw new ColumnNotFoundException(tableName, table.groupId.getQualifier)),
+      feedGroup = column(_.groupId).map(groupId => {
+        FeedGroupSchema.FeedGroupTable.query2.withKey(groupId).singleOption().map(_.toFeedGroupTable).getOrElse(
+          throw new KeyNotFoundException(tableName, groupId)
+        )
+      }).getOrElse(throw new ColumnNotFoundException(tableName, table.groupId.getQualifier)),
       name = column(_.name).getOrElse(throw new ColumnNotFoundException(tableName, table.name.getQualifier)),
       enable = column(_.enable).getOrElse(throw new ColumnNotFoundException(tableName, table.enable.getQualifier)),
       urlRegex = column(_.urlRegex).getOrElse(throw new ColumnNotFoundException(tableName, table.urlRegex.getQualifier)),
