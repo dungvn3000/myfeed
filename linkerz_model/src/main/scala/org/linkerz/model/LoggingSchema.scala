@@ -14,8 +14,6 @@ import org.joda.time.DateTime
  */
 object LoggingSchema extends Schema {
 
-  implicit val conf = HBaseConfiguration.create()
-
   class LoggingTable extends HbaseTable[LoggingTable, String, LoggingTableRow](tableName = "LoggingTable", rowKeyClass = classOf[String]) {
     def rowBuilder(result: DeserializedResult) = new LoggingTableRow(this, result)
 

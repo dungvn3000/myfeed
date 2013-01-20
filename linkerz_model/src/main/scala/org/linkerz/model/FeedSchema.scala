@@ -13,10 +13,7 @@ import org.apache.hadoop.hbase.HBaseConfiguration
  */
 object FeedSchema extends Schema {
 
-  implicit val conf = HBaseConfiguration.create()
-
   class FeedTable extends HbaseTable[FeedTable, String, FeedTableRow](tableName = "FeedTable", rowKeyClass = classOf[String]) {
-
     def rowBuilder(result: DeserializedResult) = new FeedTableRow(this, result)
 
     val info = family[String, String, Any]("info")
@@ -27,7 +24,6 @@ object FeedSchema extends Schema {
     val excludeUrl = column(info, "excludeUrl", classOf[Seq[String]])
     val contentSelection = column(info, "contentSelection", classOf[String])
     val removeSelections = column(info, "removeSelections", classOf[Seq[String]])
-
   }
 
   class FeedTableRow(table: FeedTable, result: DeserializedResult) extends HRow[FeedTable, String](result, table) {

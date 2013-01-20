@@ -16,16 +16,7 @@ import com.gravity.hbase.AnyNotSupportedException
  */
 object WebCrawlingSchema extends Schema {
 
-  implicit val conf = HBaseConfiguration.create()
-
-  implicit object ByteArrayConverter extends ByteConverter[Array[Byte]] {
-    def toBytes(t: Array[Byte]) = t
-
-    def fromBytes(bytes: Array[Byte], offset: Int, length: Int) = bytes
-  }
-
   class WebTable extends HbaseTable[WebTable, String, WebTableRow](tableName = "WebTable", rowKeyClass = classOf[String]) {
-
     def rowBuilder(result: DeserializedResult) = new WebTableRow(this, result)
 
     //Metadata Family

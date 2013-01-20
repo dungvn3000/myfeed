@@ -14,8 +14,6 @@ import org.joda.time.DateTime
  */
 object NewsBoxSchema extends Schema {
 
-  implicit val conf = HBaseConfiguration.create()
-
   class NewsBoxTable extends HbaseTable[NewsBoxTable, String, NewsBoxTableRow](tableName = "NewsBoxTable", rowKeyClass = classOf[String]) {
     def rowBuilder(result: DeserializedResult) = new NewsBoxTableRow(this, result)
 

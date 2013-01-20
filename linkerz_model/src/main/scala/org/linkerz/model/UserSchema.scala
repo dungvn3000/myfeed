@@ -13,10 +13,7 @@ import org.apache.hadoop.hbase.HBaseConfiguration
  */
 object UserSchema extends Schema {
 
-  implicit val conf = HBaseConfiguration.create()
-
   class UserTable extends HbaseTable[UserTable, String, UserTableRow](tableName = "UserTable", rowKeyClass = classOf[String]) {
-
     def rowBuilder(result: DeserializedResult) = new UserTableRow(this, result)
 
     val info = family[String, String, Any]("info")
