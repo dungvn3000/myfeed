@@ -22,7 +22,7 @@ object NewsBoxSchema extends Schema {
     val info = family[String, String, Any]("info")
     val userId = column(info, "userId", classOf[String])
     val webPageId = column(info, "webPageId", classOf[String])
-    val feedGroupId = column(info, "feedGroupId", classOf[String])
+    val groupName = column(info, "groupName", classOf[String])
     val clicked = column(info, "clicked", classOf[Boolean])
     val createdDate = column(info, "createdDate", classOf[DateTime])
   }
@@ -32,7 +32,7 @@ object NewsBoxSchema extends Schema {
       id = rowid,
       userId = column(_.userId).getOrElse(throw new ColumnNotFoundException(tableName, table.userId.getQualifier)),
       webPageId = column(_.webPageId).getOrElse(throw new ColumnNotFoundException(tableName, table.webPageId.getQualifier)),
-      feedGroupId = column(_.feedGroupId).getOrElse(throw new ColumnNotFoundException(tableName, table.feedGroupId.getQualifier)),
+      groupName = column(_.groupName).getOrElse(throw new ColumnNotFoundException(tableName, table.groupName.getQualifier)),
       clicked = column(_.clicked).getOrElse(throw new ColumnNotFoundException(tableName, table.clicked.getQualifier)),
       createdDate = column(_.createdDate).getOrElse(throw new ColumnNotFoundException(tableName, table.createdDate.getQualifier))
     )

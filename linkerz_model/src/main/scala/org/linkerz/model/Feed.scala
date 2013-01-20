@@ -15,7 +15,7 @@ package org.linkerz.model
 
 case class Feed(
                  id: String,
-                 feedGroup: FeedGroup,
+                 groupName: String,
 
                  name: String,
                  enable: Boolean,

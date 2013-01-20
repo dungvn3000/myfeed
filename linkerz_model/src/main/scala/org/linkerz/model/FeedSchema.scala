@@ -21,25 +21,19 @@ object FeedSchema extends Schema {
 
     val info = family[String, String, Any]("info")
     val name = column(info, "name", classOf[String])
+    val groupName = column(info, "groupName", classOf[String])
     val enable = column(info, "enable", classOf[Boolean])
     val urlRegex = column(info, "urlRegex", classOf[String])
     val excludeUrl = column(info, "excludeUrl", classOf[Seq[String]])
     val contentSelection = column(info, "contentSelection", classOf[String])
     val removeSelections = column(info, "removeSelections", classOf[Seq[String]])
 
-    val group = family[String, String, Any]("group")
-    val groupId = column(group, "groupId", classOf[String])
-
   }
 
   class FeedTableRow(table: FeedTable, result: DeserializedResult) extends HRow[FeedTable, String](result, table) {
     def toFeed = Feed(
       id = rowid,
-      feedGroup = column(_.groupId).map(groupId => {
-        FeedGroupSchema.FeedGroupTable.query2.withKey(groupId).singleOption().map(_.toFeedGroupTable).getOrElse(
-          throw new KeyNotFoundException(tableName, groupId)
-        )
-      }).getOrElse(throw new ColumnNotFoundException(tableName, table.groupId.getQualifier)),
+      groupName = column(_.groupName).getOrElse(throw new ColumnNotFoundException(tableName, table.groupName.getQualifier)),
       name = column(_.name).getOrElse(throw new ColumnNotFoundException(tableName, table.name.getQualifier)),
       enable = column(_.enable).getOrElse(throw new ColumnNotFoundException(tableName, table.enable.getQualifier)),
       urlRegex = column(_.urlRegex).getOrElse(throw new ColumnNotFoundException(tableName, table.urlRegex.getQualifier)),

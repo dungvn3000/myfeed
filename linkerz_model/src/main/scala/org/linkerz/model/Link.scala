@@ -13,7 +13,7 @@ import java.util.Date
  * @since 8/3/12, 6:49 PM
  *
  */
-
+//TODO: Remove it
 case class Link
 (
   id: String,

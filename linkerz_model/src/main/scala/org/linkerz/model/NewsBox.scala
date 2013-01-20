@@ -14,7 +14,7 @@ case class NewsBox(
                     id: String,
                     userId: String,
                     webPageId: String,
-                    feedGroupId: String,
+                    groupName: String,
                     clicked: Boolean = false,
                     createdDate: DateTime = new DateTime()
                     )
