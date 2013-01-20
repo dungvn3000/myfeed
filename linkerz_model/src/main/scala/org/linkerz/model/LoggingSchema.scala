@@ -45,4 +45,23 @@ object LoggingSchema extends Schema {
   }
 
   val LoggingTable = table(new LoggingTable)
+
+  /**
+   * Convenient method, to same an entity to database
+   * @param logging
+   */
+  def save(logging: Logging) {
+    val puts = LoggingTable.put(logging.id)
+      .value(_.message, logging.message)
+      .value(_.className, logging.className)
+      .value(_.logType, logging.logType)
+      .value(_.category, logging.category)
+      .value(_.createDate, logging.createDate)
+
+    logging.exceptionClass.map(puts.value(_.exceptionClass, _))
+    logging.stackTrace.map(puts.value(_.stackTrace, _))
+    logging.url.map(puts.value(_.url, _))
+
+    puts.execute()
+  }
 }

@@ -45,4 +45,16 @@ object FeedSchema extends Schema {
 
   val FeedTable = table(new FeedTable)
 
+  def save(feed: Feed) {
+    FeedTable.put(feed.id)
+      .value(_.name, feed.name)
+      .value(_.groupName, feed.groupName)
+      .value(_.enable, feed.enable)
+      .value(_.urlRegex, feed.urlRegex)
+      .value(_.excludeUrl, feed.excludeUrl)
+      .value(_.contentSelection, feed.contentSelection)
+      .value(_.removeSelections, feed.removeSelections)
+      .execute()
+  }
+
 }
