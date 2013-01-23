@@ -24,4 +24,13 @@ abstract class RichSchema(implicit conf: Configuration) extends Schema {
     })
   }
 
+  def dropTable() {
+    tables.foreach(table => {
+      if (admin.tableExists(table.tableName)) {
+        admin.disableTable(table.tableName)
+        admin.deleteTable(table.tableName)
+      }
+    })
+  }
+
 }
