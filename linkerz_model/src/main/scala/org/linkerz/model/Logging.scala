@@ -1,6 +1,7 @@
 package org.linkerz.model
 
 import org.joda.time.DateTime
+import java.util.UUID
 
 /**
  * The Class Logging.
@@ -10,7 +11,7 @@ import org.joda.time.DateTime
  *
  */
 case class Logging(
-                    id: String = "",
+                    id: String = UUID.randomUUID().toString,
                     message: String,
                     className: String,
                     exceptionClass: Option[String] = None,
