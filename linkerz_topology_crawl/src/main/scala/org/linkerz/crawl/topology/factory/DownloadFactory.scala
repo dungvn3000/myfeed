@@ -32,8 +32,8 @@ object DownloadFactory {
   schemeRegistry.register(new Scheme("http", 80, PlainSocketFactory.getSocketFactory))
   schemeRegistry.register(new Scheme("https", 443, SSLSocketFactory.getSocketFactory))
   val cm = new ThreadSafeClientConnManager(schemeRegistry)
-  cm.setMaxTotal(20000)
-  cm.setDefaultMaxPerRoute(500)
+  cm.setMaxTotal(100)
+  cm.setDefaultMaxPerRoute(10)
 
   def createDownloader() = {
     val client = new DefaultHttpClient(cm, httpParams)

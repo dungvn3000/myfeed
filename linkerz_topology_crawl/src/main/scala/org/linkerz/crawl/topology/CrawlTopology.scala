@@ -17,12 +17,21 @@ object CrawlTopology extends Serializable {
   def topology = {
     val builder = new TopologyBuilder
     builder.setSpout("spout", new FeedSpout)
-    builder.setBolt("handler", new HandlerBolt, 10).
-      fieldsGrouping("spout", new Fields("sessionId")).fieldsGrouping("parser", new Fields("sessionId"))
-    builder.setBolt("fetcher", new FetcherBolt, 20).shuffleGrouping("handler")
-    builder.setBolt("parser", new ParserBolt, 20).shuffleGrouping("fetcher")
-    builder.setBolt("metaFetcher", new MetaFetcherBolt, 10).shuffleGrouping("parser")
-    builder.setBolt("persistent", new PersistentBolt, 5).shuffleGrouping("metaFetcher")
+
+    builder.setBolt("handler", new HandlerBolt, 5)
+      .fieldsGrouping("spout", new Fields("sessionId"))
+      .fieldsGrouping("parser", new Fields("sessionId"))
+
+    builder.setBolt("fetcher", new FetcherBolt, 10).fieldsGrouping("handler", new Fields("sessionId"))
+
+    builder.setBolt("parser", new ParserBolt, 5).shuffleGrouping("fetcher")
+
+    builder.setBolt("metaFetcher", new MetaFetcherBolt, 5).fieldsGrouping("parser", new Fields("sessionId"))
+
+    builder.setBolt("ratting", new RattingBolt, 2).shuffleGrouping("metaFetcher")
+
+    builder.setBolt("persistent", new PersistentBolt, 2).shuffleGrouping("ratting")
+
     builder.createTopology()
   }
 }
