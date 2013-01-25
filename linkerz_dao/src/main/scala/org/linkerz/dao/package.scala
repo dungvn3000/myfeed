@@ -2,6 +2,7 @@ package org.linkerz
 
 import com.mongodb.casbah.MongoConnection
 import core.conf.AppConfig
+import com.mongodb.casbah.commons.conversions.scala.RegisterJodaTimeConversionHelpers
 
 /**
  * The Class package.
@@ -17,5 +18,7 @@ package object dao {
   implicit val context = ctx
 
   lazy val mongo = MongoConnection(AppConfig.mongoHost)(AppConfig.mongoDb)
+
+  RegisterJodaTimeConversionHelpers()
 
 }
