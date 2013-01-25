@@ -32,7 +32,5 @@ case class Parse(job: CrawlJob) extends Event
 //This event will sent by meta fetcher bolt, after the bolt finished it's job.
 case class MetaFetch(job: CrawlJob) extends Event
 
-case class Ratting(job: CrawlJob) extends Event
-
 //This event will sent by persistent bolt, after the bolt finished it's job.
 case class Persistent(job: CrawlJob) extends Event
