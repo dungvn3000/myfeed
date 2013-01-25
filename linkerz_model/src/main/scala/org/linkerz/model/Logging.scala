@@ -1,7 +1,7 @@
 package org.linkerz.model
 
-import org.joda.time.DateTime
-import java.util.UUID
+import org.bson.types.ObjectId
+import java.util.Date
 
 /**
  * The Class Logging.
@@ -10,17 +10,20 @@ import java.util.UUID
  * @since 11/13/12 12:39 AM
  *
  */
-case class Logging(
-                    id: String = UUID.randomUUID().toString,
-                    message: String,
-                    className: String,
-                    exceptionClass: Option[String] = None,
-                    stackTrace: Option[String] = None,
-                    logType: String = LogType.Error.toString,
-                    category: String = LogCategory.System.toString,
-                    url: Option[String] = None,
-                    createDate: DateTime = new DateTime
-                    )
+case class Logging
+(
+  _id: ObjectId = new ObjectId(),
+  message: String,
+  className: String,
+  exceptionClass: Option[String] = None,
+  stackTrace: Option[String] = None,
+  logType: String = LogType.Error.toString,
+  category: String = LogCategory.System.toString,
+  url: Option[String] = None,
+  createDate: Date = new Date
+  ) {
+  def id = _id.toString
+}
 
 object LogCategory extends Enumeration("crawling", "system") {
   type LogCategory = Value

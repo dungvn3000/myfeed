@@ -8,6 +8,7 @@ import org.linkerz.crawl.topology.model.{WebPage, WebUrl}
 import scala.Some
 import org.linkerz.model.{LogCategory, LogType, Feed, Logging}
 import collection.mutable.ListBuffer
+import org.bson.types.ObjectId
 
 /**
  * The Class CrawlJob.
@@ -36,7 +37,7 @@ case class CrawlJob(webUrl: WebUrl) {
   /**
    * For those of url match with this regex will not be crawl.
    */
-  var excludeUrl: Seq[String] = Nil
+  var excludeUrl: List[String] = Nil
 
   /**
    * Max depth for a crawl job, default is unlimited.
@@ -56,6 +57,11 @@ case class CrawlJob(webUrl: WebUrl) {
   var maxSubJob: Int = -1
 
   /**
+   * The result of this job will has this attribute.
+   */
+  var feedId: ObjectId = _
+
+  /**
    * String url.
    * @param url
    */
@@ -68,7 +74,7 @@ case class CrawlJob(webUrl: WebUrl) {
    * @param newFeed
    */
   def this(newFeed: Feed) {
-    this(newFeed.id)
+    this(newFeed.url)
 
     if (!newFeed.urlRegex.isEmpty) {
       urlRegex = Some(newFeed.urlRegex)
@@ -77,6 +83,8 @@ case class CrawlJob(webUrl: WebUrl) {
     if (!newFeed.excludeUrl.isEmpty) {
       excludeUrl = newFeed.excludeUrl
     }
+
+    feedId = newFeed._id
   }
 
   /**
@@ -96,6 +104,7 @@ case class CrawlJob(webUrl: WebUrl) {
     this.maxSubJob = parentJob.maxSubJob
     this.politenessDelay = parentJob.politenessDelay
     this.onlyCrawlInSameDomain = parentJob.onlyCrawlInSameDomain
+    this.feedId = parentJob.feedId
   }
 
   /**

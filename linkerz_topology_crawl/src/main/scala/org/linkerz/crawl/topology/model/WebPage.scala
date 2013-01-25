@@ -7,6 +7,7 @@ package org.linkerz.crawl.topology.model
 import java.util
 import org.apache.http.HttpStatus
 import org.linkerz.model.Link
+import org.bson.types.ObjectId
 
 /**
  * The Class WebPage.
@@ -33,6 +34,7 @@ class WebPage extends Serializable {
   var title: String = _
   var featureImage: Option[Array[Byte]] = None
   var potentialImages: List[String] = Nil
+  var feedId: ObjectId = _
 
   var isArticle = false
 
@@ -49,7 +51,6 @@ class WebPage extends Serializable {
    * @return
    */
   def asLink = Link(
-    id = webUrl.url,
     url = webUrl.url,
     title = title,
     text = text,
@@ -57,6 +58,7 @@ class WebPage extends Serializable {
     contentEncoding = contentEncoding,
     responseCode = responseCode,
     featureImage = featureImage,
+    feedId = feedId,
     indexDate = new util.Date
   )
 }

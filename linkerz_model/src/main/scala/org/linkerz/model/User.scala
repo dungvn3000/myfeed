@@ -1,5 +1,6 @@
 package org.linkerz.model
 
+import org.bson.types.ObjectId
 
 /**
  * The Class User.
@@ -9,4 +10,9 @@ package org.linkerz.model
  *
  */
 
-case class User(id: String, password: String, followDomains: Seq[String] = Nil)
+case class User
+(
+  _id: ObjectId = new ObjectId,
+  userName: String,
+  passWord: String
+  )

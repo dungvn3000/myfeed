@@ -1,14 +1,20 @@
 package org.linkerz.dao
 
+import com.novus.salat.dao.SalatDAO
+import com.mongodb.casbah.Imports._
+import org.linkerz.model.Feed
 
 /**
- * The Class FeedGroupDao.
+ * The Class FeedDao.
  *
  * @author Nguyen Duc Dung
- * @since 1/20/13 1:39 PM
+ * @since 11/22/12 1:07 PM
  *
  */
-object FeedDao {
+object FeedDao extends SalatDAO[Feed, ObjectId](mongo("feed")) {
 
+  def getFeedGroup(feedId: ObjectId) = findOneById(feedId).flatMap(feed => {
+    FeedGroupDao.findOneById(feed.groupId)
+  })
 
 }

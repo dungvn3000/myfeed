@@ -60,6 +60,8 @@ class LinkerZParser(feeds: List[Feed]) extends Parser {
             })
             webPage.potentialImages = potentialImages.toList
 
+            webPage.feedId = crawlJob.feedId
+
             webPage.isArticle = true
           })
         })
