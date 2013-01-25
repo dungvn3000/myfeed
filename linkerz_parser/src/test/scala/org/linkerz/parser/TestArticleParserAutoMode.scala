@@ -104,7 +104,7 @@ class TestArticleParserAutoMode extends FunSuite {
 
     expect(article.title.length)(49)
     expect(article.text.length)(4182)
-    expect(article.images.size)(21)
+    expect(article.images.size)(20)
   }
 
   test("parse zing2.html") {
@@ -115,7 +115,7 @@ class TestArticleParserAutoMode extends FunSuite {
 
     expect(article.title.length)(52)
     expect(article.text.length)(7523)
-    expect(article.images.length)(2)
+    expect(article.images.length)(1)
   }
 
   test("parse xinh1.html") {

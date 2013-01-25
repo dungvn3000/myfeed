@@ -22,4 +22,18 @@ object ArticleUtil {
     tag.getName != "option" &&
     tag.getName != "noscript"
 
+  def removeNonAlphabetsCharacter(st: String) = st.replaceAll("[^a-zA-Z0-9]","")
+
+  /**
+   * Checking whether the title is contain the text or not, by skip non alphabet character.
+   * @param title
+   * @param text
+   * @return
+   */
+  def titleContain(title: String, text: String) = {
+    val cleanTitle = removeNonAlphabetsCharacter(title.toLowerCase)
+    val cleanText = removeNonAlphabetsCharacter(text.toLowerCase)
+    cleanTitle.contains(cleanText)
+  }
+
 }

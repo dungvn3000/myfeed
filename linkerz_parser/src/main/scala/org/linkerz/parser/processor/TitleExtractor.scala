@@ -4,7 +4,7 @@ import org.linkerz.parser.model.Article
 import org.apache.commons.lang.StringUtils
 import collection.mutable.ListBuffer
 import collection.JavaConversions._
-import org.linkerz.parser.util.StopWordCounter
+import org.linkerz.parser.util.{ArticleUtil, StopWordCounter}
 
 /**
  * The Class TitleExtractor.
@@ -13,7 +13,7 @@ import org.linkerz.parser.util.StopWordCounter
  * @since 12/26/12 2:51 PM
  *
  */
-class TitleExtractor(minTitleLength: Int = 3) extends Processor {
+class TitleExtractor(minTitleLength: Int = 5) extends Processor {
 
   /**
    * This method to get the title base on element content. In most of case the title will appear in two places,
@@ -35,13 +35,13 @@ class TitleExtractor(minTitleLength: Int = 3) extends Processor {
         && element.tagName != "head") {
         val text = StringUtils.strip(element.text)
         if (StringUtils.isNotBlank(text)
-          && title.contains(text) && text.length > minTitleLength) {
+          && ArticleUtil.titleContain(title, text) && text.length > minTitleLength) {
           //In case element is h element, we will pick it as the title and stop searching.
           if ((element.tagName.contains("h") || element.attr("class").toLowerCase.contains("title"))
             && element.children.isEmpty) {
             article.title = text
             return
-          } else {
+          } else if (!potentialTitles.contains(text)) {
             potentialTitles += text
           }
         }
