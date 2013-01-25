@@ -3,18 +3,15 @@ package org.linkerz.model
 import org.bson.types.ObjectId
 
 /**
- * The Class FeedGroup.
+ * The Class LinkerZModel.
  *
  * @author Nguyen Duc Dung
- * @since 12/30/12 5:04 PM
+ * @since 1/25/13 5:49 PM
  *
  */
-case class FeedGroup
-(
-  _id: ObjectId = new ObjectId,
-  name: String
+abstract class LinkerZModel(_id: ObjectId) {
 
-  ) {
   //Convenience method to convert _id to String.
   def id = _id.toString
+
 }

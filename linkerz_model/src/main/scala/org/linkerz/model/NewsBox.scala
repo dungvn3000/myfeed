@@ -10,12 +10,11 @@ import java.util.Date
  * @since 11/11/12 2:25 AM
  *
  */
-case class NewsBox
-(
-  _id: ObjectId = new ObjectId(),
-  userId: ObjectId,
-  linkId: ObjectId,
-  groupName: String,
-  click: Boolean = false,
-  createdDate: Date = new Date()
-  )
+case class NewsBox(
+                    _id: ObjectId = new ObjectId(),
+                    userId: ObjectId,
+                    linkId: ObjectId,
+                    groupName: String,
+                    click: Boolean = false,
+                    createdDate: Date = new Date()
+                    ) extends LinkerZModel(_id)

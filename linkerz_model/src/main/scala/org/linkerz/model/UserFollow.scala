@@ -9,9 +9,8 @@ import org.bson.types.ObjectId
  * @since 1/1/13 1:51 PM
  *
  */
-case class UserFollow
-(
-  _id: ObjectId = new ObjectId,
-  userId: ObjectId,
-  feedId: ObjectId
-  )
+case class UserFollow(
+                       _id: ObjectId = new ObjectId,
+                       userId: ObjectId,
+                       feedId: ObjectId
+                       ) extends LinkerZModel(_id)

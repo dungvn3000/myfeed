@@ -8,34 +8,31 @@ import org.bson.types.ObjectId
 import java.util.Date
 
 /**
- * The Class Linker.
+ * The Class Link.
  *
  * @author Nguyen Duc Dung
  * @since 8/3/12, 6:49 PM
  *
  */
 
-case class Link
-(
-  _id: ObjectId = new ObjectId,
-  feedId: ObjectId,
+case class Link(
+                 _id: ObjectId = new ObjectId,
+                 feedId: ObjectId,
 
-  url: String,
-  responseCode: Int,
+                 url: String,
+                 responseCode: Int,
 
-  //Metadata
-  text: Option[String] = None,
-  description: Option[String] = None,
-  contentEncoding: String,
-  title: String,
-  //Feature Image
-  featureImage: Option[Array[Byte]] = None,
+                 //Metadata
+                 text: Option[String] = None,
+                 description: Option[String] = None,
+                 contentEncoding: String,
+                 title: String,
+                 //Feature Image
+                 featureImage: Option[Array[Byte]] = None,
 
-  indexDate: Date = new Date
+                 indexDate: Date = new Date
 
-  ) {
-  //Convenience method to convert _id to String.
-  def id = _id.toString
+                 ) extends LinkerZModel(_id) {
 
   override def equals(obj: Any) = {
     obj.isInstanceOf[Link] && obj.asInstanceOf[Link].url == url

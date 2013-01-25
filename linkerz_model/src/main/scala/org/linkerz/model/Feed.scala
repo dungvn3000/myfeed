@@ -14,23 +14,19 @@ import org.bson.types.ObjectId
  *
  */
 
-case class Feed
-(
-  _id: ObjectId = new ObjectId,
-  groupId: ObjectId,
+case class Feed(
+                 _id: ObjectId = new ObjectId,
+                 groupId: ObjectId,
 
-  name: String,
-  url: String,
-  enable: Boolean,
+                 name: String,
+                 url: String,
+                 enable: Boolean,
+                 group: List[String],
 
-  urlRegex: String,
-  excludeUrl: List[String] = Nil,
+                 urlRegex: String,
+                 excludeUrl: List[String] = Nil,
 
-  contentSelection: String,
-  removeSelections: List[String]
-  ) {
-
-  def id = _id.toString
-
-}
+                 contentSelection: String,
+                 removeSelections: List[String]
+                 ) extends LinkerZModel(_id)
 

@@ -10,20 +10,17 @@ import java.util.Date
  * @since 11/13/12 12:39 AM
  *
  */
-case class Logging
-(
-  _id: ObjectId = new ObjectId(),
-  message: String,
-  className: String,
-  exceptionClass: Option[String] = None,
-  stackTrace: Option[String] = None,
-  logType: String = LogType.Error.toString,
-  category: String = LogCategory.System.toString,
-  url: Option[String] = None,
-  createDate: Date = new Date
-  ) {
-  def id = _id.toString
-}
+case class Logging(
+                    _id: ObjectId = new ObjectId(),
+                    message: String,
+                    className: String,
+                    exceptionClass: Option[String] = None,
+                    stackTrace: Option[String] = None,
+                    logType: String = LogType.Error.toString,
+                    category: String = LogCategory.System.toString,
+                    url: Option[String] = None,
+                    createDate: Date = new Date
+                    ) extends LinkerZModel(_id)
 
 object LogCategory extends Enumeration("crawling", "system") {
   type LogCategory = Value
