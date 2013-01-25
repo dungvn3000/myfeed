@@ -27,6 +27,7 @@ case class Link(
                  description: Option[String] = None,
                  contentEncoding: String,
                  title: String,
+                 score: Double = 0d,
                  //Feature Image
                  featureImage: Option[Array[Byte]] = None,
 
