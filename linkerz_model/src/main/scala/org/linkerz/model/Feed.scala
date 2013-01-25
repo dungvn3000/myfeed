@@ -16,12 +16,11 @@ import org.bson.types.ObjectId
 
 case class Feed(
                  _id: ObjectId = new ObjectId,
-                 groupId: ObjectId,
 
                  name: String,
                  url: String,
                  enable: Boolean,
-                 group: List[String],
+                 group: String,
 
                  urlRegex: String,
                  excludeUrl: List[String] = Nil,
