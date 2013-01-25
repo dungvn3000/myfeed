@@ -2,6 +2,7 @@ package org.linkerz.model
 
 import org.bson.types.ObjectId
 import java.util.Date
+import org.joda.time.DateTime
 
 /**
  * The Class NewsBox.
@@ -16,5 +17,5 @@ case class NewsBox(
                     linkId: ObjectId,
                     groupName: String,
                     click: Boolean = false,
-                    createdDate: Date = new Date()
+                    createdDate: DateTime = DateTime.now()
                     ) extends LinkerZModel(_id)

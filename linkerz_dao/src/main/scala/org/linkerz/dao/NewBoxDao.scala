@@ -7,6 +7,7 @@ import com.mongodb.casbah.Imports._
 import org.linkerz.model.Link
 import org.linkerz.model.NewsBox
 import java.util.Date
+import org.joda.time.DateTime
 
 /**
  * The Class NewBoxDao.
@@ -17,7 +18,7 @@ import java.util.Date
  */
 object NewBoxDao extends SalatDAO[NewsBox, ObjectId](mongo("newbox")) {
 
-  def getLastTime(userId: ObjectId): Option[Date] = {
+  def getLastTime(userId: ObjectId): Option[DateTime] = {
     val newBox = find(MongoDBObject.empty).sort(MongoDBObject("createdDate" -> -1)).limit(1).toList
     if (!newBox.isEmpty) {
       val linkId = newBox.head.linkId

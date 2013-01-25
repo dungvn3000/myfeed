@@ -98,7 +98,9 @@ object LinkerZBuild extends Build {
   )
 
   lazy val modelDependencies = Seq(
-    "com.novus" %% "salat" % "1.9.1"
+    "com.novus" %% "salat" % "1.9.1" exclude("joda-time", "joda-time"),
+    "joda-time" % "joda-time" % "2.1",
+    "org.joda" % "joda-convert" % "1.2"
   )
 
   lazy val crawlerTopologyDependencies = Seq(

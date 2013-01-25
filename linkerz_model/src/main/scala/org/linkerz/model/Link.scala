@@ -6,6 +6,7 @@ package org.linkerz.model
 
 import org.bson.types.ObjectId
 import java.util.Date
+import org.joda.time.DateTime
 
 /**
  * The Class Link.
@@ -30,7 +31,7 @@ case class Link(
                  //Feature Image
                  featureImage: Option[Array[Byte]] = None,
 
-                 indexDate: Date = new Date
+                 indexDate: DateTime = DateTime.now()
 
                  ) extends LinkerZModel(_id) {
 

@@ -2,6 +2,7 @@ package org.linkerz.model
 
 import org.bson.types.ObjectId
 import java.util.Date
+import org.joda.time.DateTime
 
 /**
  * The Class Logging.
@@ -19,7 +20,7 @@ case class Logging(
                     logType: String = LogType.Error.toString,
                     category: String = LogCategory.System.toString,
                     url: Option[String] = None,
-                    createDate: Date = new Date
+                    createDate: DateTime = DateTime.now()
                     ) extends LinkerZModel(_id)
 
 object LogCategory extends Enumeration("crawling", "system") {

@@ -58,7 +58,6 @@ class WebPage extends Serializable {
     contentEncoding = contentEncoding,
     responseCode = responseCode,
     featureImage = featureImage,
-    feedId = feedId,
-    indexDate = new util.Date
+    feedId = feedId
   )
 }
