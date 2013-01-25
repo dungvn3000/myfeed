@@ -12,7 +12,7 @@ public class Main {
     public static void main(String[] args) {
         ParserHelper parserHelper = new ParserHelper();
         parserHelper.setLocationRelativeTo(null);
-        parserHelper.setSize(500, 500);
+        parserHelper.setSize(1000, 500);
         parserHelper.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         parserHelper.setExtendedState(JFrame.MAXIMIZED_BOTH);
         parserHelper.setVisible(true);

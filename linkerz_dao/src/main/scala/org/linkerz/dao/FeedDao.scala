@@ -13,8 +13,4 @@ import org.linkerz.model.Feed
  */
 object FeedDao extends SalatDAO[Feed, ObjectId](mongo("feed")) {
 
-  def getFeedGroup(feedId: ObjectId) = findOneById(feedId).flatMap(feed => {
-    FeedGroupDao.findOneById(feed.groupId)
-  })
-
 }
