@@ -1,5 +1,6 @@
 package org.linkerz.parser
 
+import model.Link
 import org.jsoup.nodes.Document
 import org.apache.commons.lang.StringUtils
 import edu.uci.ics.crawler4j.url.URLCanonicalizer
@@ -24,14 +25,19 @@ class LinksParser {
    */
   def parse(doc: Document) = {
     //Using java list for better performance.
-    var webUrls = new java.util.ArrayList[String]
+    val containImageLinks = new java.util.ArrayList[Link]()
+    val notContainImageLinks = new java.util.ArrayList[Link]()
+    val links = new java.util.ArrayList[Link]()
+
     val httpHost = URIUtils.extractHost(new URI(doc.baseUri()))
     val baseUrl = httpHost.toURI
 
-    val links = doc.select("a")
-    links.foreach {
-      link => {
-        var href = link.attr("href")
+    //Step 1: extract links form a web page. We split the list become two for scoring later on.
+    val urlValidator = new UrlValidator(Array("http", "https"))
+    val linkElements = doc.select("a")
+    linkElements.foreach {
+      linkElement => {
+        var href = linkElement.attr("href")
         if (StringUtils.isNotBlank(href)) {
           href = StringUtils.strip(href)
           var hrefWithoutProtocol = href
@@ -42,10 +48,14 @@ class LinksParser {
             && !hrefWithoutProtocol.contains("@")
             && !hrefWithoutProtocol.contains("mailto:")) {
             val url = URLCanonicalizer.getCanonicalURL(href, baseUrl)
-            val urlValidator = new UrlValidator(Array("http", "https"))
             if (url != null && urlValidator.isValid(url)) {
-              if (!webUrls.contains(url)) {
-                webUrls += url
+              val newLink = Link(url, linkElement)
+              if (!containImageLinks.contains(newLink) && !notContainImageLinks.contains(newLink)) {
+                if (newLink.isContainImage) {
+                  containImageLinks += newLink
+                } else {
+                  notContainImageLinks += newLink
+                }
               }
             }
           }
@@ -53,9 +63,17 @@ class LinksParser {
       }
     }
 
-    //TODO: Add ratting for each link. @dungvn3000
+    //Step 2: Merge two list which links contain image will be on the top.
+    links ++= containImageLinks
+    links ++= notContainImageLinks
 
-    webUrls
+    //Step 3: Scoring with the order of link.
+    for (i <- 0 until links.size) {
+      val link = links(i)
+      link.score = (links.size - i).toDouble / links.size
+    }
+
+    links.sortBy(-_.score)
   }
 
 }

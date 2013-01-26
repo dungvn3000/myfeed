@@ -35,7 +35,8 @@ class LinkerZParser(feeds: List[Feed]) extends Parser {
         val doc = Jsoup.parse(inputStream, webPage.contentEncoding, webPage.webUrl.url)
 
         val links = linksParser.parse(doc)
-        links.foreach(webPage.webUrls += new WebUrl(_))
+        //TODO: Refactor remove weburl
+//        links.foreach(webPage.webUrls += new WebUrl(_))
 
         feeds.find(feed => matcher(webUrl.url, feed.urlRegex)).map(feed => {
           articleParser.parse(doc, feed.contentSelection, feed.removeSelections).map(article => {

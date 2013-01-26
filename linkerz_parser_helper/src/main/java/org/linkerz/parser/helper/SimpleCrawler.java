@@ -104,7 +104,8 @@ public class SimpleCrawler {
         HttpEntity entity = download(url, statusLbl);
         if (entity != null) {
             Document doc = Jsoup.parse(entity.getContent(), "UTF-8", url);
-            testUrls = linksParser.parse(doc);
+            //TODO: Refactor remove weburl
+//            testUrls = linksParser.parse(doc);
         }
         return testUrls;
     }
