@@ -44,12 +44,16 @@ class LinksParser {
             val url = URLCanonicalizer.getCanonicalURL(href, baseUrl)
             val urlValidator = new UrlValidator(Array("http", "https"))
             if (url != null && urlValidator.isValid(url)) {
-              if (!webUrls.contains(url)) webUrls += url
+              if (!webUrls.contains(url)) {
+                webUrls += url
+              }
             }
           }
         }
       }
     }
+
+    //TODO: Add ratting for each link. @dungvn3000
 
     webUrls
   }
