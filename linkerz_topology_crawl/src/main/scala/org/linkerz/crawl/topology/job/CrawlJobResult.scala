@@ -26,8 +26,7 @@ class CrawlJobResult extends Serializable {
   //Meta data
   var contentType: String = _
   var contentEncoding: String = "UTF-8"
-  var featureImage: Option[Array[Byte]] = None
-  var potentialImages: List[String] = Nil
+
   var feedId: ObjectId = _
 
   var article: Option[Article] = None

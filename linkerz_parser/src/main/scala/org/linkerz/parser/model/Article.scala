@@ -24,6 +24,8 @@ case class Article(doc: Document, private val _containerElement: Option[Element]
 
   var title = ""
 
+  var featureImage: Option[Array[Byte]] = None
+
   //This element will contain all text content element. Default is body element.
   var containerElement: Element = _containerElement.getOrElse(doc.body())
 
@@ -95,18 +97,18 @@ case class Article(doc: Document, private val _containerElement: Option[Element]
   }
 
   def imagesUrl = {
-    val potentialImages = new mutable.HashSet[String]
-    val urlValidator = new UrlValidator(Array("http", "https"))
+    val imagesUrl = new mutable.HashSet[String]
+    val urlValidator = new UrlValidator(Array("http"))
     images.foreach(image => {
       val imgSrc = UrlBuilder.fromString(image.src).toString
       if (StringUtils.isNotBlank(imgSrc)) {
         val url = URLCanonicalizer.getCanonicalURL(imgSrc, doc.baseUri())
         if (StringUtils.isNotBlank(url) && urlValidator.isValid(url)) {
-          potentialImages += url
+          imagesUrl += url
         }
       }
     })
-    potentialImages
+    imagesUrl
   }
 
   def images = imageElements.filter(_.isContent)

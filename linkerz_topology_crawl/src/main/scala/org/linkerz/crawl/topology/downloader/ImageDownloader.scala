@@ -26,9 +26,9 @@ import org.apache.http.util.EntityUtils
 class ImageDownloader(httpClient: HttpClient = new DefaultHttpClient()) extends Downloader {
 
   def download(crawlJob: CrawlJob) {
-    crawlJob.result.map(webPage => {
+    crawlJob.result.map(_.article.map(article => {
       val scoreImage = new ListBuffer[(BufferedImage, Double)]
-      val potentialImages = webPage.potentialImages
+      val potentialImages = article.imagesUrl
 
       var skip = false
       potentialImages.toList.sortBy(-_.length).foreach(imageUrl => if (!skip) {
@@ -73,7 +73,7 @@ class ImageDownloader(httpClient: HttpClient = new DefaultHttpClient()) extends 
           val resizeImage = Scalr.resize(bestImage, Scalr.Method.AUTOMATIC, Scalr.Mode.AUTOMATIC, 300, preferHeight, Scalr.OP_ANTIALIAS)
           ImageIO.write(resizeImage, "png", outputStream)
           outputStream.flush()
-          webPage.featureImage = Some(outputStream.toByteArray)
+          article.featureImage = Some(outputStream.toByteArray)
         } catch {
           case ex: Exception => {
             crawlJob.error(ex.getMessage, getClass.getName, ex)
@@ -82,8 +82,7 @@ class ImageDownloader(httpClient: HttpClient = new DefaultHttpClient()) extends 
           outputStream.close()
         }
       }
-    })
-
+    }))
   }
 
 
