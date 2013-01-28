@@ -4,7 +4,6 @@
 
 package org.linkerz.crawl.topology.job
 
-import org.linkerz.crawl.topology.model.WebPage
 import scala.Some
 import org.linkerz.model.{LogCategory, LogType, Feed, Logging}
 import collection.mutable.ListBuffer
@@ -24,7 +23,7 @@ case class CrawlJob(webUrl: WebUrl) {
 
   var parent: Option[CrawlJob] = None
 
-  var result: Option[WebPage] = None
+  var result: Option[CrawlJobResult] = None
 
   var onlyCrawlInSameDomain: Boolean = true
 

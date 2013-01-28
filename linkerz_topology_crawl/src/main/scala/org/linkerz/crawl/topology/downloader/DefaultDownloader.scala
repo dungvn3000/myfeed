@@ -4,8 +4,7 @@
 
 package org.linkerz.crawl.topology.downloader
 
-import org.linkerz.crawl.topology.job.CrawlJob
-import org.linkerz.crawl.topology.model.WebPage
+import org.linkerz.crawl.topology.job.{CrawlJobResult, CrawlJob}
 import org.apache.http.HttpStatus
 import org.apache.http.client.HttpClient
 import org.apache.http.impl.client.DefaultHttpClient
@@ -26,7 +25,7 @@ class DefaultDownloader(httpClient: HttpClient = new DefaultHttpClient) extends 
 
   def download(crawlJob: CrawlJob) {
     val webUrl = crawlJob.webUrl
-    val webPage = new WebPage
+    val webPage = new CrawlJobResult
 
     val response = httpClient.execute(new HttpGet(webUrl.toString))
     info("Download " + response.getStatusLine.getStatusCode + " : " + webUrl)
