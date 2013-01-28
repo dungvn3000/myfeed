@@ -25,7 +25,7 @@ class WebPage extends Serializable {
   var webUrls: java.util.List[WebUrl] = new util.ArrayList[WebUrl]()
   var content: Array[Byte] = Array.empty[Byte]
 
-  var responseCode: Int = _
+
 
   //Meta data
   var text: Option[String] = None
@@ -39,13 +39,6 @@ class WebPage extends Serializable {
 
   var isArticle = false
 
-  /**
-   * Check the is any error on this page.
-   * @return
-   */
-  def isError = {
-    responseCode != HttpStatus.SC_OK
-  }
 
   /**
    * Convenient method to convert a webpage to link model to store the database.
@@ -57,7 +50,6 @@ class WebPage extends Serializable {
     text = text,
     description = description,
     contentEncoding = contentEncoding,
-    responseCode = responseCode,
     featureImage = featureImage,
     feedId = feedId
   )

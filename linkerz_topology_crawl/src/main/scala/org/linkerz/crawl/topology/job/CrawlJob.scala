@@ -10,6 +10,7 @@ import org.linkerz.model.{LogCategory, LogType, Feed, Logging}
 import collection.mutable.ListBuffer
 import org.bson.types.ObjectId
 import org.linkerz.parser.model.WebUrl
+import org.apache.http.HttpStatus
 
 /**
  * The Class CrawlJob.
@@ -61,6 +62,8 @@ case class CrawlJob(webUrl: WebUrl) {
    * The result of this job will has this attribute.
    */
   var feedId: ObjectId = _
+
+  var responseCode: Int = _
 
   /**
    * String url.
@@ -127,7 +130,7 @@ case class CrawlJob(webUrl: WebUrl) {
   def errors = _errors
 
   //Check whether the job is error or not.
-  def isError = !errors.isEmpty
+  def isError = !errors.isEmpty || responseCode != HttpStatus.SC_OK
 
   def infos = _infos
 

@@ -48,7 +48,7 @@ class HandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) w
   }
 
   private def handle(session: CrawlSession, subJob: CrawlJob)(implicit tuple: Tuple) {
-    subJob.result.map(webPage => if (!webPage.isError) {
+    subJob.result.map(webPage => {
 
       if (subJob.depth > session.currentDepth) {
         session.currentDepth = subJob.depth

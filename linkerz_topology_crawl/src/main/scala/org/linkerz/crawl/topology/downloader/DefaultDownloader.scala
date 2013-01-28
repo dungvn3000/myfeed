@@ -48,9 +48,11 @@ class DefaultDownloader(httpClient: HttpClient = new DefaultHttpClient) extends 
     }
 
     webPage.webUrl = webUrl
-    webPage.responseCode = response.getStatusLine.getStatusCode
+    crawlJob.responseCode = response.getStatusLine.getStatusCode
 
-    crawlJob.result = Some(webPage)
+    if (response == HttpStatus.SC_OK) {
+      crawlJob.result = Some(webPage)
+    }
   }
 
   def download(url: String) = httpClient.execute(new HttpGet(url))

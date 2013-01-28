@@ -27,7 +27,7 @@ class TestDefaultDownloader {
     parser.parse(crawlJob)
     imageDownloader.download(crawlJob)
 
-    assert(crawlJob.result.get.responseCode == 200)
+    assert(crawlJob.responseCode == 200)
     if (crawlJob.result.get.isArticle) {
       println(crawlJob.result.get.title)
       println(crawlJob.result.get.description.get)

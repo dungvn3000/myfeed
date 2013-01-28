@@ -26,7 +26,7 @@ class ParserBolt extends StormBolt(outputFields = List("sessionId", "event")) {
     implicit tuple => tuple matchSeq {
       case Seq(sessionId: UUID, Fetch(job)) => {
         try {
-          if (job.result.exists(!_.isError)) parser parse job
+          if (!job.isError) parser parse job
         } catch {
           case ex: Exception => {
             job.error(ex.getMessage, getClass.getName, ex)
