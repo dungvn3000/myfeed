@@ -28,11 +28,11 @@ class TestDefaultDownloader {
     imageDownloader.download(crawlJob)
 
     assert(crawlJob.responseCode == 200)
-    if (crawlJob.result.get.isArticle) {
-      println(crawlJob.result.get.title)
-      println(crawlJob.result.get.description.get)
-      println(crawlJob.result.get.potentialImages)
-    }
+//    if (crawlJob.result.get.isArticle) {
+//      println(crawlJob.result.get.title)
+//      println(crawlJob.result.get.description.get)
+//      println(crawlJob.result.get.potentialImages)
+//    }
   }
 
 }

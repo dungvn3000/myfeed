@@ -5,10 +5,8 @@
 package org.linkerz.crawl.topology.job
 
 import java.util
-import org.apache.http.HttpStatus
-import org.linkerz.model.Link
 import org.bson.types.ObjectId
-import org.linkerz.parser.model.WebUrl
+import org.linkerz.parser.model.{Article, WebUrl}
 
 /**
  * The Class CrawlJobResult.
@@ -26,28 +24,19 @@ class CrawlJobResult extends Serializable {
   var content: Array[Byte] = Array.empty[Byte]
 
   //Meta data
-  var text: Option[String] = None
-  var description: Option[String] = None
   var contentType: String = _
   var contentEncoding: String = "UTF-8"
-  var title: String = _
   var featureImage: Option[Array[Byte]] = None
   var potentialImages: List[String] = Nil
   var feedId: ObjectId = _
 
-  var isArticle = false
+  var article: Option[Article] = None
 
   /**
    * Convenient method to convert a CrawlJobResult to link model to store the database.
    * @return
    */
-  def asLink = Link(
-    url = webUrl.toString,
-    title = title,
-    text = text,
-    description = description,
-    contentEncoding = contentEncoding,
-    featureImage = featureImage,
-    feedId = feedId
-  )
+  def asLink = {
+    None
+  }
 }

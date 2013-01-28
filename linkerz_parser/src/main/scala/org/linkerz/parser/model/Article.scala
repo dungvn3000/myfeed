@@ -2,6 +2,11 @@ package org.linkerz.parser.model
 
 import org.jsoup.nodes.{Element, Document}
 import collection.JavaConverters._
+import collection.mutable
+import org.apache.commons.validator.routines.UrlValidator
+import gumi.builders.UrlBuilder
+import org.apache.commons.lang.StringUtils
+import edu.uci.ics.crawler4j.url.URLCanonicalizer
 
 /**
  * The Class Article.
@@ -87,6 +92,21 @@ case class Article(doc: Document, private val _containerElement: Option[Element]
       sb.append("\n")
     })
     sb.toString()
+  }
+
+  def imagesUrl = {
+    val potentialImages = new mutable.HashSet[String]
+    val urlValidator = new UrlValidator(Array("http", "https"))
+    images.foreach(image => {
+      val imgSrc = UrlBuilder.fromString(image.src).toString
+      if (StringUtils.isNotBlank(imgSrc)) {
+        val url = URLCanonicalizer.getCanonicalURL(imgSrc, doc.baseUri())
+        if (StringUtils.isNotBlank(url) && urlValidator.isValid(url)) {
+          potentialImages += url
+        }
+      }
+    })
+    potentialImages
   }
 
   def images = imageElements.filter(_.isContent)

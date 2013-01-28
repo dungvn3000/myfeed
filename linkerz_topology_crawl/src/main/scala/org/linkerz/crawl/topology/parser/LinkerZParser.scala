@@ -27,43 +27,20 @@ class LinkerZParser(feeds: List[Feed]) extends Parser {
   val articleParser = new ArticleParser
 
   def parse(crawlJob: CrawlJob) {
-    crawlJob.result.map(webPage => {
-      val webUrl = webPage.webUrl
+    crawlJob.result.map(result => {
+      val webUrl = result.webUrl
       info("Parse: " + webUrl.toString)
-      if (webPage.content != null) {
-        val inputStream = new ByteArrayInputStream(webPage.content)
-        val doc = Jsoup.parse(inputStream, webPage.contentEncoding, webPage.webUrl.toString)
+      if (result.content != null) {
+        val inputStream = new ByteArrayInputStream(result.content)
+        val doc = Jsoup.parse(inputStream, result.contentEncoding, result.webUrl.toString)
 
-        webPage.webUrls = linksParser.parse(doc)
+        result.webUrls = linksParser.parse(doc)
 
         feeds.find(feed => matcher(webUrl.toString, feed.urlRegex)).map(feed => {
-          articleParser.parse(doc, feed.contentSelection, feed.removeSelections).map(article => {
-            webPage.title = article.title
-            if (StringUtils.isNotBlank(article.description())) {
-              webPage.description = Some(article.description())
-            }
-            if (StringUtils.isNotBlank(article.text)) {
-              webPage.text = Some(article.text)
-            }
-
-            val potentialImages = new mutable.HashSet[String]
-            val urlValidator = new UrlValidator(Array("http", "https"))
-            article.images.foreach(image => {
-              val imgSrc = UrlBuilder.fromString(image.src).toString
-              if (StringUtils.isNotBlank(imgSrc)) {
-                val url = URLCanonicalizer.getCanonicalURL(imgSrc, webPage.webUrl.baseUrl)
-                if (StringUtils.isNotBlank(url) && urlValidator.isValid(url)) {
-                  potentialImages += url
-                }
-              }
-            })
-            webPage.potentialImages = potentialImages.toList
-
-            webPage.feedId = crawlJob.feedId
-
-            webPage.isArticle = true
-          })
+          result.article = articleParser.parse(doc, feed.contentSelection, feed.removeSelections)
         })
+
+        result.feedId = crawlJob.feedId
       }
     })
   }
