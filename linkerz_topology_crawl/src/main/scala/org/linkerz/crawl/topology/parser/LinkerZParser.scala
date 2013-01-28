@@ -32,7 +32,7 @@ class LinkerZParser(feeds: List[Feed]) extends Parser {
       info("Parse: " + webUrl.toString)
       if (result.content != null) {
         val inputStream = new ByteArrayInputStream(result.content)
-        val doc = Jsoup.parse(inputStream, result.contentEncoding, result.webUrl.toString)
+        val doc = Jsoup.parse(inputStream, result.contentEncoding, result.webUrl.baseUrl)
 
         result.webUrls = linksParser.parse(doc)
 
