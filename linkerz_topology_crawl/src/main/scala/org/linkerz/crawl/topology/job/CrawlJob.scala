@@ -4,11 +4,12 @@
 
 package org.linkerz.crawl.topology.job
 
-import org.linkerz.crawl.topology.model.{WebPage, WebUrl}
+import org.linkerz.crawl.topology.model.WebPage
 import scala.Some
 import org.linkerz.model.{LogCategory, LogType, Feed, Logging}
 import collection.mutable.ListBuffer
 import org.bson.types.ObjectId
+import org.linkerz.parser.model.WebUrl
 
 /**
  * The Class CrawlJob.
@@ -132,33 +133,33 @@ case class CrawlJob(webUrl: WebUrl) {
 
   def warns = _warns
 
-  def info(msg: String, className: String, webUrl: WebUrl) {
+  def info(msg: String, className: String) {
     _infos += Logging(
       message = msg,
       className = className,
-      url = Some(webUrl.url),
+      url = Some(webUrl.toString),
       logType = LogType.Info.toString,
       category = LogCategory.Crawling.toString
     )
   }
 
-  def error(msg: String, className: String, webUrl: WebUrl) {
+  def error(msg: String, className: String) {
     _errors += Logging(
       message = msg,
       className = className,
-      url = Some(webUrl.url),
+      url = Some(webUrl.toString),
       logType = LogType.Error.toString,
       category = LogCategory.Crawling.toString
     )
   }
 
-  def error(msg: String, className: String, webUrl: WebUrl, ex: Throwable) {
+  def error(msg: String, className: String, ex: Throwable) {
     _errors += Logging(
       message = msg,
       className = className,
       exceptionClass = Some(ex.getClass.getName),
       stackTrace = Some(ex.getStackTraceString),
-      url = Some(webUrl.url),
+      url = Some(webUrl.toString),
       logType = LogType.Error.toString,
       category = LogCategory.Crawling.toString
     )
@@ -172,50 +173,11 @@ case class CrawlJob(webUrl: WebUrl) {
     _warns += Logging(
       message = msg,
       className = className,
+      url = Some(webUrl.toString),
       logType = LogType.Warn.toString,
       category = LogCategory.Crawling.toString
     )
   }
 
-  /**
-   * For debug information.
-   * @param msg
-   */
-  def info(msg: String, className: String) {
-    _infos += Logging(
-      message = msg,
-      className = className,
-      logType = LogType.Info.toString,
-      category = LogCategory.Crawling.toString
-    )
-  }
 
-  /**
-   * For detect error.
-   * @param msg
-   */
-  def error(msg: String, className: String) {
-    _errors += Logging(
-      message = msg,
-      className = className,
-      logType = LogType.Error.toString,
-      category = LogCategory.Crawling.toString
-    )
-  }
-
-  /**
-   * For detect error.
-   * @param msg
-   * @param ex Throwable.
-   */
-  def error(msg: String, className: String, ex: Throwable) {
-    _errors += Logging(
-      message = msg,
-      className = className,
-      exceptionClass = Some(ex.getClass.getName),
-      stackTrace = Some(ex.getStackTraceString),
-      logType = LogType.Error.toString,
-      category = LogCategory.Crawling.toString
-    )
-  }
 }

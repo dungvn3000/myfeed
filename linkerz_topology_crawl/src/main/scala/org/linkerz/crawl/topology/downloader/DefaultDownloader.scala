@@ -28,8 +28,8 @@ class DefaultDownloader(httpClient: HttpClient = new DefaultHttpClient) extends 
     val webUrl = crawlJob.webUrl
     val webPage = new WebPage
 
-    val response = httpClient.execute(new HttpGet(webUrl.url))
-    info("Download " + response.getStatusLine.getStatusCode + " : " + webUrl.url)
+    val response = httpClient.execute(new HttpGet(webUrl.toString))
+    info("Download " + response.getStatusLine.getStatusCode + " : " + webUrl)
 
     if (response.getStatusLine.getStatusCode == HttpStatus.SC_OK) {
       var entity = response.getEntity

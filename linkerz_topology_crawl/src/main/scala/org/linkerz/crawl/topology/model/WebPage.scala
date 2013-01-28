@@ -8,6 +8,7 @@ import java.util
 import org.apache.http.HttpStatus
 import org.linkerz.model.Link
 import org.bson.types.ObjectId
+import org.linkerz.parser.model.WebUrl
 
 /**
  * The Class WebPage.
@@ -51,7 +52,7 @@ class WebPage extends Serializable {
    * @return
    */
   def asLink = Link(
-    url = webUrl.url,
+    url = webUrl.toString,
     title = title,
     text = text,
     description = description,

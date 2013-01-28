@@ -5,7 +5,6 @@ import org.linkerz.parser.{ArticleParser, LinksParser}
 import java.io.ByteArrayInputStream
 import org.jsoup.Jsoup
 import collection.JavaConversions._
-import org.linkerz.crawl.topology.model.WebUrl
 import org.apache.commons.lang.StringUtils
 import gumi.builders.UrlBuilder
 import edu.uci.ics.crawler4j.url.URLCanonicalizer
@@ -13,6 +12,7 @@ import collection.mutable
 import org.apache.commons.validator.routines.UrlValidator
 import org.linkerz.model.Feed
 import org.linkerz.core.matcher.SimpleRegexMatcher._
+import org.linkerz.parser.model.WebUrl
 
 /**
  * The this class using two parser LinksParse and ArticleParser.
@@ -29,16 +29,14 @@ class LinkerZParser(feeds: List[Feed]) extends Parser {
   def parse(crawlJob: CrawlJob) {
     crawlJob.result.map(webPage => {
       val webUrl = webPage.webUrl
-      info("Parse: " + webUrl.url)
+      info("Parse: " + webUrl.toString)
       if (webPage.content != null) {
         val inputStream = new ByteArrayInputStream(webPage.content)
-        val doc = Jsoup.parse(inputStream, webPage.contentEncoding, webPage.webUrl.url)
+        val doc = Jsoup.parse(inputStream, webPage.contentEncoding, webPage.webUrl.toString)
 
-        val links = linksParser.parse(doc)
-        //TODO: Refactor remove weburl
-//        links.foreach(webPage.webUrls += new WebUrl(_))
+        webPage.webUrls = linksParser.parse(doc)
 
-        feeds.find(feed => matcher(webUrl.url, feed.urlRegex)).map(feed => {
+        feeds.find(feed => matcher(webUrl.toString, feed.urlRegex)).map(feed => {
           articleParser.parse(doc, feed.contentSelection, feed.removeSelections).map(article => {
             webPage.title = article.title
             if (StringUtils.isNotBlank(article.description())) {

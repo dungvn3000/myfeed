@@ -51,13 +51,13 @@ class ImageDownloader(httpClient: HttpClient = new DefaultHttpClient()) extends 
               }
             } catch {
               case ex: Exception => {
-                crawlJob.error(ex.getMessage, getClass.getName, crawlJob.webUrl, ex)
+                crawlJob.error(ex.getMessage, getClass.getName, ex)
               }
             }
           }
         } catch {
           case ex: Exception => {
-            crawlJob.error(ex.getMessage, getClass.getName, crawlJob.webUrl, ex)
+            crawlJob.error(ex.getMessage, getClass.getName, ex)
           }
         }
       })
@@ -76,7 +76,7 @@ class ImageDownloader(httpClient: HttpClient = new DefaultHttpClient()) extends 
           webPage.featureImage = Some(outputStream.toByteArray)
         } catch {
           case ex: Exception => {
-            crawlJob.error(ex.getMessage, getClass.getName, crawlJob.webUrl, ex)
+            crawlJob.error(ex.getMessage, getClass.getName, ex)
           }
         } finally {
           outputStream.close()

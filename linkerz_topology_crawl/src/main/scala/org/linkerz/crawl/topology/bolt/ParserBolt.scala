@@ -29,7 +29,7 @@ class ParserBolt extends StormBolt(outputFields = List("sessionId", "event")) {
           if (job.result.exists(!_.isError)) parser parse job
         } catch {
           case ex: Exception => {
-            job.error(ex.getMessage, getClass.getName, job.webUrl, ex)
+            job.error(ex.getMessage, getClass.getName, ex)
             _collector reportError ex
           }
         }

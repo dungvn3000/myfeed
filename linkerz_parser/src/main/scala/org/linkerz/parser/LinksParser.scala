@@ -1,6 +1,6 @@
 package org.linkerz.parser
 
-import model.Link
+import model.WebUrl
 import org.jsoup.nodes.Document
 import org.apache.commons.lang.StringUtils
 import edu.uci.ics.crawler4j.url.URLCanonicalizer
@@ -25,9 +25,9 @@ class LinksParser {
    */
   def parse(doc: Document) = {
     //Using java list for better performance.
-    val containImageLinks = new java.util.ArrayList[Link]()
-    val notContainImageLinks = new java.util.ArrayList[Link]()
-    val links = new java.util.ArrayList[Link]()
+    val containImageLinks = new java.util.ArrayList[WebUrl]()
+    val notContainImageLinks = new java.util.ArrayList[WebUrl]()
+    val links = new java.util.ArrayList[WebUrl]()
 
     val httpHost = URIUtils.extractHost(new URI(doc.baseUri()))
     val baseUrl = httpHost.toURI
@@ -49,12 +49,12 @@ class LinksParser {
             && !hrefWithoutProtocol.contains("mailto:")) {
             val url = URLCanonicalizer.getCanonicalURL(href, baseUrl)
             if (url != null && urlValidator.isValid(url)) {
-              val newLink = Link(url, linkElement)
+              val newLink = WebUrl(url)
               if (!containImageLinks.contains(newLink) && !notContainImageLinks.contains(newLink)) {
-                if (newLink.isContainImage) {
-                  containImageLinks += newLink
-                } else {
+                if (linkElement.select("img").isEmpty) {
                   notContainImageLinks += newLink
+                } else {
+                  containImageLinks += newLink
                 }
               }
             }
