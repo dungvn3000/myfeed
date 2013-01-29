@@ -4,7 +4,6 @@
 
 package org.linkerz.crawl.topology.model
 
-import java.util
 import org.linkerz.model.Link
 import org.bson.types.ObjectId
 
@@ -18,8 +17,7 @@ import org.bson.types.ObjectId
 
 case class WebPage(webUrl: WebUrl) {
 
-  //Using java list for better performance.
-  var webUrls: java.util.List[WebUrl] = new util.ArrayList[WebUrl]()
+  var webUrls: List[WebUrl] = Nil
   var content: Array[Byte] = Array.empty[Byte]
 
   //Meta data
@@ -35,21 +33,29 @@ case class WebPage(webUrl: WebUrl) {
   var isArticle = false
 
   /**
-   * Maximum is 1 and minimum is 0.
+   * Score of a webpage is score of it's url.
+   * @return
    */
-  var score: Double = 0d
+  def score: Double = webUrl.score
 
   /**
    * Convenient method to convert a webpage to link model to store the database.
    * @return
    */
   def asLink = Link(
-    url = webUrl.toString,
+    url = urlAsString,
     title = title,
     text = text,
+    score = score,
     description = description,
     contentEncoding = contentEncoding,
     featureImage = featureImage,
     feedId = feedId
   )
+
+  /**
+   * Convenient method.
+   * @return
+   */
+  def urlAsString = webUrl.toString
 }

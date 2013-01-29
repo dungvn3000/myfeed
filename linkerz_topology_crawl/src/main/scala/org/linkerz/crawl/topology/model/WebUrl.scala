@@ -17,7 +17,7 @@ import org.linkerz.parser.model.Link
  *
  */
 
-class WebUrl(_url: String) extends Serializable {
+case class WebUrl(url: String) {
 
   def this(link: Link) {
     this(link.url)
@@ -29,7 +29,7 @@ class WebUrl(_url: String) extends Serializable {
    */
   var score: Double = 0d
 
-  def urlBuilder = UrlBuilder.fromString(_url)
+  def urlBuilder = UrlBuilder.fromString(url)
 
   def domainName = httpHost.getHostName
 
