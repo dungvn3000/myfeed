@@ -42,7 +42,7 @@ case class CrawlSession(id: UUID, job: CrawlJob) extends Logging {
   var domainName: String = job.webUrl.domainName
 
   def endSession() {
-    info("End session " + domainName + " " + jobTime + " ms")
+    info("End session " + domainName + " " + (jobTime / 1000) + " s")
     info(subJobCount + " links downloaded")
     info(currentDepth + " level")
     info(job.errors.length + " errors found")
