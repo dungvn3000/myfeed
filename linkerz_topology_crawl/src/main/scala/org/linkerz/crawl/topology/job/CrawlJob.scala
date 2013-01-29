@@ -8,8 +8,9 @@ import scala.Some
 import org.linkerz.model.{LogCategory, LogType, Feed, Logging}
 import collection.mutable.ListBuffer
 import org.bson.types.ObjectId
-import org.linkerz.parser.model.WebUrl
+import org.linkerz.parser.model.{Article, WebUrl}
 import org.apache.http.HttpStatus
+import java.util
 
 /**
  * The Class CrawlJob.
@@ -22,8 +23,6 @@ import org.apache.http.HttpStatus
 case class CrawlJob(webUrl: WebUrl) {
 
   var parent: Option[CrawlJob] = None
-
-  var result: Option[CrawlJobResult] = None
 
   var onlyCrawlInSameDomain: Boolean = true
 
@@ -57,12 +56,19 @@ case class CrawlJob(webUrl: WebUrl) {
    */
   var maxSubJob: Int = -1
 
-  /**
-   * The result of this job will has this attribute.
-   */
   var feedId: ObjectId = _
 
   var responseCode: Int = _
+
+  var content: Array[Byte] = Array.empty[Byte]
+
+  var webUrls: List[WebUrl] = Nil
+
+  var contentType: String = _
+
+  var contentEncoding: String = "UTF-8"
+
+  var article: Option[Article] = None
 
   /**
    * String url.
@@ -180,6 +186,5 @@ case class CrawlJob(webUrl: WebUrl) {
       category = LogCategory.Crawling.toString
     )
   }
-
 
 }

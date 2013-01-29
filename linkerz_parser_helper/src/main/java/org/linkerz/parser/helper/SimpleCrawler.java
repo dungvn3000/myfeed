@@ -96,7 +96,7 @@ public class SimpleCrawler {
             }
         }
         time = System.currentTimeMillis() - time;
-        statusLbl.setText("Downloaded: " + count + " websites in " + time + " ms");
+        statusLbl.setText("Downloaded: " + count + " links in " + time + " ms");
     }
 
     private List<WebUrl> getTestUrls(String url, JLabel statusLbl) throws IOException {
