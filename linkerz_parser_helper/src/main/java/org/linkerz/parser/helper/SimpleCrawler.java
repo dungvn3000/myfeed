@@ -14,6 +14,7 @@ import org.linkerz.parser.ArticleParser;
 import org.linkerz.parser.LinksParser;
 import org.linkerz.parser.model.Article;
 import org.linkerz.parser.model.ImageElement;
+import org.linkerz.parser.model.WebUrl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +40,7 @@ public class SimpleCrawler {
     private Pattern filterPattern = Pattern.compile(".*(\\.(css|js|bmp|gif|jpe?g|png|tiff?|mid|mp2|mp3|mp4|wav|avi|mov|mpeg|ram|m4v|pdf|exe|msi|jar|flv|doc|docx|xls|xlsx|ppt|pptx|rm|smil|wmv|swf|wma|zip|rar|gz))$");
 
     public void crawl(String url, String contentSelection, List<String> removeSelections, JLabel statusLbl, JTextArea resultTxt, Configuration configuration) throws IOException, URISyntaxException {
-        List<String> testUrls = getTestUrls(url, statusLbl);
+        List<WebUrl> testUrls = getTestUrls(url, statusLbl);
         ArticleParser articleParser = new ArticleParser();
         resultTxt.setText("");
         HttpHost httpHost = URIUtils.extractHost(new URI(url));
@@ -47,19 +48,19 @@ public class SimpleCrawler {
 
         int count = 0;
         long time = System.currentTimeMillis();
-        for (String testUrl : testUrls) {
-            if (!filterPattern.matcher(testUrl).matches()) {
-                HttpHost testHttpHost = URIUtils.extractHost(new URI(testUrl));
+        for (WebUrl testUrl : testUrls) {
+            if (!filterPattern.matcher(testUrl.toString()).matches()) {
+                HttpHost testHttpHost = testUrl.httpHost();
                 String testDomainName = testHttpHost.getHostName();
                 if (domainName.equals(testDomainName)) {
                     try {
-                        HttpEntity testEntity = download(testUrl, statusLbl);
+                        HttpEntity testEntity = download(testUrl.toString(), statusLbl);
                         if (testEntity != null) {
-                            Document doc = Jsoup.parse(testEntity.getContent(), "UTF-8", testUrl);
+                            Document doc = Jsoup.parse(testEntity.getContent(), "UTF-8", testUrl.baseUrl());
                             Article article = articleParser.parse(doc, contentSelection, removeSelections);
                             if (article != null) {
                                 count += 1;
-                                resultTxt.append(testUrl);
+                                resultTxt.append(testUrl.toString());
                                 resultTxt.append("\n");
 
                                 if(configuration.isShowTitle()) {
@@ -98,14 +99,13 @@ public class SimpleCrawler {
         statusLbl.setText("Downloaded: " + count + " websites in " + time + " ms");
     }
 
-    private List<String> getTestUrls(String url, JLabel statusLbl) throws IOException {
-        List<String> testUrls = Collections.emptyList();
+    private List<WebUrl> getTestUrls(String url, JLabel statusLbl) throws IOException {
+        List<WebUrl> testUrls = Collections.emptyList();
         LinksParser linksParser = new LinksParser();
         HttpEntity entity = download(url, statusLbl);
         if (entity != null) {
             Document doc = Jsoup.parse(entity.getContent(), "UTF-8", url);
-            //TODO: Refactor remove weburl
-//            testUrls = linksParser.parse(doc);
+            testUrls = linksParser.parseToJavaCollection(doc);
         }
         return testUrls;
     }

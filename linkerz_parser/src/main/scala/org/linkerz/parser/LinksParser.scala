@@ -8,6 +8,8 @@ import org.apache.commons.validator.routines.UrlValidator
 import collection.JavaConversions._
 import org.apache.http.client.utils.URIUtils
 import java.net.URI
+import collection.mutable.ListBuffer
+import scala.collection.JavaConverters._
 
 /**
  * This class using for crawling.
@@ -24,10 +26,9 @@ class LinksParser {
    * @return Duplicate urls will be removed.
    */
   def parse(doc: Document) = {
-    //Using java list for better performance.
-    val containImageLinks = new java.util.ArrayList[WebUrl]()
-    val notContainImageLinks = new java.util.ArrayList[WebUrl]()
-    val links = new java.util.ArrayList[WebUrl]()
+    val containImageLinks = new ListBuffer[WebUrl]()
+    val notContainImageLinks = new ListBuffer[WebUrl]()
+    val links = new ListBuffer[WebUrl]()
 
     val httpHost = URIUtils.extractHost(new URI(doc.baseUri()))
     val baseUrl = httpHost.toURI
@@ -73,7 +74,14 @@ class LinksParser {
       link.score = (links.size - i).toDouble / links.size
     }
 
-    links.sortBy(-_.score)
+    links.toList.sortBy(-_.score)
   }
+
+  /**
+   * For java api
+   * @param doc
+   * @return
+   */
+  def parseToJavaCollection(doc: Document) = parse(doc).asJava
 
 }

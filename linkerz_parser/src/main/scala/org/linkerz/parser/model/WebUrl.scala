@@ -15,11 +15,11 @@ case class WebUrl(_url: String) {
 
   val urlBuilder = UrlBuilder.fromString(_url)
 
+  val httpHost = URIUtils.extractHost(new URI(toString))
+
   val domainName = httpHost.getHostName
 
   val baseUrl = httpHost.toURI
-
-  val httpHost = URIUtils.extractHost(new URI(toString))
 
   override def toString = urlBuilder.toString
 
