@@ -30,7 +30,7 @@ class MetaFetcherBolt extends StormBolt(outputFields = List("sessionId", "event"
             imageDownloader download job
           } catch {
             case ex: Exception => {
-              job.error(ex.getMessage, getClass.getName, job.webUrl, ex)
+              job.error(ex.getMessage, getClass.getName, ex)
               _collector reportError ex
             }
           }

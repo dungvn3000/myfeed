@@ -129,7 +129,7 @@ case class CrawlJob(webUrl: WebUrl) {
   //Check whether the job is error or not.
   def isError = !errors.isEmpty || responseCode != HttpStatus.SC_OK
 
-  def info(msg: String, className: String, webUrl: WebUrl) {
+  def info(msg: String, className: String) {
     infos += Logging(
       message = msg,
       className = className,
@@ -139,7 +139,7 @@ case class CrawlJob(webUrl: WebUrl) {
     )
   }
 
-  def error(msg: String, className: String, webUrl: WebUrl) {
+  def error(msg: String, className: String) {
     errors += Logging(
       message = msg,
       className = className,
@@ -149,7 +149,7 @@ case class CrawlJob(webUrl: WebUrl) {
     )
   }
 
-  def error(msg: String, className: String, webUrl: WebUrl, ex: Throwable) {
+  def error(msg: String, className: String, ex: Throwable) {
     errors += Logging(
       message = msg,
       className = className,
@@ -169,49 +169,8 @@ case class CrawlJob(webUrl: WebUrl) {
     warns += Logging(
       message = msg,
       className = className,
+      url = Some(webUrl.url),
       logType = LogType.Warn.toString,
-      category = LogCategory.Crawling.toString
-    )
-  }
-
-  /**
-   * For debug information.
-   * @param msg
-   */
-  def info(msg: String, className: String) {
-    infos += Logging(
-      message = msg,
-      className = className,
-      logType = LogType.Info.toString,
-      category = LogCategory.Crawling.toString
-    )
-  }
-
-  /**
-   * For detect error.
-   * @param msg
-   */
-  def error(msg: String, className: String) {
-    errors += Logging(
-      message = msg,
-      className = className,
-      logType = LogType.Error.toString,
-      category = LogCategory.Crawling.toString
-    )
-  }
-
-  /**
-   * For detect error.
-   * @param msg
-   * @param ex Throwable.
-   */
-  def error(msg: String, className: String, ex: Throwable) {
-    errors += Logging(
-      message = msg,
-      className = className,
-      exceptionClass = Some(ex.getClass.getName),
-      stackTrace = Some(ex.getStackTraceString),
-      logType = LogType.Error.toString,
       category = LogCategory.Crawling.toString
     )
   }
