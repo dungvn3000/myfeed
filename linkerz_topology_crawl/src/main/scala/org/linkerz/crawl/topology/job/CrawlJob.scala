@@ -4,13 +4,11 @@
 
 package org.linkerz.crawl.topology.job
 
+import org.linkerz.crawl.topology.model.{WebPage, WebUrl}
 import scala.Some
 import org.linkerz.model.{LogCategory, LogType, Feed, Logging}
 import collection.mutable.ListBuffer
 import org.bson.types.ObjectId
-import org.linkerz.parser.model.{Article, WebUrl}
-import org.apache.http.HttpStatus
-import java.util
 
 /**
  * The Class CrawlJob.
@@ -23,6 +21,8 @@ import java.util
 case class CrawlJob(webUrl: WebUrl) {
 
   var parent: Option[CrawlJob] = None
+
+  var result: Option[WebPage] = None
 
   var onlyCrawlInSameDomain: Boolean = true
 
@@ -56,19 +56,10 @@ case class CrawlJob(webUrl: WebUrl) {
    */
   var maxSubJob: Int = -1
 
+  /**
+   * The result of this job will has this attribute.
+   */
   var feedId: ObjectId = _
-
-  var responseCode: Int = _
-
-  var content: Array[Byte] = Array.empty[Byte]
-
-  var webUrls: List[WebUrl] = Nil
-
-  var contentType: String = _
-
-  var contentEncoding: String = "UTF-8"
-
-  var article: Option[Article] = None
 
   /**
    * String url.
@@ -128,40 +119,46 @@ case class CrawlJob(webUrl: WebUrl) {
     _depth
   }
 
-  val errors = new ListBuffer[Logging]
-  val warns = new ListBuffer[Logging]
-  val infos = new ListBuffer[Logging]
+  protected var _errors = new ListBuffer[Logging]
+  protected var _warns = new ListBuffer[Logging]
+  protected var _infos = new ListBuffer[Logging]
+
+  def errors = _errors
 
   //Check whether the job is error or not.
-  def isError = !errors.isEmpty || responseCode != HttpStatus.SC_OK
+  def isError = !errors.isEmpty
 
-  def info(msg: String, className: String) {
-    infos += Logging(
+  def infos = _infos
+
+  def warns = _warns
+
+  def info(msg: String, className: String, webUrl: WebUrl) {
+    _infos += Logging(
       message = msg,
       className = className,
-      url = Some(webUrl.toString),
+      url = Some(webUrl.url),
       logType = LogType.Info.toString,
       category = LogCategory.Crawling.toString
     )
   }
 
-  def error(msg: String, className: String) {
-    errors += Logging(
+  def error(msg: String, className: String, webUrl: WebUrl) {
+    _errors += Logging(
       message = msg,
       className = className,
-      url = Some(webUrl.toString),
+      url = Some(webUrl.url),
       logType = LogType.Error.toString,
       category = LogCategory.Crawling.toString
     )
   }
 
-  def error(msg: String, className: String, ex: Throwable) {
-    errors += Logging(
+  def error(msg: String, className: String, webUrl: WebUrl, ex: Throwable) {
+    _errors += Logging(
       message = msg,
       className = className,
       exceptionClass = Some(ex.getClass.getName),
       stackTrace = Some(ex.getStackTraceString),
-      url = Some(webUrl.toString),
+      url = Some(webUrl.url),
       logType = LogType.Error.toString,
       category = LogCategory.Crawling.toString
     )
@@ -172,13 +169,53 @@ case class CrawlJob(webUrl: WebUrl) {
    * @param msg
    */
   def warn(msg: String, className: String) {
-    warns += Logging(
+    _warns += Logging(
       message = msg,
       className = className,
-      url = Some(webUrl.toString),
       logType = LogType.Warn.toString,
       category = LogCategory.Crawling.toString
     )
   }
 
+  /**
+   * For debug information.
+   * @param msg
+   */
+  def info(msg: String, className: String) {
+    _infos += Logging(
+      message = msg,
+      className = className,
+      logType = LogType.Info.toString,
+      category = LogCategory.Crawling.toString
+    )
+  }
+
+  /**
+   * For detect error.
+   * @param msg
+   */
+  def error(msg: String, className: String) {
+    _errors += Logging(
+      message = msg,
+      className = className,
+      logType = LogType.Error.toString,
+      category = LogCategory.Crawling.toString
+    )
+  }
+
+  /**
+   * For detect error.
+   * @param msg
+   * @param ex Throwable.
+   */
+  def error(msg: String, className: String, ex: Throwable) {
+    _errors += Logging(
+      message = msg,
+      className = className,
+      exceptionClass = Some(ex.getClass.getName),
+      stackTrace = Some(ex.getStackTraceString),
+      logType = LogType.Error.toString,
+      category = LogCategory.Crawling.toString
+    )
+  }
 }

@@ -20,6 +20,7 @@ case class Link(
                  feedId: ObjectId,
 
                  url: String,
+                 responseCode: Int,
 
                  //Metadata
                  text: Option[String] = None,

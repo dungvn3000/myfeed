@@ -4,7 +4,6 @@ import org.linkerz.crawl.topology.job.CrawlJob
 import org.linkerz.parser.{ArticleParser, LinksParser}
 import java.io.ByteArrayInputStream
 import org.jsoup.Jsoup
-import collection.JavaConversions._
 import org.apache.commons.lang.StringUtils
 import gumi.builders.UrlBuilder
 import edu.uci.ics.crawler4j.url.URLCanonicalizer
@@ -12,7 +11,6 @@ import collection.mutable
 import org.apache.commons.validator.routines.UrlValidator
 import org.linkerz.model.Feed
 import org.linkerz.core.matcher.SimpleRegexMatcher._
-import org.linkerz.parser.model.WebUrl
 
 /**
  * The this class using two parser LinksParse and ArticleParser.
@@ -27,19 +25,46 @@ class LinkerZParser(feeds: List[Feed]) extends Parser {
   val articleParser = new ArticleParser
 
   def parse(crawlJob: CrawlJob) {
-    if (!crawlJob.isError) {
-      val webUrl = crawlJob.webUrl
-      info("Parse: " + webUrl.toString)
-      if (crawlJob.content != null) {
-        val inputStream = new ByteArrayInputStream(crawlJob.content)
-        val doc = Jsoup.parse(inputStream, crawlJob.contentEncoding, webUrl.baseUrl)
+    crawlJob.result.map(webPage => {
+      val webUrl = webPage.webUrl
+      info("Parse: " + webUrl.url)
+      if (webPage.content != null) {
+        val inputStream = new ByteArrayInputStream(webPage.content)
+        val doc = Jsoup.parse(inputStream, webPage.contentEncoding, webPage.webUrl.url)
 
-        crawlJob.webUrls = linksParser.parse(doc)
+        val links = linksParser.parse(doc)
+        //TODO: Refactor remove weburl
+//        links.foreach(webPage.webUrls += new WebUrl(_))
 
-        feeds.find(feed => matcher(webUrl.toString, feed.urlRegex)).map(feed => {
-          crawlJob.article = articleParser.parse(doc, feed.contentSelection, feed.removeSelections)
+        feeds.find(feed => matcher(webUrl.url, feed.urlRegex)).map(feed => {
+          articleParser.parse(doc, feed.contentSelection, feed.removeSelections).map(article => {
+            webPage.title = article.title
+            if (StringUtils.isNotBlank(article.description())) {
+              webPage.description = Some(article.description())
+            }
+            if (StringUtils.isNotBlank(article.text)) {
+              webPage.text = Some(article.text)
+            }
+
+            val potentialImages = new mutable.HashSet[String]
+            val urlValidator = new UrlValidator(Array("http", "https"))
+            article.images.foreach(image => {
+              val imgSrc = UrlBuilder.fromString(image.src).toString
+              if (StringUtils.isNotBlank(imgSrc)) {
+                val url = URLCanonicalizer.getCanonicalURL(imgSrc, webPage.webUrl.baseUrl)
+                if (StringUtils.isNotBlank(url) && urlValidator.isValid(url)) {
+                  potentialImages += url
+                }
+              }
+            })
+            webPage.potentialImages = potentialImages.toList
+
+            webPage.feedId = crawlJob.feedId
+
+            webPage.isArticle = true
+          })
         })
       }
-    }
+    })
   }
 }

@@ -26,9 +26,9 @@ import org.apache.http.util.EntityUtils
 class ImageDownloader(httpClient: HttpClient = new DefaultHttpClient()) extends Downloader {
 
   def download(crawlJob: CrawlJob) {
-    crawlJob.article.map(article => {
+    crawlJob.result.map(webPage => {
       val scoreImage = new ListBuffer[(BufferedImage, Double)]
-      val potentialImages = article.imagesUrl
+      val potentialImages = webPage.potentialImages
 
       var skip = false
       potentialImages.toList.sortBy(-_.length).foreach(imageUrl => if (!skip) {
@@ -51,13 +51,13 @@ class ImageDownloader(httpClient: HttpClient = new DefaultHttpClient()) extends 
               }
             } catch {
               case ex: Exception => {
-                crawlJob.error(ex.getMessage, getClass.getName, ex)
+                crawlJob.error(ex.getMessage, getClass.getName, crawlJob.webUrl, ex)
               }
             }
           }
         } catch {
           case ex: Exception => {
-            crawlJob.error(ex.getMessage, getClass.getName, ex)
+            crawlJob.error(ex.getMessage, getClass.getName, crawlJob.webUrl, ex)
           }
         }
       })
@@ -73,16 +73,17 @@ class ImageDownloader(httpClient: HttpClient = new DefaultHttpClient()) extends 
           val resizeImage = Scalr.resize(bestImage, Scalr.Method.AUTOMATIC, Scalr.Mode.AUTOMATIC, 300, preferHeight, Scalr.OP_ANTIALIAS)
           ImageIO.write(resizeImage, "png", outputStream)
           outputStream.flush()
-          article.featureImage = Some(outputStream.toByteArray)
+          webPage.featureImage = Some(outputStream.toByteArray)
         } catch {
           case ex: Exception => {
-            crawlJob.error(ex.getMessage, getClass.getName, ex)
+            crawlJob.error(ex.getMessage, getClass.getName, crawlJob.webUrl, ex)
           }
         } finally {
           outputStream.close()
         }
       }
     })
+
   }
 
 

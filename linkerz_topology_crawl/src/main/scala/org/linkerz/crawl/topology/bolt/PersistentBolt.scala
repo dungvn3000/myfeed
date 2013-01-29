@@ -17,9 +17,11 @@ class PersistentBolt extends StormBolt(outputFields = List("sessionId", "event")
   execute {
     implicit tuple => tuple matchSeq {
       case Seq(sessionId: UUID, MetaFetch(job)) => {
-//        if (!job.isError) job.result.map(webPage => if (webPage.isArticle) {
-//          LinkDao.checkAndSave(webPage.asLink)
-//        })
+        job.result.map {
+          webPage => if (!webPage.isError && webPage.isArticle) {
+            LinkDao.checkAndSave(webPage.asLink)
+          }
+        }
 
         //Save error for each job.
         //We will not save TimeOutException, because it so common.

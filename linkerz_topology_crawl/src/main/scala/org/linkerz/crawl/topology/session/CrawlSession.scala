@@ -5,10 +5,10 @@
 package org.linkerz.crawl.topology.session
 
 import org.linkerz.crawl.topology.job.CrawlJob
+import org.linkerz.crawl.topology.model.WebUrl
 import java.util
 import grizzled.slf4j.Logging
 import util.UUID
-import org.linkerz.parser.model.WebUrl
 
 /**
  * The Class CrawlSession.
@@ -39,7 +39,7 @@ case class CrawlSession(id: UUID, job: CrawlJob) extends Logging {
    */
   def jobTime = System.currentTimeMillis - startTime
 
-  val domainName: String = job.webUrl.domainName
+  var domainName: String = job.webUrl.domainName
 
   def endSession() {
     info("End session " + domainName + " " + jobTime + " ms")

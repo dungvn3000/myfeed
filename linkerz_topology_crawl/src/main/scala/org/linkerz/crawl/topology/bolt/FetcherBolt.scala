@@ -33,7 +33,7 @@ class FetcherBolt extends StormBolt(outputFields = List("sessionId", "event")) w
           downloader download job
         } catch {
           case ex: Exception => {
-            job.error(ex.getMessage, getClass.getName, ex)
+            job.error(ex.getMessage, getClass.getName, job.webUrl, ex)
             _collector reportError ex
           }
         }

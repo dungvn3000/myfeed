@@ -5,6 +5,7 @@
 package org.linkerz.crawl.topology.downloader
 
 import org.linkerz.crawl.topology.job.CrawlJob
+import org.linkerz.crawl.topology.model.WebPage
 import org.apache.http.HttpStatus
 import org.apache.http.client.HttpClient
 import org.apache.http.impl.client.DefaultHttpClient
@@ -25,9 +26,10 @@ class DefaultDownloader(httpClient: HttpClient = new DefaultHttpClient) extends 
 
   def download(crawlJob: CrawlJob) {
     val webUrl = crawlJob.webUrl
+    val webPage = new WebPage
 
-    val response = httpClient.execute(new HttpGet(webUrl.toString))
-    info("Download " + response.getStatusLine.getStatusCode + " : " + webUrl)
+    val response = httpClient.execute(new HttpGet(webUrl.url))
+    info("Download " + response.getStatusLine.getStatusCode + " : " + webUrl.url)
 
     if (response.getStatusLine.getStatusCode == HttpStatus.SC_OK) {
       var entity = response.getEntity
@@ -37,15 +39,18 @@ class DefaultDownloader(httpClient: HttpClient = new DefaultHttpClient) extends 
         }
       }
 
-      crawlJob.content = EntityUtils.toByteArray(entity)
-      crawlJob.contentType = response.getEntity.getContentType.getValue
+      webPage.content = EntityUtils.toByteArray(entity)
+      webPage.contentType = response.getEntity.getContentType.getValue
 
       if (ContentType.getOrDefault(entity).getCharset != null) {
-        crawlJob.contentEncoding = ContentType.getOrDefault(entity).getCharset.name()
+        webPage.contentEncoding = ContentType.getOrDefault(entity).getCharset.name()
       }
     }
 
-    crawlJob.responseCode = response.getStatusLine.getStatusCode
+    webPage.webUrl = webUrl
+    webPage.responseCode = response.getStatusLine.getStatusCode
+
+    crawlJob.result = Some(webPage)
   }
 
   def download(url: String) = httpClient.execute(new HttpGet(url))

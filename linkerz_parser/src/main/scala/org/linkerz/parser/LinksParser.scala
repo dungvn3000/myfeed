@@ -1,6 +1,6 @@
 package org.linkerz.parser
 
-import model.WebUrl
+import model.Link
 import org.jsoup.nodes.Document
 import org.apache.commons.lang.StringUtils
 import edu.uci.ics.crawler4j.url.URLCanonicalizer
@@ -8,8 +8,6 @@ import org.apache.commons.validator.routines.UrlValidator
 import collection.JavaConversions._
 import org.apache.http.client.utils.URIUtils
 import java.net.URI
-import collection.mutable.ListBuffer
-import scala.collection.JavaConverters._
 
 /**
  * This class using for crawling.
@@ -26,9 +24,10 @@ class LinksParser {
    * @return Duplicate urls will be removed.
    */
   def parse(doc: Document) = {
-    val containImageLinks = new ListBuffer[WebUrl]()
-    val notContainImageLinks = new ListBuffer[WebUrl]()
-    val links = new ListBuffer[WebUrl]()
+    //Using java list for better performance.
+    val containImageLinks = new java.util.ArrayList[Link]()
+    val notContainImageLinks = new java.util.ArrayList[Link]()
+    val links = new java.util.ArrayList[Link]()
 
     val httpHost = URIUtils.extractHost(new URI(doc.baseUri()))
     val baseUrl = httpHost.toURI
@@ -50,12 +49,12 @@ class LinksParser {
             && !hrefWithoutProtocol.contains("mailto:")) {
             val url = URLCanonicalizer.getCanonicalURL(href, baseUrl)
             if (url != null && urlValidator.isValid(url)) {
-              val newLink = WebUrl(url)
+              val newLink = Link(url, linkElement)
               if (!containImageLinks.contains(newLink) && !notContainImageLinks.contains(newLink)) {
-                if (linkElement.select("img").isEmpty) {
-                  notContainImageLinks += newLink
-                } else {
+                if (newLink.isContainImage) {
                   containImageLinks += newLink
+                } else {
+                  notContainImageLinks += newLink
                 }
               }
             }
@@ -74,14 +73,7 @@ class LinksParser {
       link.score = (links.size - i).toDouble / links.size
     }
 
-    links.toList.sortBy(-_.score)
+    links.sortBy(-_.score)
   }
-
-  /**
-   * For java api
-   * @param doc
-   * @return
-   */
-  def parseToJavaCollection(doc: Document) = parse(doc).asJava
 
 }
