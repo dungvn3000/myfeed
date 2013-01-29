@@ -26,7 +26,7 @@ import org.apache.http.util.EntityUtils
 class ImageDownloader(httpClient: HttpClient = new DefaultHttpClient()) extends Downloader {
 
   def download(crawlJob: CrawlJob) {
-    crawlJob.result.map(_.article.map(article => {
+    crawlJob.article.map(article => {
       val scoreImage = new ListBuffer[(BufferedImage, Double)]
       val potentialImages = article.imagesUrl
 
@@ -82,7 +82,7 @@ class ImageDownloader(httpClient: HttpClient = new DefaultHttpClient()) extends 
           outputStream.close()
         }
       }
-    }))
+    })
   }
 
 

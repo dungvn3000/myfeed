@@ -27,21 +27,19 @@ class LinkerZParser(feeds: List[Feed]) extends Parser {
   val articleParser = new ArticleParser
 
   def parse(crawlJob: CrawlJob) {
-    crawlJob.result.map(result => {
-      val webUrl = result.webUrl
+    if (!crawlJob.isError) {
+      val webUrl = crawlJob.webUrl
       info("Parse: " + webUrl.toString)
-      if (result.content != null) {
-        val inputStream = new ByteArrayInputStream(result.content)
-        val doc = Jsoup.parse(inputStream, result.contentEncoding, result.webUrl.baseUrl)
+      if (crawlJob.content != null) {
+        val inputStream = new ByteArrayInputStream(crawlJob.content)
+        val doc = Jsoup.parse(inputStream, crawlJob.contentEncoding, webUrl.baseUrl)
 
-        result.webUrls = linksParser.parse(doc)
+        crawlJob.webUrls = linksParser.parse(doc)
 
         feeds.find(feed => matcher(webUrl.toString, feed.urlRegex)).map(feed => {
-          result.article = articleParser.parse(doc, feed.contentSelection, feed.removeSelections)
+          crawlJob.article = articleParser.parse(doc, feed.contentSelection, feed.removeSelections)
         })
-
-        result.feedId = crawlJob.feedId
       }
-    })
+    }
   }
 }
