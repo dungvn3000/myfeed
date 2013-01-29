@@ -6,8 +6,10 @@ import org.apache.commons.lang.StringUtils
 import edu.uci.ics.crawler4j.url.URLCanonicalizer
 import org.apache.commons.validator.routines.UrlValidator
 import collection.JavaConversions._
+import collection.JavaConverters._
 import org.apache.http.client.utils.URIUtils
 import java.net.URI
+import collection.mutable.ListBuffer
 
 /**
  * This class using for crawling.
@@ -25,9 +27,9 @@ class LinksParser {
    */
   def parse(doc: Document) = {
     //Using java list for better performance.
-    val containImageLinks = new java.util.ArrayList[Link]()
-    val notContainImageLinks = new java.util.ArrayList[Link]()
-    val links = new java.util.ArrayList[Link]()
+    val containImageLinks = new ListBuffer[Link]()
+    val notContainImageLinks = new ListBuffer[Link]()
+    val links = new ListBuffer[Link]()
 
     val httpHost = URIUtils.extractHost(new URI(doc.baseUri()))
     val baseUrl = httpHost.toURI
@@ -73,7 +75,14 @@ class LinksParser {
       link.score = (links.size - i).toDouble / links.size
     }
 
-    links.sortBy(-_.score)
+    links.toList.sortBy(-_.score)
   }
+
+  /**
+   * For Java Api
+   * @param doc
+   * @return
+   */
+  def parseToJavaList(doc: Document) = parse(doc).asJava
 
 }
