@@ -26,9 +26,9 @@ class DefaultDownloader(httpClient: HttpClient = new DefaultHttpClient) extends 
 
   def download(crawlJob: CrawlJob) {
     val webUrl = crawlJob.webUrl
-    val response = httpClient.execute(new HttpGet(webUrl.url))
+    val response = httpClient.execute(new HttpGet(webUrl.toString))
 
-    info("Download " + response.getStatusLine.getStatusCode + " : " + webUrl.url)
+    info("Download " + response.getStatusLine.getStatusCode + " : " + webUrl)
 
     if (response.getStatusLine.getStatusCode == HttpStatus.SC_OK) {
       var entity = response.getEntity
@@ -40,7 +40,10 @@ class DefaultDownloader(httpClient: HttpClient = new DefaultHttpClient) extends 
 
       val webPage = WebPage(webUrl)
       webPage.content = EntityUtils.toByteArray(entity)
-      webPage.contentType = response.getEntity.getContentType.getValue
+
+      if (response.getEntity.getContentType != null) {
+        webPage.contentType = response.getEntity.getContentType.getValue
+      }
 
       if (ContentType.getOrDefault(entity).getCharset != null) {
         webPage.contentEncoding = ContentType.getOrDefault(entity).getCharset.name()

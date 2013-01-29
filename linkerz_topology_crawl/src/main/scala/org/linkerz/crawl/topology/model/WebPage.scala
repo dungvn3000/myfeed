@@ -35,11 +35,16 @@ case class WebPage(webUrl: WebUrl) {
   var isArticle = false
 
   /**
+   * Maximum is 1 and minimum is 0.
+   */
+  var score: Double = 0d
+
+  /**
    * Convenient method to convert a webpage to link model to store the database.
    * @return
    */
   def asLink = Link(
-    url = webUrl.url,
+    url = webUrl.toString,
     title = title,
     text = text,
     description = description,

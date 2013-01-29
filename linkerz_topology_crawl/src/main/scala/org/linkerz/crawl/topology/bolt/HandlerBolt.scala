@@ -40,7 +40,7 @@ class HandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) w
       }
       case Seq(sessionId: UUID, Parse(subJob)) => sessions ~> sessionId map (session => handle(session, subJob)) getOrElse {
         //When session id is none that mean this job is expired already, we will stop it.
-        info("Session is expired " + subJob.webUrl.url)
+        info("Session is expired " + subJob.webUrl)
       }
       case Seq(sessionId: UUID, Ack) => sessions = sessions end sessionId
       case Seq(sessionId: UUID, Fail) => sessions = sessions end sessionId
@@ -88,16 +88,16 @@ class HandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) w
     }
 
 
-    if (job.filterPattern.matcher(webUrl.url).matches()) return false
+    if (job.filterPattern.matcher(webUrl.toString).matches()) return false
 
     //Only crawl the url is match with url regex
-    if (job.urlRegex.isDefined && !SimpleRegexMatcher.matcher(webUrl.url, job.urlRegex.get)) {
+    if (job.urlRegex.isDefined && !SimpleRegexMatcher.matcher(webUrl.toString, job.urlRegex.get)) {
       return false
     }
 
     //Not crawl the exclude url
     if (job.excludeUrl != null) job.excludeUrl.foreach(regex => {
-      if (SimpleRegexMatcher.matcher(webUrl.url, regex)) {
+      if (SimpleRegexMatcher.matcher(webUrl.toString, regex)) {
         return false
       }
     })
@@ -107,7 +107,7 @@ class HandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) w
       || (job.onlyCrawlInSameDomain && webUrl.domainName == session.domainName)) {
       //Make sure the url is not in the queue
       if (!session.queueUrls.contains(webUrl)) {
-        if (LinkDao.findByUrl(webUrl.url).isEmpty) {
+        if (LinkDao.findByUrl(webUrl.toString).isEmpty) {
           return true
         }
       }

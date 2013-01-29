@@ -133,7 +133,7 @@ case class CrawlJob(webUrl: WebUrl) {
     infos += Logging(
       message = msg,
       className = className,
-      url = Some(webUrl.url),
+      url = Some(webUrl.toString),
       logType = LogType.Info.toString,
       category = LogCategory.Crawling.toString
     )
@@ -143,7 +143,7 @@ case class CrawlJob(webUrl: WebUrl) {
     errors += Logging(
       message = msg,
       className = className,
-      url = Some(webUrl.url),
+      url = Some(webUrl.toString),
       logType = LogType.Error.toString,
       category = LogCategory.Crawling.toString
     )
@@ -155,7 +155,7 @@ case class CrawlJob(webUrl: WebUrl) {
       className = className,
       exceptionClass = Some(ex.getClass.getName),
       stackTrace = Some(ex.getStackTraceString),
-      url = Some(webUrl.url),
+      url = Some(webUrl.toString),
       logType = LogType.Error.toString,
       category = LogCategory.Crawling.toString
     )
@@ -169,7 +169,7 @@ case class CrawlJob(webUrl: WebUrl) {
     warns += Logging(
       message = msg,
       className = className,
-      url = Some(webUrl.url),
+      url = Some(webUrl.toString),
       logType = LogType.Warn.toString,
       category = LogCategory.Crawling.toString
     )
