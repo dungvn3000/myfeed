@@ -128,21 +128,15 @@ case class CrawlJob(webUrl: WebUrl) {
     _depth
   }
 
-  protected var _errors = new ListBuffer[Logging]
-  protected var _warns = new ListBuffer[Logging]
-  protected var _infos = new ListBuffer[Logging]
-
-  def errors = _errors
+  val errors = new ListBuffer[Logging]
+  val warns = new ListBuffer[Logging]
+  val infos = new ListBuffer[Logging]
 
   //Check whether the job is error or not.
   def isError = !errors.isEmpty || responseCode != HttpStatus.SC_OK
 
-  def infos = _infos
-
-  def warns = _warns
-
   def info(msg: String, className: String) {
-    _infos += Logging(
+    infos += Logging(
       message = msg,
       className = className,
       url = Some(webUrl.toString),
@@ -152,7 +146,7 @@ case class CrawlJob(webUrl: WebUrl) {
   }
 
   def error(msg: String, className: String) {
-    _errors += Logging(
+    errors += Logging(
       message = msg,
       className = className,
       url = Some(webUrl.toString),
@@ -162,7 +156,7 @@ case class CrawlJob(webUrl: WebUrl) {
   }
 
   def error(msg: String, className: String, ex: Throwable) {
-    _errors += Logging(
+    errors += Logging(
       message = msg,
       className = className,
       exceptionClass = Some(ex.getClass.getName),
@@ -178,7 +172,7 @@ case class CrawlJob(webUrl: WebUrl) {
    * @param msg
    */
   def warn(msg: String, className: String) {
-    _warns += Logging(
+    warns += Logging(
       message = msg,
       className = className,
       url = Some(webUrl.toString),
