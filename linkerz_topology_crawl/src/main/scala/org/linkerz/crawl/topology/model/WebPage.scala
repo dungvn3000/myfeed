@@ -5,7 +5,6 @@
 package org.linkerz.crawl.topology.model
 
 import java.util
-import org.apache.http.HttpStatus
 import org.linkerz.model.Link
 import org.bson.types.ObjectId
 
@@ -17,14 +16,11 @@ import org.bson.types.ObjectId
  *
  */
 
-class WebPage extends Serializable {
+case class WebPage(webUrl: WebUrl) {
 
-  var webUrl: WebUrl = _
   //Using java list for better performance.
   var webUrls: java.util.List[WebUrl] = new util.ArrayList[WebUrl]()
   var content: Array[Byte] = Array.empty[Byte]
-
-  var responseCode: Int = _
 
   //Meta data
   var text: Option[String] = None
@@ -39,14 +35,6 @@ class WebPage extends Serializable {
   var isArticle = false
 
   /**
-   * Check the is any error on this page.
-   * @return
-   */
-  def isError = {
-    responseCode != HttpStatus.SC_OK
-  }
-
-  /**
    * Convenient method to convert a webpage to link model to store the database.
    * @return
    */
@@ -56,7 +44,6 @@ class WebPage extends Serializable {
     text = text,
     description = description,
     contentEncoding = contentEncoding,
-    responseCode = responseCode,
     featureImage = featureImage,
     feedId = feedId
   )

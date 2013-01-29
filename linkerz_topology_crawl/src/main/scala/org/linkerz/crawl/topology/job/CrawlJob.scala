@@ -9,6 +9,7 @@ import scala.Some
 import org.linkerz.model.{LogCategory, LogType, Feed, Logging}
 import collection.mutable.ListBuffer
 import org.bson.types.ObjectId
+import org.apache.http.HttpStatus
 
 /**
  * The Class CrawlJob.
@@ -60,6 +61,8 @@ case class CrawlJob(webUrl: WebUrl) {
    * The result of this job will has this attribute.
    */
   var feedId: ObjectId = _
+
+  var responseCode: Int = _
 
   /**
    * String url.
@@ -119,21 +122,15 @@ case class CrawlJob(webUrl: WebUrl) {
     _depth
   }
 
-  protected var _errors = new ListBuffer[Logging]
-  protected var _warns = new ListBuffer[Logging]
-  protected var _infos = new ListBuffer[Logging]
-
-  def errors = _errors
+  val errors = new ListBuffer[Logging]
+  val warns = new ListBuffer[Logging]
+  val infos = new ListBuffer[Logging]
 
   //Check whether the job is error or not.
-  def isError = !errors.isEmpty
-
-  def infos = _infos
-
-  def warns = _warns
+  def isError = !errors.isEmpty || responseCode != HttpStatus.SC_OK
 
   def info(msg: String, className: String, webUrl: WebUrl) {
-    _infos += Logging(
+    infos += Logging(
       message = msg,
       className = className,
       url = Some(webUrl.url),
@@ -143,7 +140,7 @@ case class CrawlJob(webUrl: WebUrl) {
   }
 
   def error(msg: String, className: String, webUrl: WebUrl) {
-    _errors += Logging(
+    errors += Logging(
       message = msg,
       className = className,
       url = Some(webUrl.url),
@@ -153,7 +150,7 @@ case class CrawlJob(webUrl: WebUrl) {
   }
 
   def error(msg: String, className: String, webUrl: WebUrl, ex: Throwable) {
-    _errors += Logging(
+    errors += Logging(
       message = msg,
       className = className,
       exceptionClass = Some(ex.getClass.getName),
@@ -169,7 +166,7 @@ case class CrawlJob(webUrl: WebUrl) {
    * @param msg
    */
   def warn(msg: String, className: String) {
-    _warns += Logging(
+    warns += Logging(
       message = msg,
       className = className,
       logType = LogType.Warn.toString,
@@ -182,7 +179,7 @@ case class CrawlJob(webUrl: WebUrl) {
    * @param msg
    */
   def info(msg: String, className: String) {
-    _infos += Logging(
+    infos += Logging(
       message = msg,
       className = className,
       logType = LogType.Info.toString,
@@ -195,7 +192,7 @@ case class CrawlJob(webUrl: WebUrl) {
    * @param msg
    */
   def error(msg: String, className: String) {
-    _errors += Logging(
+    errors += Logging(
       message = msg,
       className = className,
       logType = LogType.Error.toString,
@@ -209,7 +206,7 @@ case class CrawlJob(webUrl: WebUrl) {
    * @param ex Throwable.
    */
   def error(msg: String, className: String, ex: Throwable) {
-    _errors += Logging(
+    errors += Logging(
       message = msg,
       className = className,
       exceptionClass = Some(ex.getClass.getName),

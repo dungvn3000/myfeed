@@ -18,7 +18,7 @@ class PersistentBolt extends StormBolt(outputFields = List("sessionId", "event")
     implicit tuple => tuple matchSeq {
       case Seq(sessionId: UUID, MetaFetch(job)) => {
         job.result.map {
-          webPage => if (!webPage.isError && webPage.isArticle) {
+          webPage => if (webPage.isArticle) {
             LinkDao.checkAndSave(webPage.asLink)
           }
         }
