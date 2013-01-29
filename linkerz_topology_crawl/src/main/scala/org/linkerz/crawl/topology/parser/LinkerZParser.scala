@@ -11,6 +11,8 @@ import collection.mutable
 import org.apache.commons.validator.routines.UrlValidator
 import org.linkerz.model.Feed
 import org.linkerz.core.matcher.SimpleRegexMatcher._
+import org.linkerz.crawl.topology.model.WebUrl
+import scala.collection.JavaConversions._
 
 /**
  * The this class using two parser LinksParse and ArticleParser.
@@ -33,8 +35,7 @@ class LinkerZParser(feeds: List[Feed]) extends Parser {
         val doc = Jsoup.parse(inputStream, webPage.contentEncoding, webPage.webUrl.url)
 
         val links = linksParser.parse(doc)
-        //TODO: Refactor remove weburl
-//        links.foreach(webPage.webUrls += new WebUrl(_))
+        links.foreach(link => webPage.webUrls += new WebUrl(link.url))
 
         feeds.find(feed => matcher(webUrl.url, feed.urlRegex)).map(feed => {
           articleParser.parse(doc, feed.contentSelection, feed.removeSelections).map(article => {

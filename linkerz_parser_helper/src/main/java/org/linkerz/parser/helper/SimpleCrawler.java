@@ -14,6 +14,7 @@ import org.linkerz.parser.ArticleParser;
 import org.linkerz.parser.LinksParser;
 import org.linkerz.parser.model.Article;
 import org.linkerz.parser.model.ImageElement;
+import org.linkerz.parser.model.Link;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,22 +63,22 @@ public class SimpleCrawler {
                                 resultTxt.append(testUrl);
                                 resultTxt.append("\n");
 
-                                if(configuration.isShowTitle()) {
+                                if (configuration.isShowTitle()) {
                                     resultTxt.append(article.title());
                                     resultTxt.append("\n");
                                 }
 
-                                if(configuration.isShowDescription()) {
+                                if (configuration.isShowDescription()) {
                                     resultTxt.append(article.description(30));
                                     resultTxt.append("\n");
                                 }
 
-                                if(configuration.isShowText()) {
+                                if (configuration.isShowText()) {
                                     resultTxt.append(article.text());
                                     resultTxt.append("\n");
                                 }
 
-                                if(configuration.isShowImage()) {
+                                if (configuration.isShowImage()) {
                                     for (ImageElement element : article.imagesAsJavaList()) {
                                         resultTxt.append(element.src());
                                         resultTxt.append("\n");
@@ -104,8 +105,9 @@ public class SimpleCrawler {
         HttpEntity entity = download(url, statusLbl);
         if (entity != null) {
             Document doc = Jsoup.parse(entity.getContent(), "UTF-8", url);
-            //TODO: Refactor remove weburl
-//            testUrls = linksParser.parse(doc);
+            for (Link link : linksParser.parseToJavaList(doc)) {
+                testUrls.add(link.url());
+            }
         }
         return testUrls;
     }
