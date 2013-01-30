@@ -31,7 +31,7 @@ class ImageDownloader(httpClient: HttpClient = new DefaultHttpClient()) extends 
       val potentialImages = webPage.potentialImages
 
       var skip = false
-      potentialImages.toList.sortBy(-_.length).foreach(imageUrl => if (!skip) {
+      potentialImages.foreach(imageUrl => if (!skip) {
         try {
           val response = httpClient.execute(new HttpGet(imageUrl))
           val entity = response.getEntity
