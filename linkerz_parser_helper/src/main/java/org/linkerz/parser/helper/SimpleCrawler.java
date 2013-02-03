@@ -22,7 +22,7 @@ import javax.swing.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -100,7 +100,7 @@ public class SimpleCrawler {
     }
 
     private List<String> getTestUrls(String url, JLabel statusLbl) throws IOException {
-        List<String> testUrls = Collections.emptyList();
+        List<String> testUrls = new ArrayList<String>();
         LinksParser linksParser = new LinksParser();
         HttpEntity entity = download(url, statusLbl);
         if (entity != null) {
