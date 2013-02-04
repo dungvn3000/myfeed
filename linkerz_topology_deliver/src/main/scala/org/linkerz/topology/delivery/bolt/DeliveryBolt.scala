@@ -3,7 +3,9 @@ package org.linkerz.topology.delivery.bolt
 import storm.scala.dsl.StormBolt
 import grizzled.slf4j.Logging
 import org.bson.types.ObjectId
-import org.linkerz.topology.delivery.event.GetNews
+import org.linkerz.topology.delivery.event.{Delivery, GetNews}
+import org.linkerz.model.NewsBox
+import org.linkerz.dao.{NewsBoxDao, FeedDao}
 
 /**
  * The Class DeliveryBolt.
@@ -16,7 +18,17 @@ class DeliveryBolt extends StormBolt(outputFields = List("userId", "event")) wit
 
   execute(tuple => tuple matchSeq {
     case Seq(userId: ObjectId, GetNews(links)) => {
+      links.foreach(link => {
+        FeedDao.findOneById(link.feedId).map(feed => {
+          NewsBoxDao.save(NewsBox(
+            userId = userId,
+            linkId = link._id,
+            group = feed.group
+          ))
+        })
+      })
 
+      tuple emit(userId, Delivery)
     }
   })
 

@@ -1,6 +1,7 @@
 package org.linkerz.topology.delivery.event
 
 import org.linkerz.model.Link
+import org.bson.types.ObjectId
 
 /**
  * The Class Events.
@@ -12,7 +13,7 @@ import org.linkerz.model.Link
 
 sealed trait Event extends Serializable
 
-case object Start extends Event
+case class Start(feedIds: List[ObjectId]) extends Event
 
 case object Delivery extends Event
 

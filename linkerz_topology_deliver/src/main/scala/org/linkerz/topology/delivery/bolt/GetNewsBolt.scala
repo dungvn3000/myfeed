@@ -2,8 +2,10 @@ package org.linkerz.topology.delivery.bolt
 
 import storm.scala.dsl.StormBolt
 import grizzled.slf4j.Logging
-import org.linkerz.topology.delivery.event.Start
+import org.linkerz.topology.delivery.event.{GetNews, Start}
 import org.bson.types.ObjectId
+import org.linkerz.dao.{NewsBoxDao, LinkDao}
+import org.joda.time.DateTime
 
 /**
  * The Class GetNewsBolt.
@@ -15,8 +17,17 @@ import org.bson.types.ObjectId
 class GetNewsBolt extends StormBolt(outputFields = List("userId", "event")) with Logging {
 
   execute(tuple => tuple matchSeq {
-    case Seq(userId: ObjectId, Start) => {
+    case Seq(userId: ObjectId, Start(feedIds)) => {
+      val last7Day = DateTime.now.minusDays(7)
+      var links = LinkDao.getAfter(last7Day, feedIds)
 
+      links = links.filter(link => {
+        !NewsBoxDao.isExist(link._id)
+      })
+
+      if (!links.isEmpty) {
+        tuple emit(userId, GetNews(links))
+      }
     }
   })
 
