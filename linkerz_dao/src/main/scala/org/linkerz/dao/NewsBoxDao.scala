@@ -31,7 +31,10 @@ object NewsBoxDao extends SalatDAO[NewsBox, ObjectId](mongo("newsbox")) {
   }
 
   def getUserClicked(userId: ObjectId) = {
-    val clicks = find(MongoDBObject("userId" -> userId)).filter(_.click)
+    val clicks = find(MongoDBObject(
+      "userId" -> userId,
+      "click" -> true
+    ))
     val links = new ListBuffer[Link]
     clicks.foreach(click => {
       val link = LinkDao.findOneById(click.linkId).getOrElse(throw new Exception("Some thing goes worng, can't find the link id"))
@@ -43,6 +46,7 @@ object NewsBoxDao extends SalatDAO[NewsBox, ObjectId](mongo("newsbox")) {
   def isUserClicked(userId: ObjectId, linkId: ObjectId) = !find(
     MongoDBObject(
       "userId" -> userId,
-      "linkId" -> linkId
+      "linkId" -> linkId,
+      "click" -> true
     )).isEmpty
 }
