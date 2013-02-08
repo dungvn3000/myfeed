@@ -17,11 +17,13 @@ class MergeBolt extends StormBolt(outputFields = List("userId", "event")) {
 
   execute {
     tuple => tuple matchSeq {
-      case Seq(userId: ObjectId, GetClickedLink(clickedLink)) => {
+      case Seq(userId: ObjectId, GetClickedLink(clickedLinks)) => {
         val last7Day = DateTime.now.minusDays(7)
         val links = LinkDao.getAfter(last7Day)
-        links.foreach(link => {
-          tuple emit(userId, MergeLink(clickedLink, link))
+        clickedLinks.foreach(clickedLink => {
+          links.foreach(link => {
+            tuple emit(userId, MergeLink(clickedLink, link))
+          })
         })
       }
     }

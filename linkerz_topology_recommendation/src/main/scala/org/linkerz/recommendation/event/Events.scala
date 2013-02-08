@@ -13,7 +13,7 @@ import org.bson.types.ObjectId
 sealed trait Event extends Serializable
 
 object Recommendation extends Event
-case class GetClickedLink(clickedLink: Link) extends Event
+case class GetClickedLink(clickedLinks: List[Link]) extends Event
 case class MergeLink(clickedLink: Link, link: Link) extends Event
 case class Correlation(clickedLinkId: ObjectId, linkId: ObjectId, score: Double) extends Event
 

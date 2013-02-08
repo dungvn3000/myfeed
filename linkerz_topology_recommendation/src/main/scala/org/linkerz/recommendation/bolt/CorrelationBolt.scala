@@ -26,8 +26,6 @@ class CorrelationBolt extends StormBolt(outputFields = List("userId", "event")) 
   @transient var pearsonsCorrelation: PearsonsCorrelation = _
   @transient var tokenizer: Tokenizer = _
 
-  var count = 0
-
   setup {
     pearsonsCorrelation = new PearsonsCorrelation
     tokenizer = JavaWordTokenizer ~> StopWordFilter("vi")
@@ -40,9 +38,10 @@ class CorrelationBolt extends StormBolt(outputFields = List("userId", "event")) 
           val text1 = clickedLink.text.get + " " + clickedLink.title
           val text2 = link.text.get + " " + link.title
           val score = sim_pearson(text1, text2)
-          count +=1
 
-          if (score > 0.55 && score < 0.8 && !NewsBoxDao.isUserClicked(userId, link._id)) {
+          if (score > 0.55 && score < 0.9
+            && !NewsBoxDao.isUserClicked(userId, link._id)
+            && !NewsBoxDao.isInRecommend(userId, link._id)) {
             info(score + " - " + clickedLink.title + " - " + link.title)
             NewsBoxDao.save(NewsBox(
               userId = userId,
