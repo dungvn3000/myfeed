@@ -104,7 +104,6 @@ object LinkerZBuild extends Build {
   )
 
   lazy val crawlerTopologyDependencies = Seq(
-    "org.jsoup" % "jsoup" % "1.7.1",
     "org.apache.httpcomponents" % "httpclient" % "4.2.2",
     "net.coobird" % "thumbnailator" % "0.4.2",
     "org.imgscalr" % "imgscalr-lib" % "4.2",
@@ -122,6 +121,7 @@ object LinkerZBuild extends Build {
   ) ++ stormDependencies ++ testDependencies
 
   lazy val parserDependencies = Seq(
+    "rome" % "rome" % "1.0",
     "org.jsoup" % "jsoup" % "1.7.1",
     "org.apache.httpcomponents" % "httpclient" % "4.2.2",
     "org.scalanlp" % "breeze-process_2.9.2" % "0.1"
