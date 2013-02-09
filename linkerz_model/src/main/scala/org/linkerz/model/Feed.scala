@@ -16,16 +16,9 @@ import org.bson.types.ObjectId
 
 case class Feed(
                  _id: ObjectId = new ObjectId,
-
                  name: String,
-                 url: String,
+                 urls: List[String],
                  enable: Boolean,
-                 group: String,
-
-                 urlRegex: String,
-                 excludeUrl: List[String] = Nil,
-
-                 contentSelection: String,
-                 removeSelections: List[String]
+                 group: String
                  ) extends LinkerZModel(_id)
 

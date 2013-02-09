@@ -12,7 +12,7 @@ import grizzled.slf4j.Logging
  * @since 11/29/12 11:41 PM
  *
  */
-class HandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) with Logging {
+class FeedHandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) with Logging {
 
 
 

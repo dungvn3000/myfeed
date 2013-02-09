@@ -18,7 +18,7 @@ object CrawlTopology extends Serializable {
     val builder = new TopologyBuilder
     builder.setSpout("spout", new FeedSpout)
 
-    builder.setBolt("handler", new HandlerBolt, 5)
+    builder.setBolt("handler", new FeedHandlerBolt, 5)
       .fieldsGrouping("spout", new Fields("sessionId"))
       .fieldsGrouping("parser", new Fields("sessionId"))
 
