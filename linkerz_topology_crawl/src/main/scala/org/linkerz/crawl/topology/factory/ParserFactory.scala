@@ -4,9 +4,7 @@
 
 package org.linkerz.crawl.topology.factory
 
-import org.linkerz.crawl.topology.parser.{RssParser, LinkerZParser}
-import org.linkerz.dao.FeedDao
-import com.mongodb.casbah.commons.MongoDBObject
+import org.linkerz.crawl.topology.parser.{RssParser, WebPageParser}
 
 /**
  * The Class DefaultParserFactory.
@@ -18,10 +16,7 @@ import com.mongodb.casbah.commons.MongoDBObject
 
 object ParserFactory {
 
-  def createParser() = {
-    val feeds = FeedDao.find(MongoDBObject.empty).toList
-    new LinkerZParser(feeds)
-  }
+  def createParser() = new WebPageParser
 
   def createRssParser() = new RssParser
 

@@ -21,7 +21,7 @@ class ScheduleActor(collector: SpoutOutputCollector) extends Actor with DBLogger
     case "run" => {
       val newFeeds = FeedDao.find(MongoDBObject("enable" -> true)).toList
       newFeeds.foreach(feed => {
-        collector.emit(new Values(feed))
+        collector.emit(new Values(feed._id, feed))
       })
     }
   }

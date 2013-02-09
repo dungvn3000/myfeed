@@ -22,7 +22,7 @@ object CrawlTopology extends Serializable {
       .fieldsGrouping("spout", new Fields("sessionId"))
       .fieldsGrouping("parser", new Fields("sessionId"))
 
-    builder.setBolt("fetcher", new WePageFetcherBolt, 10).fieldsGrouping("handler", new Fields("sessionId"))
+    builder.setBolt("fetcher", new WebPageFetcherBolt, 10).fieldsGrouping("handler", new Fields("sessionId"))
 
     builder.setBolt("parser", new WebPageParserBolt, 5).shuffleGrouping("fetcher")
 

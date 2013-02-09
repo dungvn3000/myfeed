@@ -13,14 +13,14 @@ import org.linkerz.crawl.topology.model.WebUrl
  * @since 11/30/12 12:55 AM
  *
  */
-class WePageFetcherBolt extends StormBolt(outputFields = List("webPage")) with Logging {
+class WebPageFetcherBolt extends StormBolt(outputFields = List("feedId", "webPage")) with Logging {
 
   @transient
   private val downloader = DownloaderFactory.createWebPageDownloader()
 
   execute(implicit tuple => tuple matchSeq {
-    case Seq(entry: SyndEntry) => {
-      downloader.download(new WebUrl(entry.getLink)).map(tuple.emit(_))
+    case Seq(feedId, entry: SyndEntry) => {
+      downloader.download(new WebUrl(entry.getLink)).map(tuple.emit(feedId, _))
     }
   })
 

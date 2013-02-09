@@ -15,7 +15,7 @@ import org.linkerz.crawl.topology.model.WebUrl
  * @since 11/29/12 11:41 PM
  *
  */
-class FeedHandlerBolt extends StormBolt(outputFields = List("entry")) with Logging {
+class FeedHandlerBolt extends StormBolt(outputFields = List("feedId", "entry")) with Logging {
 
   @transient
   private val downloader = DownloaderFactory.createDefaultDownloader()
@@ -24,12 +24,12 @@ class FeedHandlerBolt extends StormBolt(outputFields = List("entry")) with Loggi
   private val parser = ParserFactory.createRssParser()
 
   execute(implicit tuple => tuple matchSeq {
-    case Seq(feed: Feed) => {
+    case Seq(feedId, feed: Feed) => {
       feed.urls.foreach(url => {
         val response = downloader.download(new WebUrl(url))
         val entries = parser.parse(response)
         entries.foreach(entry => {
-          tuple.emit(entry)
+          tuple.emit(feedId, entry)
         })
       })
     }
