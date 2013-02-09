@@ -7,7 +7,6 @@ package org.linkerz.crawl.topology.model
 import org.apache.http.client.utils.URIUtils
 import java.net.URI
 import gumi.builders.UrlBuilder
-import org.linkerz.parser.model.Link
 
 /**
  * The Class WebUrl.
@@ -18,11 +17,6 @@ import org.linkerz.parser.model.Link
  */
 
 case class WebUrl(url: String) {
-
-  def this(link: Link) {
-    this(link.url)
-    score = link.score
-  }
 
   /**
    * Maximum is 1 and minimum is 0.

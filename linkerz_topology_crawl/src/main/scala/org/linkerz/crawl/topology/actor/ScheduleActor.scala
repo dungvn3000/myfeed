@@ -4,9 +4,9 @@ import org.linkerz.logger.DBLogger
 import akka.actor.Actor
 import org.linkerz.dao.FeedDao
 import com.mongodb.casbah.commons.MongoDBObject
-import java.util.UUID
 import grizzled.slf4j.Logging
 import backtype.storm.spout.SpoutOutputCollector
+import backtype.storm.tuple.Values
 
 /**
  * The Class ScheduleActor.
@@ -21,9 +21,7 @@ class ScheduleActor(collector: SpoutOutputCollector) extends Actor with DBLogger
     case "run" => {
       val newFeeds = FeedDao.find(MongoDBObject("enable" -> true)).toList
       newFeeds.foreach(feed => {
-        //Make sure the id is unique all the time.
-        val sessionId = UUID.randomUUID()
-//        collector.emit(new Values(sessionId, Start(job)), sessionId)
+        collector.emit(new Values(feed))
       })
     }
   }

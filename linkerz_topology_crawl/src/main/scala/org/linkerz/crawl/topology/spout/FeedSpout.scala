@@ -16,7 +16,7 @@ import org.linkerz.core.actor.Akka
  * @since 11/30/12 1:42 AM
  *
  */
-class FeedSpout extends StormSpout(outputFields = List("sessionId", "event")) with Logging with DBLogger {
+class FeedSpout extends StormSpout(outputFields = List("feed")) with Logging with DBLogger {
 
   setup {
     val scheduleActor = Akka.system.actorOf(Props(new ScheduleActor(_collector)))
