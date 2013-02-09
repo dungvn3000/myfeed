@@ -1,10 +1,8 @@
 package org.linkerz.crawl.topology.bolt
 
 import storm.scala.dsl.StormBolt
-import org.linkerz.crawl.topology.event.{Handle, Fetch}
 import org.linkerz.crawl.topology.factory.DownloadFactory
 import grizzled.slf4j.Logging
-import java.util.UUID
 import org.linkerz.crawl.topology.downloader.Downloader
 
 /**
@@ -21,15 +19,5 @@ class FetcherBolt extends StormBolt(outputFields = List("sessionId", "event")) w
 
   setup {
     downloader = DownloadFactory.createDownloader()
-  }
-
-  execute {
-    implicit tuple => tuple matchSeq {
-      case Seq(sessionId: UUID, Handle(job)) => {
-
-        tuple emit(sessionId, Fetch(job))
-      }
-    }
-    tuple.ack()
   }
 }

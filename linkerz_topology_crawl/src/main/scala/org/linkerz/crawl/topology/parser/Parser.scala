@@ -5,7 +5,6 @@
 package org.linkerz.crawl.topology.parser
 
 import grizzled.slf4j.Logging
-import org.linkerz.crawl.topology.job.CrawlJob
 
 
 /**
@@ -18,6 +17,6 @@ import org.linkerz.crawl.topology.job.CrawlJob
 
 trait Parser extends Logging {
 
-  def parse(crawlJob: CrawlJob)
+//  def parse(crawlJob: FeedJob)
 
 }

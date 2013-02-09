@@ -1,6 +1,5 @@
 package org.linkerz.crawl.topology.parser
 
-import org.linkerz.crawl.topology.job.CrawlJob
 import org.linkerz.parser.{ArticleParser, LinksParser}
 import org.linkerz.model.Feed
 
@@ -16,7 +15,7 @@ class LinkerZParser(feeds: List[Feed]) extends Parser {
   val linksParser = new LinksParser
   val articleParser = new ArticleParser
 
-  def parse(crawlJob: CrawlJob) {
+//  def parse(crawlJob: FeedJob) {
 //    crawlJob.result.map(webPage => {
 //      info("Parse: " + webPage.urlAsString)
 //      if (webPage.content != null) {
@@ -55,5 +54,5 @@ class LinkerZParser(feeds: List[Feed]) extends Parser {
 //        })
 //      }
 //    })
-  }
+//  }
 }

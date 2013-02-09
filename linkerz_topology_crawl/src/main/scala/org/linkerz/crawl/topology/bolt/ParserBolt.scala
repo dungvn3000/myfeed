@@ -1,10 +1,8 @@
 package org.linkerz.crawl.topology.bolt
 
 import storm.scala.dsl.StormBolt
-import org.linkerz.crawl.topology.event.{Fetch, Parse}
 import org.linkerz.crawl.topology.parser.Parser
 import org.linkerz.crawl.topology.factory.ParserFactory
-import java.util.UUID
 
 /**
  * This bolt will parse a web page.
@@ -22,14 +20,4 @@ class ParserBolt extends StormBolt(outputFields = List("sessionId", "event")) {
     parser = ParserFactory.createParser()
   }
 
-  execute {
-    implicit tuple => tuple matchSeq {
-      case Seq(sessionId: UUID, Fetch(job)) => {
-
-
-        tuple emit(sessionId, Parse(job))
-      }
-    }
-    tuple.ack()
-  }
 }

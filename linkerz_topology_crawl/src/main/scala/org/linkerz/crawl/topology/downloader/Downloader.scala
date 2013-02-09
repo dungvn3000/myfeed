@@ -5,7 +5,6 @@
 package org.linkerz.crawl.topology.downloader
 
 import grizzled.slf4j.Logging
-import org.linkerz.crawl.topology.job.CrawlJob
 import org.apache.http.HttpResponse
 
 /**
@@ -22,7 +21,7 @@ trait Downloader extends Logging {
    * Download a crawl job.
    * @param crawlJob
    */
-  def download(crawlJob: CrawlJob)
+//  def download(crawlJob: FeedJob)
 
 
   def download(url: String): HttpResponse
