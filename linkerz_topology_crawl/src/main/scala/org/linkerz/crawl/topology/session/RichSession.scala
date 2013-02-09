@@ -25,7 +25,6 @@ class RichSession(sessions: List[CrawlSession]) {
    */
   def end(sessionId: UUID) = sessions.filter(session => {
     if (session.id == sessionId) {
-      session.endSession()
       false
     } else true
   })

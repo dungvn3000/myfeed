@@ -48,10 +48,10 @@ class DefaultDownloader(httpClient: HttpClient = new DefaultHttpClient) extends 
       if (ContentType.getOrDefault(entity).getCharset != null) {
         webPage.contentEncoding = ContentType.getOrDefault(entity).getCharset.name()
       }
-      crawlJob.result = Some(webPage)
+//      crawlJob.result = Some(webPage)
     }
 
-    crawlJob.responseCode = response.getStatusLine.getStatusCode
+//    crawlJob.responseCode = response.getStatusLine.getStatusCode
   }
 
   def download(url: String) = httpClient.execute(new HttpGet(url))
