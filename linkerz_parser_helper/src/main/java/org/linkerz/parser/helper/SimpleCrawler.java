@@ -8,8 +8,9 @@ import org.apache.http.client.entity.GzipDecompressingEntity;
 import org.apache.http.client.utils.URIUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.linkerz.crawl.topology.downloader.Downloader;
-import org.linkerz.crawl.topology.factory.DownloadFactory;
+import org.linkerz.crawl.topology.downloader.DefaultDownloader;
+import org.linkerz.crawl.topology.factory.DownloaderFactory;
+import org.linkerz.crawl.topology.model.WebUrl;
 import org.linkerz.parser.ArticleParser;
 import org.linkerz.parser.LinksParser;
 import org.linkerz.parser.model.Article;
@@ -35,7 +36,7 @@ import java.util.regex.Pattern;
 public class SimpleCrawler {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-    private Downloader downloader = DownloadFactory.createDownloader();
+    private DefaultDownloader downloader = DownloaderFactory.createDefaultDownloader();
 
     private Pattern filterPattern = Pattern.compile(".*(\\.(css|js|bmp|gif|jpe?g|png|tiff?|mid|mp2|mp3|mp4|wav|avi|mov|mpeg|ram|m4v|pdf|exe|msi|jar|flv|doc|docx|xls|xlsx|ppt|pptx|rm|smil|wmv|swf|wma|zip|rar|gz))$");
 
@@ -113,7 +114,7 @@ public class SimpleCrawler {
     }
 
     private HttpEntity download(String url, JLabel statusLbl) throws IOException {
-        HttpResponse response = downloader.download(url);
+        HttpResponse response = downloader.download(new WebUrl(url));
         logger.info("Download " + response.getStatusLine().getStatusCode() + ": " + url);
         statusLbl.setText("Download " + response.getStatusLine().getStatusCode() + ": " + url);
         HttpEntity entity = response.getEntity();

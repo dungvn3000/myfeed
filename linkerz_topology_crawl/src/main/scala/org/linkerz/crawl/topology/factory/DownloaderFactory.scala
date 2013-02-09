@@ -4,7 +4,7 @@
 
 package org.linkerz.crawl.topology.factory
 
-import org.linkerz.crawl.topology.downloader.{DefaultDownloader, WebPageDownloader}
+import org.linkerz.crawl.topology.downloader.{ImageDownloader, DefaultDownloader, WebPageDownloader}
 import org.apache.http.params.{CoreConnectionPNames, CoreProtocolPNames, BasicHttpParams}
 import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.conn.scheme.{PlainSocketFactory, Scheme, SchemeRegistry}
@@ -43,6 +43,12 @@ object DownloaderFactory {
   def createWebPageDownloader() = {
     val client = new DefaultHttpClient(cm, httpParams)
     client.setRedirectStrategy(new StrictlyRedirectStrategy)
-    new WebPageDownloader()(client)
+    new WebPageDownloader(client)
+  }
+
+  def createImageDownloader() = {
+    val client = new DefaultHttpClient(cm, httpParams)
+    client.setRedirectStrategy(new StrictlyRedirectStrategy)
+    new ImageDownloader(client)
   }
 }
