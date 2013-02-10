@@ -12,8 +12,11 @@ import gumi.builders.UrlBuilder
  */
 class StrictlyRedirectStrategy extends DefaultRedirectStrategy {
 
+  var lastRedirectedUri: String = _
+
   override def createLocationURI(location: String) = {
     val newLocation = UrlBuilder.fromString(location).toString
+    lastRedirectedUri = newLocation
     super.createLocationURI(newLocation)
   }
 
