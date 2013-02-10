@@ -40,14 +40,16 @@ class ImageDownloader(httpClient: HttpClient = new DefaultHttpClient()) extends 
             val bytes = EntityUtils.toByteArray(entity)
             val inputStream = new ByteArrayInputStream(bytes)
             val image = ImageIO.read(inputStream)
-            val score = image.getWidth + image.getHeight
-            if (score >= 300) {
-              scoreImage += image -> score
-            }
+            if (image != null) {
+              val score = image.getWidth + image.getHeight
+              if (score >= 300) {
+                scoreImage += image -> score
+              }
 
-            //Avoid download too much images, if the image score is 600, definitely it is good.
-            if (score >= 600) {
-              skip = true
+              //Avoid download too much images, if the image score is 600, definitely it is good.
+              if (score >= 600) {
+                skip = true
+              }
             }
           } catch {
             case ex: Exception => {

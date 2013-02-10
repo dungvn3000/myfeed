@@ -5,6 +5,7 @@ import grizzled.slf4j.Logging
 import org.linkerz.crawl.topology.factory.DownloaderFactory
 import com.sun.syndication.feed.synd.SyndEntry
 import org.linkerz.crawl.topology.model.WebUrl
+import org.linkerz.crawl.topology.downloader.WebPageDownloader
 
 /**
  * This bolt is simply download a url and emit it to a parser.
@@ -16,7 +17,11 @@ import org.linkerz.crawl.topology.model.WebUrl
 class WebPageFetcherBolt extends StormBolt(outputFields = List("feedId", "webPage")) with Logging {
 
   @transient
-  private val downloader = DownloaderFactory.createWebPageDownloader()
+  private var downloader: WebPageDownloader = _
+
+  setup {
+    downloader = DownloaderFactory.createWebPageDownloader()
+  }
 
   execute(implicit tuple => tuple matchSeq {
     case Seq(feedId, entry: SyndEntry) => {

@@ -4,7 +4,6 @@ import storm.scala.dsl.StormBolt
 import grizzled.slf4j.Logging
 import org.linkerz.crawl.topology.model.WebPage
 import org.bson.types.ObjectId
-import org.linkerz.dao.LinkDao
 
 /**
  * This bolt is using for persistent data to the database server.
@@ -17,7 +16,7 @@ class PersistentBolt extends StormBolt(outputFields = Nil) with Logging {
 
   execute(implicit tuple => tuple matchSeq {
     case Seq(feedId: ObjectId, webPage: WebPage) => {
-      LinkDao.save(webPage.asLink(feedId))
+//      LinkDao.save(webPage.asLink(feedId))
     }
   })
 

@@ -17,7 +17,7 @@ object CrawlingLocalRunner extends App {
 
   val conf = new Config
   conf setDebug false
-  conf setNumWorkers 8
+  conf setNumWorkers 4
   //Set time out for an crawl job is 10 minutes
   conf setMessageTimeoutSecs 60 * 10
 

@@ -5,6 +5,8 @@ import grizzled.slf4j.Logging
 import org.linkerz.crawl.topology.factory.{DownloaderFactory, ParserFactory}
 import org.linkerz.model.Feed
 import org.linkerz.crawl.topology.model.WebUrl
+import org.linkerz.crawl.topology.downloader.DefaultDownloader
+import org.linkerz.crawl.topology.parser.RssParser
 
 /**
  * The mission of this bolt will receive job from the feed spot and emit it to a fetcher. On the other hand this bolt
@@ -18,10 +20,15 @@ import org.linkerz.crawl.topology.model.WebUrl
 class FeedHandlerBolt extends StormBolt(outputFields = List("feedId", "entry")) with Logging {
 
   @transient
-  private val downloader = DownloaderFactory.createDefaultDownloader()
+  private var downloader: DefaultDownloader = _
 
   @transient
-  private val parser = ParserFactory.createRssParser()
+  private var parser: RssParser = _
+
+  setup {
+    downloader = DownloaderFactory.createDefaultDownloader()
+    parser = ParserFactory.createRssParser()
+  }
 
   execute(implicit tuple => tuple matchSeq {
     case Seq(feedId, feed: Feed) => {
@@ -31,6 +38,10 @@ class FeedHandlerBolt extends StormBolt(outputFields = List("feedId", "entry")) 
         entries.foreach(entry => {
           tuple.emit(feedId, entry)
         })
+
+        if (entries.isEmpty) {
+          info("Can't parse this url: " + url)
+        }
       })
     }
   })

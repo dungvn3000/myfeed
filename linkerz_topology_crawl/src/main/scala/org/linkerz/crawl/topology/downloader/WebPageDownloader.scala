@@ -14,7 +14,6 @@ import org.apache.http.entity.ContentType
 import org.apache.http.util.EntityUtils
 import org.apache.http.client.entity.GzipDecompressingEntity
 import org.linkerz.crawl.topology.factory.StrictlyRedirectStrategy
-import org.linkerz.core.string.RichString._
 
 /**
  * The Class DefaultDownload.
@@ -44,8 +43,8 @@ class WebPageDownloader(httpClient: HttpClient = new DefaultHttpClient) extends 
         if (redirectHandler.isInstanceOf[StrictlyRedirectStrategy]) {
           val redirectUrl = redirectHandler.asInstanceOf[StrictlyRedirectStrategy].lastRedirectedUri
 
-          if (redirectUrl.isNotBlank) {
-            webPage = WebPage(webUrl.copy(url = redirectUrl))
+          if (redirectUrl != null) {
+            webPage = WebPage(webUrl.copy(url = redirectUrl.toString))
           }
         }
       }
