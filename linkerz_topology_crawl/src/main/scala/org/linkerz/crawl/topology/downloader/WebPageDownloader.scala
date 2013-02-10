@@ -41,10 +41,11 @@ class WebPageDownloader(httpClient: HttpClient = new DefaultHttpClient) extends 
       if (httpClient.isInstanceOf[DefaultHttpClient]) {
         val redirectHandler = httpClient.asInstanceOf[DefaultHttpClient].getRedirectStrategy
         if (redirectHandler.isInstanceOf[StrictlyRedirectStrategy]) {
-          val redirectUrl = redirectHandler.asInstanceOf[StrictlyRedirectStrategy].lastRedirectedUri
-
+          val strictlyRedirectStrategy = redirectHandler.asInstanceOf[StrictlyRedirectStrategy]
+          val redirectUrl = strictlyRedirectStrategy.lastRedirectedUri
           if (redirectUrl != null) {
             webPage = WebPage(webUrl.copy(url = redirectUrl.toString))
+            strictlyRedirectStrategy.lastRedirectedUri = null
           }
         }
       }

@@ -73,7 +73,7 @@ class ImageDownloader(httpClient: HttpClient = new DefaultHttpClient()) extends 
           preferHeight = bestImage.getHeight * 30 / 100
         }
         val resizeImage = Scalr.resize(bestImage, Scalr.Method.AUTOMATIC, Scalr.Mode.AUTOMATIC, 300, preferHeight, Scalr.OP_ANTIALIAS)
-        ImageIO.write(resizeImage, "png", outputStream)
+        ImageIO.write(resizeImage, "jpg", outputStream)
         outputStream.flush()
         webPage.featureImage = Some(outputStream.toByteArray)
       } catch {
