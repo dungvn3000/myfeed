@@ -43,7 +43,11 @@ abstract class StormBolt(val streamToFields: collection.Map[String, List[String]
   }
 
   override def execute(tuple: Tuple) {
-    _execute(tuple)
+    try {
+      _execute(tuple)
+    } catch {
+      case ex: Exception => _collector.reportError(ex)
+    }
   }
 
   var _execute: Tuple => Unit = _
