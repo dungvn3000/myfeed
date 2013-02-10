@@ -17,8 +17,7 @@ class PersistentBolt extends StormBolt(outputFields = Nil) with Logging {
 
   execute(implicit tuple => tuple matchSeq {
     case Seq(feedId: ObjectId, webPage: WebPage) => {
-      webPage.feedId = feedId
-      LinkDao.save(webPage.asLink)
+      LinkDao.save(webPage.asLink(feedId))
     }
   })
 
