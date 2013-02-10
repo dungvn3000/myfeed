@@ -10,6 +10,7 @@ import org.apache.commons.validator.routines.UrlValidator
 import gumi.builders.UrlBuilder
 import edu.uci.ics.crawler4j.url.URLCanonicalizer
 import collection.mutable
+import com.sun.syndication.feed.synd.SyndEntry
 
 /**
  * The this class using two parser LinksParse and ArticleParser.
@@ -22,13 +23,17 @@ class WebPageParser extends Logging {
 
   val articleParser = new ArticleParser
 
-  def parse(webPage: WebPage) {
+  def parse(webPage: WebPage, entry: Option[SyndEntry] = None) {
     info("Parse: " + webPage.urlAsString)
     if (webPage.content != null) {
       val inputStream = new ByteArrayInputStream(webPage.content)
       val doc = Jsoup.parse(inputStream, webPage.contentEncoding, webPage.urlAsString)
 
-      val article = articleParser.parse(doc)
+      val article = if (entry.isDefined) {
+        articleParser.parse(doc, entry.get.getTitle, entry.get.getDescription.getValue)
+      } else {
+        articleParser.parse(doc)
+      }
 
       webPage.title = article.title
       if (StringUtils.isNotBlank(article.description)) {

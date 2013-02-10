@@ -4,6 +4,7 @@ import grizzled.slf4j.Logging
 import org.linkerz.crawl.topology.factory.{ParserFactory, DownloaderFactory}
 import org.linkerz.crawl.topology.model.{WebPage, WebUrl}
 import javax.swing.{JLabel, JTextArea}
+import com.sun.syndication.feed.synd.SyndEntry
 
 /**
  * The Class Crawler.
@@ -22,11 +23,11 @@ class SimpleCrawler extends Logging {
   def crawl(rssUrl: String, configuration: Configuration, resultTxt: JTextArea, statusLbl: JLabel) {
     var count = 0
     var time = System.currentTimeMillis()
-    val urls = getUrlList(rssUrl)
-    urls.foreach(url => {
-      statusLbl.setText("Downloading: " + url)
-      download(url).map(webPage => {
-        parser(webPage)
+    val urls = getEntryList(rssUrl)
+    urls.foreach(entry => {
+      statusLbl.setText("Downloading: " + entry.getLink)
+      download(entry.getLink).map(webPage => {
+        parser(webPage, entry)
         if (webPage.isArticle) {
           resultTxt.append(webPage.webUrl.toString)
           resultTxt.append("\n")
@@ -64,16 +65,16 @@ class SimpleCrawler extends Logging {
     statusLbl.setText("Downloaded: " + count + " websites in " + (time / 1000) + " s")
   }
 
-  def getUrlList(url: String) = {
+  def getEntryList(url: String) = {
     val response = defaultDownloader.download(new WebUrl(url))
     val entries = rssParser.parse(response)
-    entries.map(_.getLink)
+    entries
   }
 
   def download(url: String) = webPageDownloader.download(new WebUrl(url))
 
-  def parser(webPage: WebPage) {
-    webPageParser.parse(webPage)
+  def parser(webPage: WebPage, entry: SyndEntry) {
+    webPageParser.parse(webPage, Some(entry))
   }
 
 }

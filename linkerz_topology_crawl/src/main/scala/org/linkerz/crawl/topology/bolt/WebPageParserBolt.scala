@@ -5,6 +5,7 @@ import grizzled.slf4j.Logging
 import org.linkerz.crawl.topology.factory.ParserFactory
 import org.linkerz.crawl.topology.model.WebPage
 import org.linkerz.crawl.topology.parser.WebPageParser
+import com.sun.syndication.feed.synd.SyndEntry
 
 /**
  * This bolt will parse a web page.
@@ -23,8 +24,8 @@ class WebPageParserBolt extends StormBolt(outputFields = List("feedId", "webPage
   }
 
   execute(implicit tuple => tuple matchSeq {
-    case Seq(feedId, webPage: WebPage) => {
-      parser.parse(webPage)
+    case Seq(feedId, entry: SyndEntry, webPage: WebPage) => {
+      parser.parse(webPage, Some(entry))
       tuple.emit(feedId, webPage)
     }
   })

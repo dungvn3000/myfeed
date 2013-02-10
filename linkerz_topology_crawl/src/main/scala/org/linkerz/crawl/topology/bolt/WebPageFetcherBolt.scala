@@ -14,7 +14,7 @@ import org.linkerz.crawl.topology.downloader.WebPageDownloader
  * @since 11/30/12 12:55 AM
  *
  */
-class WebPageFetcherBolt extends StormBolt(outputFields = List("feedId", "webPage")) with Logging {
+class WebPageFetcherBolt extends StormBolt(outputFields = List("feedId", "entry" ,"webPage")) with Logging {
 
   @transient
   private var downloader: WebPageDownloader = _
@@ -25,7 +25,7 @@ class WebPageFetcherBolt extends StormBolt(outputFields = List("feedId", "webPag
 
   execute(implicit tuple => tuple matchSeq {
     case Seq(feedId, entry: SyndEntry) => {
-      downloader.download(new WebUrl(entry.getLink)).map(tuple.emit(feedId, _))
+      downloader.download(new WebUrl(entry.getLink)).map(tuple.emit(feedId, entry, _))
     }
   })
 
