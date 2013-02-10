@@ -58,7 +58,7 @@ public class SimpleCrawler {
                         HttpEntity testEntity = download(testUrl, statusLbl);
                         if (testEntity != null) {
                             Document doc = Jsoup.parse(testEntity.getContent(), "UTF-8", testUrl);
-                            Article article = articleParser.parse(doc, contentSelection, removeSelections);
+                            Article article = articleParser.parse(doc, "", "");
                             if (article != null) {
                                 count += 1;
                                 resultTxt.append(testUrl);

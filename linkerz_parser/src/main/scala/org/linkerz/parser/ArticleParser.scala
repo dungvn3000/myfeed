@@ -3,8 +3,6 @@ package org.linkerz.parser
 import processor._
 import model.Article
 import org.jsoup.nodes.Document
-import collection.JavaConversions._
-import org.apache.commons.lang.StringUtils
 
 /**
  * The Class ArticleParser.
@@ -15,11 +13,12 @@ import org.apache.commons.lang.StringUtils
  */
 class ArticleParser {
 
-  val processorsForAutoMode = new Processors <~ List(
+  val processors = new Processors <~ List(
     //Step1: Remove hidden element , clean document.
     new DocumentCleaner,
     new LanguageDetector,
     new RemoveHiddenElement,
+    new RemoveDirtyElementFilter,
     //Step2: Extract article elements.
     new ArticleExtractor,
     new TitleExtractor,
@@ -38,58 +37,17 @@ class ArticleParser {
     new ExpandTitleToContentFilter
   )
 
-  val processorsForManualMode = new Processors <~ List(
-    new DocumentCleaner,
-    new LanguageDetector,
-    new RemoveHiddenElement,
-    new RemoveDirtyElementFilter,
-    new ArticleExtractor,
-    new TitleExtractor,
-    new MarkEveryThingIsPotentialFilter,
-    new DirtyImageFilter,
-    new HighLinkDensityFilter,
-    new MarkPotentialIsContentFilter
-  )
-
   /**
    * Parse a html document to an article
    * @param doc
+   * @param title optional using like a hint for parser
+   * @param description optional using like a hint for parser
    * @return
    */
-  def parse(doc: Document) = {
+  def parse(doc: Document, title: String = "", description: String = "") = {
     val article = Article(doc.normalise())
-    processorsForAutoMode.process(article)
+    processors.process(article)
     article
-  }
-
-  /**
-   * Support java api.
-   * @param doc
-   * @param contentSelection
-   * @param removeSelections
-   * @return
-   */
-  def parse(doc: Document, contentSelection: String, removeSelections: java.util.List[String]): Article  = parse(doc, contentSelection, removeSelections.toList).getOrElse(null)
-
-  /**
-   * Parse a html document to an article
-   * @param doc
-   * @param contentSelection
-   * @param removeSelections
-   * @return
-   */
-  def parse(doc: Document, contentSelection: String, removeSelections: List[String] = Nil): Option[Article] = {
-    //Remove unused selections.
-    removeSelections.foreach(select => if (StringUtils.isNotBlank(select)) {
-      doc.select(select).remove()
-    })
-    val containerElement = doc.select(contentSelection).first()
-    if (containerElement != null) {
-      val article = Article(doc, Some(containerElement))
-      processorsForManualMode.process(article)
-      return Some(article)
-    }
-    None
   }
 
 }
