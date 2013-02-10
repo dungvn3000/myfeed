@@ -8,7 +8,7 @@ import javax.swing.*;
  * @author Nguyen Duc Dung
  * @since 12/29/12 12:17 AM
  */
-public class Main {
+public class CrawlerMain {
     public static void main(String[] args) {
         ParserHelper parserHelper = new ParserHelper();
         parserHelper.setLocationRelativeTo(null);
