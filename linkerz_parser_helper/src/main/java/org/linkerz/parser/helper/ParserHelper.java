@@ -7,8 +7,6 @@ import org.slf4j.LoggerFactory;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * The Class ParserHelper.
@@ -23,10 +21,6 @@ public class ParserHelper extends JFrame implements ActionListener {
     private JPanel contentPanel = new JPanel(new MigLayout("inset 20", "[40][grow]"));
     private JButton startBtn = new JButton("Start");
     private JTextField urlTxt = new JTextField();
-    private JTextField selectionTxt = new JTextField();
-    private JTextField removeText1 = new JTextField();
-    private JTextField removeText2 = new JTextField();
-    private JTextField removeText3 = new JTextField();
     private JCheckBox showTitleCb = new JCheckBox("Show Title");
     private JCheckBox showDescriptionCb = new JCheckBox("Show Description");
     private JCheckBox showTextCb = new JCheckBox("Show Text");
@@ -42,16 +36,8 @@ public class ParserHelper extends JFrame implements ActionListener {
 
     public void initComponent() {
         setTitle("Parser Helper");
-        contentPanel.add(new JLabel("Url: "));
+        contentPanel.add(new JLabel("Rss Url: "));
         contentPanel.add(urlTxt, "wrap, grow");
-        contentPanel.add(new JLabel("Content selection: "));
-        contentPanel.add(selectionTxt, "wrap, grow");
-        contentPanel.add(new JLabel("Remove selection: "));
-        contentPanel.add(removeText1, "wrap, grow");
-        contentPanel.add(new JLabel("Remove selection: "));
-        contentPanel.add(removeText2, "wrap, grow");
-        contentPanel.add(new JLabel("Remove selection: "));
-        contentPanel.add(removeText3, "wrap, grow");
         contentPanel.add(new JLabel("Options: "));
         contentPanel.add(showTitleCb, "split 4");
         contentPanel.add(showDescriptionCb);
@@ -78,16 +64,12 @@ public class ParserHelper extends JFrame implements ActionListener {
             @Override
             public void run() {
                 try {
-                    List<String> removeSelections = new ArrayList<String>();
-                    removeSelections.add(removeText1.getText());
-                    removeSelections.add(removeText2.getText());
-                    removeSelections.add(removeText3.getText());
                     Configuration configuration = new Configuration();
                     configuration.setShowDescription(showDescriptionCb.isSelected());
                     configuration.setShowText(showTextCb.isSelected());
                     configuration.setShowTitle(showTitleCb.isSelected());
                     configuration.setShowImage(showImageCb.isSelected());
-                    crawler.crawl(urlTxt.getText(), selectionTxt.getText(), removeSelections, statusLbl, resultTxt, configuration);
+                    new SimpleCrawler().crawl(urlTxt.getText(), configuration, resultTxt, statusLbl);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 } finally {
