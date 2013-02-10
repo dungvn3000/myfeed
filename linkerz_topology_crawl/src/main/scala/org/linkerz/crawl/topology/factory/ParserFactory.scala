@@ -16,7 +16,7 @@ import org.linkerz.crawl.topology.parser.{RssParser, WebPageParser}
 
 object ParserFactory {
 
-  def createParser() = new WebPageParser
+  def createWebPageParser() = new WebPageParser
 
   def createRssParser() = new RssParser
 

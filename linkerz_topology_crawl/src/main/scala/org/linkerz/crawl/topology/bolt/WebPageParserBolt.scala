@@ -15,7 +15,7 @@ import org.linkerz.crawl.topology.model.WebPage
 class WebPageParserBolt extends StormBolt(outputFields = List("feedId", "webPage")) with Logging {
 
   @transient
-  private val parser = ParserFactory.createParser()
+  private val parser = ParserFactory.createWebPageParser()
 
   execute(implicit tuple => tuple matchSeq {
     case Seq(feedId, webPage: WebPage) => {

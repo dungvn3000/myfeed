@@ -29,6 +29,7 @@ class WebPageParser extends Logging {
       val doc = Jsoup.parse(inputStream, webPage.contentEncoding, webPage.urlAsString)
 
       val article = articleParser.parse(doc)
+
       webPage.title = article.title
       if (StringUtils.isNotBlank(article.description())) {
         webPage.description = Some(article.description())
