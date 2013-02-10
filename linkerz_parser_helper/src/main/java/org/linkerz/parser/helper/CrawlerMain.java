@@ -3,7 +3,7 @@ package org.linkerz.parser.helper;
 import javax.swing.*;
 
 /**
- * The Class Main.
+ * The Class CrawlerMain.
  *
  * @author Nguyen Duc Dung
  * @since 12/29/12 12:17 AM
