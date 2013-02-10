@@ -26,7 +26,7 @@ class WebPageDownloader(httpClient: HttpClient = new DefaultHttpClient) extends 
 
   def download(webUrl: WebUrl): Option[WebPage] = {
     val response = httpClient.execute(new HttpGet(webUrl.toString))
-    info("Download " + response.getStatusLine.getStatusCode + " : " + webUrl)
+    if (response.getStatusLine != null) info("Download " + response.getStatusLine.getStatusCode + " : " + webUrl)
 
     if (response.getStatusLine.getStatusCode == HttpStatus.SC_OK) {
       var entity = response.getEntity
