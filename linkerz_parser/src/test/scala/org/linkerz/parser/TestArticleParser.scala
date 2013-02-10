@@ -297,21 +297,17 @@ class TestArticleParser extends FunSuite {
   }
 
   test("parse cnn.com home page") {
-    val url = "http://giaitri.vnexpress.net/tin-tuc/thoi-trang/bo-suu-tap/truong-thi-may-kieu-sa-cung-hoa-cuoi-2143295.html"
-    val doc = Jsoup.connect(url).get()
+    val url = "http://edition.cnn.com/"
+    val doc = Jsoup.parse(getResourceAsStream("cnn.homepage.html"), "utf-8", url)
     val parser = new ArticleParser
-    val article = parser.parse(doc, "", "Á hậu các dân tộc Việt Nam 2007 thể hiện niềm hạnh phúc của cô gái trẻ khi khoác lên mình bộ soiree tinh khôi.")
-
-    println(article.title)
-    println(article.text)
-    println(article.images)
+    val article = parser.parse(doc)
   }
 
   ignore("parse single page") {
     val url = "http://tuoitre.vn/Chinh-tri-Xa-hoi/524325/Nguoi-mat-95-hot-kim-cuong%C2%A0nhan%C2%A0nu-trang-35-trieu-dong.html"
     val doc = Jsoup.connect(url).get()
     val parser = new ArticleParser
-    val article = parser.parse(doc, "", "Á hậu các dân tộc Việt Nam 2007 thể hiện niềm hạnh phúc của cô gái trẻ khi khoác lên mình bộ soiree tinh khôi.")
+    val article = parser.parse(doc)
 
     println(article.title)
     println(article.prettyText())
