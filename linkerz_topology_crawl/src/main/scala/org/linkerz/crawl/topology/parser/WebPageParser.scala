@@ -31,8 +31,8 @@ class WebPageParser extends Logging {
       val article = articleParser.parse(doc)
 
       webPage.title = article.title
-      if (StringUtils.isNotBlank(article.description())) {
-        webPage.description = Some(article.description())
+      if (StringUtils.isNotBlank(article.description)) {
+        webPage.description = Some(article.description)
       }
       if (StringUtils.isNotBlank(article.text)) {
         webPage.text = Some(article.text)

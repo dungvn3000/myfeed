@@ -70,7 +70,7 @@ public class SimpleCrawler {
                                 }
 
                                 if (configuration.isShowDescription()) {
-                                    resultTxt.append(article.description(30));
+                                    resultTxt.append(article.description());
                                     resultTxt.append("\n");
                                 }
 

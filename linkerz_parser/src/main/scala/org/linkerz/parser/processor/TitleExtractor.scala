@@ -5,6 +5,7 @@ import org.apache.commons.lang.StringUtils
 import collection.mutable.ListBuffer
 import collection.JavaConversions._
 import org.linkerz.parser.util.{ArticleUtil, StopWordCounter}
+import org.linkerz.core.string.RichString._
 
 /**
  * The Class TitleExtractor.
@@ -23,6 +24,10 @@ class TitleExtractor(minTitleLength: Int = 5) extends Processor {
    * @return
    */
   def process(implicit article: Article) {
+
+    //Skip it when the title is defined already.
+    if (article.title.isNotBlank) return
+
     val counter = new StopWordCounter(article.languageCode)
 
     val potentialTitles = new ListBuffer[String]

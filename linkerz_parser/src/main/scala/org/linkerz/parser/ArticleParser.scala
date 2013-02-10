@@ -3,6 +3,7 @@ package org.linkerz.parser
 import processor._
 import model.Article
 import org.jsoup.nodes.Document
+import org.linkerz.core.string.RichString._
 
 /**
  * The Class ArticleParser.
@@ -24,6 +25,7 @@ class ArticleParser {
     new TitleExtractor,
     //Step3: Try to find potential element.
     new TitleBaseFilter,
+    new DescriptionBaseFilter,
     new NumbOfWordFilter,
     new TagBaseFilter,
     new ImageBaseFilter,
@@ -34,18 +36,22 @@ class ArticleParser {
     //Step5: Only keep high score elements.
     new HighestScoreElementFilter,
     new ContainerElementDetector,
-    new ExpandTitleToContentFilter
+    new ExpandTitleToContentFilter,
+    //Step6: Extract description from the content
+    new DescriptionExtractor
   )
 
   /**
    * Parse a html document to an article
    * @param doc
-   * @param title optional using like a hint for parser
-   * @param description optional using like a hint for parser
+   * @param title optional using like a hint for the parser
+   * @param description optional using like a hint for the parser
    * @return
    */
   def parse(doc: Document, title: String = "", description: String = "") = {
     val article = Article(doc.normalise())
+    if (title.isNotBlank) article.title = title.trimToEmpty
+    if (description.isNotBlank) article.description = description.trimToEmpty
     processors.process(article)
     article
   }
