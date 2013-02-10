@@ -23,8 +23,10 @@ class MetaFetcherBolt extends StormBolt(outputFields = List("feedId", "webPage")
 
   execute(implicit tuple => tuple matchSeq {
     case Seq(feedId, webPage: WebPage) => {
-      imageDownloader.download(webPage)
-      tuple.emit(feedId, webPage)
+      if (webPage.isArticle) {
+        imageDownloader.download(webPage)
+        tuple.emit(feedId, webPage)
+      }
     }
   })
 
