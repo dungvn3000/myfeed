@@ -17,6 +17,10 @@ case class RichString(st: String) {
 
   def trimToEmpty = StringUtils.trimToEmpty(st)
 
+  def equalsIgnoreCase(st2: String) = StringUtils.equalsIgnoreCase(st, st2)
+
+  def equalsIgnoreCaseAndSpace(st2: String) = StringUtils.equalsIgnoreCase(StringUtils.trimToEmpty(st), StringUtils.trimToEmpty(st2))
+
 }
 
 

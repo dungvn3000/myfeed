@@ -25,7 +25,7 @@ class ArticleParser {
     new TitleExtractor,
     //Step3: Try to find potential element.
     new TitleBaseFilter,
-    new DescriptionBaseFilter,
+    new RssDescriptionBaseFilter,
     new NumbOfWordFilter,
     new TagBaseFilter,
     new ImageBaseFilter,
@@ -45,13 +45,13 @@ class ArticleParser {
    * Parse a html document to an article
    * @param doc
    * @param title optional using like a hint for the parser
-   * @param description optional using like a hint for the parser
+   * @param descriptionFromRss optional using like a hint for the parser
    * @return
    */
-  def parse(doc: Document, title: String = "", description: String = "") = {
+  def parse(doc: Document, title: String = "", descriptionFromRss: String = "") = {
     val article = Article(doc.normalise())
     if (title.isNotBlank) article.title = title.trimToEmpty
-    if (description.isNotBlank) article.description = description.trimToEmpty
+    if (descriptionFromRss.isNotBlank) article.descriptionFromRss = descriptionFromRss.trimToEmpty
     processors.process(article)
     article
   }

@@ -21,6 +21,8 @@ case class Article(doc: Document, private val _containerElement: Option[Element]
 
   var description = ""
 
+  var descriptionFromRss = ""
+
   //This element will contain all text content element. Default is body element.
   var containerElement: Element = _containerElement.getOrElse(doc.body())
 
