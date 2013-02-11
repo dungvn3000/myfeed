@@ -7,7 +7,7 @@ package org.linkerz.crawl.topology.model
 import org.apache.http.client.utils.URIUtils
 import java.net.URI
 import gumi.builders.UrlBuilder
-import org.linkerz.core.string.RichString._
+import org.linkerz.parser.model.Link
 
 /**
  * The Class WebUrl.
@@ -19,12 +19,17 @@ import org.linkerz.core.string.RichString._
 
 case class WebUrl(url: String) {
 
+  def this(link: Link) {
+    this(link.url)
+    score = link.score
+  }
+
   /**
    * Maximum is 1 and minimum is 0.
    */
   var score: Double = 0d
 
-  def urlBuilder = UrlBuilder.fromString(url.trimToEmpty)
+  def urlBuilder = UrlBuilder.fromString(url)
 
   def domainName = httpHost.getHostName
 

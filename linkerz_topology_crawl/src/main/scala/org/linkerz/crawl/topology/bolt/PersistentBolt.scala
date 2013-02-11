@@ -1,9 +1,10 @@
 package org.linkerz.crawl.topology.bolt
 
 import storm.scala.dsl.StormBolt
+import org.linkerz.crawl.topology.event.{MetaFetch, Persistent}
+import java.util.UUID
+import org.linkerz.dao.{LoggingDao, LinkDao}
 import grizzled.slf4j.Logging
-import org.linkerz.crawl.topology.model.WebPage
-import org.bson.types.ObjectId
 
 /**
  * This bolt is using for persistent data to the database server.
@@ -12,14 +13,27 @@ import org.bson.types.ObjectId
  * @since 11/30/12 2:12 AM
  *
  */
-class PersistentBolt extends StormBolt(outputFields = Nil) with Logging {
+class PersistentBolt extends StormBolt(outputFields = List("sessionId", "event")) with Logging {
+  execute {
+    implicit tuple => tuple matchSeq {
+      case Seq(sessionId: UUID, MetaFetch(job)) => {
+        job.result.map {
+          webPage => if (webPage.isArticle) {
+            LinkDao.checkAndSave(webPage.asLink)
+          }
+        }
 
-  execute(implicit tuple => tuple matchSeq {
-    case Seq(feedId: ObjectId, webPage: WebPage) => {
-      if (webPage.isArticle) {
-//        LinkDao.save(webPage.asLink(feedId))
+        //Save error for each job.
+        //We will not save TimeOutException, because it so common.
+        if (!job.errors.isEmpty) {
+          LoggingDao.insert(job.errors)
+        }
+        //LoggingDao.insert(job.infos)
+        //LoggingDao.insert(job.warns)
+
+        tuple emit(sessionId, Persistent(job))
       }
     }
-  })
-
+    tuple.ack()
+  }
 }

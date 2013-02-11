@@ -16,7 +16,7 @@ import org.scalatest.FunSuite
  * @since 8/3/12, 10:58 PM
  *
  */
-class TestArticleParser extends FunSuite {
+class TestArticleParserAutoMode extends FunSuite {
 
   test("parse thanhnien1.html") {
     val url = "http://www.thanhnien.com.vn/pages/20121219/5-bong-hong-buon-ma-tuy-lanh-an.aspx"
@@ -126,7 +126,7 @@ class TestArticleParser extends FunSuite {
 
     expect(article.title.length)(47)
     expect(article.text.length)(6408)
-    expect(article.images.size)(47)
+    expect(article.images.size)(46)
   }
 
   test("parse dantri1.html") {
@@ -147,7 +147,7 @@ class TestArticleParser extends FunSuite {
     val article = parser.parse(doc)
 
     expect(article.title.length)(45)
-    expect(article.text.length)(4381)
+    expect(article.text.length)(4663)
     expect(article.images.size)(1)
   }
 
@@ -158,7 +158,7 @@ class TestArticleParser extends FunSuite {
     val article = parser.parse(doc)
 
     expect(article.title.length)(52)
-    expect(article.text.length)(8269)
+    expect(article.text.length)(8566)
     expect(article.images.size)(5)
   }
 

@@ -3,7 +3,8 @@ package org.linkerz.parser
 import processor._
 import model.Article
 import org.jsoup.nodes.Document
-import org.linkerz.core.string.RichString._
+import collection.JavaConversions._
+import org.apache.commons.lang.StringUtils
 
 /**
  * The Class ArticleParser.
@@ -14,18 +15,16 @@ import org.linkerz.core.string.RichString._
  */
 class ArticleParser {
 
-  val processors = new Processors <~ List(
+  val processorsForAutoMode = new Processors <~ List(
     //Step1: Remove hidden element , clean document.
     new DocumentCleaner,
     new LanguageDetector,
     new RemoveHiddenElement,
-    new RemoveDirtyElementFilter,
     //Step2: Extract article elements.
     new ArticleExtractor,
     new TitleExtractor,
     //Step3: Try to find potential element.
     new TitleBaseFilter,
-    new RssDescriptionBaseFilter,
     new NumbOfWordFilter,
     new TagBaseFilter,
     new ImageBaseFilter,
@@ -36,24 +35,61 @@ class ArticleParser {
     //Step5: Only keep high score elements.
     new HighestScoreElementFilter,
     new ContainerElementDetector,
-    new ExpandTitleToContentFilter,
-    //Step6: Extract description from the content
-    new DescriptionExtractor
+    new ExpandTitleToContentFilter
+  )
+
+  val processorsForManualMode = new Processors <~ List(
+    new DocumentCleaner,
+    new LanguageDetector,
+    new RemoveHiddenElement,
+    new RemoveDirtyElementFilter,
+    new ArticleExtractor,
+    new TitleExtractor,
+    new MarkEveryThingIsPotentialFilter,
+    new DirtyImageFilter,
+    new HighLinkDensityFilter,
+    new MarkPotentialIsContentFilter
   )
 
   /**
    * Parse a html document to an article
    * @param doc
-   * @param title optional using like a hint for the parser
-   * @param descriptionFromRss optional using like a hint for the parser
    * @return
    */
-  def parse(doc: Document, title: String = "", descriptionFromRss: String = "") = {
+  def parse(doc: Document) = {
     val article = Article(doc.normalise())
-    if (title.isNotBlank) article.title = title.trimToEmpty
-    if (descriptionFromRss.isNotBlank) article.descriptionFromRss = descriptionFromRss.trimToEmpty
-    processors.process(article)
+    processorsForAutoMode.process(article)
     article
+  }
+
+  /**
+   * Support java api.
+   * @param doc
+   * @param contentSelection
+   * @param removeSelections
+   * @return
+   */
+  def parse(doc: Document, contentSelection: String, removeSelections: java.util.List[String]): Article  = parse(doc, contentSelection, removeSelections.toList).getOrElse(null)
+
+  /**
+   * Parse a html document to an article
+   * @param doc
+   * @param contentSelection
+   * @param removeSelections
+   * @return
+   */
+  def parse(doc: Document, contentSelection: String, removeSelections: List[String] = Nil): Option[Article] = {
+    //Remove unused selections.
+    removeSelections.foreach(select => if (StringUtils.isNotBlank(select)) {
+      doc.select(select).remove()
+    })
+    val containerElement = doc.select(contentSelection).first()
+    if (containerElement != null) {
+      val article = Article(doc, Some(containerElement))
+      processorsForManualMode.process(article)
+      return Some(article)
+    }
+    None
   }
 
 }

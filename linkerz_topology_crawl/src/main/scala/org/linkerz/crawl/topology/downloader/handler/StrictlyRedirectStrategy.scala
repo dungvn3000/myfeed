@@ -1,10 +1,7 @@
-package org.linkerz.crawl.topology.factory
+package org.linkerz.crawl.topology.downloader.handler
 
 import org.apache.http.impl.client.DefaultRedirectStrategy
 import gumi.builders.UrlBuilder
-import org.apache.http.{HttpResponse, HttpRequest}
-import org.apache.http.protocol.HttpContext
-import java.net.URI
 
 /**
  * The Class StrictlyRedirectStrategy.
@@ -14,13 +11,6 @@ import java.net.URI
  *
  */
 class StrictlyRedirectStrategy extends DefaultRedirectStrategy {
-
-  var lastRedirectedUri: URI = _
-
-  override def getLocationURI(request: HttpRequest, response: HttpResponse, context: HttpContext) = {
-    lastRedirectedUri = super.getLocationURI(request, response, context)
-    lastRedirectedUri
-  }
 
   override def createLocationURI(location: String) = {
     val newLocation = UrlBuilder.fromString(location).toString

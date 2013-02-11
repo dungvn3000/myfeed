@@ -1,9 +1,10 @@
 package org.linkerz.crawl.topology.bolt
 
 import storm.scala.dsl.StormBolt
-import org.linkerz.crawl.topology.factory.DownloaderFactory
-import org.linkerz.crawl.topology.model.WebPage
-import org.linkerz.crawl.topology.downloader.ImageDownloader
+import org.linkerz.crawl.topology.event.{Parse, MetaFetch}
+import java.util.UUID
+import org.linkerz.crawl.topology.factory.DownloadFactory
+import org.linkerz.crawl.topology.downloader.Downloader
 
 /**
  * This bolt is using for download meta data relate to a url.
@@ -12,22 +13,31 @@ import org.linkerz.crawl.topology.downloader.ImageDownloader
  * @since 11/30/12 2:08 AM
  *
  */
-class MetaFetcherBolt extends StormBolt(outputFields = List("feedId", "webPage")) {
+class MetaFetcherBolt extends StormBolt(outputFields = List("sessionId", "event")) {
 
   @transient
-  private var imageDownloader: ImageDownloader = _
+  private var imageDownloader: Downloader = _
 
   setup {
-    imageDownloader = DownloaderFactory.createImageDownloader()
+    imageDownloader = DownloadFactory.createImageDownloader()
   }
 
-  execute(implicit tuple => tuple matchSeq {
-    case Seq(feedId, webPage: WebPage) => {
-      if (webPage.isArticle) {
-        imageDownloader.download(webPage)
-        tuple.emit(feedId, webPage)
+  execute {
+    implicit tuple => tuple matchSeq {
+      case Seq(sessionId: UUID, Parse(job)) => {
+        if (!job.isError) {
+          try {
+            imageDownloader download job
+          } catch {
+            case ex: Exception => {
+              job.error(ex.getMessage, getClass.getName, ex)
+              _collector reportError ex
+            }
+          }
+        }
+        tuple emit(sessionId, MetaFetch(job))
       }
     }
-  })
-
+    tuple.ack()
+  }
 }

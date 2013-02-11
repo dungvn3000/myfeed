@@ -121,7 +121,6 @@ object LinkerZBuild extends Build {
   ) ++ stormDependencies ++ testDependencies
 
   lazy val parserDependencies = Seq(
-    "rome" % "rome" % "1.0",
     "org.jsoup" % "jsoup" % "1.7.2",
     "org.apache.httpcomponents" % "httpclient" % "4.2.2",
     "org.scalanlp" % "breeze-process_2.9.2" % "0.1"

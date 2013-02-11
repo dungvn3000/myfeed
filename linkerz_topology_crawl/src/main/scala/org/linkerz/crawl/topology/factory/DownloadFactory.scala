@@ -4,9 +4,10 @@
 
 package org.linkerz.crawl.topology.factory
 
-import org.linkerz.crawl.topology.downloader.{ImageDownloader, DefaultDownloader, WebPageDownloader}
+import org.linkerz.crawl.topology.downloader.{ImageDownloader, DefaultDownloader}
 import org.apache.http.params.{CoreConnectionPNames, CoreProtocolPNames, BasicHttpParams}
 import org.apache.http.impl.client.DefaultHttpClient
+import org.linkerz.crawl.topology.downloader.handler.StrictlyRedirectStrategy
 import org.apache.http.conn.scheme.{PlainSocketFactory, Scheme, SchemeRegistry}
 import org.apache.http.conn.ssl.SSLSocketFactory
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
@@ -19,7 +20,7 @@ import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
  *
  */
 
-object DownloaderFactory {
+object DownloadFactory {
 
   val httpParams = new BasicHttpParams()
   httpParams.setParameter(CoreProtocolPNames.USER_AGENT,
@@ -34,16 +35,10 @@ object DownloaderFactory {
   cm.setMaxTotal(100)
   cm.setDefaultMaxPerRoute(10)
 
-  def createDefaultDownloader() = {
+  def createDownloader() = {
     val client = new DefaultHttpClient(cm, httpParams)
     client.setRedirectStrategy(new StrictlyRedirectStrategy)
     new DefaultDownloader(client)
-  }
-
-  def createWebPageDownloader() = {
-    val client = new DefaultHttpClient(cm, httpParams)
-    client.setRedirectStrategy(new StrictlyRedirectStrategy)
-    new WebPageDownloader(client)
   }
 
   def createImageDownloader() = {

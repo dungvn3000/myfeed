@@ -2,12 +2,14 @@ package org.linkerz.crawl.topology.spout
 
 import akka.util.duration._
 import grizzled.slf4j.Logging
+import java.util.UUID
 import storm.scala.dsl.StormSpout
 import backtype.storm.utils.Utils
 import org.linkerz.logger.DBLogger
 import org.linkerz.crawl.topology.actor.ScheduleActor
 import akka.actor.Props
 import org.linkerz.core.actor.Akka
+import org.linkerz.crawl.topology.event.{Fail, Ack}
 
 /**
  * This spout will loop the feed list for every 15 minutes.
@@ -16,7 +18,7 @@ import org.linkerz.core.actor.Akka
  * @since 11/30/12 1:42 AM
  *
  */
-class FeedSpout extends StormSpout(outputFields = List("feedId", "feed")) with Logging with DBLogger {
+class FeedSpout extends StormSpout(outputFields = List("sessionId", "event")) with Logging with DBLogger {
 
   setup {
     val scheduleActor = Akka.system.actorOf(Props(new ScheduleActor(_collector)))
@@ -27,5 +29,13 @@ class FeedSpout extends StormSpout(outputFields = List("feedId", "feed")) with L
   def nextTuple() {
     //Sleep 10ms for not wasting cpu
     Utils sleep 10
+  }
+
+  override def ack(msgId: Any) {
+    this emit(msgId.asInstanceOf[UUID], Ack)
+  }
+
+  override def fail(msgId: Any) {
+    this emit(msgId.asInstanceOf[UUID], Fail)
   }
 }

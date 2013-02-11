@@ -17,6 +17,7 @@ import org.bson.types.ObjectId
 
 case class WebPage(webUrl: WebUrl) {
 
+  var webUrls: List[WebUrl] = Nil
   var content: Array[Byte] = Array.empty[Byte]
 
   //Meta data
@@ -27,6 +28,7 @@ case class WebPage(webUrl: WebUrl) {
   var title: String = _
   var featureImage: Option[Array[Byte]] = None
   var potentialImages: List[String] = Nil
+  var feedId: ObjectId = _
 
   var isArticle = false
 
@@ -40,7 +42,7 @@ case class WebPage(webUrl: WebUrl) {
    * Convenient method to convert a webpage to link model to store the database.
    * @return
    */
-  def asLink(feedId: ObjectId) = Link(
+  def asLink = Link(
     url = urlAsString,
     title = title,
     text = text,

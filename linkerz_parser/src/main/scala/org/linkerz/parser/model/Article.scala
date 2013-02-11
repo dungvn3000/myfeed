@@ -19,10 +19,6 @@ case class Article(doc: Document, private val _containerElement: Option[Element]
 
   var title = ""
 
-  var description = ""
-
-  var descriptionFromRss = ""
-
   //This element will contain all text content element. Default is body element.
   var containerElement: Element = _containerElement.getOrElse(doc.body())
 
@@ -47,6 +43,29 @@ case class Article(doc: Document, private val _containerElement: Option[Element]
       sb.append("\n")
     })
     sb.toString()
+  }
+
+  /**
+   * The short description text for the article. Find the longest block and split it to a description.
+   * @return
+   */
+  def description(maxNumbOfWord: Int = 30) = {
+    var bestDescription: String = ""
+    if (!textContentElements.isEmpty) {
+      bestDescription = textContentElements.sortBy(-_.text.length).head.text
+      val words = bestDescription.split(' ')
+      val sb = new StringBuilder
+      var wordCount = 0
+      words.foreach(word => {
+        if (wordCount < maxNumbOfWord) {
+          sb.append(word)
+          sb.append(" ")
+          wordCount +=1
+        }
+      })
+      bestDescription = sb.toString()
+    }
+    bestDescription
   }
 
   /**
@@ -76,7 +95,7 @@ case class Article(doc: Document, private val _containerElement: Option[Element]
   def imagesAsJavaList = imageElements.filter(_.isContent).asJava
 
   /**
-   * Article element list without title tag.
+   * Article element list without title element.
    */
   var elements: List[ArticleElement] = Nil
 
