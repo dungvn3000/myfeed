@@ -5,6 +5,8 @@ import org.apache.http.{HttpStatus, HttpResponse}
 import com.sun.syndication.feed.synd.SyndEntry
 import collection.JavaConversions._
 import grizzled.slf4j.Logging
+import org.linkerz.core.string.RichString._
+import org.jsoup.Jsoup
 
 /**
  * The Class RssParser.
@@ -23,8 +25,16 @@ class RssParser extends Logging {
       try {
         val feed = new SyndFeedInput().build(xmlReader)
         if (!feed.getEntries.isEmpty) {
-          val entries = feed.getEntries.map(_.asInstanceOf[SyndEntry])
-          return entries.toList
+          val entries = feed.getEntries.map(_.asInstanceOf[SyndEntry]).toList
+          entries.foreach(entry => {
+            if (entry.getDescription != null) {
+              val html = entry.getDescription.getValue
+              if (html != null && html.isNotBlank) {
+                val doc = Jsoup.parse(html)
+              }
+            }
+          })
+          return entries
         }
       } catch {
         case ex: FeedException => error(ex.getMessage, ex)

@@ -29,7 +29,7 @@ class WebPageParser extends Logging {
       val inputStream = new ByteArrayInputStream(webPage.content)
       val doc = Jsoup.parse(inputStream, webPage.contentEncoding, webPage.urlAsString)
 
-      val article = if (entry.isDefined) {
+      val article = if (entry.isDefined && entry.get.getDescription != null) {
         articleParser.parse(doc, entry.get.getTitle, entry.get.getDescription.getValue)
       } else {
         articleParser.parse(doc)

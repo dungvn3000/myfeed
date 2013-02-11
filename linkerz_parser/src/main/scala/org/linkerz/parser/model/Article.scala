@@ -74,7 +74,7 @@ case class Article(doc: Document, private val _containerElement: Option[Element]
   def imagesAsJavaList = imageElements.filter(_.isContent).asJava
 
   /**
-   * Article element list without title element.
+   * Article element list without title tag.
    */
   var elements: List[ArticleElement] = Nil
 
