@@ -13,8 +13,8 @@ import org.apache.http.HttpStatus
 import javax.imageio.ImageIO
 import org.apache.http.client.methods.HttpGet
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
-import org.imgscalr.Scalr
 import org.apache.http.util.EntityUtils
+import net.coobird.thumbnailator.Thumbnails
 
 /**
  * The Class ImageDownloader.
@@ -44,11 +44,13 @@ class ImageDownloader(httpClient: HttpClient = new DefaultHttpClient()) extends 
               if (score >= 300) {
                 scoreImage += image -> score
               }
+              inputStream.close()
 
               //Avoid download too much images, if the image score is 600, definitely it is good.
               if (score >= 600) {
                 skip = true
               }
+
             } catch {
               case ex: Exception => {
                 crawlJob.error(ex.getMessage, getClass.getName, ex)
@@ -70,9 +72,8 @@ class ImageDownloader(httpClient: HttpClient = new DefaultHttpClient()) extends 
           if (bestImage.getHeight > 1000) {
             preferHeight = bestImage.getHeight * 30 / 100
           }
-          val resizeImage = Scalr.resize(bestImage, Scalr.Method.AUTOMATIC, Scalr.Mode.AUTOMATIC, 300, preferHeight, Scalr.OP_ANTIALIAS)
-          ImageIO.write(resizeImage, "png", outputStream)
-          outputStream.flush()
+
+          Thumbnails.of(bestImage).size(300, preferHeight).outputFormat("jpeg").toOutputStream(outputStream)
           webPage.featureImage = Some(outputStream.toByteArray)
         } catch {
           case ex: Exception => {

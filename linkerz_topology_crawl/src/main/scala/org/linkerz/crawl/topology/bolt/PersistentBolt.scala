@@ -22,6 +22,8 @@ class PersistentBolt extends StormBolt(outputFields = List("sessionId", "event")
 
             val feed = FeedDao.findOneById(webPage.feedId).getOrElse(throw new Exception("Can't find feedId " + webPage.feedId))
 
+            info("Saving " + webPage.urlAsString)
+
             if (feed.confirmed) {
               LinkDao.checkAndSave(webPage.asLink)
             } else {
