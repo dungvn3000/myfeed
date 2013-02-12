@@ -14,6 +14,7 @@ import org.linkerz.crawl.topology.event.Handle
 import org.linkerz.crawl.topology.session.CrawlSession
 import org.linkerz.crawl.topology.event.Start
 import org.linkerz.crawl.topology.job.CrawlJob
+import org.linkerz.crawl.topology.filter.BlackUrlPattern
 
 /**
  * The mission of this bolt will receive job from the feed spot and emit it to a fetcher. On the other hand this bolt
@@ -101,6 +102,11 @@ class HandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) w
         return false
       }
     })
+
+    //Black list check
+    if (BlackUrlPattern.matches(webUrl.toString)) {
+      return false
+    }
 
     //Only crawl in same domain.
     if (!job.onlyCrawlInSameDomain

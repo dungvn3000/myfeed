@@ -1,12 +1,24 @@
+#This file is using SimpleRegexMatcher
 */feedback
+*/feedback?
 */feedback.*
+*/lienhe
+*/lienhe?
 */lienhe.*
+*/aboutus
+*/aboutus?
 */aboutus.*
 */contact
+*/contact?
 */contact.*
 */about
+*/about?
 */about.*
 */privacy
+*/privacy?
 */privacy.*
 */announcements
+*/announcements?
 */announcements.*
+*/Lien-he-quang-cao*
+*/Gop-y*
