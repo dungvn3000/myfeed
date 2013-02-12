@@ -17,12 +17,8 @@ object LinkTestDao extends SalatDAO[Link, ObjectId](mongo("link_test")) {
   def findByUrl(url: String) = findOne(MongoDBObject("url" -> url))
 
   def checkAndSave(link: Link) = {
-    val result = findOne(MongoDBObject(
-      "$or" -> Array(
-        MongoDBObject("url" -> link.url),
-        MongoDBObject("title" -> link.title)
-      )
-    ))
+    //For testing purpose, we should check url only when save a link.
+    val result = findOne(MongoDBObject("url" -> link.url))
 
     if (result.isEmpty) {
       save(link)
