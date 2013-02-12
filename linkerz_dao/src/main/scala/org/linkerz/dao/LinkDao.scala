@@ -19,8 +19,8 @@ object LinkDao extends SalatDAO[Link, ObjectId](mongo("link")) {
 
   def checkAndSave(link: Link) = {
     val result = findOne(MongoDBObject(
-      "url" -> link.url,
       "$or" -> Array(
+        MongoDBObject("url" -> link.url),
         MongoDBObject("title" -> link.title)
       )
     ))

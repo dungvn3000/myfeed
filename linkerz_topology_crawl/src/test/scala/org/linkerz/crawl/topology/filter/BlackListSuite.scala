@@ -20,7 +20,8 @@ class BlackListSuite extends FunSuite {
       "http://news.zing.vn/privacy.html",
       "http://www.thanhnien.com.vn/Pages/Lien-he-quang-cao.aspx",
       "http://www.thanhnien.com.vn/Pages/Gop-y.aspx",
-      "http://www.bbc.co.uk/feedback/"
+      "http://www.bbc.co.uk/feedback/",
+      "http://www.bbc.co.uk/tos/"
     )
 
     urls.foreach(url => {

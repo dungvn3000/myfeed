@@ -18,8 +18,8 @@ object LinkTestDao extends SalatDAO[Link, ObjectId](mongo("link_test")) {
 
   def checkAndSave(link: Link) = {
     val result = findOne(MongoDBObject(
-      "url" -> link.url,
       "$or" -> Array(
+        MongoDBObject("url" -> link.url),
         MongoDBObject("title" -> link.title)
       )
     ))
@@ -29,4 +29,5 @@ object LinkTestDao extends SalatDAO[Link, ObjectId](mongo("link_test")) {
       Some(link)
     } else None
   }
+
 }
