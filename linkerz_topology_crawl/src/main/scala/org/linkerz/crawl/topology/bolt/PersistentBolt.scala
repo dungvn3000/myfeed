@@ -3,7 +3,7 @@ package org.linkerz.crawl.topology.bolt
 import storm.scala.dsl.StormBolt
 import org.linkerz.crawl.topology.event.{MetaFetch, Persistent}
 import java.util.UUID
-import org.linkerz.dao.{LoggingDao, LinkDao}
+import org.linkerz.dao.{LinkTestDao, FeedDao, LoggingDao, LinkDao}
 import grizzled.slf4j.Logging
 
 /**
@@ -19,7 +19,15 @@ class PersistentBolt extends StormBolt(outputFields = List("sessionId", "event")
       case Seq(sessionId: UUID, MetaFetch(job)) => {
         job.result.map {
           webPage => if (webPage.isArticle) {
-            LinkDao.checkAndSave(webPage.asLink)
+
+            val feed = FeedDao.findOneById(webPage.feedId).getOrElse(throw new Exception("Can't find feedId " + webPage.feedId))
+
+            if (feed.confirmed) {
+              LinkDao.checkAndSave(webPage.asLink)
+            } else {
+              LinkTestDao.checkAndSave(webPage.asLink)
+            }
+
           }
         }
 
