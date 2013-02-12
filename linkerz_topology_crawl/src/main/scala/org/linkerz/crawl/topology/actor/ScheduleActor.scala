@@ -20,9 +20,10 @@ import backtype.storm.spout.SpoutOutputCollector
  */
 class ScheduleActor(collector: SpoutOutputCollector) extends Actor with DBLogger with Logging {
 
+  val newFeeds = FeedDao.find(MongoDBObject("enable" -> true)).toList
+
   protected def receive = {
     case "run" => {
-      val newFeeds = FeedDao.find(MongoDBObject("enable" -> true)).toList
       newFeeds.foreach(feed => {
         val job = new CrawlJob(feed)
         job.maxDepth = 1 // Set level is 2 because we will get related link.

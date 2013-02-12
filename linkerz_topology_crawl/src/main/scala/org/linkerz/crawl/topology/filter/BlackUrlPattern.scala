@@ -3,6 +3,7 @@ package org.linkerz.crawl.topology.filter
 import io.Source
 import org.linkerz.core.matcher.SimpleRegexMatcher
 import collection.mutable.ListBuffer
+import org.linkerz.model.BlackUrl
 
 /**
  * The Class BlackUrlPattern.
@@ -11,9 +12,9 @@ import collection.mutable.ListBuffer
  * @since 2/12/13 11:28 AM
  *
  */
-object BlackUrlPattern {
+class BlackUrlPattern(blackUrls: List[BlackUrl] = Nil) {
 
-  lazy val regexps = {
+  val regexps = {
     val strm = try {
       this.getClass.getClassLoader.getResourceAsStream("filter/black_url.lst")
     } catch {
@@ -26,6 +27,10 @@ object BlackUrlPattern {
       regexps += st.trim
     })
     strm.close()
+
+    blackUrls.foreach(blackUrl => {
+      regexps += blackUrl.urlRegex
+    })
 
     regexps.toList
   }

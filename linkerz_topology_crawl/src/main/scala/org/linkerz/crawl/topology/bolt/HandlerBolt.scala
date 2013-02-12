@@ -9,7 +9,7 @@ import backtype.storm.tuple.Tuple
 import org.linkerz.crawl.topology.event._
 import org.linkerz.crawl.topology.session.RichSession._
 import java.util.UUID
-import org.linkerz.dao.LinkDao
+import org.linkerz.dao.{BlackUrlDao, LinkDao}
 import org.linkerz.crawl.topology.event.Handle
 import org.linkerz.crawl.topology.session.CrawlSession
 import org.linkerz.crawl.topology.event.Start
@@ -28,6 +28,13 @@ import org.linkerz.crawl.topology.filter.BlackUrlPattern
 class HandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) with Logging {
 
   private var sessions: List[CrawlSession] = Nil
+
+  @transient
+  private var blackUrlPattern: BlackUrlPattern = _
+
+  setup {
+    blackUrlPattern = new BlackUrlPattern(BlackUrlDao.all)
+  }
 
   execute {
     implicit tuple => tuple matchSeq {
@@ -104,7 +111,7 @@ class HandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) w
     })
 
     //Black list check
-    if (BlackUrlPattern.matches(webUrl.toString)) {
+    if (blackUrlPattern.matches(webUrl.toString)) {
       return false
     }
 

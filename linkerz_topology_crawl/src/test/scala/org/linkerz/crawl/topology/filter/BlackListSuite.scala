@@ -12,6 +12,9 @@ import org.scalatest.FunSuite
 class BlackListSuite extends FunSuite {
 
   test("test black list partern") {
+
+    val blackUrlPattern = new BlackUrlPattern()
+
     val urls = List(
       "http://news.zing.vn/feedback",
       "http://news.zing.vn/privacy.html",
@@ -21,7 +24,7 @@ class BlackListSuite extends FunSuite {
     )
 
     urls.foreach(url => {
-      assert(BlackUrlPattern.matches(url))
+      assert(blackUrlPattern.matches(url))
     })
   }
 
