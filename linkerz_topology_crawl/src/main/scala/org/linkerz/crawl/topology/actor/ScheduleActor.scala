@@ -10,6 +10,7 @@ import org.linkerz.crawl.topology.event.Start
 import grizzled.slf4j.Logging
 import backtype.storm.tuple.Values
 import backtype.storm.spout.SpoutOutputCollector
+import backtype.storm.utils.Utils
 
 /**
  * The Class ScheduleActor.
@@ -32,6 +33,9 @@ class ScheduleActor(collector: SpoutOutputCollector) extends Actor with DBLogger
         //Make sure the id is unique all the time.
         val sessionId = UUID.randomUUID()
         collector.emit(new Values(sessionId, Start(job)), sessionId)
+
+        //Delay 10s for each feed.
+        Utils sleep 1000 * 10
       })
     }
   }

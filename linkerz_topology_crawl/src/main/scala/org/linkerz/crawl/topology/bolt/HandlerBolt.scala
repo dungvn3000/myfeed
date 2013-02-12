@@ -9,7 +9,7 @@ import backtype.storm.tuple.Tuple
 import org.linkerz.crawl.topology.event._
 import org.linkerz.crawl.topology.session.RichSession._
 import java.util.UUID
-import org.linkerz.dao.{BlackUrlDao, LinkDao}
+import org.linkerz.dao.{LinkTestDao, FeedDao, BlackUrlDao, LinkDao}
 import org.linkerz.crawl.topology.event.Handle
 import org.linkerz.crawl.topology.session.CrawlSession
 import org.linkerz.crawl.topology.event.Start
@@ -120,9 +120,17 @@ class HandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) w
       || (job.onlyCrawlInSameDomain && webUrl.domainName == session.domainName)) {
       //Make sure the url is not in the queue
       if (!session.queueUrls.contains(webUrl)) {
-        if (LinkDao.findByUrl(webUrl.toString).isEmpty) {
+
+        val feed = FeedDao.findOneById(session.job.feedId).getOrElse(throw new Exception("Can't find feedId " + session.job.feedId))
+
+        if (feed.confirmed) {
+          if (LinkDao.findByUrl(webUrl.toString).isEmpty) {
+            return true
+          }
+        } else if (LinkTestDao.findByUrl(webUrl.toString).isEmpty) {
           return true
         }
+
       }
     }
 
