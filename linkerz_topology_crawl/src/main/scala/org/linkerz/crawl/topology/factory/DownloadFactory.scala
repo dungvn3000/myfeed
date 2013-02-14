@@ -18,11 +18,14 @@ import crawlercommons.fetcher.http.SimpleHttpFetcher
 object DownloadFactory {
 
   def createDownloader() = {
-    new DefaultDownloader(new SimpleHttpFetcher(10, new LinkerZUserAgent))
+    new DefaultDownloader(new SimpleHttpFetcher(100, new LinkerZUserAgent))
   }
 
   def createImageDownloader() = {
-    new ImageDownloader(new SimpleHttpFetcher(10, new LinkerZUserAgent))
+    val fetcher = new SimpleHttpFetcher(100, new LinkerZUserAgent)
+    //set maximum file size is 1mb
+    fetcher.setMaxContentSize("image/jpeg", 1024 * 1024)
+    new ImageDownloader(fetcher)
   }
 
 }

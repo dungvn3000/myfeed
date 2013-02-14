@@ -23,7 +23,7 @@ class TestDefaultDownloader {
     val imageDownloader = DownloadFactory.createImageDownloader()
     val feeds = FeedDao.find(MongoDBObject.empty).toList
     val parser = new LinkerZParser(feeds)
-    val crawlJob = new CrawlJob("http://news.zing.vn/xa-hoi/tap-doan-moc-tui-xuong-pho-sai-gon/a293547.html")
+    val crawlJob = new CrawlJob("http://vnexpress.net/gl/xa-hoi/du-lich/2013/02/ruoc-qua-phao-6-met-o-lang-dong-ky/")
     downloader.download(crawlJob)
     parser.parse(crawlJob)
     imageDownloader.download(crawlJob)
@@ -33,6 +33,7 @@ class TestDefaultDownloader {
       println(crawlJob.result.get.title)
       println(crawlJob.result.get.description.get)
       println(crawlJob.result.get.potentialImages)
+      println(crawlJob.result.get.featureImage.get.size)
     }
   }
 
