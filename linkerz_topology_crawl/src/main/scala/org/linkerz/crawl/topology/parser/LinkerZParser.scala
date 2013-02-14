@@ -30,7 +30,7 @@ class LinkerZParser(feeds: List[Feed]) extends Parser {
       info("Parse: " + webPage.urlAsString)
       if (webPage.content != null) {
         val inputStream = new ByteArrayInputStream(webPage.content)
-        val doc = Jsoup.parse(inputStream, webPage.contentEncoding, webPage.urlAsString)
+        val doc = Jsoup.parse(inputStream, null, webPage.urlAsString)
 
         webPage.webUrls = linksParser.parse(doc).map(new WebUrl(_))
 
@@ -57,7 +57,9 @@ class LinkerZParser(feeds: List[Feed]) extends Parser {
             })
             webPage.potentialImages = potentialImages.toList
 
-            webPage.feedId = crawlJob.feedId
+            if (crawlJob.feed != null) {
+              webPage.feedId = crawlJob.feed._id
+            }
 
             webPage.isArticle = true
           })

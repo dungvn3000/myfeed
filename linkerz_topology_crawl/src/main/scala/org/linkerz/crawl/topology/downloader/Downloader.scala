@@ -24,12 +24,4 @@ trait Downloader extends Logging {
    */
   def download(crawlJob: CrawlJob)
 
-
-  def download(url: String): HttpResponse
-
-  /**
-   * Close all connection used by this downloader.
-   */
-  def close()
-
 }

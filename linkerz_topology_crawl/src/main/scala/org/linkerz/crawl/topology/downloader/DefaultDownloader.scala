@@ -6,13 +6,9 @@ package org.linkerz.crawl.topology.downloader
 
 import org.linkerz.crawl.topology.job.CrawlJob
 import org.linkerz.crawl.topology.model.WebPage
+import crawlercommons.fetcher.BaseFetcher
+import com.google.common.net.HttpHeaders
 import org.apache.http.HttpStatus
-import org.apache.http.client.HttpClient
-import org.apache.http.impl.client.DefaultHttpClient
-import org.apache.http.client.methods.HttpGet
-import org.apache.http.util.EntityUtils
-import org.apache.http.client.entity.GzipDecompressingEntity
-import org.apache.http.entity.ContentType
 
 /**
  * The Class DefaultDownload.
@@ -22,41 +18,20 @@ import org.apache.http.entity.ContentType
  *
  */
 
-class DefaultDownloader(httpClient: HttpClient = new DefaultHttpClient) extends Downloader {
+class DefaultDownloader(htmlFetcher: BaseFetcher) extends Downloader {
 
   def download(crawlJob: CrawlJob) {
     val webUrl = crawlJob.webUrl
-    val response = httpClient.execute(new HttpGet(webUrl.toString))
-
-    info("Download " + response.getStatusLine.getStatusCode + " : " + webUrl)
-
-    if (response.getStatusLine.getStatusCode == HttpStatus.SC_OK) {
-      var entity = response.getEntity
-      if (entity.getContentEncoding != null) {
-        if (entity.getContentEncoding.toString.contains("gzip")) {
-          entity = new GzipDecompressingEntity(entity)
-        }
-      }
-
+    info("Download : " + webUrl)
+    val result = htmlFetcher.get(webUrl.toString)
+    if (result.getStatusCode == HttpStatus.SC_OK && result.getContentLength > 0) {
       val webPage = WebPage(webUrl)
-      webPage.content = EntityUtils.toByteArray(entity)
-
-      if (response.getEntity.getContentType != null) {
-        webPage.contentType = response.getEntity.getContentType.getValue
-      }
-
-      if (ContentType.getOrDefault(entity).getCharset != null) {
-        webPage.contentEncoding = ContentType.getOrDefault(entity).getCharset.name()
-      }
+      webPage.content = result.getContent
+      webPage.contentType = result.getContentType
+      webPage.contentEncoding = result.getHeaders.get(HttpHeaders.CONTENT_ENCODING)
       crawlJob.result = Some(webPage)
     }
-
-    crawlJob.responseCode = response.getStatusLine.getStatusCode
+    crawlJob.responseCode = result.getStatusCode
   }
 
-  def download(url: String) = httpClient.execute(new HttpGet(url))
-
-  def close() {
-    httpClient.getConnectionManager.shutdown()
-  }
 }

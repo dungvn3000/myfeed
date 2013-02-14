@@ -104,12 +104,10 @@ object LinkerZBuild extends Build {
   )
 
   lazy val crawlerTopologyDependencies = Seq(
-    "org.apache.httpcomponents" % "httpclient" % "4.2.2",
-    "net.coobird" % "thumbnailator" % "0.4.2",
-    "org.imgscalr" % "imgscalr-lib" % "4.2",
+    "net.coobird" % "thumbnailator" % "0.4.3",
     "com.gravity" % "goose" % "2.1.22",
     "org.scalanlp" % "breeze-process_2.9.2" % "0.1",
-    "com.google.code.crawler-commons" % "crawler-commons" % "0.1",
+    "com.google.code.crawler-commons" % "crawler-commons" % "0.2",
     "de.thischwa.jii" % "java-image-info" % "0.5"
   ) ++ stormDependencies ++ testDependencies
 

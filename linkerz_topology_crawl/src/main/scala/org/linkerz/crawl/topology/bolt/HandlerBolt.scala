@@ -9,11 +9,12 @@ import backtype.storm.tuple.Tuple
 import org.linkerz.crawl.topology.event._
 import org.linkerz.crawl.topology.session.RichSession._
 import java.util.UUID
-import org.linkerz.dao.LinkDao
+import org.linkerz.dao.{LinkTestDao, FeedDao, BlackUrlDao, LinkDao}
 import org.linkerz.crawl.topology.event.Handle
 import org.linkerz.crawl.topology.session.CrawlSession
 import org.linkerz.crawl.topology.event.Start
 import org.linkerz.crawl.topology.job.CrawlJob
+import org.linkerz.crawl.topology.filter.BlackUrlPattern
 
 /**
  * The mission of this bolt will receive job from the feed spot and emit it to a fetcher. On the other hand this bolt
@@ -54,7 +55,9 @@ class HandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) w
         session.currentDepth = subJob.depth
       }
 
-      for (webUrl <- webPage.webUrls if (shouldCrawl(session, webUrl))) {
+      val blackUrlPattern = new BlackUrlPattern(session.job.blackUrls)
+
+      for (webUrl <- webPage.webUrls if (shouldCrawl(session, webUrl, blackUrlPattern))) {
 
         //Counting
         session.subJobCount += 1
@@ -74,7 +77,7 @@ class HandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) w
     tuple.ack()
   }
 
-  private def shouldCrawl(session: CrawlSession, webUrl: WebUrl): Boolean = {
+  private def shouldCrawl(session: CrawlSession, webUrl: WebUrl, blackUrlPattern: BlackUrlPattern): Boolean = {
 
     val job = session.job
 
@@ -102,12 +105,21 @@ class HandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) w
       }
     })
 
+    //Black list check
+    if (blackUrlPattern.matches(webUrl.toString)) {
+      return false
+    }
+
     //Only crawl in same domain.
     if (!job.onlyCrawlInSameDomain
       || (job.onlyCrawlInSameDomain && webUrl.domainName == session.domainName)) {
       //Make sure the url is not in the queue
       if (!session.queueUrls.contains(webUrl)) {
-        if (LinkDao.findByUrl(webUrl.toString).isEmpty) {
+        if (session.job.feed.confirmed) {
+          if (LinkDao.findByUrl(webUrl.toString).isEmpty) {
+            return true
+          }
+        } else if (LinkTestDao.findByUrl(webUrl.toString).isEmpty) {
           return true
         }
       }

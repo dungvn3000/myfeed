@@ -20,7 +20,7 @@ case class Feed(
                  name: String,
                  url: String,
                  enable: Boolean,
-                 conform: Boolean = false,
+                 confirmed: Boolean = false,
                  group: String,
 
                  urlRegex: String,
