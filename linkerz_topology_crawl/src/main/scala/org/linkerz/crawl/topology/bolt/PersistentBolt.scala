@@ -19,17 +19,12 @@ class PersistentBolt extends StormBolt(outputFields = List("sessionId", "event")
       case Seq(sessionId: UUID, MetaFetch(job)) => {
         job.result.map {
           webPage => if (webPage.isArticle) {
-
-            val feed = FeedDao.findOneById(webPage.feedId).getOrElse(throw new Exception("Can't find feedId " + webPage.feedId))
-
             info("Saving " + webPage.urlAsString)
-
-            if (feed.confirmed) {
+            if (job.feed.confirmed) {
               LinkDao.checkAndSave(webPage.asLink)
             } else {
               LinkTestDao.checkAndSave(webPage.asLink)
             }
-
           }
         }
 

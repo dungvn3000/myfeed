@@ -29,13 +29,6 @@ class HandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) w
 
   private var sessions: List[CrawlSession] = Nil
 
-  @transient
-  private var blackUrlPattern: BlackUrlPattern = _
-
-  setup {
-    blackUrlPattern = new BlackUrlPattern(BlackUrlDao.all)
-  }
-
   execute {
     implicit tuple => tuple matchSeq {
       case Seq(sessionId: UUID, Start(parentJob)) => {
@@ -62,7 +55,9 @@ class HandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) w
         session.currentDepth = subJob.depth
       }
 
-      for (webUrl <- webPage.webUrls if (shouldCrawl(session, webUrl))) {
+      val blackUrlPattern = new BlackUrlPattern(session.job.blackUrls)
+
+      for (webUrl <- webPage.webUrls if (shouldCrawl(session, webUrl, blackUrlPattern))) {
 
         //Counting
         session.subJobCount += 1
@@ -82,7 +77,7 @@ class HandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) w
     tuple.ack()
   }
 
-  private def shouldCrawl(session: CrawlSession, webUrl: WebUrl): Boolean = {
+  private def shouldCrawl(session: CrawlSession, webUrl: WebUrl, blackUrlPattern: BlackUrlPattern): Boolean = {
 
     val job = session.job
 
@@ -120,17 +115,13 @@ class HandlerBolt extends StormBolt(outputFields = List("sessionId", "event")) w
       || (job.onlyCrawlInSameDomain && webUrl.domainName == session.domainName)) {
       //Make sure the url is not in the queue
       if (!session.queueUrls.contains(webUrl)) {
-
-        val feed = FeedDao.findOneById(session.job.feedId).getOrElse(throw new Exception("Can't find feedId " + session.job.feedId))
-
-        if (feed.confirmed) {
+        if (session.job.feed.confirmed) {
           if (LinkDao.findByUrl(webUrl.toString).isEmpty) {
             return true
           }
         } else if (LinkTestDao.findByUrl(webUrl.toString).isEmpty) {
           return true
         }
-
       }
     }
 

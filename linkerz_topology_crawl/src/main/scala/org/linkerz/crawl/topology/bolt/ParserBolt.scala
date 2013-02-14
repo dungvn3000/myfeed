@@ -15,17 +15,11 @@ import java.util.UUID
  */
 class ParserBolt extends StormBolt(outputFields = List("sessionId", "event")) {
 
-  @transient
-  private var parser: Parser = _
-
-  setup {
-    parser = ParserFactory.createParser()
-  }
-
   execute {
     implicit tuple => tuple matchSeq {
       case Seq(sessionId: UUID, Fetch(job)) => {
         try {
+          val parser = ParserFactory.createParser(job.feeds)
           if (!job.isError) parser parse job
         } catch {
           case ex: Exception => {

@@ -4,12 +4,14 @@
 
 package org.linkerz.crawl.topology.job
 
-import org.linkerz.crawl.topology.model.{WebPage, WebUrl}
-import scala.Some
-import org.linkerz.model.{LogCategory, LogType, Feed, Logging}
+import org.linkerz.model._
 import collection.mutable.ListBuffer
-import org.bson.types.ObjectId
 import org.apache.http.HttpStatus
+import org.linkerz.model.Feed
+import org.linkerz.crawl.topology.model.WebUrl
+import org.linkerz.model.Logging
+import org.linkerz.crawl.topology.model.WebPage
+import scala.Some
 
 /**
  * The Class CrawlJob.
@@ -57,12 +59,13 @@ case class CrawlJob(webUrl: WebUrl) {
    */
   var maxSubJob: Int = -1
 
-  /**
-   * The result of this job will has this attribute.
-   */
-  var feedId: ObjectId = _
-
   var responseCode: Int = _
+
+  var feed: Feed = _
+
+  var feeds: List[Feed] = _
+
+  var blackUrls: List[BlackUrl] = _
 
   /**
    * String url.
@@ -74,20 +77,24 @@ case class CrawlJob(webUrl: WebUrl) {
 
   /**
    *
-   * @param newFeed
+   * @param feed
+   * @param feeds
+   * @param blackUrls
    */
-  def this(newFeed: Feed) {
-    this(newFeed.url)
+  def this(feed: Feed, feeds: List[Feed], blackUrls: List[BlackUrl]) {
+    this(feed.url)
 
-    if (!newFeed.urlRegex.isEmpty) {
-      urlRegex = Some(newFeed.urlRegex)
+    if (!feed.urlRegex.isEmpty) {
+      urlRegex = Some(feed.urlRegex)
     }
 
-    if (!newFeed.excludeUrl.isEmpty) {
-      excludeUrl = newFeed.excludeUrl
+    if (!feed.excludeUrl.isEmpty) {
+      excludeUrl = feed.excludeUrl
     }
 
-    feedId = newFeed._id
+    this.feed = feed
+    this.feeds = feeds
+    this.blackUrls = blackUrls
   }
 
   /**
@@ -107,7 +114,10 @@ case class CrawlJob(webUrl: WebUrl) {
     this.maxSubJob = parentJob.maxSubJob
     this.politenessDelay = parentJob.politenessDelay
     this.onlyCrawlInSameDomain = parentJob.onlyCrawlInSameDomain
-    this.feedId = parentJob.feedId
+
+    this.feed = parentJob.feed
+    this.feeds = parentJob.feeds
+    this.blackUrls = parentJob.blackUrls
   }
 
   /**

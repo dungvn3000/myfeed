@@ -7,6 +7,7 @@ package org.linkerz.crawl.topology.factory
 import org.linkerz.crawl.topology.parser.LinkerZParser
 import org.linkerz.dao.FeedDao
 import com.mongodb.casbah.commons.MongoDBObject
+import org.linkerz.model.Feed
 
 /**
  * The Class DefaultParserFactory.
@@ -17,8 +18,7 @@ import com.mongodb.casbah.commons.MongoDBObject
  */
 
 object ParserFactory {
-  def createParser() = {
-    val feeds = FeedDao.find(MongoDBObject.empty).toList
+  def createParser(feeds: List[Feed]) = {
     new LinkerZParser(feeds)
   }
 }
