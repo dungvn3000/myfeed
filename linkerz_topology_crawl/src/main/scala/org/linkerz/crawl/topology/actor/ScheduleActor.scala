@@ -21,8 +21,6 @@ import backtype.storm.utils.Utils
  */
 class ScheduleActor(collector: SpoutOutputCollector) extends Actor with DBLogger with Logging {
 
-
-
   protected def receive = {
     case "run" => {
       val blackUrls = BlackUrlDao.all

@@ -6,6 +6,7 @@ import org.linkerz.dao.FeedDao
 import com.mongodb.casbah.commons.MongoDBObject
 import org.linkerz.crawl.topology.factory.DownloadFactory
 import org.junit.Test
+import crawlercommons.fetcher.file.SimpleFileFetcher
 
 /**
  * The Class TestDefaultDownloader.

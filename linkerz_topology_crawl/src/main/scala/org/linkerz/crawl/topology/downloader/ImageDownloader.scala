@@ -5,16 +5,13 @@
 package org.linkerz.crawl.topology.downloader
 
 import org.linkerz.crawl.topology.job.CrawlJob
-import org.apache.http.client.HttpClient
-import org.apache.http.impl.client.DefaultHttpClient
 import collection.mutable.ListBuffer
 import java.awt.image.BufferedImage
 import org.apache.http.HttpStatus
 import javax.imageio.ImageIO
-import org.apache.http.client.methods.HttpGet
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
-import org.apache.http.util.EntityUtils
 import net.coobird.thumbnailator.Thumbnails
+import crawlercommons.fetcher.BaseFetcher
 
 /**
  * The Class ImageDownloader.
@@ -23,7 +20,7 @@ import net.coobird.thumbnailator.Thumbnails
  * @since 8/19/12, 11:59 AM
  *
  */
-class ImageDownloader(httpClient: HttpClient = new DefaultHttpClient()) extends Downloader {
+class ImageDownloader(httpFetcher: BaseFetcher) extends Downloader {
 
   def download(crawlJob: CrawlJob) {
     crawlJob.result.map(webPage => {
@@ -33,11 +30,10 @@ class ImageDownloader(httpClient: HttpClient = new DefaultHttpClient()) extends 
       var skip = false
       potentialImages.foreach(imageUrl => if (!skip) {
         try {
-          val response = httpClient.execute(new HttpGet(imageUrl))
-          val entity = response.getEntity
-          if (response.getStatusLine.getStatusCode == HttpStatus.SC_OK) {
+          val result = httpFetcher.get(imageUrl)
+          if (result.getStatusCode == HttpStatus.SC_OK && result.getContentLength > 0) {
             try {
-              val bytes = EntityUtils.toByteArray(entity)
+              val bytes = result.getContent
               val inputStream = new ByteArrayInputStream(bytes)
               val image = ImageIO.read(inputStream)
               val score = image.getWidth + image.getHeight
@@ -85,12 +81,5 @@ class ImageDownloader(httpClient: HttpClient = new DefaultHttpClient()) extends 
       }
     })
 
-  }
-
-
-  def download(url: String) = throw new UnsupportedOperationException()
-
-  def close() {
-    httpClient.getConnectionManager.shutdown()
   }
 }

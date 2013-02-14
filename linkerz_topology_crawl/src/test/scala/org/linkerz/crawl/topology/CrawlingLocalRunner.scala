@@ -16,10 +16,10 @@ object CrawlingLocalRunner extends App {
   val localCluster = new LocalCluster
 
   val conf = new Config
-  conf setDebug false
+  conf setDebug true
   conf setNumWorkers 8
   //Set time out for an crawl job is 10 minutes
-  conf setMessageTimeoutSecs 60 * 10
+  conf setMessageTimeoutSecs 60 * 5
 
   localCluster.submitTopology("crawler", conf, topology)
 
