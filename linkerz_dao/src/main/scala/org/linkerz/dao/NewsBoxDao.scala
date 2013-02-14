@@ -16,9 +16,10 @@ import org.linkerz.model.NewsBox
  */
 object NewsBoxDao extends SalatDAO[NewsBox, ObjectId](mongo("newsbox")) {
 
-  def isExist(linkId: ObjectId) = {
-    findOne(MongoDBObject("linkId" -> linkId)).isDefined
-  }
+  def isExist(linkId: ObjectId, userId: ObjectId) = findOne(MongoDBObject(
+    "linkId" -> linkId,
+    "userId" -> userId
+  )).isDefined
 
   def findByUserId(userId: ObjectId): List[Link] = {
     val newBox = find(MongoDBObject("userId" -> userId)).toList

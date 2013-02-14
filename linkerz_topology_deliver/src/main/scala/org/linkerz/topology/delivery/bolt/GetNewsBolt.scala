@@ -22,7 +22,7 @@ class GetNewsBolt extends StormBolt(outputFields = List("userId", "event")) with
       var links = LinkDao.getAfter(last7Day, feedIds)
 
       links = links.filter(link => {
-        !NewsBoxDao.isExist(link._id)
+        !NewsBoxDao.isExist(link._id, userId)
       })
 
       if (!links.isEmpty) {
