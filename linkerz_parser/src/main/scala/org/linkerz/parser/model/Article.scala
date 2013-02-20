@@ -10,7 +10,7 @@ import collection.JavaConverters._
  * @since 12/23/12 1:00 AM
  *
  */
-case class Article(doc: Document, private val _containerElement: Option[Element] = None) {
+class Article(val doc: Document, private val _containerElement: Option[Element] = None) {
 
   /**
    * Default is vi.

@@ -57,7 +57,7 @@ class ArticleParser {
    * @return
    */
   def parse(doc: Document) = {
-    val article = Article(doc.normalise())
+    val article = new Article(doc.normalise())
     processorsForAutoMode.process(article)
     article
   }
@@ -85,7 +85,7 @@ class ArticleParser {
     })
     val containerElement = doc.select(contentSelection).first()
     if (containerElement != null) {
-      val article = Article(doc, Some(containerElement))
+      val article = new Article(doc, Some(containerElement))
       processorsForManualMode.process(article)
       return Some(article)
     }

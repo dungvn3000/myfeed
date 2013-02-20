@@ -9,13 +9,13 @@ object LinkerZBuild extends Build {
   lazy val sharedSetting = defaultSettings ++ Seq(
     version := "0.1-SNAPSHOT",
     organization := "org.linkerz",
-    scalaVersion := "2.9.1",
+    scalaVersion := "2.10.0",
     scalacOptions += "-Yresolve-term-conflict:package",
     resolvers ++= Seq(
-      "Typesafe Repository" at "http://repo.akka.io/releases/",
       "twitter4j" at "http://twitter4j.org/maven2",
       "clojars.org" at "http://clojars.org/repo",
       "thischwa-repro" at "http://maven-repo.thischwa.de/",
+      "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
       "Local Maven Repository" at "file://" + Path.userHome.absolutePath + "/.m2/repository",
       Resolver.file("Local Repository", file(Path.userHome.absolutePath + "/.ivy2/local"))(Resolver.ivyStylePatterns)
     )
@@ -80,25 +80,24 @@ object LinkerZBuild extends Build {
   lazy val coreDependencies = Seq(
     "org.slf4j" % "slf4j-simple" % "1.6.6",
     "org.slf4j" % "slf4j-api" % "1.6.6",
-    "org.clapper" %% "grizzled-slf4j" % "0.6.9",
+    "org.clapper" %% "grizzled-slf4j" % "1.0.1",
     "commons-collections" % "commons-collections" % "3.2.1",
     "commons-digester" % "commons-digester" % "2.1" exclude("commons-beanutils", "commons-beanutils"),
     "commons-lang" % "commons-lang" % "2.6",
     "org.apache.commons" % "commons-math3" % "3.0",
     "commons-validator" % "commons-validator" % "1.4.0" exclude("commons-beanutils", "commons-beanutils"),
     "commons-io" % "commons-io" % "2.4",
-    "org.scalaz" %% "scalaz-core" % "6.0.4",
     "com.typesafe" % "config" % "1.0.0",
-    "com.typesafe.akka" % "akka-actor" % "2.0.3"
+    "com.typesafe.akka" %% "akka-actor" % "2.1.0"
   )
 
   lazy val testDependencies = Seq(
     "junit" % "junit" % "4.10" % "test",
-    "org.scalatest" %% "scalatest" % "1.8" % "test"
+    "org.scalatest" %% "scalatest" % "1.9.1" % "test"
   )
 
   lazy val modelDependencies = Seq(
-    "com.novus" %% "salat" % "1.9.1" exclude("joda-time", "joda-time"),
+    "com.novus" %% "salat" % "1.9.2-SNAPSHOT" exclude("joda-time", "joda-time"),
     "joda-time" % "joda-time" % "2.1",
     "org.joda" % "joda-convert" % "1.2"
   )

@@ -10,7 +10,10 @@ import org.apache.commons.lang.StringUtils
  * @since 12/23/12 3:24 AM
  *
  */
-abstract case class ArticleElement(jsoupElement: Element)(implicit article: Article) {
+abstract class ArticleElement(_jsoupElement: Element)(implicit article: Article) {
+
+  //getter
+  def jsoupElement = _jsoupElement
 
   /**
    * Index of this element inside an article.

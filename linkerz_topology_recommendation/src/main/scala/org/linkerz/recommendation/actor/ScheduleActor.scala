@@ -17,7 +17,7 @@ import backtype.storm.tuple.Values
  *
  */
 class ScheduleActor(collector: SpoutOutputCollector) extends Actor with DBLogger with Logging {
-  protected def receive = {
+  def receive = {
     case "run" => {
       val users = UserDao.find(MongoDBObject.empty).toList
       users.foreach(user => {

@@ -1,6 +1,5 @@
 package org.linkerz.crawl.topology.spout
 
-import akka.util.duration._
 import grizzled.slf4j.Logging
 import java.util.UUID
 import storm.scala.dsl.StormSpout
@@ -10,6 +9,7 @@ import org.linkerz.crawl.topology.actor.ScheduleActor
 import akka.actor.Props
 import org.linkerz.core.actor.Akka
 import org.linkerz.crawl.topology.event.{Fail, Ack}
+import scala.concurrent.duration._
 
 /**
  * This spout will loop the feed list for every 15 minutes.
@@ -23,6 +23,7 @@ class FeedSpout extends StormSpout(outputFields = List("sessionId", "event")) wi
   setup {
     val scheduleActor = Akka.system.actorOf(Props(new ScheduleActor(_collector)))
     //Schedule the actor run for every 15 minutes.
+    import Akka.system.dispatcher
     Akka.system.scheduler.schedule(10 seconds, 10 minutes, scheduleActor, "run")
   }
 

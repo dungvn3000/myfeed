@@ -9,7 +9,8 @@ import org.jsoup.nodes.Element
  * @since 12/23/12 1:04 AM
  *
  */
-case class ImageElement(override val jsoupElement: Element)(implicit article: Article) extends ArticleElement(jsoupElement) {
+class ImageElement(_jsoupElement: Element)(implicit article: Article) extends ArticleElement(_jsoupElement) {
+
   def text = ""
 
   def src = jsoupElement.attr("src")

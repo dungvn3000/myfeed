@@ -41,13 +41,13 @@ class ArticleExtractor extends Processor {
   private def handleAElement(element: Element)(implicit articleElements: ListBuffer[ArticleElement], article: Article) {
     //A link element should be empty
     if (element.children.isEmpty) {
-      val linkElement = LinkElement(element)
+      val linkElement = new LinkElement(element)
       addToArticle(linkElement)
     } else {
       //If not
       val imageElements = element.select("img")
       if (imageElements.isEmpty) {
-        val linkElement = LinkElement(element)
+        val linkElement = new LinkElement(element)
         addToArticle(linkElement)
 
         //Skip parse a element content except img element
@@ -57,7 +57,7 @@ class ArticleExtractor extends Processor {
   }
 
   private def handleImgElement(element: Element)(implicit articleElements: ListBuffer[ArticleElement], article: Article) {
-    val imgElement = ImageElement(element)
+    val imgElement = new ImageElement(element)
     addToArticle(imgElement)
   }
 
@@ -73,7 +73,7 @@ class ArticleExtractor extends Processor {
       }
 
       if (!element.isHidden) {
-        val textElement = TextElement(element)
+        val textElement = new TextElement(element)
         if (textElement.hasText) {
           addToArticle(textElement)
         }

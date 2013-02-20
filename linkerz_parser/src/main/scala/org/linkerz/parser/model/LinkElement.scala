@@ -9,7 +9,8 @@ import org.jsoup.nodes.Element
  * @since 12/23/12 1:06 AM
  *
  */
-case class LinkElement(override val jsoupElement: Element)(implicit article: Article) extends ArticleElement(jsoupElement) {
+class LinkElement(_jsoupElement: Element)(implicit article: Article) extends ArticleElement(_jsoupElement) {
+
   def text = jsoupElement.text()
 
   /**

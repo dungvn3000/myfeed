@@ -6,7 +6,7 @@ import org.linkerz.core.actor.Akka
 import akka.actor.Props
 import backtype.storm.utils.Utils
 import org.linkerz.topology.delivery.actor.ScheduleActor
-import akka.util.duration._
+import scala.concurrent.duration._
 
 /**
  * The Class ScheduleSpout.
@@ -20,6 +20,7 @@ class ScheduleSpout extends StormSpout(outputFields = List("userId", "event")) w
   setup {
     val scheduleActor = Akka.system.actorOf(Props(new ScheduleActor(_collector)))
     //Schedule the actor run for every 15 minutes.
+    import Akka.system.dispatcher
     Akka.system.scheduler.schedule(10 seconds, 5 minutes, scheduleActor, "run")
   }
 
