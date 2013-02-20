@@ -111,7 +111,7 @@ object LinkerZBuild extends Build {
   ) ++ stormDependencies ++ testDependencies
 
   lazy val recommendationDependencies = Seq(
-    "org.scalanlp" % "breeze-process_2.9.2" % "0.1",
+    "org.scalanlp" %% "breeze-process" % "0.2-SNAPSHOT",
     "org.apache.mahout" % "mahout-core" % "0.7",
     "org.carrot2" % "carrot2-mini" % "3.6.1",
     "redis.clients" % "jedis" % "2.1.0"
@@ -120,7 +120,7 @@ object LinkerZBuild extends Build {
   lazy val parserDependencies = Seq(
     "org.jsoup" % "jsoup" % "1.7.2",
     "org.apache.httpcomponents" % "httpclient" % "4.2.2",
-    "org.scalanlp" % "breeze-process_2.9.2" % "0.1"
+    "org.scalanlp" %% "breeze-process" % "0.2-SNAPSHOT"
   )
 
   lazy val parserHelperDependencies = Seq(
