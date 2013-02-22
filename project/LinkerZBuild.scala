@@ -16,6 +16,7 @@ object LinkerZBuild extends Build {
       "clojars.org" at "http://clojars.org/repo",
       "thischwa-repro" at "http://maven-repo.thischwa.de/",
       "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
+      "Expecty Repository" at "https://raw.github.com/pniederw/expecty/master/m2repo/",
       "Local Maven Repository" at "file://" + Path.userHome.absolutePath + "/.m2/repository",
       Resolver.file("Local Repository", file(Path.userHome.absolutePath + "/.ivy2/local"))(Resolver.ivyStylePatterns)
     )
@@ -93,6 +94,7 @@ object LinkerZBuild extends Build {
 
   lazy val testDependencies = Seq(
     "junit" % "junit" % "4.10" % "test",
+    "org.expecty" % "expecty" % "0.9" % "test",
     "org.scalatest" %% "scalatest" % "1.9.1" % "test"
   )
 
