@@ -12,7 +12,8 @@ import org.bson.types.ObjectId
 
 case class User(
                  _id: ObjectId = new ObjectId,
-                 userName: String,
-                 passWord: String,
-                 userFollows: List[ObjectId] = Nil
+                 username: String,
+                 password: String,
+                 email: String,
+                 userGroups: List[ObjectId] = Nil
                  ) extends LinkerZModel(_id)

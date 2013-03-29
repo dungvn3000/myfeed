@@ -19,8 +19,9 @@ class UserDaoSuite extends FunSuite {
 
   test("test find user by user name") {
     UserDao.save(User(
-      userName = "test user1",
-      passWord = "test user1"
+      username = "test user1",
+      password = "test user1",
+      email = "testuser1@vketnoi.com"
     ))
 
     val user = UserDao.findOne(MongoDBObject("userName" -> "test user1"))
@@ -30,18 +31,21 @@ class UserDaoSuite extends FunSuite {
 
   test("insert mulite users") {
     val user1 = User(
-      userName = "test user1",
-      passWord = "test user1"
+      username = "test user1",
+      password = "test user1",
+      email = "testuser1@vketnoi.com"
     )
 
     val user2 = User(
-      userName = "test user1",
-      passWord = "test user1"
+      username = "test user1",
+      password = "test user1",
+      email = "testuser1@vketnoi.com"
     )
 
     val user3 = User(
-      userName = "test user1",
-      passWord = "test user1"
+      username = "test user1",
+      password = "test user1",
+      email = "testuser1@vketnoi.com"
     )
 
     UserDao.insert(List(user1, user2, user3))
