@@ -14,6 +14,5 @@ case class User(
                  _id: ObjectId = new ObjectId,
                  username: String,
                  password: String,
-                 email: String,
-                 userGroups: List[ObjectId] = Nil
-                 ) extends LinkerZModel(_id)
+                 email: String
+                 ) extends BaseModel(_id)

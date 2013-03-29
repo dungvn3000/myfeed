@@ -19,5 +19,5 @@ case class Comment(
                    userId: ObjectId,
                    comment: String,
                    indexDate: DateTime = DateTime.now()
-                   ) extends LinkerZModel(_id)
+                   ) extends BaseModel(_id)
 

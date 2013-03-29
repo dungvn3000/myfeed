@@ -28,5 +28,5 @@ case class Feed(
 
                  contentSelection: String,
                  removeSelections: List[String]
-                 ) extends LinkerZModel(_id)
+                 ) extends BaseModel(_id)
 

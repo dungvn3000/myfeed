@@ -9,4 +9,4 @@ import org.bson.types.ObjectId
  * @since 2/12/13 11:00 AM
  *
  */
-case class BlackUrl(_id: ObjectId = new ObjectId, urlRegex: String) extends LinkerZModel(_id)
+case class BlackUrl(_id: ObjectId = new ObjectId, urlRegex: String) extends BaseModel(_id)

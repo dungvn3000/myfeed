@@ -17,4 +17,4 @@ case class NewsBox(
                     group: String,
                     click: Boolean = false,
                     createdDate: DateTime = DateTime.now()
-                    ) extends LinkerZModel(_id)
+                    ) extends BaseModel(_id)

@@ -21,7 +21,7 @@ case class Logging(
                     category: String = LogCategory.System.toString,
                     url: Option[String] = None,
                     createDate: DateTime = DateTime.now()
-                    ) extends LinkerZModel(_id)
+                    ) extends BaseModel(_id)
 
 object LogCategory extends Enumeration("crawling", "system") {
   type LogCategory = Value

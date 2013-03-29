@@ -18,5 +18,5 @@ case class Rating(
                    targetId: ObjectId,
                    userId: ObjectId,
                    targetType: Int
-                   ) extends LinkerZModel(_id)
+                   ) extends BaseModel(_id)
 

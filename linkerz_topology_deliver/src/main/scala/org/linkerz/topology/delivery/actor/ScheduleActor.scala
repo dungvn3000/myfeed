@@ -22,7 +22,7 @@ class ScheduleActor(collector: SpoutOutputCollector) extends Actor with DBLogger
       val users = UserDao.find(MongoDBObject.empty).toList
       users.foreach(user => {
         info("Delivery to " + user.username)
-        collector.emit(new Values(user._id, Start(user.userGroups)))
+//        collector.emit(new Values(user._id, Start(user.userGroups)))
       })
     }
   }

@@ -32,7 +32,7 @@ case class Link(
 
                  indexDate: DateTime = DateTime.now()
 
-                 ) extends LinkerZModel(_id) {
+                 ) extends BaseModel(_id) {
 
   override def equals(obj: Any) = {
     obj.isInstanceOf[Link] && obj.asInstanceOf[Link].url == url
