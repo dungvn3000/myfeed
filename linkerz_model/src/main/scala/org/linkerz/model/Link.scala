@@ -24,11 +24,11 @@ case class Link(
                  //Metadata
                  text: Option[String] = None,
                  description: Option[String] = None,
-                 contentEncoding: String,
+                 contentEncoding: String = "UTF-8",
                  title: String,
                  score: Double = 0d,
                  //Feature Image
-                 featureImage: Option[Array[Byte]] = None,
+                 featureImage: Option[ObjectId] = None,
 
                  indexDate: DateTime = DateTime.now()
 

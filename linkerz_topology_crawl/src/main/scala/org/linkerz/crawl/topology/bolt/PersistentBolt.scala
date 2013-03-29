@@ -3,8 +3,10 @@ package org.linkerz.crawl.topology.bolt
 import storm.scala.dsl.StormBolt
 import org.linkerz.crawl.topology.event.{MetaFetch, Persistent}
 import java.util.UUID
-import org.linkerz.dao.{LinkTestDao, FeedDao, LoggingDao, LinkDao}
+import org.linkerz.dao._
 import grizzled.slf4j.Logging
+import org.linkerz.crawl.topology.event.MetaFetch
+import org.linkerz.crawl.topology.event.Persistent
 
 /**
  * This bolt is using for persistent data to the database server.
@@ -20,6 +22,7 @@ class PersistentBolt extends StormBolt(outputFields = List("sessionId", "event")
         job.result.map {
           webPage => if (webPage.isArticle) {
             info("Saving " + webPage.urlAsString)
+            webPage.featureImage.map(ImageDao.insert(_))
             if (job.feed.confirmed) {
               LinkDao.checkAndSave(webPage.asLink)
             } else {

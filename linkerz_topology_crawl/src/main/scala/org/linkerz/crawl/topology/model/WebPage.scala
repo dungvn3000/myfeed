@@ -4,7 +4,7 @@
 
 package org.linkerz.crawl.topology.model
 
-import org.linkerz.model.Link
+import org.linkerz.model.{Image, Link}
 import org.bson.types.ObjectId
 
 /**
@@ -26,7 +26,7 @@ case class WebPage(webUrl: WebUrl) {
   var contentType: String = _
   var contentEncoding: String = "UTF-8"
   var title: String = _
-  var featureImage: Option[Array[Byte]] = None
+  var featureImage: Option[Image] = None
   var potentialImages: List[String] = Nil
   var feedId: ObjectId = _
 
@@ -49,7 +49,7 @@ case class WebPage(webUrl: WebUrl) {
     score = score,
     description = description,
     contentEncoding = contentEncoding,
-    featureImage = featureImage,
+    featureImage = if (featureImage.isDefined) Some(featureImage.get._id) else  None,
     feedId = feedId
   )
 

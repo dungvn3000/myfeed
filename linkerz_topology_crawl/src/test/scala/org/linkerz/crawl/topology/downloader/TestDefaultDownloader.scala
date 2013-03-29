@@ -33,7 +33,7 @@ class TestDefaultDownloader {
       println(crawlJob.result.get.title)
       println(crawlJob.result.get.description.get)
       println(crawlJob.result.get.potentialImages)
-      println(crawlJob.result.get.featureImage.get.size)
+      println(crawlJob.result.get.featureImage)
     }
   }
 

@@ -12,6 +12,7 @@ import javax.imageio.ImageIO
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
 import net.coobird.thumbnailator.Thumbnails
 import crawlercommons.fetcher.BaseFetcher
+import org.linkerz.model.Image
 
 /**
  * The Class ImageDownloader.
@@ -70,7 +71,11 @@ class ImageDownloader(httpFetcher: BaseFetcher) extends Downloader {
           }
 
           Thumbnails.of(bestImage).size(300, preferHeight).outputFormat("jpeg").toOutputStream(outputStream)
-          webPage.featureImage = Some(outputStream.toByteArray)
+
+          val bytes = outputStream.toByteArray
+          if (bytes.length > 0) {
+            webPage.featureImage = Some(Image(original = bytes))
+          }
         } catch {
           case ex: Exception => {
             crawlJob.error(ex.getMessage, getClass.getName, ex)
