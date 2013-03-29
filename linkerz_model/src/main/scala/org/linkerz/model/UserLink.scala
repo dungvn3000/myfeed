@@ -12,6 +12,12 @@ import org.joda.time.DateTime
  */
 case class UserLink(_id: ObjectId = new ObjectId(),
                     userId: ObjectId,
-                    linkId: ObjectId,
+                    url: String,
+                    //Metadata
+                    title: String,
+                    description: Option[String] = None,
+                    text: Option[String] = None,
+                    contentEncoding: String = "UTF-8",
+                    featureImage: Option[ObjectId] = None,
                     created: DateTime = DateTime.now()
                      ) extends BaseModel(_id)
