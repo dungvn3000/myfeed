@@ -23,7 +23,7 @@ class DeliveryBolt extends StormBolt(outputFields = List("userId", "event")) wit
           NewsBoxDao.save(NewsBox(
             userId = userId,
             linkId = link._id,
-            group = feed.group
+            groupId = link._id
           ))
         })
       })

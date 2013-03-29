@@ -46,7 +46,7 @@ class CorrelationBolt extends StormBolt(outputFields = List("userId", "event")) 
             NewsBoxDao.save(NewsBox(
               userId = userId,
               linkId = link._id,
-              group = "recommend"
+              groupId = link._id
             ))
           }
 

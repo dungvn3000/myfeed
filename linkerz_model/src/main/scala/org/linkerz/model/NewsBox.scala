@@ -14,7 +14,7 @@ case class NewsBox(
                     _id: ObjectId = new ObjectId(),
                     userId: ObjectId,
                     linkId: ObjectId,
-                    group: String,
+                    groupId: ObjectId,
                     click: Boolean = false,
                     createdDate: DateTime = DateTime.now()
                     ) extends BaseModel(_id)
