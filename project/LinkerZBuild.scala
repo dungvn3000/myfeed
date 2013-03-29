@@ -24,7 +24,7 @@ object LinkerZBuild extends Build {
 
   lazy val linkerZ = Project("linkerz", file("."), settings = sharedSetting).aggregate(
     linkerZCore, linkerZModel, linkerZRecommendation, linkerZLogger,
-    scalaStorm, urlBuilder, linkerZTopologyCrawl, linkerZParser, linkerZParserHelper, linkerZDao, linkerZDeliver
+    scalaStorm, urlBuilder, linkerZTopologyCrawl, linkerZParserHelper, linkerZDao, linkerZDeliver
   )
 
   lazy val linkerZCore = Project("linkerz_core", file("linkerz_core"), settings = sharedSetting).settings(
@@ -55,19 +55,13 @@ object LinkerZBuild extends Build {
     jarName in assembly := "linkerz_topology_crawl.jar",
     libraryDependencies ++= crawlerTopologyDependencies
   ).dependsOn(
-    linkerZCore, linkerZDao, linkerZLogger, scalaStorm, urlBuilder, linkerZParser
-  )
-
-  lazy val linkerZParser = Project("linkerz_parser", file("linkerz_parser"), settings = sharedSetting).settings {
-    libraryDependencies ++= parserDependencies ++ testDependencies
-  }.dependsOn(
-    linkerZCore, linkerZLogger
+    linkerZCore, linkerZDao, linkerZLogger, scalaStorm, urlBuilder
   )
 
   lazy val linkerZParserHelper = Project("linkerz_parser_helper", file("linkerz_parser_helper"), settings = sharedSetting).settings {
     libraryDependencies ++= parserHelperDependencies ++ testDependencies
   }.dependsOn(
-    linkerZCore, linkerZLogger, linkerZParser, linkerZTopologyCrawl, urlBuilder
+    linkerZCore, linkerZLogger, linkerZTopologyCrawl, urlBuilder
   )
 
   lazy val scalaStorm = Project("scala_storm", file("scala_storm"), settings = sharedSetting).settings {
@@ -107,26 +101,22 @@ object LinkerZBuild extends Build {
   lazy val crawlerTopologyDependencies = Seq(
     "net.coobird" % "thumbnailator" % "0.4.3",
     "com.gravity" % "goose" % "2.1.22",
-    "org.scalanlp" % "breeze-process_2.9.2" % "0.1",
+    "org.scalanlp" %% "breeze-process" % "0.3-SNAPSHOT",
     "com.google.code.crawler-commons" % "crawler-commons" % "0.2",
-    "de.thischwa.jii" % "java-image-info" % "0.5"
+    "de.thischwa.jii" % "java-image-info" % "0.5",
+    "com.github.sonic" %% "sonic_parser" % "0.0.1"
   ) ++ stormDependencies ++ testDependencies
 
   lazy val recommendationDependencies = Seq(
-    "org.scalanlp" %% "breeze-process" % "0.2-SNAPSHOT",
+    "org.scalanlp" %% "breeze-process" % "0.3-SNAPSHOT",
     "org.apache.mahout" % "mahout-core" % "0.7",
     "org.carrot2" % "carrot2-mini" % "3.6.1",
     "redis.clients" % "jedis" % "2.1.0"
   ) ++ stormDependencies ++ testDependencies
 
-  lazy val parserDependencies = Seq(
-    "org.jsoup" % "jsoup" % "1.7.2",
-    "org.apache.httpcomponents" % "httpclient" % "4.2.2",
-    "org.scalanlp" %% "breeze-process" % "0.2-SNAPSHOT"
-  )
-
   lazy val parserHelperDependencies = Seq(
-    "com.miglayout" % "miglayout" % "3.7.4"
+    "com.miglayout" % "miglayout" % "3.7.4",
+    "com.github.sonic" %% "sonic_parser" % "0.0.1"
   )
 
   lazy val stormDependencies = Seq(
