@@ -7,7 +7,7 @@ package org.linkerz.crawl.topology.model
 import org.apache.http.client.utils.URIUtils
 import java.net.URI
 import gumi.builders.UrlBuilder
-import org.linkerz.parser.model.Link
+import com.github.sonic.parser.model.Link
 
 /**
  * The Class WebUrl.

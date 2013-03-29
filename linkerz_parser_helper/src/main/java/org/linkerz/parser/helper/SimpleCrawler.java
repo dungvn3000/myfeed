@@ -1,5 +1,10 @@
 package org.linkerz.parser.helper;
 
+import com.github.sonic.parser.ArticleParser;
+import com.github.sonic.parser.LinksParser;
+import com.github.sonic.parser.model.Article;
+import com.github.sonic.parser.model.ImageElement;
+import com.github.sonic.parser.model.Link;
 import crawlercommons.fetcher.BaseFetchException;
 import crawlercommons.fetcher.BaseFetcher;
 import crawlercommons.fetcher.FetchedResult;
@@ -11,11 +16,6 @@ import org.apache.http.client.utils.URIUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.linkerz.crawl.topology.factory.LinkerZUserAgent;
-import org.linkerz.parser.ArticleParser;
-import org.linkerz.parser.LinksParser;
-import org.linkerz.parser.model.Article;
-import org.linkerz.parser.model.ImageElement;
-import org.linkerz.parser.model.Link;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,7 +1,7 @@
 package org.linkerz.crawl.topology.parser
 
 import org.linkerz.crawl.topology.job.CrawlJob
-import org.linkerz.parser.{ArticleParser, LinksParser}
+import com.github.sonic.parser.{ArticleParser, LinksParser}
 import java.io.ByteArrayInputStream
 import org.jsoup.Jsoup
 import org.apache.commons.lang.StringUtils
