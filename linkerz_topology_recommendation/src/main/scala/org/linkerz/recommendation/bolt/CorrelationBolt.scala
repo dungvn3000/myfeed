@@ -33,24 +33,23 @@ class CorrelationBolt extends StormBolt(outputFields = List("userId", "event")) 
 
   execute {
     tuple => tuple matchSeq {
-      case Seq(userId: ObjectId, MergeLink(clickedLink, link)) => {
-        if (clickedLink.text.isDefined && link.text.isDefined && clickedLink.id != link.id) {
-          val text1 = clickedLink.text.get + " " + clickedLink.title
+      case Seq(userId: ObjectId, MergeLink(userLink, link)) => {
+        if (userLink.text.isDefined && link.text.isDefined && userLink.id != link.id) {
+          val text1 = userLink.text.get + " " + userLink.title
           val text2 = link.text.get + " " + link.title
           val score = sim_pearson(text1, text2)
 
           if (score > 0.55 && score < 0.9
-            && !NewsBoxDao.isUserClicked(userId, link._id)
-            && !NewsBoxDao.isInRecommend(userId, link._id)) {
-            info(score + " - " + clickedLink.title + " - " + link.title)
+            info(score + " - " + userLink.title + " - " + link.title)
+            && !NewsBoxDao.isExist(link._id, userId)) {
             NewsBoxDao.save(NewsBox(
               userId = userId,
               linkId = link._id,
-              groupId = link._id
+              groupId = userLink.groupId
             ))
           }
 
-          tuple emit(clickedLink.id, link.id, score)
+          tuple emit(userLink.id, link.id, score)
         }
       }
     }

@@ -1,7 +1,7 @@
 package org.linkerz.recommendation
 
 import backtype.storm.topology.TopologyBuilder
-import bolt.{CorrelationBolt, MergeBolt, GetClickedLinkBolt}
+import bolt.{CorrelationBolt, MergeBolt, GetUserLinkBolt}
 import spout.RecommendationSpout
 
 /**
@@ -16,8 +16,8 @@ object RecommendationTopology extends Serializable {
   def topology = {
     val builder = new TopologyBuilder
     builder.setSpout("spout", new RecommendationSpout)
-    builder.setBolt("getClicked", new GetClickedLinkBolt).shuffleGrouping("spout")
-    builder.setBolt("merge", new MergeBolt, 5).shuffleGrouping("getClicked")
+    builder.setBolt("getUserLink", new GetUserLinkBolt).shuffleGrouping("spout")
+    builder.setBolt("merge", new MergeBolt, 5).shuffleGrouping("getUserLink")
     builder.setBolt("correlation", new CorrelationBolt, 20).shuffleGrouping("merge")
     builder.createTopology()
   }

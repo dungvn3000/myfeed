@@ -44,13 +44,6 @@ object NewsBoxDao extends SalatDAO[NewsBox, ObjectId](mongo("newsbox")) {
     links.toList
   }
 
-  def isInRecommend(userId: ObjectId, linkId: ObjectId) = !find(
-    MongoDBObject(
-      "userId" -> userId,
-      "linkId" -> linkId,
-      "group" -> "recommend"
-    )).isEmpty
-
   def isUserClicked(userId: ObjectId, linkId: ObjectId) = !find(
     MongoDBObject(
       "userId" -> userId,
