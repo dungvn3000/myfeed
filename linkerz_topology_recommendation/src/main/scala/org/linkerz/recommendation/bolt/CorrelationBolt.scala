@@ -40,8 +40,8 @@ class CorrelationBolt extends StormBolt(outputFields = List("userId", "event")) 
           val score = sim_pearson(text1, text2)
 
           if (score > 0.55 && score < 0.9
-            info(score + " - " + userLink.title + " - " + link.title)
             && !NewsBoxDao.isExist(link._id, userId)) {
+            info(score + " - " + userLink.title + " - " + link.title)
             NewsBoxDao.save(NewsBox(
               userId = userId,
               linkId = link._id,
