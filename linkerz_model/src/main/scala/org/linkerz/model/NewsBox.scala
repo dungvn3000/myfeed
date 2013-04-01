@@ -15,6 +15,14 @@ case class NewsBox(
                     userId: ObjectId,
                     linkId: ObjectId,
                     groupId: ObjectId,
+
+                    //Denormalization for avoiding join to link.
+                    url: String,
+                    title: String,
+                    description: Option[String] = None,
+                    featureImage: Option[ObjectId] = None,
+
+                    read: Boolean = false,
                     click: Boolean = false,
                     createdDate: DateTime = DateTime.now()
                     ) extends BaseModel(_id)
