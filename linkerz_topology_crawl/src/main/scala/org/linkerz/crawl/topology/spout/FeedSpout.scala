@@ -24,7 +24,7 @@ class FeedSpout extends StormSpout(outputFields = List("sessionId", "event")) wi
     val scheduleActor = Akka.system.actorOf(Props(new ScheduleActor(_collector)))
     //Schedule the actor run for every 15 minutes.
     import Akka.system.dispatcher
-    Akka.system.scheduler.schedule(10 seconds, 10 minutes, scheduleActor, "run")
+    Akka.system.scheduler.schedule(10 seconds, 30 minutes, scheduleActor, "run")
   }
 
   def nextTuple() {
