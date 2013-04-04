@@ -14,7 +14,7 @@ case class NewsBox(
                     _id: ObjectId = new ObjectId(),
                     userId: ObjectId,
                     linkId: ObjectId,
-                    groupId: ObjectId,
+                    topicId: ObjectId,
 
                     //Denormalization for avoiding join to link.
                     url: String,

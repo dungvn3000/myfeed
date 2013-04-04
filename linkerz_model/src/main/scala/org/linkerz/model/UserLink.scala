@@ -12,7 +12,7 @@ import org.joda.time.DateTime
  */
 case class UserLink(_id: ObjectId = new ObjectId(),
                     userId: ObjectId,
-                    groupId: ObjectId,
+                    topicId: ObjectId,
                     url: String,
                     //Metadata
                     title: String,

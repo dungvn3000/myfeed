@@ -50,7 +50,7 @@ class CorrelationBolt extends StormBolt(outputFields = List("userId", "event")) 
               url = link.url,
               description = link.description,
               featureImage = link.featureImage,
-              groupId = userLink.groupId
+              topicId = userLink.topicId
             ))
           }
 
