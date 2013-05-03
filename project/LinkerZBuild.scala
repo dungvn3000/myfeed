@@ -24,7 +24,7 @@ object LinkerZBuild extends Build {
 
   lazy val linkerZ = Project("linkerz", file("."), settings = sharedSetting).aggregate(
     linkerZCore, linkerZModel, linkerZRecommendation, linkerZLogger,
-    scalaStorm, urlBuilder, linkerZTopologyCrawl, linkerZParserHelper, linkerZDao
+    scalaStorm, urlBuilder, linkerZTopologyCrawl, linkerZDao
   )
 
   lazy val linkerZCore = Project("linkerz_core", file("linkerz_core"), settings = sharedSetting).settings(
@@ -52,12 +52,6 @@ object LinkerZBuild extends Build {
     libraryDependencies ++= crawlerTopologyDependencies
   ).dependsOn(
     linkerZCore, linkerZDao, linkerZLogger, scalaStorm, urlBuilder
-  )
-
-  lazy val linkerZParserHelper = Project("linkerz_parser_helper", file("linkerz_parser_helper"), settings = sharedSetting).settings {
-    libraryDependencies ++= parserHelperDependencies ++ testDependencies
-  }.dependsOn(
-    linkerZCore, linkerZLogger, linkerZTopologyCrawl, urlBuilder
   )
 
   lazy val scalaStorm = Project("scala_storm", file("scala_storm"), settings = sharedSetting).settings {
@@ -100,7 +94,9 @@ object LinkerZBuild extends Build {
     "org.scalanlp" %% "breeze-process" % "0.3-SNAPSHOT",
     "com.google.code.crawler-commons" % "crawler-commons" % "0.2",
     "de.thischwa.jii" % "java-image-info" % "0.5",
-    "com.github.sonic" %% "sonic_parser" % "0.0.1"
+    "com.github.sonic" %% "sonic_parser" % "0.0.1",
+    "net.java.dev.rome" % "rome" % "1.0.0",
+    "org.rometools" % "rome-opml" % "1.0"
   ) ++ stormDependencies ++ testDependencies
 
   lazy val recommendationDependencies = Seq(
@@ -109,11 +105,6 @@ object LinkerZBuild extends Build {
     "org.carrot2" % "carrot2-mini" % "3.6.1",
     "redis.clients" % "jedis" % "2.1.0"
   ) ++ stormDependencies ++ testDependencies
-
-  lazy val parserHelperDependencies = Seq(
-    "com.miglayout" % "miglayout" % "3.7.4",
-    "com.github.sonic" %% "sonic_parser" % "0.0.1"
-  )
 
   lazy val stormDependencies = Seq(
     "storm" % "storm" % "0.8.2" % "provided"
