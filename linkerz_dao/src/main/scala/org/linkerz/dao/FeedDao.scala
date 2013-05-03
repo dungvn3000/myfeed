@@ -14,6 +14,6 @@ import com.mongodb.casbah.commons.MongoDBObject
  */
 object FeedDao extends SalatDAO[Feed, ObjectId](mongo("feed")) {
 
-  def all = find(MongoDBObject("enable" -> true)).toList
+  def all = find(MongoDBObject.empty).toList
 
 }

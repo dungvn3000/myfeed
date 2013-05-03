@@ -23,11 +23,11 @@ class ScheduleActor(collector: SpoutOutputCollector) extends Actor with DBLogger
     case "run" => {
       val newFeeds = FeedDao.all
       newFeeds.foreach(feed => {
-        val job = new FetchJob(feed, newFeeds)
+        val job = new FetchJob(feed)
         info("Start fetching " + feed.url)
         //Make sure the id is unique all the time.
         val sessionId = UUID.randomUUID()
-        collector.emit(new Values(sessionId, Start(job)), sessionId)
+        collector.emit(new Values(Start(job)))
 
         //Delay 10s for each feed.
         Utils sleep 1000 * 10
