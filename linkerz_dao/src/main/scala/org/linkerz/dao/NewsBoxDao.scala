@@ -4,7 +4,7 @@ import com.novus.salat.dao.SalatDAO
 import com.mongodb.casbah.commons.MongoDBObject
 import collection.mutable.ListBuffer
 import com.mongodb.casbah.Imports._
-import org.linkerz.model.Link
+import org.linkerz.model.News
 import org.linkerz.model.NewsBox
 
 /**
@@ -21,7 +21,7 @@ object NewsBoxDao extends SalatDAO[NewsBox, ObjectId](mongo("newsbox")) {
     "userId" -> userId
   )).isDefined
 
-  def findByUserId(userId: ObjectId): List[Link] = {
+  def findByUserId(userId: ObjectId): List[News] = {
     val newBox = find(MongoDBObject("userId" -> userId)).toList
     if (!newBox.isEmpty) {
       val linkIds = newBox.map(_.linkId)
@@ -36,7 +36,7 @@ object NewsBoxDao extends SalatDAO[NewsBox, ObjectId](mongo("newsbox")) {
       "userId" -> userId,
       "click" -> true
     ))
-    val links = new ListBuffer[Link]
+    val links = new ListBuffer[News]
     clicks.foreach(click => {
       val link = LinkDao.findOneById(click.linkId).getOrElse(throw new Exception("Some thing goes worng, can't find the link id"))
       links += link

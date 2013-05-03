@@ -16,17 +16,7 @@ import org.bson.types.ObjectId
 
 case class Feed(
                  _id: ObjectId = new ObjectId,
-
                  name: String,
-                 url: String,
-                 enable: Boolean,
-                 confirmed: Boolean = false,
-                 group: String,
-
-                 urlRegex: String,
-                 excludeUrl: List[String] = Nil,
-
-                 contentSelection: String,
-                 removeSelections: List[String]
+                 url: String
                  ) extends BaseModel(_id)
 

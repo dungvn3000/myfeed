@@ -3,7 +3,7 @@ package org.linkerz.dao
 import com.novus.salat.dao.SalatDAO
 import com.mongodb.casbah.commons.MongoDBObject
 import com.mongodb.casbah.Imports._
-import org.linkerz.model.Link
+import org.linkerz.model.News
 import org.joda.time.DateTime
 
 /**
@@ -13,11 +13,11 @@ import org.joda.time.DateTime
  * @since 11/22/12 1:07 PM
  *
  */
-object LinkDao extends SalatDAO[Link, ObjectId](mongo("link")) {
+object LinkDao extends SalatDAO[News, ObjectId](mongo("link")) {
 
   def findByUrl(url: String) = findOne(MongoDBObject("url" -> url))
 
-  def checkAndSave(link: Link) = {
+  def checkAndSave(link: News) = {
     val result = findOne(MongoDBObject(
       "$or" -> Array(
         MongoDBObject("url" -> link.url),

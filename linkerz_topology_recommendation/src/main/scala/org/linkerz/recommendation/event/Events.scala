@@ -1,6 +1,6 @@
 package org.linkerz.recommendation.event
 
-import org.linkerz.model.{UserLink, Link}
+import org.linkerz.model.{UserLink, News}
 import org.bson.types.ObjectId
 
 /**
@@ -14,6 +14,6 @@ sealed trait Event extends Serializable
 
 object Recommendation extends Event
 case class GetUserLink(userLinks: List[UserLink]) extends Event
-case class MergeLink(userLink: UserLink, link: Link) extends Event
+case class MergeLink(userLink: UserLink, link: News) extends Event
 case class Correlation(clickedLinkId: ObjectId, linkId: ObjectId, score: Double) extends Event
 

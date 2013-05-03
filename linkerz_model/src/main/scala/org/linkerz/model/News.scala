@@ -15,27 +15,22 @@ import org.joda.time.DateTime
  *
  */
 
-case class Link(
+case class News(
                  _id: ObjectId = new ObjectId,
                  feedId: ObjectId,
-
                  url: String,
-
                  //Metadata
-                 text: Option[String] = None,
-                 description: Option[String] = None,
-                 contentEncoding: String = "UTF-8",
                  title: String,
+                 description: Option[String] = None,
+                 text: Option[String] = None,
                  score: Double = 0d,
                  //Feature Image
                  featureImage: Option[ObjectId] = None,
-
-                 indexDate: DateTime = DateTime.now()
-
+                 createdDate: DateTime = DateTime.now()
                  ) extends BaseModel(_id) {
 
   override def equals(obj: Any) = {
-    obj.isInstanceOf[Link] && obj.asInstanceOf[Link].url == url
+    obj.isInstanceOf[News] && obj.asInstanceOf[News].url == url
   }
 
   override def hashCode() = url.hashCode

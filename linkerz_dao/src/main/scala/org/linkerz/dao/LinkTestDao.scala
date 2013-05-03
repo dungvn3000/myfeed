@@ -3,7 +3,7 @@ package org.linkerz.dao
 import com.novus.salat.dao.SalatDAO
 import com.mongodb.casbah.commons.MongoDBObject
 import com.mongodb.casbah.Imports._
-import org.linkerz.model.Link
+import org.linkerz.model.News
 
 /**
  * The dao is using for persistent link come from a unconfirmed feed.
@@ -12,11 +12,11 @@ import org.linkerz.model.Link
  * @since 11/22/12 1:07 PM
  *
  */
-object LinkTestDao extends SalatDAO[Link, ObjectId](mongo("link_test")) {
+object LinkTestDao extends SalatDAO[News, ObjectId](mongo("link_test")) {
 
   def findByUrl(url: String) = findOne(MongoDBObject("url" -> url))
 
-  def checkAndSave(link: Link) = {
+  def checkAndSave(link: News) = {
     //For testing purpose, we should check url only when save a link.
     val result = findOne(MongoDBObject("url" -> link.url))
 

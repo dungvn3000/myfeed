@@ -4,7 +4,7 @@
 
 package org.linkerz.crawl.topology.model
 
-import org.linkerz.model.{Image, Link}
+import org.linkerz.model.{Image, News}
 import org.bson.types.ObjectId
 
 /**
@@ -42,7 +42,7 @@ case class WebPage(webUrl: WebUrl) {
    * Convenient method to convert a webpage to link model to store the database.
    * @return
    */
-  def asLink = Link(
+  def asLink = News(
     url = urlAsString,
     title = title,
     text = text,
