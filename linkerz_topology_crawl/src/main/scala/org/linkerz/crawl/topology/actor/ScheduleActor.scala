@@ -4,7 +4,6 @@ import org.linkerz.logger.DBLogger
 import akka.actor.Actor
 import org.linkerz.dao.FeedDao
 import org.linkerz.crawl.topology.job.FetchJob
-import java.util.UUID
 import org.linkerz.crawl.topology.event.Start
 import grizzled.slf4j.Logging
 import backtype.storm.tuple.Values
@@ -25,10 +24,7 @@ class ScheduleActor(collector: SpoutOutputCollector) extends Actor with DBLogger
       newFeeds.foreach(feed => {
         val job = new FetchJob(feed)
         info("Start fetching " + feed.url)
-        //Make sure the id is unique all the time.
-        val sessionId = UUID.randomUUID()
         collector.emit(new Values(Start(job)))
-
         //Delay 10s for each feed.
         Utils sleep 1000 * 10
       })

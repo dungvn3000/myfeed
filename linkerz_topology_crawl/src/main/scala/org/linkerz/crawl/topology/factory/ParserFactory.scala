@@ -4,9 +4,7 @@
 
 package org.linkerz.crawl.topology.factory
 
-import org.linkerz.crawl.topology.parser.LinkerZParser
-import org.linkerz.dao.FeedDao
-import com.mongodb.casbah.commons.MongoDBObject
+import org.linkerz.crawl.topology.parser.{RssParser, LinkerZParser}
 import org.linkerz.model.Feed
 
 /**
@@ -21,4 +19,6 @@ object ParserFactory {
   def createParser(feeds: List[Feed]) = {
     new LinkerZParser(feeds)
   }
+
+  def createRssParser() = new RssParser
 }
