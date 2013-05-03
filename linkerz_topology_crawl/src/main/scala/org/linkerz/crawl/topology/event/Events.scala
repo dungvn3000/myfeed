@@ -1,6 +1,6 @@
 package org.linkerz.crawl.topology.event
 
-import org.linkerz.crawl.topology.job.CrawlJob
+import org.linkerz.crawl.topology.job.FetchJob
 
 /**
  * The Class Event.
@@ -12,7 +12,7 @@ import org.linkerz.crawl.topology.job.CrawlJob
 sealed trait Event extends Serializable
 
 //This event starting from the spout, using for start crawling an url.
-case class Start(job: CrawlJob) extends Event
+case class Start(job: FetchJob) extends Event
 
 //This event will be sent from the spout. When a job was acked.
 object Ack extends Event
@@ -21,16 +21,16 @@ object Ack extends Event
 object Fail extends Event
 
 //This event will sent by handler bolt, after the bolt finished it's job.
-case class Handle(job: CrawlJob) extends Event
+case class Handle(job: FetchJob) extends Event
 
 //This event will sent by fetcher bolt, after the bolt finished it's job.
-case class Fetch(job: CrawlJob) extends Event
+case class Fetch(job: FetchJob) extends Event
 
 //This event will sent by parser bolt, after the bolt finished it's job.
-case class Parse(job: CrawlJob) extends Event
+case class Parse(job: FetchJob) extends Event
 
 //This event will sent by meta fetcher bolt, after the bolt finished it's job.
-case class MetaFetch(job: CrawlJob) extends Event
+case class MetaFetch(job: FetchJob) extends Event
 
 //This event will sent by persistent bolt, after the bolt finished it's job.
-case class Persistent(job: CrawlJob) extends Event
+case class Persistent(job: FetchJob) extends Event

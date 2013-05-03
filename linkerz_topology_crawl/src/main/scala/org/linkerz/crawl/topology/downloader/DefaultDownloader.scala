@@ -4,7 +4,7 @@
 
 package org.linkerz.crawl.topology.downloader
 
-import org.linkerz.crawl.topology.job.CrawlJob
+import org.linkerz.crawl.topology.job.FetchJob
 import org.linkerz.crawl.topology.model.WebPage
 import crawlercommons.fetcher.BaseFetcher
 import com.google.common.net.HttpHeaders
@@ -20,7 +20,7 @@ import org.apache.http.HttpStatus
 
 class DefaultDownloader(htmlFetcher: BaseFetcher) extends Downloader {
 
-  def download(crawlJob: CrawlJob) {
+  def download(crawlJob: FetchJob) {
     val webUrl = crawlJob.webUrl
     info("Download : " + webUrl)
     val result = htmlFetcher.get(webUrl.toString)

@@ -1,7 +1,6 @@
 package org.linkerz.crawl.topology.bolt
 
 import storm.scala.dsl.StormBolt
-import org.linkerz.crawl.topology.event.{MetaFetch, Persistent}
 import java.util.UUID
 import org.linkerz.dao._
 import grizzled.slf4j.Logging
@@ -22,12 +21,6 @@ class PersistentBolt extends StormBolt(outputFields = List("sessionId", "event")
         job.result.map {
           webPage => if (webPage.isArticle) {
             info("Saving " + webPage.urlAsString)
-            webPage.featureImage.map(ImageDao.insert(_))
-            if (job.feed.confirmed) {
-              NewsDao.checkAndSave(webPage.asLink)
-            } else {
-              LinkTestDao.checkAndSave(webPage.asLink)
-            }
           }
         }
 

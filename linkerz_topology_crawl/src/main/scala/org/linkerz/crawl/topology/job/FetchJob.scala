@@ -14,16 +14,16 @@ import org.linkerz.crawl.topology.model.WebPage
 import scala.Some
 
 /**
- * The Class CrawlJob.
+ * The Class FetchJob.
  *
  * @author Nguyen Duc Dung
  * @since 7/29/12, 12:55 AM
  *
  */
 
-case class CrawlJob(webUrl: WebUrl) {
+case class FetchJob(webUrl: WebUrl) {
 
-  var parent: Option[CrawlJob] = None
+  var parent: Option[FetchJob] = None
 
   var result: Option[WebPage] = None
 
@@ -32,7 +32,6 @@ case class CrawlJob(webUrl: WebUrl) {
   var feed: Feed = _
 
   var feeds: List[Feed] = _
-
 
   /**
    * String url.
@@ -58,7 +57,7 @@ case class CrawlJob(webUrl: WebUrl) {
    * @param webUrl
    * @param parentJob
    */
-  def this(webUrl: WebUrl, parentJob: CrawlJob) {
+  def this(webUrl: WebUrl, parentJob: FetchJob) {
     this(webUrl)
     assert(parent != null)
     this.parent = Some(parentJob)

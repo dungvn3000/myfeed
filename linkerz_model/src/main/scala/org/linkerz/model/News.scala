@@ -24,8 +24,7 @@ case class News(
                  description: Option[String] = None,
                  text: Option[String] = None,
                  score: Double = 0d,
-                 //Feature Image
-                 featureImage: Option[ObjectId] = None,
+
                  createdDate: DateTime = DateTime.now()
                  ) extends BaseModel(_id) {
 

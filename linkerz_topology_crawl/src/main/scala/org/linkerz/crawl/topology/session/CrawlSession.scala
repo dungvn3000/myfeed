@@ -4,7 +4,7 @@
 
 package org.linkerz.crawl.topology.session
 
-import org.linkerz.crawl.topology.job.CrawlJob
+import org.linkerz.crawl.topology.job.FetchJob
 import org.linkerz.crawl.topology.model.WebUrl
 import java.util
 import grizzled.slf4j.Logging
@@ -17,7 +17,7 @@ import util.UUID
  * @since 7/29/12, 1:06 AM
  *
  */
-case class CrawlSession(id: UUID, job: CrawlJob) extends Logging {
+case class CrawlSession(id: UUID, job: FetchJob) extends Logging {
 
   /**
    * Store queue urls list, It is not using for queue url,

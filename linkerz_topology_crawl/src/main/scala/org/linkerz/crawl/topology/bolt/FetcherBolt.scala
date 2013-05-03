@@ -3,7 +3,6 @@ package org.linkerz.crawl.topology.bolt
 import storm.scala.dsl.StormBolt
 import org.linkerz.crawl.topology.event.{Handle, Fetch}
 import org.linkerz.crawl.topology.factory.DownloadFactory
-import backtype.storm.utils.Utils
 import grizzled.slf4j.Logging
 import java.util.UUID
 import org.linkerz.crawl.topology.downloader.Downloader
@@ -28,8 +27,6 @@ class FetcherBolt extends StormBolt(outputFields = List("sessionId", "event")) w
     implicit tuple => tuple matchSeq {
       case Seq(sessionId: UUID, Handle(job)) => {
         try {
-          //Delay time for each job.
-          if (job.politenessDelay > 0 && job.parent.isDefined) Utils sleep job.politenessDelay
           downloader download job
         } catch {
           case ex: Exception => {
