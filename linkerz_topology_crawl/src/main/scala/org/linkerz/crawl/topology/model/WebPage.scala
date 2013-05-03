@@ -4,7 +4,7 @@
 
 package org.linkerz.crawl.topology.model
 
-import org.linkerz.model.{Image, News}
+import org.linkerz.model.News
 import org.bson.types.ObjectId
 
 /**
@@ -26,8 +26,6 @@ case class WebPage(webUrl: WebUrl) {
   var contentType: String = _
   var contentEncoding: String = "UTF-8"
   var title: String = _
-  var featureImage: Option[Image] = None
-  var potentialImages: List[String] = Nil
   var feedId: ObjectId = _
 
   var isArticle = false
@@ -48,8 +46,6 @@ case class WebPage(webUrl: WebUrl) {
     text = text,
     score = score,
     description = description,
-    contentEncoding = contentEncoding,
-    featureImage = if (featureImage.isDefined) Some(featureImage.get._id) else  None,
     feedId = feedId
   )
 
