@@ -2,7 +2,7 @@ package org.linkerz.recommendation.bolt
 
 import storm.scala.dsl.StormBolt
 import org.linkerz.recommendation.event.{MergeLink, GetUserLink}
-import org.linkerz.dao.LinkDao
+import org.linkerz.dao.NewsDao
 import org.bson.types.ObjectId
 import org.joda.time.DateTime
 
@@ -19,7 +19,7 @@ class MergeBolt extends StormBolt(outputFields = List("userId", "event")) {
     tuple => tuple matchSeq {
       case Seq(userId: ObjectId, GetUserLink(userLinks)) => {
         val last7Day = DateTime.now.minusDays(7)
-        val links = LinkDao.getAfter(last7Day)
+        val links = NewsDao.getAfter(last7Day)
         userLinks.foreach(userLink => {
           links.foreach(link => {
             tuple emit(userId, MergeLink(userLink, link))

@@ -14,7 +14,7 @@ class LinkDaoSuite extends FunSuite {
 
   test("get last news in 7 days") {
     val last7Day = DateTime.now.minusDays(7)
-    val links = LinkDao.getAfter(last7Day)
+    val links = NewsDao.getAfter(last7Day)
 
     assert(!links.isEmpty)
     assert(links.last.createdDate.isAfter(last7Day))

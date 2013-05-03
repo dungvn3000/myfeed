@@ -24,7 +24,7 @@ class PersistentBolt extends StormBolt(outputFields = List("sessionId", "event")
             info("Saving " + webPage.urlAsString)
             webPage.featureImage.map(ImageDao.insert(_))
             if (job.feed.confirmed) {
-              LinkDao.checkAndSave(webPage.asLink)
+              NewsDao.checkAndSave(webPage.asLink)
             } else {
               LinkTestDao.checkAndSave(webPage.asLink)
             }

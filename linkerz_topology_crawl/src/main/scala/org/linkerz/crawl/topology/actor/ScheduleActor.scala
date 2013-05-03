@@ -2,8 +2,7 @@ package org.linkerz.crawl.topology.actor
 
 import org.linkerz.logger.DBLogger
 import akka.actor.Actor
-import org.linkerz.dao.{BlackUrlDao, FeedDao}
-import com.mongodb.casbah.commons.MongoDBObject
+import org.linkerz.dao.FeedDao
 import org.linkerz.crawl.topology.job.CrawlJob
 import java.util.UUID
 import org.linkerz.crawl.topology.event.Start
@@ -22,12 +21,9 @@ import backtype.storm.utils.Utils
 class ScheduleActor(collector: SpoutOutputCollector) extends Actor with DBLogger with Logging {
   def receive = {
     case "run" => {
-      val blackUrls = BlackUrlDao.all
       val newFeeds = FeedDao.all
       newFeeds.foreach(feed => {
-        val job = new CrawlJob(feed, newFeeds, blackUrls)
-        job.maxDepth = 1 // Set level is 2 because we will get related link.
-        job.politenessDelay = 1000
+        val job = new CrawlJob(feed, newFeeds)
         info("Start Crawling " + feed.url)
         //Make sure the id is unique all the time.
         val sessionId = UUID.randomUUID()
