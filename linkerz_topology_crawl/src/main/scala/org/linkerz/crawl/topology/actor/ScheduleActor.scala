@@ -24,7 +24,7 @@ class ScheduleActor(collector: SpoutOutputCollector) extends Actor with DBLogger
       val newFeeds = FeedDao.all
       newFeeds.foreach(feed => {
         val job = new FetchJob(feed, newFeeds)
-        info("Start Crawling " + feed.url)
+        info("Start fetching " + feed.url)
         //Make sure the id is unique all the time.
         val sessionId = UUID.randomUUID()
         collector.emit(new Values(sessionId, Start(job)), sessionId)

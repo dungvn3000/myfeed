@@ -1,7 +1,7 @@
 package org.linkerz.crawl.topology.bolt
 
 import storm.scala.dsl.StormBolt
-import org.linkerz.crawl.topology.event.{Handle, Fetch}
+import org.linkerz.crawl.topology.event.FetchDone
 import org.linkerz.crawl.topology.factory.DownloadFactory
 import grizzled.slf4j.Logging
 import java.util.UUID
@@ -34,7 +34,7 @@ class FetcherBolt extends StormBolt(outputFields = List("sessionId", "event")) w
             _collector reportError ex
           }
         }
-        tuple emit(sessionId, Fetch(job))
+        tuple emit(sessionId, FetchDone(job))
       }
     }
     tuple.ack()

@@ -23,15 +23,11 @@ import scala.Some
 
 case class FetchJob(webUrl: WebUrl) {
 
-  var parent: Option[FetchJob] = None
-
   var result: Option[WebPage] = None
 
   var responseCode: Int = _
 
   var feed: Feed = _
-
-  var feeds: List[Feed] = _
 
   /**
    * String url.
@@ -39,42 +35,6 @@ case class FetchJob(webUrl: WebUrl) {
    */
   def this(url: String) {
     this(new WebUrl(url))
-  }
-
-  /**
-   *
-   * @param feed
-   * @param feeds
-   */
-  def this(feed: Feed, feeds: List[Feed]) {
-    this(feed.url)
-    this.feed = feed
-    this.feeds = feeds
-  }
-
-  /**
-   *
-   * @param webUrl
-   * @param parentJob
-   */
-  def this(webUrl: WebUrl, parentJob: FetchJob) {
-    this(webUrl)
-    assert(parent != null)
-    this.parent = Some(parentJob)
-    this.feed = parentJob.feed
-    this.feeds = parentJob.feeds
-  }
-
-  /**
-   * The depth of the job from the first job.
-   */
-  private var _depth: Int = 0
-
-  def depth: Int = {
-    if (!parent.isEmpty) {
-      _depth = parent.get.depth + 1
-    }
-    _depth
   }
 
   val errors = new ListBuffer[Logging]
