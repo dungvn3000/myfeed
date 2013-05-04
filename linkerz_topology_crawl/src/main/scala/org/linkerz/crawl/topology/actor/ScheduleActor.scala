@@ -3,7 +3,6 @@ package org.linkerz.crawl.topology.actor
 import org.linkerz.logger.DBLogger
 import akka.actor.Actor
 import org.linkerz.dao.FeedDao
-import org.linkerz.crawl.topology.job.FetchJob
 import org.linkerz.crawl.topology.event.Start
 import grizzled.slf4j.Logging
 import backtype.storm.tuple.Values
@@ -22,9 +21,8 @@ class ScheduleActor(collector: SpoutOutputCollector) extends Actor with DBLogger
     case "run" => {
       val newFeeds = FeedDao.all
       newFeeds.foreach(feed => {
-        val job = new FetchJob(feed)
         info("Start fetching " + feed.url)
-        collector.emit(new Values(Start(job)))
+        collector.emit(new Values(Start(feed)), feed._id)
         //Delay 10s for each feed.
         Utils sleep 1000 * 10
       })

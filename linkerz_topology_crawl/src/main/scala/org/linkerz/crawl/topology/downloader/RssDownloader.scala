@@ -1,8 +1,8 @@
 package org.linkerz.crawl.topology.downloader
 
 import crawlercommons.fetcher.BaseFetcher
-import org.linkerz.crawl.topology.job.FetchJob
 import grizzled.slf4j.Logging
+import org.linkerz.model.Feed
 
 /**
  * The Class RssDownloader.
@@ -12,8 +12,8 @@ import grizzled.slf4j.Logging
  *
  */
 class RssDownloader(htmlFetcher: BaseFetcher) extends Logging {
-  def download(feedJob: FetchJob) {
-    info("Download : " + feedJob.url)
-    feedJob.result = htmlFetcher.get(feedJob.url)
+  def download(feed: Feed) = {
+    info("Download : " + feed.url)
+    htmlFetcher.get(feed.url)
   }
 }

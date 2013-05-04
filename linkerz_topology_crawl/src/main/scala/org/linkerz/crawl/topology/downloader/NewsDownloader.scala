@@ -4,9 +4,9 @@
 
 package org.linkerz.crawl.topology.downloader
 
-import org.linkerz.crawl.topology.job.CrawlJob
 import crawlercommons.fetcher.BaseFetcher
 import grizzled.slf4j.Logging
+import com.sun.syndication.feed.synd.SyndEntry
 
 /**
  * The Class DefaultDownload.
@@ -18,9 +18,9 @@ import grizzled.slf4j.Logging
 
 class NewsDownloader(htmlFetcher: BaseFetcher) extends Logging {
 
-  def download(job: CrawlJob) {
-    info("Download : " + job.url)
-    job.result = htmlFetcher.get(job.url)
+  def download(entry: SyndEntry) = {
+    info("Download : " + entry.getLink)
+    htmlFetcher.get(entry.getLink)
   }
 
 }

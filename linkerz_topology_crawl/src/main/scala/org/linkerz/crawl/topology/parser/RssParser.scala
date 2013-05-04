@@ -6,7 +6,7 @@ import org.apache.http.HttpStatus
 import collection.JavaConversions._
 import grizzled.slf4j.Logging
 import java.io.ByteArrayInputStream
-import org.linkerz.crawl.topology.job.FetchJob
+import crawlercommons.fetcher.FetchedResult
 
 /**
  * The Class RssParser.
@@ -17,8 +17,7 @@ import org.linkerz.crawl.topology.job.FetchJob
  */
 class RssParser extends Logging {
 
-  def parse(job: FetchJob): List[SyndEntry] = {
-    val result = job.result
+  def parse(result: FetchedResult): List[SyndEntry] = {
     if (result.getStatusCode == HttpStatus.SC_OK
       && result.getContentLength > 0) {
       val input = new ByteArrayInputStream(result.getContent)
@@ -26,8 +25,7 @@ class RssParser extends Logging {
       try {
         val feed = new SyndFeedInput().build(xmlReader)
         if (!feed.getEntries.isEmpty) {
-          val entries = feed.getEntries.map(_.asInstanceOf[SyndEntry]).toList
-          return entries
+          return feed.getEntries.map(_.asInstanceOf[SyndEntry]).toList
         }
       } catch {
         case ex: FeedException => error(ex.getMessage, ex)
