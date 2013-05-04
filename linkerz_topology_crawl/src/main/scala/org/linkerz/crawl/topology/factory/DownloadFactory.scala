@@ -4,7 +4,7 @@
 
 package org.linkerz.crawl.topology.factory
 
-import org.linkerz.crawl.topology.downloader.DefaultDownloader
+import org.linkerz.crawl.topology.downloader.{RssDownloader, NewsDownloader}
 import crawlercommons.fetcher.http.SimpleHttpFetcher
 
 /**
@@ -17,8 +17,12 @@ import crawlercommons.fetcher.http.SimpleHttpFetcher
 
 object DownloadFactory {
 
-  def createDownloader() = {
-    new DefaultDownloader(new SimpleHttpFetcher(100, new LinkerZUserAgent))
+  def createNewsDownloader() = {
+    new NewsDownloader(new SimpleHttpFetcher(100, new LinkerZUserAgent))
+  }
+
+  def createRssDownloader() = {
+    new RssDownloader(new SimpleHttpFetcher(100, new LinkerZUserAgent))
   }
 
 }

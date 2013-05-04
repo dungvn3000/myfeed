@@ -5,6 +5,7 @@
 package org.linkerz.crawl.topology.job
 
 import org.linkerz.model.Feed
+import crawlercommons.fetcher.FetchedResult
 
 /**
  * The Class FetchJob.
@@ -15,5 +16,9 @@ import org.linkerz.model.Feed
  */
 
 case class FetchJob(feed: Feed) {
+
+  var result : FetchedResult = _
+
+  def url = feed.url
 
 }
