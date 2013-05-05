@@ -1,10 +1,11 @@
 package org.linkerz.crawl.topology.bolt
 
 import storm.scala.dsl.StormBolt
-import org.linkerz.crawl.topology.event.DownloadDone
+import org.linkerz.crawl.topology.event.{ParseDone, DownloadDone}
 import org.linkerz.crawl.topology.factory.ParserFactory
 import org.linkerz.crawl.topology.parser.NewsParser
 import org.bson.types.ObjectId
+import org.linkerz.model.News
 
 /**
  * This bolt will parse a web page.
@@ -25,8 +26,16 @@ class ParserBolt extends StormBolt(outputFields = List("feedId", "event")) {
   execute {
     implicit tuple => tuple matchSeq {
       case Seq(feedId: ObjectId, DownloadDone(feed, result)) => {
-        parser.parse(feedId, result).map(news => {
-          tuple.emit(feedId, news)
+        parser.parse(result).map(article => {
+
+          val news = News(
+            url = result.getFetchedUrl,
+            title = article.title,
+            description = Some(article.description()),
+            text = Some(article.text),
+            feedId = feedId
+          )
+          tuple.emit(feedId, ParseDone(feed, news))
         })
       }
     }

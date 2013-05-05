@@ -5,8 +5,7 @@ import crawlercommons.fetcher.FetchedResult
 import org.apache.http.HttpStatus
 import java.io.ByteArrayInputStream
 import org.jsoup.Jsoup
-import org.linkerz.model.News
-import org.bson.types.ObjectId
+import com.github.sonic.parser.model.Article
 
 /**
  * The this class using two parser LinksParse and ArticleParser.
@@ -19,21 +18,12 @@ class NewsParser {
 
   val articleParser = new ArticleParser
 
-  def parse(feedId: ObjectId, result: FetchedResult): Option[News] = {
+  def parse(result: FetchedResult): Option[Article] = {
     if (result.getStatusCode == HttpStatus.SC_OK && result.getContentLength > 0) {
       val input = new ByteArrayInputStream(result.getContent)
       val doc = Jsoup.parse(input, null, result.getFetchedUrl)
       val article = articleParser.parse(doc)
-
-      val news = News(
-        feedId = feedId,
-        title = article.title,
-        description = Some(article.description()),
-        text = Some(article.text),
-        url = result.getFetchedUrl
-      )
-
-      return Some(news)
+      return Some(article)
     }
     None
   }
