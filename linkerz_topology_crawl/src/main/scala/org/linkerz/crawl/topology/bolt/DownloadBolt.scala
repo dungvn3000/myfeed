@@ -2,9 +2,10 @@ package org.linkerz.crawl.topology.bolt
 
 import storm.scala.dsl.StormBolt
 import grizzled.slf4j.Logging
-import org.linkerz.crawl.topology.event.FetchDone
+import org.linkerz.crawl.topology.event.{DownloadDone, FetchDone}
 import org.linkerz.crawl.topology.downloader.NewsDownloader
 import org.linkerz.crawl.topology.factory.DownloadFactory
+import org.apache.http.HttpStatus
 
 /**
  * The Class DownloadBolt.
@@ -24,10 +25,14 @@ class DownloadBolt extends StormBolt(outputFields = List("feedId", "event")) wit
 
   execute {
     implicit tuple => tuple matchSeq {
-      case FetchDone(entry) => {
-        downloader.download(entry)
+      case Seq(feedId, FetchDone(feed, entry)) => {
+        val result = downloader.download(entry)
+        if (result.getStatusCode == HttpStatus.SC_OK && result.getContentLength > 0) {
+          tuple.emit(feedId, DownloadDone(feed, result))
+        }
       }
     }
+      tuple.ack()
   }
 
 }

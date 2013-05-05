@@ -1,11 +1,9 @@
 package org.linkerz.crawl.topology.bolt
 
 import storm.scala.dsl.StormBolt
-import java.util.UUID
-import org.linkerz.dao._
 import grizzled.slf4j.Logging
-import org.linkerz.crawl.topology.event.MetaFetch
-import org.linkerz.crawl.topology.event.Persistent
+import org.linkerz.crawl.topology.event.{PersistentDone, ParseDone}
+import org.bson.types.ObjectId
 
 /**
  * This bolt is using for persistent data to the database server.
@@ -14,27 +12,13 @@ import org.linkerz.crawl.topology.event.Persistent
  * @since 11/30/12 2:12 AM
  *
  */
-class PersistentBolt extends StormBolt(outputFields = List("sessionId", "event")) with Logging {
+class PersistentBolt extends StormBolt(outputFields = List("feedId", "event")) with Logging {
   execute {
     implicit tuple => tuple matchSeq {
-      case Seq(sessionId: UUID, MetaFetch(job)) => {
-        job.result.map {
-          webPage => if (webPage.isArticle) {
-            info("Saving " + webPage.urlAsString)
-          }
-        }
-
-        //Save error for each job.
-        //We will not save TimeOutException, because it so common.
-        if (!job.errors.isEmpty) {
-          LoggingDao.insert(job.errors)
-        }
-        //LoggingDao.insert(job.infos)
-        //LoggingDao.insert(job.warns)
-
-        tuple emit(sessionId, Persistent(job))
+      case Seq(feedId: ObjectId, ParseDone(feed, news)) => {
+        tuple emit(feedId, PersistentDone(feed))
       }
     }
-    tuple.ack()
+      tuple.ack()
   }
 }

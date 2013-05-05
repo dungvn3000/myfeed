@@ -4,8 +4,7 @@
 
 package org.linkerz.crawl.topology.factory
 
-import org.linkerz.crawl.topology.parser.{RssParser, LinkerZParser}
-import org.linkerz.model.Feed
+import org.linkerz.crawl.topology.parser.{RssParser, NewsParser}
 
 /**
  * The Class DefaultParserFactory.
@@ -16,9 +15,7 @@ import org.linkerz.model.Feed
  */
 
 object ParserFactory {
-  def createParser(feeds: List[Feed]) = {
-    new LinkerZParser(feeds)
-  }
+  def createNewsParser() = new NewsParser()
 
   def createRssParser() = new RssParser
 }

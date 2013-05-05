@@ -14,7 +14,7 @@ import scala.concurrent.duration._
  * @since 11/30/12 1:42 AM
  *
  */
-class FeedSpout extends StormSpout(outputFields = List("feedId","event")) {
+class FeedSpout extends StormSpout(outputFields = List("event")) {
 
   setup {
     val scheduleActor = Akka.system.actorOf(Props(new ScheduleActor(_collector)))
