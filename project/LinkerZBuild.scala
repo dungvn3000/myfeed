@@ -92,6 +92,7 @@ object LinkerZBuild extends Build {
     "net.coobird" % "thumbnailator" % "0.4.3",
     "com.gravity" % "goose" % "2.1.22",
     "org.apache.httpcomponents" % "httpclient" % "4.2.2",
+    "com.ning" % "async-http-client" % "1.7.14",
     "de.thischwa.jii" % "java-image-info" % "0.5",
     "org.scalanlp" %% "breeze-process" % "0.3-SNAPSHOT",
     "com.github.sonic" %% "sonic_parser" % "0.0.1",

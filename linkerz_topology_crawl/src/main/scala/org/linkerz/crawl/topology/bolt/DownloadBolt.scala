@@ -3,7 +3,7 @@ package org.linkerz.crawl.topology.bolt
 import storm.scala.dsl.StormBolt
 import grizzled.slf4j.Logging
 import org.linkerz.crawl.topology.event.{DownloadDone, FetchDone}
-import org.linkerz.crawl.topology.downloader.DefaultDownloader
+import org.linkerz.crawl.topology.downloader.Downloader
 import org.linkerz.crawl.topology.factory.DownloadFactory
 import org.apache.commons.lang.StringUtils
 
@@ -17,10 +17,10 @@ import org.apache.commons.lang.StringUtils
 class DownloadBolt extends StormBolt(outputFields = List("feedId", "event")) with Logging {
 
   @transient
-  private var downloader: DefaultDownloader = _
+  private var downloader: Downloader = _
 
   setup {
-    downloader = DownloadFactory.createDownloader()
+    downloader = DownloadFactory.createDownloaderWithAsyncHttpClient()
   }
 
   execute {

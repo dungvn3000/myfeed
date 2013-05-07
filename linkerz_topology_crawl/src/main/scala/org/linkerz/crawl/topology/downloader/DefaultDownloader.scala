@@ -20,7 +20,7 @@ import org.apache.http.util.EntityUtils
  *
  */
 
-class DefaultDownloader(httpClient: HttpClient = new DefaultHttpClient) extends Logging {
+class DefaultDownloader(httpClient: HttpClient = new DefaultHttpClient) extends Downloader with Logging {
 
   def download(url: String): Option[DownloadResult] = {
     val response = httpClient.execute(new HttpGet(url))
