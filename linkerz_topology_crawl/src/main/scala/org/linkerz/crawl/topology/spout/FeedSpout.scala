@@ -31,7 +31,7 @@ class FeedSpout extends StormSpout(outputFields = List("event")) with Logging {
     var msg = s"Ack msgId: $msgId "
     val id = new ObjectId(msgId.toString)
     FeedDao.findOneById(id).map(feed => {
-      msg += s" Feed Url: $feed.url"
+      msg += s" Feed Url: ${feed.url}"
     })
     info(msg)
   }
@@ -40,7 +40,7 @@ class FeedSpout extends StormSpout(outputFields = List("event")) with Logging {
     var msg = s"Fail msgId: $msgId"
     val id = new ObjectId(msgId.toString)
     FeedDao.findOneById(id).map(feed => {
-      msg += s" Feed Url: $feed.url"
+      msg += s" Feed Url: ${feed.url}"
     })
     info(msg)
   }
