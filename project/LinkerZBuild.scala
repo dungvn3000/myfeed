@@ -91,12 +91,11 @@ object LinkerZBuild extends Build {
   lazy val crawlerTopologyDependencies = Seq(
     "net.coobird" % "thumbnailator" % "0.4.3",
     "com.gravity" % "goose" % "2.1.22",
-    "org.scalanlp" %% "breeze-process" % "0.3-SNAPSHOT",
-    "com.google.code.crawler-commons" % "crawler-commons" % "0.2",
+    "org.apache.httpcomponents" % "httpclient" % "4.2.2",
     "de.thischwa.jii" % "java-image-info" % "0.5",
+    "org.scalanlp" %% "breeze-process" % "0.3-SNAPSHOT",
     "com.github.sonic" %% "sonic_parser" % "0.0.1",
-    "net.java.dev.rome" % "rome" % "1.0.0",
-    "org.rometools" % "rome-opml" % "1.0"
+    "net.java.dev.rome" % "rome" % "1.0.0"
   ) ++ stormDependencies ++ testDependencies
 
   lazy val recommendationDependencies = Seq(

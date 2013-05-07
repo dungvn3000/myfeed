@@ -1,11 +1,9 @@
 package org.linkerz.crawl.topology.parser
 
 import com.github.sonic.parser.ArticleParser
-import crawlercommons.fetcher.FetchedResult
-import org.apache.http.HttpStatus
 import java.io.ByteArrayInputStream
 import org.jsoup.Jsoup
-import com.github.sonic.parser.model.Article
+import org.linkerz.crawl.topology.downloader.DownloadResult
 
 /**
  * The this class using two parser LinksParse and ArticleParser.
@@ -18,13 +16,9 @@ class NewsParser {
 
   val articleParser = new ArticleParser
 
-  def parse(result: FetchedResult): Option[Article] = {
-    if (result.getStatusCode == HttpStatus.SC_OK && result.getContentLength > 0) {
-      val input = new ByteArrayInputStream(result.getContent)
-      val doc = Jsoup.parse(input, null, result.getFetchedUrl)
-      val article = articleParser.parse(doc)
-      return Some(article)
-    }
-    None
+  def parse(result: DownloadResult) = {
+    val input = new ByteArrayInputStream(result.content)
+    val doc = Jsoup.parse(input, null, result.url)
+    articleParser.parse(doc)
   }
 }

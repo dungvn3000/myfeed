@@ -3,7 +3,7 @@ package org.linkerz.crawl.topology.bolt
 import storm.scala.dsl.StormBolt
 import org.linkerz.crawl.topology.event.{FetchDone, Start}
 import grizzled.slf4j.Logging
-import org.linkerz.crawl.topology.downloader.RssDownloader
+import org.linkerz.crawl.topology.downloader.DefaultDownloader
 import org.linkerz.crawl.topology.factory.{ParserFactory, DownloadFactory}
 import org.linkerz.crawl.topology.parser.RssParser
 
@@ -17,23 +17,24 @@ import org.linkerz.crawl.topology.parser.RssParser
 class FetcherBolt extends StormBolt(outputFields = List("feedId", "event")) with Logging {
 
   @transient
-  private var downloader: RssDownloader = _
+  private var downloader: DefaultDownloader = _
 
   @transient
   private var parser: RssParser = _
 
   setup {
-    downloader = DownloadFactory.createRssDownloader()
+    downloader = DownloadFactory.createDownloader()
     parser = ParserFactory.createRssParser()
   }
 
   execute {
     implicit tuple => tuple matchSeq {
       case Seq(Start(feed)) => {
-        val result = downloader.download(feed)
-        val entries = parser.parse(result)
-        entries.foreach(entry => {
-          tuple.emit(feed._id, FetchDone(feed, entry))
+        downloader.download(feed.url).map(result => {
+          val entries = parser.parse(result)
+          entries.foreach(entry => {
+            tuple.emit(feed._id, FetchDone(feed, entry))
+          })
         })
       }
     }

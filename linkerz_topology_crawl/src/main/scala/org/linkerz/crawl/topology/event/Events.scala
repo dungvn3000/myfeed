@@ -2,7 +2,7 @@ package org.linkerz.crawl.topology.event
 
 import org.linkerz.model.{News, Feed}
 import com.sun.syndication.feed.synd.SyndEntry
-import crawlercommons.fetcher.FetchedResult
+import org.linkerz.crawl.topology.downloader.DownloadResult
 
 /**
  * The Class Event.
@@ -17,7 +17,7 @@ case class Start(feed: Feed) extends Event
 
 case class FetchDone(feed: Feed, entry: SyndEntry) extends Event
 
-case class DownloadDone(feed: Feed, result: FetchedResult) extends Event
+case class DownloadDone(feed: Feed, result: DownloadResult) extends Event
 
 case class ParseDone(feed: Feed, news: News) extends Event
 
