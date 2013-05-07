@@ -3,6 +3,7 @@ package org.linkerz.crawl.topology
 import backtype.storm.topology.TopologyBuilder
 import bolt._
 import spout.FeedSpout
+import backtype.storm.tuple.Fields
 
 /**
  * The Class CrawlTopology.
@@ -19,7 +20,7 @@ object CrawlTopology extends Serializable {
 
     builder.setBolt("fetcher", new FetcherBolt, 10).shuffleGrouping("spout")
 
-    builder.setBolt("downloader", new DownloadBolt, 20).shuffleGrouping("fetcher")
+    builder.setBolt("downloader", new DownloadBolt, 20).fieldsGrouping("fetcher", new Fields("feedId"))
 
     builder.setBolt("parser", new ParserBolt, 20).shuffleGrouping("downloader")
 

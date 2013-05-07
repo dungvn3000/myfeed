@@ -30,14 +30,21 @@ class FetcherBolt extends StormBolt(outputFields = List("feedId", "event")) with
   execute {
     implicit tuple => tuple matchSeq {
       case Seq(Start(feed)) => {
-        downloader.download(feed.url).map(result => {
-          val entries = parser.parse(result)
-          entries.foreach(entry => {
-            tuple.emit(feed._id, FetchDone(feed, entry))
+        try {
+          downloader.download(feed.url).map(result => {
+            val entries = parser.parse(result)
+            entries.foreach(entry => {
+              tuple.emit(feed._id, FetchDone(feed, entry))
+            })
           })
-        })
+          tuple.ack()
+        } catch {
+          case ex: Exception => {
+            _collector.reportError(ex)
+            tuple.fail()
+          }
+        }
       }
     }
-      tuple.ack()
   }
 }

@@ -11,6 +11,7 @@ import org.apache.http.params.{BasicHttpParams, CoreProtocolPNames, CoreConnecti
 import org.linkerz.crawl.topology.downloader.handler.StrictlyRedirectStrategy
 import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.impl.conn.PoolingClientConnectionManager
+import org.apache.http.client.params.CookiePolicy
 
 /**
  * The Class DefaultDownloadFactory.
@@ -27,6 +28,11 @@ object DownloadFactory {
   //Set time out 10s
   httpParams.setParameter(CoreConnectionPNames.SO_TIMEOUT, 1000 * 10)
   httpParams.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 1000 * 10)
+  httpParams.setParameter(CoreConnectionPNames.TCP_NODELAY, true)
+  httpParams.setParameter(CoreConnectionPNames.STALE_CONNECTION_CHECK, false)
+  httpParams.setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, "UTF-8")
+  httpParams.setParameter("http.protocol.cookie-policy", CookiePolicy.IGNORE_COOKIES)
+  httpParams.setParameter("Cache-Control", "max-age=0")
 
   val schemeRegistry = new SchemeRegistry
   schemeRegistry.register(new Scheme("http", 80, PlainSocketFactory.getSocketFactory))

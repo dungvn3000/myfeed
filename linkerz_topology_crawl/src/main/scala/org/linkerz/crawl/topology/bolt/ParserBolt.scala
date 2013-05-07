@@ -35,8 +35,8 @@ class ParserBolt extends StormBolt(outputFields = List("feedId", "event")) {
           feedId = feedId
         )
         tuple.emit(feedId, ParseDone(feed, news))
+        tuple.ack()
       }
     }
-      tuple.ack()
   }
 }

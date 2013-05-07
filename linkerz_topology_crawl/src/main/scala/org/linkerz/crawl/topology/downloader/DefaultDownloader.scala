@@ -28,13 +28,15 @@ class DefaultDownloader(httpClient: HttpClient = new DefaultHttpClient) extends 
 
     if (response.getStatusLine.getStatusCode == HttpStatus.SC_OK) {
       var entity = response.getEntity
-      if (entity.getContentLength > 0) {
-        if (entity.getContentEncoding != null && entity.getContentEncoding.toString.contains("gzip")) {
-          entity = new GzipDecompressingEntity(entity)
-        }
+
+      if (entity.getContentEncoding != null && entity.getContentEncoding.toString.contains("gzip")) {
+        entity = new GzipDecompressingEntity(entity)
+      }
+      val content = EntityUtils.toByteArray(entity)
+      if(content != null && content.length > 0) {
         return Some(DownloadResult(
           url = url,
-          content = EntityUtils.toByteArray(entity)
+          content = content
         ))
       }
     }

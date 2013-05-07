@@ -28,13 +28,17 @@ class DownloadBolt extends StormBolt(outputFields = List("feedId", "event")) wit
       case Seq(feedId, FetchDone(feed, entry)) => {
         val url = StringUtils.trimToEmpty(entry.getLink)
         if (StringUtils.isNotEmpty(url)) {
-          downloader.download(url).map(result => {
-            tuple.emit(feedId, DownloadDone(feed, result))
-          })
+          try {
+            downloader.download(url).map(result => {
+              tuple.emit(feedId, DownloadDone(feed, result))
+            })
+          } catch {
+            case ex: Exception => _collector.reportError(ex)
+          }
         }
+        tuple.ack()
       }
     }
-      tuple.ack()
   }
 
 }

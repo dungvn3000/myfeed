@@ -18,8 +18,8 @@ class PersistentBolt extends StormBolt(outputFields = List("feedId", "event")) w
       case Seq(feedId: ObjectId, ParseDone(feed, news)) => {
         info(news.title)
         tuple emit(feedId, PersistentDone(feed))
+        tuple.ack()
       }
     }
-      tuple.ack()
   }
 }
