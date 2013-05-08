@@ -25,16 +25,20 @@ class ParserBolt extends StormBolt(outputFields = List("feedId", "event")) {
 
   execute {
     implicit tuple => tuple matchSeq {
-      case Seq(feedId: ObjectId, DownloadDone(feed, result)) => {
-        val article = parser.parse(result)
-        val news = News(
-          url = result.url,
-          title = article.title,
-          description = Some(article.description()),
-          text = Some(article.text),
-          feedId = feedId
-        )
-        tuple.emit(feedId, ParseDone(feed, news))
+      case Seq(feedId: ObjectId, DownloadDone(feed, item, result)) => {
+        try {
+          val article = parser.parse(result)
+          val news = News(
+            url = result.url,
+            title = item.getTitle,
+            description = Some(item.getDescription),
+            text = Some(article.text),
+            feedId = feedId
+          )
+          tuple.emit(feedId, ParseDone(feed, news))
+        } catch {
+          case ex: Exception => _collector.reportError(ex)
+        }
         tuple.ack()
       }
     }

@@ -6,6 +6,7 @@ import grizzled.slf4j.Logging
 import org.linkerz.crawl.topology.downloader.Downloader
 import org.linkerz.crawl.topology.factory.{ParserFactory, DownloadFactory}
 import org.linkerz.crawl.topology.parser.RssParser
+import collection.JavaConversions._
 
 /**
  * This bolt is simply download a url and emit it to a parser.
@@ -23,7 +24,7 @@ class FetcherBolt extends StormBolt(outputFields = List("feedId", "event")) with
   private var parser: RssParser = _
 
   setup {
-    downloader = DownloadFactory.createDownloaderWithAsyncHttpClient()
+    downloader = DownloadFactory.createDownloader()
     parser = ParserFactory.createRssParser()
   }
 
@@ -32,9 +33,9 @@ class FetcherBolt extends StormBolt(outputFields = List("feedId", "event")) with
       case Seq(Start(feed)) => {
         try {
           downloader.download(feed.url).map(result => {
-            val entries = parser.parse(result)
-            entries.foreach(entry => {
-              tuple.emit(feed._id, FetchDone(feed, entry))
+            val rssFeed = parser.parse(result)
+            rssFeed.getItems.foreach(item => {
+              tuple.emit(feed._id, FetchDone(feed, item))
             })
           })
           tuple.ack()
