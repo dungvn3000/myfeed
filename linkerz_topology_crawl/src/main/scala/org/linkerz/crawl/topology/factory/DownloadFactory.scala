@@ -8,8 +8,8 @@ import org.linkerz.crawl.topology.downloader.DefaultDownloader
 import org.apache.http.conn.ssl.SSLSocketFactory
 import org.apache.http.conn.scheme.{SchemeRegistry, PlainSocketFactory, Scheme}
 import org.apache.http.params.{BasicHttpParams, CoreProtocolPNames, CoreConnectionPNames}
-import org.linkerz.crawl.topology.downloader.handler.StrictlyRedirectStrategy
-import org.apache.http.impl.client.DefaultHttpClient
+import org.linkerz.crawl.topology.downloader.handler.{ResponseInterceptor, StrictlyRedirectStrategy}
+import org.apache.http.impl.client.{DefaultHttpRequestRetryHandler, AbstractHttpClient, DefaultHttpClient}
 import org.apache.http.impl.conn.PoolingClientConnectionManager
 import org.apache.http.client.params.CookiePolicy
 
@@ -26,9 +26,9 @@ object DownloadFactory {
   def createDownloader() = {
     val httpParams = new BasicHttpParams()
     httpParams.setParameter(CoreProtocolPNames.USER_AGENT, FireFoxUserAgent.value)
-    //Set time out 10s
-    httpParams.setParameter(CoreConnectionPNames.SO_TIMEOUT, 1000 * 10)
-    httpParams.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 1000 * 10)
+    //Set time out 30s
+    httpParams.setParameter(CoreConnectionPNames.SO_TIMEOUT, 1000 * 30)
+    httpParams.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 1000 * 30)
     httpParams.setParameter(CoreConnectionPNames.TCP_NODELAY, true)
     httpParams.setParameter(CoreConnectionPNames.STALE_CONNECTION_CHECK, false)
     httpParams.setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, "UTF-8")
@@ -44,6 +44,10 @@ object DownloadFactory {
 
     val client = new DefaultHttpClient(cm, httpParams)
     client.setRedirectStrategy(new StrictlyRedirectStrategy)
+    client.asInstanceOf[AbstractHttpClient].setHttpRequestRetryHandler(new DefaultHttpRequestRetryHandler(3, true))
+    client.getParams.setParameter("http.conn-manager.timeout", 120000L)
+    client.getParams.setParameter("http.protocol.wait-for-continue", 10000L)
+    client.addResponseInterceptor(new ResponseInterceptor)
     new DefaultDownloader(client)
   }
 }

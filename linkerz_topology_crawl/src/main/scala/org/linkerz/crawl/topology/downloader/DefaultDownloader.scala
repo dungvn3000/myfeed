@@ -8,7 +8,6 @@ import grizzled.slf4j.Logging
 import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpGet
-import org.apache.http.client.entity.GzipDecompressingEntity
 import org.apache.http.HttpStatus
 import org.apache.http.util.EntityUtils
 
@@ -27,11 +26,7 @@ class DefaultDownloader(httpClient: HttpClient = new DefaultHttpClient) extends 
     info(s"Download ${response.getStatusLine.getStatusCode} : $url")
 
     if (response.getStatusLine.getStatusCode == HttpStatus.SC_OK) {
-      var entity = response.getEntity
-
-      if (entity.getContentEncoding != null && entity.getContentEncoding.toString.contains("gzip")) {
-        entity = new GzipDecompressingEntity(entity)
-      }
+      val entity = response.getEntity
       val content = EntityUtils.toByteArray(entity)
       if(content != null && content.length > 0) {
         return Some(DownloadResult(
