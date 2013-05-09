@@ -24,7 +24,7 @@ object LinkerZBuild extends Build {
 
   lazy val linkerZ = Project("linkerz", file("."), settings = sharedSetting).aggregate(
     linkerZCore, linkerZModel, linkerZRecommendation, linkerZLogger,
-    scalaStorm, urlBuilder, linkerZTopologyCrawl, linkerZDao
+    scalaStorm, urlBuilder, linkerZTopologyCrawl, linkerZDao, urlNormalization
   )
 
   lazy val linkerZCore = Project("linkerz_core", file("linkerz_core"), settings = sharedSetting).settings(
@@ -62,14 +62,18 @@ object LinkerZBuild extends Build {
     libraryDependencies ++= testDependencies
   }
 
+  lazy val urlNormalization = Project("url_normalization", file("url_normalization"), settings = sharedSetting).settings {
+    libraryDependencies ++=  coreDependencies ++ testDependencies
+  }
+
   lazy val coreDependencies = Seq(
     "org.slf4j" % "slf4j-simple" % "1.6.6",
     "org.slf4j" % "slf4j-api" % "1.6.6",
     "org.clapper" %% "grizzled-slf4j" % "1.0.1",
     "commons-collections" % "commons-collections" % "3.2.1",
-    "commons-digester" % "commons-digester" % "2.1" exclude("commons-beanutils", "commons-beanutils"),
-    "commons-lang" % "commons-lang" % "2.6",
+    "org.apache.commons" % "commons-lang3" % "3.1",
     "org.apache.commons" % "commons-math3" % "3.0",
+    "commons-digester" % "commons-digester" % "2.1" exclude("commons-beanutils", "commons-beanutils"),
     "commons-validator" % "commons-validator" % "1.4.0" exclude("commons-beanutils", "commons-beanutils"),
     "commons-io" % "commons-io" % "2.4",
     "com.typesafe" % "config" % "1.0.0",
