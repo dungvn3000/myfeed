@@ -13,7 +13,7 @@ import org.joda.time.DateTime
  * @since 11/22/12 1:07 PM
  *
  */
-object NewsDao extends SalatDAO[News, ObjectId](mongo("news")) {
+object NewsDao extends SalatDAO[News, String](mongo("news")) {
 
   def findByUrl(url: String) = findOne(MongoDBObject("url" -> url))
 

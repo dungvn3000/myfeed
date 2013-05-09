@@ -17,7 +17,7 @@ class PersistentBolt extends StormBolt(outputFields = List("feedId", "event")) w
   execute {
     implicit tuple => tuple matchSeq {
       case Seq(feedId: ObjectId, ParseDone(feed, news)) => {
-        NewsDao.checkAndSave(news)
+        NewsDao.save(news)
         tuple emit(feedId, PersistentDone(feed))
         tuple.ack()
       }
