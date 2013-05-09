@@ -17,17 +17,17 @@ object NewsDao extends SalatDAO[News, ObjectId](mongo("news")) {
 
   def findByUrl(url: String) = findOne(MongoDBObject("url" -> url))
 
-  def checkAndSave(link: News) = {
+  def checkAndSave(news: News) = {
     val result = findOne(MongoDBObject(
       "$or" -> Array(
-        MongoDBObject("url" -> link.url),
-        MongoDBObject("title" -> link.title)
+        MongoDBObject("url" -> news.url),
+        MongoDBObject("title" -> news.title)
       )
     ))
 
     if (result.isEmpty) {
-      save(link)
-      Some(link)
+      save(news)
+      Some(news)
     } else None
   }
 

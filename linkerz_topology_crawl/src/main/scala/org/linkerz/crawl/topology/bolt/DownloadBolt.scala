@@ -7,6 +7,7 @@ import org.linkerz.crawl.topology.downloader.Downloader
 import org.linkerz.crawl.topology.factory.DownloadFactory
 import org.apache.commons.lang.StringUtils
 import org.apache.commons.validator.routines.UrlValidator
+import org.linkerz.dao.NewsDao
 
 /**
  * The Class DownloadBolt.
@@ -33,12 +34,14 @@ class DownloadBolt extends StormBolt(outputFields = List("feedId", "event")) wit
       case Seq(feedId, FetchDone(feed, item)) => {
         val url = StringUtils.trimToEmpty(item.getLink)
         if (urlValidator.isValid(url)) {
-          try {
-            downloader.download(url).map(result => {
-              tuple.emit(feedId, DownloadDone(feed, item, result))
-            })
-          } catch {
-            case ex: Exception => _collector.reportError(ex)
+          if(NewsDao.findByUrl(url).isEmpty) {
+            try {
+              downloader.download(url).map(result => {
+                tuple.emit(feedId, DownloadDone(feed, item, result))
+              })
+            } catch {
+              case ex: Exception => _collector.reportError(ex)
+            }
           }
         }
         tuple.ack()
