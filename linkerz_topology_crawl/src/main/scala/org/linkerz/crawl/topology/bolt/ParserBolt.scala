@@ -6,6 +6,7 @@ import org.linkerz.crawl.topology.factory.ParserFactory
 import org.linkerz.crawl.topology.parser.NewsParser
 import org.bson.types.ObjectId
 import org.linkerz.model.News
+import ch.sentric.URL
 
 /**
  * This bolt will parse a web page.
@@ -28,7 +29,9 @@ class ParserBolt extends StormBolt(outputFields = List("feedId", "event")) {
       case Seq(feedId: ObjectId, DownloadDone(feed, item, result)) => {
         try {
           val article = parser.parse(result)
+          val url = new URL(result.url)
           val news = News(
+            _id = url.getNormalizedUrl,
             url = result.url,
             title = item.getTitle,
             description = Some(item.getDescription),

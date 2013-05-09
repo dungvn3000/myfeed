@@ -10,7 +10,6 @@ object LinkerZBuild extends Build {
     version := "0.1-SNAPSHOT",
     organization := "org.linkerz",
     scalaVersion := "2.10.0",
-    scalacOptions += "-Yresolve-term-conflict:package",
     resolvers ++= Seq(
       "twitter4j" at "http://twitter4j.org/maven2",
       "clojars.org" at "http://clojars.org/repo",
@@ -54,9 +53,10 @@ object LinkerZBuild extends Build {
     linkerZCore, linkerZDao, linkerZLogger, scalaStorm, urlBuilder
   )
 
-  lazy val scalaStorm = Project("scala_storm", file("scala_storm"), settings = sharedSetting).settings {
-    libraryDependencies ++= stormDependencies ++ rabbitMqDependencies ++ testDependencies
-  }
+  lazy val scalaStorm = Project("scala_storm", file("scala_storm"), settings = sharedSetting).settings(
+    libraryDependencies ++= stormDependencies ++ rabbitMqDependencies ++ testDependencies,
+    scalacOptions += "-Yresolve-term-conflict:package"
+  )
 
   lazy val urlBuilder = Project("url_builder", file("url_builder"), settings = sharedSetting).settings {
     libraryDependencies ++= testDependencies

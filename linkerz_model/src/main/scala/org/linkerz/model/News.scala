@@ -16,7 +16,8 @@ import org.joda.time.DateTime
  */
 
 case class News(
-                 _id: ObjectId = new ObjectId,
+                //this is a url after normalization.
+                 _id: String,
                  feedId: ObjectId,
                  url: String,
                  //Metadata
