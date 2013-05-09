@@ -24,7 +24,7 @@ object LinkerZBuild extends Build {
 
   lazy val linkerZ = Project("linkerz", file("."), settings = sharedSetting).aggregate(
     linkerZCore, linkerZModel, linkerZRecommendation, linkerZLogger,
-    scalaStorm, urlBuilder, linkerZTopologyCrawl, linkerZDao, urlNormalization
+    scalaStorm, urlBuilder, linkerZTopologyCrawl, linkerZDao
   )
 
   lazy val linkerZCore = Project("linkerz_core", file("linkerz_core"), settings = sharedSetting).settings(
@@ -62,10 +62,6 @@ object LinkerZBuild extends Build {
     libraryDependencies ++= testDependencies
   }
 
-  lazy val urlNormalization = Project("url_normalization", file("url_normalization"), settings = sharedSetting).settings {
-    libraryDependencies ++=  coreDependencies ++ testDependencies
-  }
-
   lazy val coreDependencies = Seq(
     "org.slf4j" % "slf4j-simple" % "1.6.6",
     "org.slf4j" % "slf4j-api" % "1.6.6",
@@ -98,7 +94,8 @@ object LinkerZBuild extends Build {
     "org.apache.httpcomponents" % "httpclient" % "4.2.5",
     "de.thischwa.jii" % "java-image-info" % "0.5",
     "org.scalanlp" %% "breeze-process" % "0.3-SNAPSHOT",
-    "com.github.sonic" %% "sonic_parser" % "0.0.1"
+    "com.github.sonic" %% "sonic_parser" % "0.0.1",
+    "ch.sentric" % "url-normalization" % "1.0.0"
   ) ++ stormDependencies ++ testDependencies
 
   lazy val recommendationDependencies = Seq(
