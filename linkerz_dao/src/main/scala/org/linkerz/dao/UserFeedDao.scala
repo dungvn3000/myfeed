@@ -3,6 +3,7 @@ package org.linkerz.dao
 import com.novus.salat.dao.SalatDAO
 import org.linkerz.model.UserFeed
 import org.bson.types.ObjectId
+import com.mongodb.casbah.commons.MongoDBObject
 
 /**
  * The Class UserFeedDao.
@@ -12,5 +13,9 @@ import org.bson.types.ObjectId
  *
  */
 object UserFeedDao extends SalatDAO[UserFeed, ObjectId](mongo("userFeed")) {
+
+  def getUserFeed(userId: ObjectId) = find(MongoDBObject(
+    "userId" -> userId
+  )).toList
 
 }

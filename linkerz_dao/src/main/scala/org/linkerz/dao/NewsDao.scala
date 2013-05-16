@@ -31,18 +31,14 @@ object NewsDao extends SalatDAO[News, String](mongo("news")) {
     } else None
   }
 
-  def getAfter(start: DateTime, feedIds: List[ObjectId]) = {
-    val links = find(
-      MongoDBObject(
-        "indexDate" -> MongoDBObject("$gt" -> start),
-        "feedId" -> MongoDBObject("$in" -> feedIds)
-      )
-    ).toList
-    links
-  }
+  def getAfter(start: DateTime, feedIds: List[ObjectId]) = find(
+    MongoDBObject(
+      "indexDate" -> MongoDBObject("$gt" -> start),
+      "feedId" -> MongoDBObject("$in" -> feedIds)
+    )
+  ).toList
 
-  def getAfter(start: DateTime) = {
-    val links = find(MongoDBObject("indexDate" -> MongoDBObject("$gt" -> start))).toList
-    links
-  }
+
+  def getAfter(start: DateTime) = find(MongoDBObject("indexDate" -> MongoDBObject("$gt" -> start))).toList
+
 }

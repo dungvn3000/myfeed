@@ -18,6 +18,6 @@ case class UserNews(
                      score: Double = 0,
                      recommend: Boolean = false,
                      read: Boolean = false,
-                     click: Boolean = false,
+                     clicked: Boolean = false,
                      createdDate: DateTime = DateTime.now
                      ) extends BaseModel(_id)

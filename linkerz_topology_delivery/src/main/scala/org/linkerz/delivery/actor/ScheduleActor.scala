@@ -1,12 +1,11 @@
-package org.linkerz.recommendation.actor
+package org.linkerz.delivery.actor
 
 import backtype.storm.spout.SpoutOutputCollector
 import akka.actor.Actor
 import org.linkerz.logger.DBLogger
 import grizzled.slf4j.Logging
 import org.linkerz.dao.UserDao
-import com.mongodb.casbah.commons.MongoDBObject
-import org.linkerz.recommendation.event.Recommendation
+import org.linkerz.delivery.event.Start
 import backtype.storm.tuple.Values
 
 /**
@@ -19,10 +18,10 @@ import backtype.storm.tuple.Values
 class ScheduleActor(collector: SpoutOutputCollector) extends Actor with DBLogger with Logging {
   def receive = {
     case "run" => {
-      val users = UserDao.find(MongoDBObject.empty).toList
+      val users = UserDao.all
       users.foreach(user => {
-        println("Recommend for user " + user.id)
-        collector.emit(new Values(user._id, Recommendation))
+        println("Delivery to user " + user.id)
+        collector.emit(new Values(user._id, Start))
       })
     }
   }

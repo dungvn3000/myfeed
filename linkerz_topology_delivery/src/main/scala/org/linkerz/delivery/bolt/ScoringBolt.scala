@@ -1,8 +1,8 @@
-package org.linkerz.recommendation.bolt
+package org.linkerz.delivery.bolt
 
 import storm.scala.dsl.StormBolt
 import org.bson.types.ObjectId
-import org.linkerz.recommendation.event.MergeLink
+import org.linkerz.delivery.event.GetNewsDone
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation
 import breeze.text.tokenize.{Tokenizer, JavaWordTokenizer}
 import breeze.text.transform.StopWordFilter
@@ -11,6 +11,8 @@ import collection.immutable.HashSet
 import org.apache.commons.math3.stat.Frequency
 import collection.mutable.ListBuffer
 import grizzled.slf4j.Logging
+import org.linkerz.model.UserNews
+import org.linkerz.dao.UserNewsDao
 
 /**
  * The Class CorrelationBolt.
@@ -19,7 +21,7 @@ import grizzled.slf4j.Logging
  * @since 12/16/12 3:48 AM
  *
  */
-class CorrelationBolt extends StormBolt(outputFields = List("userId", "event")) with Logging {
+class ScoringBolt extends StormBolt(outputFields = List("userId", "event")) with Logging {
 
   @transient var pearsonsCorrelation: PearsonsCorrelation = _
   @transient var tokenizer: Tokenizer = _
@@ -31,8 +33,31 @@ class CorrelationBolt extends StormBolt(outputFields = List("userId", "event")) 
 
   execute {
     tuple => tuple matchSeq {
-      case Seq(userId: ObjectId, MergeLink(userLink, link)) => {
+      case Seq(userId: ObjectId, GetNewsDone(news, userClicked)) => {
+        //I just find the best score, if the best score more then 0.5, i'll turn the flag recommend on.
+        var bestScore = 0d
+        news.text.map(text1 => {
+          for (clicked <- userClicked) {
+            clicked.text.map(text2 => {
+              val score = sim_pearson(text1, text2)
+              if (score > bestScore) bestScore = score
+            })
+          }
+        })
 
+        val recommend = if (bestScore > 0.5) true else false
+
+        val userNews = UserNews(
+          userId = userId,
+          newsId = news._id,
+          feedId = news.feedId,
+          score = bestScore,
+          recommend = recommend
+        )
+
+        UserNewsDao.save(userNews)
+
+        tuple.ack()
       }
     }
   }

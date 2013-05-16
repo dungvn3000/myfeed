@@ -1,8 +1,8 @@
-package org.linkerz.recommendation
+package org.linkerz.delivery
 
 import backtype.storm.{StormSubmitter, Config}
 import org.linkerz.core.conf.AppConfig
-import org.linkerz.recommendation.RecommendationTopology._
+import org.linkerz.delivery.DeliveryTopology._
 
 /**
  * The Class Main.
@@ -18,6 +18,6 @@ object Main extends App {
   conf put (Config.NIMBUS_HOST, AppConfig.nimbusHost)
   conf setNumWorkers 4
 
-  StormSubmitter.submitTopology("recommendation", conf, topology)
+  StormSubmitter.submitTopology("delivery", conf, topology)
 
 }
