@@ -13,5 +13,7 @@ import org.joda.time.DateTime
 case class UserFeed(
                      _id: ObjectId = new ObjectId(),
                      feedId: ObjectId,
+                     //This is not name of feed, it is a name form user.
+                     name: String,
                      createdDate: DateTime = DateTime.now
                      ) extends BaseModel(_id)
