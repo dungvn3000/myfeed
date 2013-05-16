@@ -16,6 +16,8 @@ object LinkerZBuild extends Build {
       "thischwa-repro" at "http://maven-repo.thischwa.de/",
       "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
       "Expecty Repository" at "https://raw.github.com/pniederw/expecty/master/m2repo/",
+      //On macos
+      //"Local Maven Repository" at "file:///Volumes/Data/Java/m2repository/",
       "Local Maven Repository" at "file://" + Path.userHome.absolutePath + "/.m2/repository",
       Resolver.file("Local Repository", file(Path.userHome.absolutePath + "/.ivy2/local"))(Resolver.ivyStylePatterns)
     )
