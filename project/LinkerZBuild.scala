@@ -22,7 +22,7 @@ object LinkerZBuild extends Build {
   )
 
   lazy val linkerZ = Project("linkerz", file("."), settings = sharedSetting).aggregate(
-    linkerZCore, linkerZModel, linkerZRecommendation, linkerZLogger,
+    linkerZCore, linkerZModel, linkerZDelivery, linkerZLogger,
     scalaStorm, urlBuilder, linkerZTopologyCrawl, linkerZDao
   )
 
@@ -38,8 +38,8 @@ object LinkerZBuild extends Build {
     libraryDependencies ++= testDependencies
   ).dependsOn(linkerZCore, linkerZModel)
 
-  lazy val linkerZRecommendation = Project("linkerz_topology_recommendation", file("linkerz_topology_recommendation"), settings = sharedSetting).settings(
-    libraryDependencies ++= recommendationDependencies
+  lazy val linkerZDelivery = Project("linkerz_topology_delivery", file("linkerz_topology_delivery"), settings = sharedSetting).settings(
+    libraryDependencies ++= deliveryDependencies
   ).dependsOn(linkerZCore, linkerZDao, scalaStorm, linkerZLogger)
 
   lazy val linkerZLogger = Project("linkerz_logger", file("linkerz_logger"), settings = sharedSetting).settings(
@@ -98,7 +98,7 @@ object LinkerZBuild extends Build {
     "ch.sentric" % "url-normalization" % "1.0.0"
   ) ++ stormDependencies ++ testDependencies
 
-  lazy val recommendationDependencies = Seq(
+  lazy val deliveryDependencies = Seq(
     "org.scalanlp" %% "breeze-process" % "0.3-SNAPSHOT",
     "org.apache.mahout" % "mahout-core" % "0.7",
     "org.carrot2" % "carrot2-mini" % "3.6.1",

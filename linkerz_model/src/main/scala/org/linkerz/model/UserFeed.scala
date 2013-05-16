@@ -4,16 +4,14 @@ import org.bson.types.ObjectId
 import org.joda.time.DateTime
 
 /**
- * The Class Read.
+ * The Class UserFeed.
  *
  * @author Nguyen Duc Dung
- * @since 5/2/13 9:31 AM
+ * @since 5/16/13 3:58 PM
  *
  */
-case class UserRead(
-                     _id: ObjectId = new ObjectId,
+case class UserFeed(
+                     _id: ObjectId = new ObjectId(),
                      feedId: ObjectId,
-                     linkId: ObjectId,
-                     click: Boolean = false,
                      createdDate: DateTime = DateTime.now
                      ) extends BaseModel(_id)

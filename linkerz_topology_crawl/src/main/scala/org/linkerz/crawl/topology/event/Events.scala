@@ -20,5 +20,3 @@ case class FetchDone(feed: Feed, item: RssItemBean) extends Event
 case class DownloadDone(feed: Feed, item: RssItemBean, result: DownloadResult) extends Event
 
 case class ParseDone(feed: Feed, news: News) extends Event
-
-case class PersistentDone(feed: Feed) extends Event
