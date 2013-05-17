@@ -18,14 +18,14 @@ class GetNewsBolt extends StormBolt(outputFields = List("userId", "event")) {
   execute {
     tuple => tuple matchSeq {
       case Seq(userId: ObjectId, Start) => {
-        val userFeedIds = UserFeedDao.getUserFeed(userId).map(_._id)
+        val userFeedIds = UserFeedDao.getUserFeed(userId).map(_.feedId)
         val last7Day = DateTime.now.minusDays(7)
         val news = NewsDao.getAfter(last7Day, userFeedIds)
         val userClicked = UserNewsDao.getUserClicked(userId)
 
         news
           .filter(item => UserNewsDao.findByNews(item._id).isEmpty)
-          .foreach(item => tuple.emit(item, GetNewsDone(item, userClicked)))
+          .foreach(item => tuple.emit(userId, GetNewsDone(item, userClicked)))
 
         tuple.ack()
       }

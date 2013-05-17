@@ -18,6 +18,8 @@ object DeliveryLocalRunner extends App {
   val conf = new Config
   conf setDebug false
   conf setNumWorkers 4
+  //Set time out for an crawl job is 10 minutes
+  conf setMessageTimeoutSecs 60 * 10
 
   localCluster.submitTopology("delivery", conf, topology)
 

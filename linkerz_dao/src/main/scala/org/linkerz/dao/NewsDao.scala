@@ -33,7 +33,7 @@ object NewsDao extends SalatDAO[News, String](mongo("news")) {
 
   def getAfter(start: DateTime, feedIds: List[ObjectId]) = find(
     MongoDBObject(
-      "indexDate" -> MongoDBObject("$gt" -> start),
+      "createdDate" -> MongoDBObject("$gt" -> start),
       "feedId" -> MongoDBObject("$in" -> feedIds)
     )
   ).toList

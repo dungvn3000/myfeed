@@ -19,7 +19,7 @@ object CrawlingLocalRunner extends App {
   conf setDebug false
   conf setNumWorkers 8
   //Set time out for an crawl job is 10 minutes
-  conf setMessageTimeoutSecs 60 * 5
+  conf setMessageTimeoutSecs 60 * 10
 
   localCluster.submitTopology("crawler", conf, topology)
 
