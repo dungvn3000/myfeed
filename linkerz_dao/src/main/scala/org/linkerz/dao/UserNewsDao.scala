@@ -22,7 +22,7 @@ object UserNewsDao extends SalatDAO[UserNews, ObjectId](mongo("userNews")) {
     "newsId" -> newsId
   ))
 
-  def getUserClicked(userId: ObjectId) = {
+  def getUserClicks(userId: ObjectId) = {
     val newsId = find(MongoDBObject(
       "userId" -> userId,
       "clicked" -> true

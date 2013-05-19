@@ -18,4 +18,9 @@ object UserFeedDao extends SalatDAO[UserFeed, ObjectId](mongo("userFeed")) {
     "userId" -> userId
   )).toList
 
+  def findFeed(userId: ObjectId, feedId: ObjectId) = findOne(MongoDBObject(
+    "userId" -> userId,
+    "feedId" -> feedId
+  ))
+
 }

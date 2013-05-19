@@ -11,7 +11,7 @@ import org.apache.commons.math3.stat.Frequency
 import scala.collection.mutable.ListBuffer
 import org.bson.types.ObjectId
 import org.linkerz.crawl.topology.event.PersistentDone
-import org.linkerz.dao.{UserDao, UserNewsDao}
+import org.linkerz.dao.{UserFeedDao, UserDao, UserNewsDao}
 import org.linkerz.model.UserNews
 
 /**
@@ -34,17 +34,18 @@ class DeliveryBolt extends StormBolt(outputFields = List("userId", "event")) wit
   execute {
     tuple => tuple matchSeq {
       case Seq(feedId: ObjectId, PersistentDone(news)) => {
-        UserDao.all.foreach(user => {
-          val userClicked = UserNewsDao.getUserClicked(user._id)
+        UserDao.all.foreach(user => if (UserFeedDao.findFeed(user._id, feedId).isDefined) {
+
+          val userClicks = UserNewsDao.getUserClicks(user._id)
 
           //I just find the best score, if the best score more then 0.5, i'll turn the flag recommend on.
           var bestScore = 0d
 
           news.text.map(text1 => {
-            userClicked.foreach(click => click.text.map {
+            userClicks.foreach(click => click.text.map {
               text2 =>
                 val score = sim_pearson(text1, text2)
-                if(score > bestScore) bestScore = score
+                if (score > bestScore) bestScore = score
             })
           })
 
