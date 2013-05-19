@@ -24,7 +24,7 @@ object LinkerZBuild extends Build {
   )
 
   lazy val linkerZ = Project("linkerz", file("."), settings = sharedSetting).aggregate(
-    linkerZCore, linkerZModel, linkerZDelivery, linkerZLogger,
+    linkerZCore, linkerZModel, linkerZLogger,
     scalaStorm, urlBuilder, linkerZTopologyCrawl, linkerZDao
   )
 
@@ -40,9 +40,6 @@ object LinkerZBuild extends Build {
     libraryDependencies ++= testDependencies
   ).dependsOn(linkerZCore, linkerZModel)
 
-  lazy val linkerZDelivery = Project("linkerz_topology_delivery", file("linkerz_topology_delivery"), settings = sharedSetting).settings(
-    libraryDependencies ++= deliveryDependencies
-  ).dependsOn(linkerZCore, linkerZDao, scalaStorm, linkerZLogger)
 
   lazy val linkerZLogger = Project("linkerz_logger", file("linkerz_logger"), settings = sharedSetting).settings(
     libraryDependencies ++= testDependencies

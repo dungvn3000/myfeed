@@ -1,27 +1,27 @@
-package org.linkerz.delivery.bolt
+package org.linkerz.crawl.topology.bolt
 
 import storm.scala.dsl.StormBolt
-import org.bson.types.ObjectId
-import org.linkerz.delivery.event.GetNewsDone
+import grizzled.slf4j.Logging
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation
-import breeze.text.tokenize.{Tokenizer, JavaWordTokenizer}
+import breeze.text.tokenize.{JavaWordTokenizer, Tokenizer}
 import breeze.text.transform.StopWordFilter
 import breeze.text.analyze.CaseFolder
-import collection.immutable.HashSet
+import scala.collection.immutable.HashSet
 import org.apache.commons.math3.stat.Frequency
-import collection.mutable.ListBuffer
-import grizzled.slf4j.Logging
+import scala.collection.mutable.ListBuffer
+import org.bson.types.ObjectId
+import org.linkerz.crawl.topology.event.PersistentDone
+import org.linkerz.dao.{UserDao, UserNewsDao}
 import org.linkerz.model.UserNews
-import org.linkerz.dao.UserNewsDao
 
 /**
- * The Class CorrelationBolt.
+ * The Class DeliveryBolt.
  *
  * @author Nguyen Duc Dung
- * @since 12/16/12 3:48 AM
+ * @since 5/19/13 11:07 AM
  *
  */
-class ScoringBolt extends StormBolt(outputFields = List("userId", "event")) with Logging {
+class DeliveryBolt extends StormBolt(outputFields = List("userId", "event")) with Logging {
 
   @transient var pearsonsCorrelation: PearsonsCorrelation = _
   @transient var tokenizer: Tokenizer = _
@@ -33,29 +33,33 @@ class ScoringBolt extends StormBolt(outputFields = List("userId", "event")) with
 
   execute {
     tuple => tuple matchSeq {
-      case Seq(userId: ObjectId, GetNewsDone(news, userClicked)) => {
-        //I just find the best score, if the best score more then 0.5, i'll turn the flag recommend on.
-        var bestScore = 0d
-        news.text.map(text1 => {
-          for (clicked <- userClicked) {
-            clicked.text.map(text2 => {
-              val score = sim_pearson(text1, text2)
-              if (score > bestScore) bestScore = score
+      case Seq(feedId: ObjectId, PersistentDone(news)) => {
+        UserDao.all.foreach(user => {
+          val userClicked = UserNewsDao.getUserClicked(user._id)
+
+          //I just find the best score, if the best score more then 0.5, i'll turn the flag recommend on.
+          var bestScore = 0d
+
+          news.text.map(text1 => {
+            userClicked.foreach(click => click.text.map {
+              text2 =>
+                val score = sim_pearson(text1, text2)
+                if(score > bestScore) bestScore = score
             })
-          }
+          })
+
+          val recommend = if (bestScore > 0.5) true else false
+
+          val userNews = UserNews(
+            userId = user._id,
+            newsId = news._id,
+            feedId = news.feedId,
+            score = bestScore,
+            recommend = recommend
+          )
+
+          UserNewsDao.save(userNews)
         })
-
-        val recommend = if (bestScore > 0.5) true else false
-
-        val userNews = UserNews(
-          userId = userId,
-          newsId = news._id,
-          feedId = news.feedId,
-          score = bestScore,
-          recommend = recommend
-        )
-
-        UserNewsDao.save(userNews)
 
         tuple.ack()
       }

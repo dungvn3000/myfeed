@@ -26,6 +26,8 @@ object CrawlTopology extends Serializable {
 
     builder.setBolt("persistent", new PersistentBolt, 2).shuffleGrouping("parser")
 
+    builder.setBolt("delivery", new DeliveryBolt, 10).shuffleGrouping("persistent")
+
     builder.createTopology()
   }
 }
