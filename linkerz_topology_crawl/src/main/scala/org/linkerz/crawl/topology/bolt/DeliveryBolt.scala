@@ -34,7 +34,8 @@ class DeliveryBolt extends StormBolt(outputFields = List("userId", "event")) wit
   execute {
     tuple => tuple matchSeq {
       case Seq(feedId: ObjectId, PersistentDone(news)) => {
-        UserDao.all.foreach(user => if (UserFeedDao.findFeed(user._id, feedId).isDefined) {
+        UserDao.all.foreach(user => if (UserFeedDao.findFeed(user._id, feedId).isDefined
+          && UserNewsDao.findByNews(news._id, user._id).isEmpty) {
 
           val userClicks = UserNewsDao.getUserClicks(user._id)
 
@@ -45,7 +46,7 @@ class DeliveryBolt extends StormBolt(outputFields = List("userId", "event")) wit
             userClicks.foreach(click => click.text.map {
               text2 =>
                 val score = sim_pearson(text1, text2)
-                if (score > bestScore) bestScore = score
+                if (score > bestScore && score < 0.8) bestScore = score
             })
           })
 

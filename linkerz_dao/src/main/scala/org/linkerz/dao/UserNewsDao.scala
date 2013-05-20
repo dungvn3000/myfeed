@@ -18,8 +18,9 @@ object UserNewsDao extends SalatDAO[UserNews, ObjectId](mongo("userNews")) {
     "userId" -> userId
   )).toList
 
-  def findByNews(newsId: String) = findOne(MongoDBObject(
-    "newsId" -> newsId
+  def findByNews(newsId: String, userId: ObjectId) = findOne(MongoDBObject(
+    "newsId" -> newsId,
+    "userId" -> userId
   ))
 
   def getUserClicks(userId: ObjectId) = {
