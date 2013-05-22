@@ -11,15 +11,14 @@ import com.typesafe.config.ConfigFactory
  */
 object AppConfig {
 
-  private val defaultKey = "default."
+  private val devKey = "dev."
+  private val prodKey = "prod."
   private val mongoKey = "mongodb."
-  private val rabbitMqKey = "rabbitmq."
   private val storm = "storm."
 
   lazy val conf = ConfigFactory.load()
 
-  lazy val mongoHost = conf.getString(mongoKey + defaultKey + "host")
-  lazy val mongoDb = conf.getString(mongoKey + defaultKey + "db")
-  lazy val rabbitMqHost = conf.getString(rabbitMqKey + defaultKey + "host")
-  lazy val nimbusHost = conf.getString(storm + defaultKey + "nimbus.host")
+  lazy val mongoUri = conf.getString(mongoKey + devKey + "uri")
+  lazy val mongoDb = conf.getString(mongoKey + devKey + "db")
+  lazy val nimbusHost = conf.getString(storm + devKey + "nimbus.host")
 }
