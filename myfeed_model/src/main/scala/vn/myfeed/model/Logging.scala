@@ -1,7 +1,8 @@
 package vn.myfeed.model
 
-import org.bson.types.ObjectId
 import org.joda.time.DateTime
+import com.novus.salat.dao.SalatDAO
+import com.mongodb.casbah.Imports._
 
 /**
  * The Class Logging.
@@ -21,6 +22,10 @@ case class Logging(
                     url: Option[String] = None,
                     createDate: DateTime = DateTime.now()
                     ) extends BaseModel(_id)
+
+object Logging extends SalatDAO[Logging, ObjectId](mongo("logging")) {
+
+}
 
 object LogCategory extends Enumeration("crawling", "system") {
   type LogCategory = Value

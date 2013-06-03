@@ -2,6 +2,8 @@ package vn.myfeed.model
 
 import org.bson.types.ObjectId
 import org.joda.time.DateTime
+import com.novus.salat.dao.SalatDAO
+import com.mongodb.casbah.commons.MongoDBObject
 
 /**
  * The Class UserFeed.
@@ -18,3 +20,16 @@ case class UserFeed(
                      name: String,
                      createdDate: DateTime = DateTime.now
                      ) extends BaseModel(_id)
+
+object UserFeed extends SalatDAO[UserFeed, ObjectId](mongo("userFeed")) {
+
+  def getUserFeed(userId: ObjectId) = find(MongoDBObject(
+    "userId" -> userId
+  )).toList
+
+  def findFeed(userId: ObjectId, feedId: ObjectId) = findOne(MongoDBObject(
+    "userId" -> userId,
+    "feedId" -> feedId
+  ))
+
+}

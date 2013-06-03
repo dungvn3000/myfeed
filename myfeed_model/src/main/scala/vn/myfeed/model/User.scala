@@ -1,6 +1,8 @@
 package vn.myfeed.model
 
 import org.bson.types.ObjectId
+import com.novus.salat.dao.SalatDAO
+import com.mongodb.casbah.commons.MongoDBObject
 
 /**
  * The Class User.
@@ -17,3 +19,9 @@ case class User(
                  email: String,
                  role: String
                  ) extends BaseModel(_id)
+
+object User extends SalatDAO[User, ObjectId](mongo("user")) {
+
+  def all = find(MongoDBObject.empty).toList
+
+}

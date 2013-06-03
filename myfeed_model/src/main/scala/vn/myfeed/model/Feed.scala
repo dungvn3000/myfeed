@@ -23,7 +23,7 @@ case class Feed(
                  topic: Option[String] = None
                  ) extends BaseModel(_id)
 
-object FeedDao extends SalatDAO[Feed, ObjectId](mongo("feed")) {
+object Feed extends SalatDAO[Feed, ObjectId](mongo("feed")) {
 
   def all = find(MongoDBObject.empty).toList
 

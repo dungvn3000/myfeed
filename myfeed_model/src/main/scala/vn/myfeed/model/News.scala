@@ -4,8 +4,12 @@
 
 package vn.myfeed.model
 
-import org.bson.types.ObjectId
 import org.joda.time.DateTime
+import com.novus.salat.dao.SalatDAO
+import scala.Array
+import com.mongodb.casbah.commons.MongoDBObject
+import com.mongodb.casbah.Imports._
+import scala.Some
 
 /**
  * The Class Link.
@@ -16,7 +20,7 @@ import org.joda.time.DateTime
  */
 
 case class News(
-                //this is a url after normalization.
+                 //this is a url after normalization.
                  _id: String,
                  feedId: ObjectId,
                  url: String,
@@ -36,3 +40,32 @@ case class News(
   override def hashCode() = url.hashCode
 }
 
+object News extends SalatDAO[News, String](mongo("news")) {
+
+  def findByUrl(url: String) = findOne(MongoDBObject("url" -> url))
+
+  def checkAndSave(news: News) = {
+    val result = findOne(MongoDBObject(
+      "$or" -> Array(
+        MongoDBObject("url" -> news.url),
+        MongoDBObject("title" -> news.title)
+      )
+    ))
+
+    if (result.isEmpty) {
+      save(news)
+      Some(news)
+    } else None
+  }
+
+  def getAfter(start: DateTime, feedIds: List[ObjectId]) = find(
+    MongoDBObject(
+      "createdDate" -> MongoDBObject("$gt" -> start),
+      "feedId" -> MongoDBObject("$in" -> feedIds)
+    )
+  ).toList
+
+
+  def getAfter(start: DateTime) = find(MongoDBObject("indexDate" -> MongoDBObject("$gt" -> start))).toList
+
+}
