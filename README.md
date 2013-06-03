@@ -1,6 +1,6 @@
-VKetNoi
+MyFeed
 =======
 
-vketnoi.com
+myfeed.vn
 
-Cong thong tin danh cho nguoi Viet.
+What's feed your mind?
