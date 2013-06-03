@@ -12,8 +12,8 @@ class MyFeed extends MyfeedStack {
     </html>
   }
 
-  get("/hi") {
-    "how are you bro?"
+  get("/hello") {
+    "how do you do?"
   }
   
 }
