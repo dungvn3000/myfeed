@@ -1,7 +1,7 @@
 package vn.myfeed.web
 
 
-class MyFeed extends MyfeedStack {
+class MyFeed extends MyfeedStack with AuthenticationSupport {
 
   get("/") {
     <html>
@@ -13,7 +13,24 @@ class MyFeed extends MyfeedStack {
   }
 
   get("/hello") {
-    "how do you do?"
+    if (isAuthenticated) {
+      "what's up? " + user.id
+    } else {
+      redirect("/login")
+    }
   }
-  
+
+  get("/login") {
+    if(authenticate.isDefined) {
+      redirect("/")
+    } else {
+      "wrong username"
+    }
+  }
+
+  get("/logout") {
+    logOut
+    if(isAuthenticated) redirect("/login")
+  }
+
 }

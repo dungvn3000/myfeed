@@ -1,1 +1,1 @@
-alert "me may"
+console.log "hehehehe"

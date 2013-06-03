@@ -1,6 +1,3 @@
-import com.bowlingx.sbt.plugins.Wro4jPlugin._
-import com.github.siasia.PluginKeys._
-import Wro4jKeys._
 import sbt._
 import Keys._
 import Project._
@@ -73,8 +70,7 @@ object MyFeedBuild extends Build {
     libraryDependencies ++= testDependencies
   }
 
-  lazy val myfeedWeb = Project("myfeed_web", file("myfeed_web"), settings = sharedSetting ++ ScalatraPlugin.scalatraWithJRebel
-    ++ scalateSettings ++ wro4jSettings ++ Seq(
+  lazy val myfeedWeb = Project("myfeed_web", file("myfeed_web"), settings = sharedSetting ++ ScalatraPlugin.scalatraWithJRebel ++ scalateSettings ++ Seq(
     scalateTemplateConfig in Compile <<= (sourceDirectory in Compile) {
       base =>
         Seq(
@@ -145,7 +141,11 @@ object MyFeedBuild extends Build {
   lazy val webDependencies = Seq(
     "org.scalatra" %% "scalatra" % ScalatraVersion,
     "org.scalatra" %% "scalatra-scalate" % ScalatraVersion,
+    "org.scalatra" %% "scalatra-auth" % ScalatraVersion,
+    "org.scalatra" %% "scalatra-json" % ScalatraVersion,
+    "org.scalatra" %% "scalatra-swagger"  % ScalatraVersion,
     "org.scalatra" %% "scalatra-specs2" % ScalatraVersion % "test",
+    "org.json4s" %% "json4s-native" % "3.2.4",
     "ro.isdc.wro4j" % "wro4j-core" % "1.6.3",
     "ro.isdc.wro4j" % "wro4j-extensions" % "1.6.3",
     "ch.qos.logback" % "logback-classic" % "1.0.6" % "runtime",
