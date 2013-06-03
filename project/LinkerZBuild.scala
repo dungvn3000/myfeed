@@ -3,13 +3,22 @@ import Keys._
 import Project._
 import sbtassembly.Plugin._
 import AssemblyKeys._
+import org.scalatra.sbt._
+import com.mojolly.scalate.ScalatePlugin._
+import ScalateKeys._
 
 object LinkerZBuild extends Build {
 
+  val Organization = "vn.myfeed"
+  val Name = "myfeed"
+  val Version = "0.1.0-SNAPSHOT"
+  val ScalaVersion = "2.10.0"
+  val ScalatraVersion = "2.2.1"
+
   lazy val sharedSetting = defaultSettings ++ Seq(
-    version := "0.1-SNAPSHOT",
-    organization := "org.linkerz",
-    scalaVersion := "2.10.0",
+    version := Version,
+    organization := Organization,
+    scalaVersion := ScalaVersion,
     resolvers ++= Seq(
       "twitter4j" at "http://twitter4j.org/maven2",
       "clojars.org" at "http://clojars.org/repo",
@@ -25,7 +34,7 @@ object LinkerZBuild extends Build {
 
   lazy val linkerZ = Project("linkerz", file("."), settings = sharedSetting).aggregate(
     linkerZCore, linkerZModel, linkerZLogger,
-    scalaStorm, urlBuilder, linkerZTopologyCrawl, linkerZDao
+    scalaStorm, urlBuilder, linkerZTopologyCrawl, linkerZDao, myfeedWeb
   )
 
   lazy val linkerZCore = Project("linkerz_core", file("linkerz_core"), settings = sharedSetting).settings(
@@ -61,6 +70,23 @@ object LinkerZBuild extends Build {
     libraryDependencies ++= testDependencies
   }
 
+  lazy val myfeedWeb = Project("myfeed_web", file("myfeed_web"), settings = sharedSetting ++ ScalatraPlugin.scalatraWithJRebel ++ scalateSettings ++ Seq(
+    scalateTemplateConfig in Compile <<= (sourceDirectory in Compile) {
+      base =>
+        Seq(
+          TemplateConfig(
+            base / "webapp" / "templates",
+            Seq.empty, /* default imports should be added here */
+            Seq(
+              Binding("context", "_root_.org.scalatra.scalate.ScalatraRenderContext", importMembers = true, isImplicit = true)
+            ), /* add extra bindings here */
+            Some("templates")
+          )
+        )
+    },
+    libraryDependencies ++= webDependencies
+  ))
+
   lazy val coreDependencies = Seq(
     "org.slf4j" % "slf4j-simple" % "1.6.6",
     "org.slf4j" % "slf4j-api" % "1.6.6",
@@ -92,13 +118,13 @@ object LinkerZBuild extends Build {
     "com.gravity" % "goose" % "2.1.22",
     "org.apache.httpcomponents" % "httpclient" % "4.2.5",
     "de.thischwa.jii" % "java-image-info" % "0.5",
-    "org.scalanlp" %% "breeze-process" % "0.3-SNAPSHOT",
+    "org.scalanlp" %% "breeze-process" % "0.3",
     "com.github.sonic" %% "sonic_parser" % "0.0.1",
     "ch.sentric" % "url-normalization" % "1.0.0"
   ) ++ stormDependencies ++ testDependencies
 
   lazy val deliveryDependencies = Seq(
-    "org.scalanlp" %% "breeze-process" % "0.3-SNAPSHOT",
+    "org.scalanlp" %% "breeze-process" % "0.3",
     "org.apache.mahout" % "mahout-core" % "0.7",
     "org.carrot2" % "carrot2-mini" % "3.6.1",
     "redis.clients" % "jedis" % "2.1.0"
@@ -110,5 +136,14 @@ object LinkerZBuild extends Build {
 
   lazy val rabbitMqDependencies = Seq(
     "com.rabbitmq" % "amqp-client" % "2.8.7"
+  )
+
+  lazy val webDependencies = Seq(
+    "org.scalatra" %% "scalatra" % ScalatraVersion,
+    "org.scalatra" %% "scalatra-scalate" % ScalatraVersion,
+    "org.scalatra" %% "scalatra-specs2" % ScalatraVersion % "test",
+    "ch.qos.logback" % "logback-classic" % "1.0.6" % "runtime",
+    "org.eclipse.jetty" % "jetty-webapp" % "8.1.8.v20121106" % "container",
+    "org.eclipse.jetty.orbit" % "javax.servlet" % "3.0.0.v201112011016" % "container;provided;test" artifacts (Artifact("javax.servlet", "jar", "jar"))
   )
 }
