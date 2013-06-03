@@ -1,7 +1,6 @@
 package org.linkerz.model
 
 import org.bson.types.ObjectId
-import java.util.Date
 import org.joda.time.DateTime
 
 /**

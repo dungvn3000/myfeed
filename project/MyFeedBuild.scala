@@ -7,7 +7,7 @@ import org.scalatra.sbt._
 import com.mojolly.scalate.ScalatePlugin._
 import ScalateKeys._
 
-object LinkerZBuild extends Build {
+object MyFeedBuild extends Build {
 
   val Organization = "vn.myfeed"
   val Name = "myfeed"
@@ -32,33 +32,33 @@ object LinkerZBuild extends Build {
     )
   )
 
-  lazy val linkerZ = Project("linkerz", file("."), settings = sharedSetting).aggregate(
-    linkerZCore, linkerZModel, linkerZLogger,
-    scalaStorm, urlBuilder, linkerZTopologyCrawl, linkerZDao, myfeedWeb
+  lazy val myfeed = Project(Name, file("."), settings = sharedSetting).aggregate(
+    myfeedCore, myfeedModel, myfeedLogger,
+    scalaStorm, urlBuilder, myfeedTopologyCrawl, myfeedDao, myfeedWeb
   )
 
-  lazy val linkerZCore = Project("linkerz_core", file("linkerz_core"), settings = sharedSetting).settings(
+  lazy val myfeedCore = Project("myfeed_core", file("myfeed_core"), settings = sharedSetting).settings(
     libraryDependencies ++= coreDependencies
   )
 
-  lazy val linkerZModel = Project("linkerz_model", file("linkerz_model"), settings = sharedSetting).settings(
+  lazy val myfeedModel = Project("myfeed_model", file("myfeed_model"), settings = sharedSetting).settings(
     libraryDependencies ++= modelDependencies ++ testDependencies
-  ).dependsOn(linkerZCore)
+  ).dependsOn(myfeedCore)
 
-  lazy val linkerZDao = Project("linkerz_dao", file("linkerz_dao"), settings = sharedSetting).settings(
+  lazy val myfeedDao = Project("myfeed_dao", file("myfeed_dao"), settings = sharedSetting).settings(
     libraryDependencies ++= testDependencies
-  ).dependsOn(linkerZCore, linkerZModel)
+  ).dependsOn(myfeedCore, myfeedModel)
 
 
-  lazy val linkerZLogger = Project("linkerz_logger", file("linkerz_logger"), settings = sharedSetting).settings(
+  lazy val myfeedLogger = Project("myfeed_logger", file("myfeed_logger"), settings = sharedSetting).settings(
     libraryDependencies ++= testDependencies
-  ).dependsOn(linkerZCore, linkerZDao)
+  ).dependsOn(myfeedCore, myfeedDao)
 
-  lazy val linkerZTopologyCrawl = Project("linkerz_topology_crawl", file("linkerz_topology_crawl"), settings = sharedSetting ++ assemblySettings).settings(
-    jarName in assembly := "linkerz_topology_crawl.jar",
+  lazy val myfeedTopologyCrawl = Project("myfeed_topology_crawl", file("myfeed_topology_crawl"), settings = sharedSetting ++ assemblySettings).settings(
+    jarName in assembly := "myfeed_topology_crawl.jar",
     libraryDependencies ++= crawlerTopologyDependencies
   ).dependsOn(
-    linkerZCore, linkerZDao, linkerZLogger, scalaStorm, urlBuilder
+    myfeedCore, myfeedDao, myfeedLogger, scalaStorm, urlBuilder
   )
 
   lazy val scalaStorm = Project("scala_storm", file("scala_storm"), settings = sharedSetting).settings(

@@ -12,9 +12,8 @@ class MyFeed extends MyfeedStack {
     </html>
   }
 
-  get("/hello") {
-    contentType = "text/html"
-    jade("/WEB-INF/templates/views/dung.jade")
+  get("/hi") {
+    "how are you bro?"
   }
   
 }
