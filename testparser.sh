@@ -1,2 +1,2 @@
-sbt "test-only org.linkerz.parser.*"
+sbt "test-only vn.myfeed.parser.*"
 

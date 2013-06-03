@@ -1,10 +1,10 @@
-package org.linkerz.logger
+package vn.myfeed.logger
 
 import org.scalatest.FunSuite
 import com.mongodb.casbah.commons.MongoDBObject
 import org.junit.Assert
-import org.linkerz.dao.LoggingDao
-import org.linkerz.model.LogCategory
+import vn.myfeed.dao.LoggingDao
+import vn.myfeed.model.LogCategory
 
 /**
  * The Class DBLoggerSuite.

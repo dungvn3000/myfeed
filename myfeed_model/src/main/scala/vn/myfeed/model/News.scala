@@ -2,7 +2,7 @@
  * Copyright (C) 2012 - 2013 LinkerZ (Searching and Sharing)
  */
 
-package org.linkerz.model
+package vn.myfeed.model
 
 import org.bson.types.ObjectId
 import org.joda.time.DateTime

@@ -1,4 +1,4 @@
-package org.linkerz.crawl.topology.downloader.handler
+package vn.myfeed.crawl.topology.downloader.handler
 
 import org.apache.http.impl.client.DefaultRedirectStrategy
 import gumi.builders.UrlBuilder

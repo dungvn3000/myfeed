@@ -1,7 +1,7 @@
-package org.linkerz.dao
+package vn.myfeed.dao
 
 import com.novus.salat.dao.SalatDAO
-import org.linkerz.model.User
+import vn.myfeed.model.User
 import org.bson.types.ObjectId
 import com.mongodb.casbah.commons.MongoDBObject
 

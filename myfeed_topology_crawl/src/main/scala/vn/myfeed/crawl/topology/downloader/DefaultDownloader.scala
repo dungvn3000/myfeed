@@ -2,7 +2,7 @@
  * Copyright (C) 2012 - 2013 LinkerZ (Searching and Sharing)
  */
 
-package org.linkerz.crawl.topology.downloader
+package vn.myfeed.crawl.topology.downloader
 
 import grizzled.slf4j.Logging
 import org.apache.http.impl.client.DefaultHttpClient

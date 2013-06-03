@@ -2,13 +2,13 @@
  * Copyright (C) 2012 - 2013 LinkerZ (Searching and Sharing)
  */
 
-package org.linkerz.crawl.topology.factory
+package vn.myfeed.crawl.topology.factory
 
-import org.linkerz.crawl.topology.downloader.DefaultDownloader
+import vn.myfeed.crawl.topology.downloader.DefaultDownloader
 import org.apache.http.conn.ssl.SSLSocketFactory
 import org.apache.http.conn.scheme.{SchemeRegistry, PlainSocketFactory, Scheme}
 import org.apache.http.params.{BasicHttpParams, CoreProtocolPNames, CoreConnectionPNames}
-import org.linkerz.crawl.topology.downloader.handler.{ResponseInterceptor, StrictlyRedirectStrategy}
+import vn.myfeed.crawl.topology.downloader.handler.{ResponseInterceptor, StrictlyRedirectStrategy}
 import org.apache.http.impl.client.{DefaultHttpRequestRetryHandler, AbstractHttpClient, DefaultHttpClient}
 import org.apache.http.impl.conn.PoolingClientConnectionManager
 import org.apache.http.client.params.CookiePolicy

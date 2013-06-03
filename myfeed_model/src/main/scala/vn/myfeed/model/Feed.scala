@@ -2,9 +2,11 @@
  * Copyright (C) 2012 - 2013 LinkerZ (Searching and Sharing)
  */
 
-package org.linkerz.model
+package vn.myfeed.model
 
-import org.bson.types.ObjectId
+import com.novus.salat.dao.SalatDAO
+import com.mongodb.casbah.Imports._
+import com.mongodb.casbah.commons.MongoDBObject
 
 /**
  * The Class Feeds.
@@ -21,3 +23,8 @@ case class Feed(
                  topic: Option[String] = None
                  ) extends BaseModel(_id)
 
+object FeedDao extends SalatDAO[Feed, ObjectId](mongo("feed")) {
+
+  def all = find(MongoDBObject.empty).toList
+
+}

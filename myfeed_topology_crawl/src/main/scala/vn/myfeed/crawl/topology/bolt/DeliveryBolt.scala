@@ -1,4 +1,4 @@
-package org.linkerz.crawl.topology.bolt
+package vn.myfeed.crawl.topology.bolt
 
 import storm.scala.dsl.StormBolt
 import grizzled.slf4j.Logging
@@ -10,9 +10,9 @@ import scala.collection.immutable.HashSet
 import org.apache.commons.math3.stat.Frequency
 import scala.collection.mutable.ListBuffer
 import org.bson.types.ObjectId
-import org.linkerz.crawl.topology.event.PersistentDone
-import org.linkerz.dao.{UserFeedDao, UserDao, UserNewsDao}
-import org.linkerz.model.UserNews
+import vn.myfeed.crawl.topology.event.PersistentDone
+import vn.myfeed.dao.{UserFeedDao, UserDao, UserNewsDao}
+import vn.myfeed.model.UserNews
 
 /**
  * The Class DeliveryBolt.

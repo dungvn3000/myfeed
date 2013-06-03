@@ -1,8 +1,8 @@
-package org.linkerz.dao
+package vn.myfeed.dao
 
 import com.novus.salat.dao.SalatDAO
 import com.mongodb.casbah.Imports._
-import org.linkerz.model.Feed
+import vn.myfeed.model.Feed
 import com.mongodb.casbah.commons.MongoDBObject
 
 /**

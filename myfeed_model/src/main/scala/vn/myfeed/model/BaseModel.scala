@@ -1,5 +1,4 @@
-package org.linkerz.model
-
+package vn.myfeed.model
 
 /**
  * The Class LinkerZModel.

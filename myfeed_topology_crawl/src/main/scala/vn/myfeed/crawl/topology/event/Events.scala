@@ -1,7 +1,7 @@
-package org.linkerz.crawl.topology.event
+package vn.myfeed.crawl.topology.event
 
-import org.linkerz.model.{News, Feed}
-import org.linkerz.crawl.topology.downloader.DownloadResult
+import vn.myfeed.model.{News, Feed}
+import vn.myfeed.crawl.topology.downloader.DownloadResult
 import org.horrabin.horrorss.RssItemBean
 
 /**

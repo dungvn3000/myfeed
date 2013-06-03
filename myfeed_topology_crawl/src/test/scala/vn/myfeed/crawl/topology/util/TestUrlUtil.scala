@@ -2,7 +2,7 @@
  * Copyright (C) 2012 - 2013 LinkerZ (Searching and Sharing)
  */
 
-package org.linkerz.crawl.topology.util
+package vn.myfeed.crawl.topology.util
 
 import edu.uci.ics.crawler4j.url.URLCanonicalizer
 import java.net.URI

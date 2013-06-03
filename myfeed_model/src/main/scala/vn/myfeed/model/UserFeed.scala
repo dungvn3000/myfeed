@@ -1,4 +1,4 @@
-package org.linkerz.model
+package vn.myfeed.model
 
 import org.bson.types.ObjectId
 import org.joda.time.DateTime

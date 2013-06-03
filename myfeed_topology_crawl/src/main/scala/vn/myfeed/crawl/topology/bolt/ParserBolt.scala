@@ -1,11 +1,11 @@
-package org.linkerz.crawl.topology.bolt
+package vn.myfeed.crawl.topology.bolt
 
 import storm.scala.dsl.StormBolt
-import org.linkerz.crawl.topology.event.{ParseDone, DownloadDone}
-import org.linkerz.crawl.topology.factory.ParserFactory
-import org.linkerz.crawl.topology.parser.NewsParser
+import vn.myfeed.crawl.topology.event.{ParseDone, DownloadDone}
+import vn.myfeed.crawl.topology.factory.ParserFactory
+import vn.myfeed.crawl.topology.parser.NewsParser
 import org.bson.types.ObjectId
-import org.linkerz.model.News
+import vn.myfeed.model.News
 import ch.sentric.URL
 import org.apache.commons.lang3.StringUtils
 

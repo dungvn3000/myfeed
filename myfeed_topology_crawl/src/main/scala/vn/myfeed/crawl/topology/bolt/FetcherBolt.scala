@@ -1,11 +1,11 @@
-package org.linkerz.crawl.topology.bolt
+package vn.myfeed.crawl.topology.bolt
 
 import storm.scala.dsl.StormBolt
-import org.linkerz.crawl.topology.event.{FetchDone, Start}
+import vn.myfeed.crawl.topology.event.{FetchDone, Start}
 import grizzled.slf4j.Logging
-import org.linkerz.crawl.topology.downloader.Downloader
-import org.linkerz.crawl.topology.factory.{ParserFactory, DownloadFactory}
-import org.linkerz.crawl.topology.parser.RssParser
+import vn.myfeed.crawl.topology.downloader.Downloader
+import vn.myfeed.crawl.topology.factory.{ParserFactory, DownloadFactory}
+import vn.myfeed.crawl.topology.parser.RssParser
 import collection.JavaConversions._
 
 /**

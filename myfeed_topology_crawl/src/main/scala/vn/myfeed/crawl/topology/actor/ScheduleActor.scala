@@ -1,9 +1,9 @@
-package org.linkerz.crawl.topology.actor
+package vn.myfeed.crawl.topology.actor
 
-import org.linkerz.logger.DBLogger
+import vn.myfeed.logger.DBLogger
 import akka.actor.Actor
-import org.linkerz.dao.FeedDao
-import org.linkerz.crawl.topology.event.Start
+import vn.myfeed.dao.FeedDao
+import vn.myfeed.crawl.topology.event.Start
 import grizzled.slf4j.Logging
 import backtype.storm.tuple.Values
 import backtype.storm.spout.SpoutOutputCollector

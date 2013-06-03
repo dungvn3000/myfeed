@@ -1,7 +1,7 @@
-package org.linkerz.logger
+package vn.myfeed.logger
 
-import org.linkerz.dao.LoggingDao
-import org.linkerz.model.{LogCategory, LogType, Logging}
+import vn.myfeed.dao.LoggingDao
+import vn.myfeed.model.{LogCategory, LogType, Logging}
 
 /**
  * The Class DBLogger.

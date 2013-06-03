@@ -1,4 +1,4 @@
-package org.linkerz.core.conf
+package vn.myfeed.core.conf
 
 import com.typesafe.config.ConfigFactory
 

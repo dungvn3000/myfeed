@@ -1,8 +1,8 @@
-package org.linkerz.crawl.topology
+package vn.myfeed.crawl.topology
 
 import backtype.storm.{StormSubmitter, Config}
 import CrawlTopology._
-import org.linkerz.core.conf.AppConfig
+import vn.myfeed.core.conf.AppConfig
 
 /**
  * The Class Main.

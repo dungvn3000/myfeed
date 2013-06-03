@@ -1,13 +1,13 @@
-package org.linkerz.crawl.topology.bolt
+package vn.myfeed.crawl.topology.bolt
 
 import storm.scala.dsl.StormBolt
 import grizzled.slf4j.Logging
-import org.linkerz.crawl.topology.event.{DownloadDone, FetchDone}
-import org.linkerz.crawl.topology.downloader.Downloader
-import org.linkerz.crawl.topology.factory.DownloadFactory
+import vn.myfeed.crawl.topology.event.{DownloadDone, FetchDone}
+import vn.myfeed.crawl.topology.downloader.Downloader
+import vn.myfeed.crawl.topology.factory.DownloadFactory
 import org.apache.commons.lang.StringUtils
 import org.apache.commons.validator.routines.UrlValidator
-import org.linkerz.dao.NewsDao
+import vn.myfeed.dao.NewsDao
 import ch.sentric.URL
 
 /**

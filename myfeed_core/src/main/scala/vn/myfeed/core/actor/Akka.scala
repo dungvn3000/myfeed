@@ -1,4 +1,4 @@
-package org.linkerz.core.actor
+package vn.myfeed.core.actor
 
 import akka.actor.ActorSystem
 

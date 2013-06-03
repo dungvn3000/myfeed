@@ -1,9 +1,9 @@
-package org.linkerz.crawl.topology.parser
+package vn.myfeed.crawl.topology.parser
 
 import com.github.sonic.parser.ArticleParser
 import java.io.ByteArrayInputStream
 import org.jsoup.Jsoup
-import org.linkerz.crawl.topology.downloader.DownloadResult
+import vn.myfeed.crawl.topology.downloader.DownloadResult
 
 /**
  * The this class using two parser LinksParse and ArticleParser.

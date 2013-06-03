@@ -1,4 +1,4 @@
-package org.linkerz.crawl.topology.factory
+package vn.myfeed.crawl.topology.factory
 
 /**
  * The Class FirefoxUserAgent.

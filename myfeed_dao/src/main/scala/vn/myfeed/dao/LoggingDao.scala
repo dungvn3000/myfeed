@@ -1,8 +1,8 @@
-package org.linkerz.dao
+package vn.myfeed.dao
 
 import com.novus.salat.dao.SalatDAO
 import com.mongodb.casbah.Imports._
-import org.linkerz.model.Logging
+import vn.myfeed.model.Logging
 
 /**
  * The Class LoggingDao.

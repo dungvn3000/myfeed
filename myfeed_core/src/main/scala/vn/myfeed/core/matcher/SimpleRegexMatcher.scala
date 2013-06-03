@@ -2,7 +2,7 @@
  * Copyright (C) 2012 - 2013 LinkerZ (Searching and Sharing)
  */
 
-package org.linkerz.core.matcher
+package vn.myfeed.core.matcher
 
 import org.apache.commons.digester.{SimpleRegexMatcher => SMatcher}
 

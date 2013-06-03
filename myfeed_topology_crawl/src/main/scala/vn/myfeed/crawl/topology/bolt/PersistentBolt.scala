@@ -1,10 +1,10 @@
-package org.linkerz.crawl.topology.bolt
+package vn.myfeed.crawl.topology.bolt
 
 import storm.scala.dsl.StormBolt
 import grizzled.slf4j.Logging
-import org.linkerz.crawl.topology.event.{PersistentDone, ParseDone}
+import vn.myfeed.crawl.topology.event.{PersistentDone, ParseDone}
 import org.bson.types.ObjectId
-import org.linkerz.dao.NewsDao
+import vn.myfeed.dao.NewsDao
 
 /**
  * This bolt is using for persistent data to the database server.

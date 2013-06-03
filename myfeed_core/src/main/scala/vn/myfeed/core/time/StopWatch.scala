@@ -1,4 +1,4 @@
-package org.linkerz.core.time
+package vn.myfeed.core.time
 
 import grizzled.slf4j.Logging
 

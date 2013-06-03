@@ -1,8 +1,8 @@
-package org.linkerz.crawl.topology.parser
+package vn.myfeed.crawl.topology.parser
 
 import grizzled.slf4j.Logging
 import java.io.ByteArrayInputStream
-import org.linkerz.crawl.topology.downloader.DownloadResult
+import vn.myfeed.crawl.topology.downloader.DownloadResult
 import org.horrabin.horrorss.RssFeed
 
 /**

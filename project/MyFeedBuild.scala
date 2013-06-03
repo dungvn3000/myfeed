@@ -84,7 +84,7 @@ object MyFeedBuild extends Build {
           )
         )
     },
-    libraryDependencies ++= webDependencies
+    libraryDependencies ++= webDependencies ++ modelDependencies
   ))
 
   lazy val coreDependencies = Seq(

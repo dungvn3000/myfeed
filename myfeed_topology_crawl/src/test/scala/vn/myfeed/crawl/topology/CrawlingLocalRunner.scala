@@ -1,4 +1,4 @@
-package org.linkerz.crawl.topology
+package vn.myfeed.crawl.topology
 
 import backtype.storm.{Config, LocalCluster}
 import backtype.storm.utils.Utils

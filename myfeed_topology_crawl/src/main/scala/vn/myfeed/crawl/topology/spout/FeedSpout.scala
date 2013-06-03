@@ -1,12 +1,12 @@
-package org.linkerz.crawl.topology.spout
+package vn.myfeed.crawl.topology.spout
 
 import storm.scala.dsl.StormSpout
 import backtype.storm.utils.Utils
-import org.linkerz.crawl.topology.actor.ScheduleActor
+import vn.myfeed.crawl.topology.actor.ScheduleActor
 import akka.actor.Props
-import org.linkerz.core.actor.Akka
+import vn.myfeed.core.actor.Akka
 import scala.concurrent.duration._
-import org.linkerz.dao.FeedDao
+import vn.myfeed.dao.FeedDao
 import org.bson.types.ObjectId
 import grizzled.slf4j.Logging
 

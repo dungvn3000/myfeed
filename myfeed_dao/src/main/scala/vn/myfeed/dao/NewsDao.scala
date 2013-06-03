@@ -1,9 +1,9 @@
-package org.linkerz.dao
+package vn.myfeed.dao
 
 import com.novus.salat.dao.SalatDAO
 import com.mongodb.casbah.commons.MongoDBObject
 import com.mongodb.casbah.Imports._
-import org.linkerz.model.News
+import vn.myfeed.model.News
 import org.joda.time.DateTime
 
 /**
