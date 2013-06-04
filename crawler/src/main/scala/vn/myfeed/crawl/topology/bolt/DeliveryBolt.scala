@@ -11,8 +11,7 @@ import org.apache.commons.math3.stat.Frequency
 import scala.collection.mutable.ListBuffer
 import org.bson.types.ObjectId
 import vn.myfeed.crawl.topology.event.PersistentDone
-import vn.myfeed.dao.{UserFeedDao, UserDao, UserNewsDao}
-import vn.myfeed.model.UserNews
+import vn.myfeed.model.{User, UserFeed, UserNews}
 
 /**
  * The Class DeliveryBolt.
@@ -34,10 +33,10 @@ class DeliveryBolt extends StormBolt(outputFields = List("userId", "event")) wit
   execute {
     tuple => tuple matchSeq {
       case Seq(feedId: ObjectId, PersistentDone(news)) => {
-        UserDao.all.foreach(user => if (UserFeedDao.findFeed(user._id, feedId).isDefined
-          && UserNewsDao.findByNews(news._id, user._id).isEmpty) {
+        User.all.foreach(user => if (UserFeed.findFeed(user._id, feedId).isDefined
+          && UserNews.findByNews(news._id, user._id).isEmpty) {
 
-          val userClicks = UserNewsDao.getUserClicks(user._id)
+          val userClicks = UserNews.getUserClicks(user._id)
 
           //I just find the best score, if the best score more then 0.5, i'll turn the flag recommend on.
           var bestScore = 0d
@@ -60,7 +59,7 @@ class DeliveryBolt extends StormBolt(outputFields = List("userId", "event")) wit
             recommend = recommend
           )
 
-          UserNewsDao.save(userNews)
+          UserNews.save(userNews)
         })
 
         tuple.ack()

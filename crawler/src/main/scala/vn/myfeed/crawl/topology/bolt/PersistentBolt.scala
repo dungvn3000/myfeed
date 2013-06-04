@@ -4,7 +4,7 @@ import storm.scala.dsl.StormBolt
 import grizzled.slf4j.Logging
 import vn.myfeed.crawl.topology.event.{PersistentDone, ParseDone}
 import org.bson.types.ObjectId
-import vn.myfeed.dao.NewsDao
+import vn.myfeed.model.News
 
 /**
  * This bolt is using for persistent data to the database server.
@@ -17,7 +17,7 @@ class PersistentBolt extends StormBolt(outputFields = List("feedId", "event")) w
   execute {
     implicit tuple => tuple matchSeq {
       case Seq(feedId: ObjectId, ParseDone(feed, news)) => {
-        NewsDao.save(news)
+        News.save(news)
         tuple.emit(feedId, PersistentDone(news))
         tuple.ack()
       }

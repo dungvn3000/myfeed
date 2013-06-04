@@ -6,9 +6,9 @@ import vn.myfeed.crawl.topology.actor.ScheduleActor
 import akka.actor.Props
 import vn.myfeed.core.actor.Akka
 import scala.concurrent.duration._
-import vn.myfeed.dao.FeedDao
 import org.bson.types.ObjectId
 import grizzled.slf4j.Logging
+import vn.myfeed.model.Feed
 
 /**
  * This spout will loop the feed list for every 15 minutes.
@@ -30,7 +30,7 @@ class FeedSpout extends StormSpout(outputFields = List("event")) with Logging {
   override def ack(msgId: Any) {
     var msg = s"Ack msgId: $msgId "
     val id = new ObjectId(msgId.toString)
-    FeedDao.findOneById(id).map(feed => {
+    Feed.findOneById(id).map(feed => {
       msg += s" Feed Url: ${feed.url}"
     })
     info(msg)
@@ -39,7 +39,7 @@ class FeedSpout extends StormSpout(outputFields = List("event")) with Logging {
   override def fail(msgId: Any) {
     var msg = s"Fail msgId: $msgId"
     val id = new ObjectId(msgId.toString)
-    FeedDao.findOneById(id).map(feed => {
+    Feed.findOneById(id).map(feed => {
       msg += s" Feed Url: ${feed.url}"
     })
     info(msg)

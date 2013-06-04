@@ -9,6 +9,10 @@ class MyFeed extends MyfeedStack with AuthenticationSupport with NativeJsonSuppo
 
   protected implicit val jsonFormats: Formats = DefaultFormats
 
+  before("/login") {
+    println("dung ne")
+  }
+
   get("/") {
     contentType = formats("json")
     List(
@@ -38,7 +42,6 @@ class MyFeed extends MyfeedStack with AuthenticationSupport with NativeJsonSuppo
     if (!isAuthenticated) redirect("/login")
   }
 
-  protected def applicationDescription = "WTF"
 }
 
 case class Test(name: String)

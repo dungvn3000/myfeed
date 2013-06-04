@@ -33,7 +33,7 @@ object MyFeedBuild extends Build {
   )
 
   lazy val myfeed = Project(Name, file("."), settings = sharedSetting).aggregate(
-    core, model, logger, scalaStorm, urlBuilder, crawler, dao, web
+    core, model, logger, scalaStorm, urlBuilder, crawler, web
   )
 
   lazy val core = Project("core", file("core"), settings = sharedSetting).settings(
@@ -44,20 +44,15 @@ object MyFeedBuild extends Build {
     libraryDependencies ++= modelDependencies ++ testDependencies
   ).dependsOn(core)
 
-  lazy val dao = Project("dao", file("dao"), settings = sharedSetting).settings(
-    libraryDependencies ++= testDependencies
-  ).dependsOn(core, model)
-
-
   lazy val logger = Project("logger", file("logger"), settings = sharedSetting).settings(
     libraryDependencies ++= testDependencies
-  ).dependsOn(core, dao)
+  ).dependsOn(core, model)
 
   lazy val crawler = Project("crawler", file("crawler"), settings = sharedSetting ++ assemblySettings).settings(
     jarName in assembly := "crawler.jar",
     libraryDependencies ++= crawlerTopologyDependencies
   ).dependsOn(
-    core, dao, logger, scalaStorm, urlBuilder
+    core, model, logger, scalaStorm, urlBuilder
   )
 
   lazy val scalaStorm = Project("scala_storm", file("scala_storm"), settings = sharedSetting).settings(

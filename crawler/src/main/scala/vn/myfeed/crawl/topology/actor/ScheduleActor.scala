@@ -2,12 +2,12 @@ package vn.myfeed.crawl.topology.actor
 
 import vn.myfeed.logger.DBLogger
 import akka.actor.Actor
-import vn.myfeed.dao.FeedDao
 import vn.myfeed.crawl.topology.event.Start
 import grizzled.slf4j.Logging
 import backtype.storm.tuple.Values
 import backtype.storm.spout.SpoutOutputCollector
 import backtype.storm.utils.Utils
+import vn.myfeed.model.Feed
 
 /**
  * The Class ScheduleActor.
@@ -19,7 +19,7 @@ import backtype.storm.utils.Utils
 class ScheduleActor(collector: SpoutOutputCollector) extends Actor with DBLogger with Logging {
   def receive = {
     case "run" => {
-      val newFeeds = FeedDao.all
+      val newFeeds = Feed.all
       newFeeds.foreach(feed => {
         info("Start fetching " + feed.url)
         collector.emit(new Values(Start(feed)), feed._id)
