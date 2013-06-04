@@ -41,7 +41,7 @@ object MyFeedBuild extends Build {
 
   lazy val model = Project("model", file("model"), settings = sharedSetting).settings(
     libraryDependencies ++= modelDependencies ++ testDependencies
-  ).dependsOn(core)
+  )
 
   lazy val dao = Project("dao", file("dao"), settings = sharedSetting).settings(
     libraryDependencies ++= testDependencies
