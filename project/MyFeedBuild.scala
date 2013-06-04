@@ -33,32 +33,32 @@ object MyFeedBuild extends Build {
   )
 
   lazy val myfeed = Project(Name, file("."), settings = sharedSetting).aggregate(
-    myfeedCore, myfeedModel, myfeedLogger,
-    scalaStorm, urlBuilder, myfeedTopologyCrawl, myfeedDao, myfeedWeb
+    core, model, logger,
+    scalaStorm, urlBuilder, crawler, dao, web
   )
 
-  lazy val myfeedCore = Project("myfeed_core", file("myfeed_core"), settings = sharedSetting).settings(
+  lazy val core = Project("core", file("core"), settings = sharedSetting).settings(
     libraryDependencies ++= coreDependencies
   )
 
-  lazy val myfeedModel = Project("myfeed_model", file("myfeed_model"), settings = sharedSetting).settings(
+  lazy val model = Project("model", file("model"), settings = sharedSetting).settings(
     libraryDependencies ++= modelDependencies ++ testDependencies
-  ).dependsOn(myfeedCore)
+  ).dependsOn(core)
 
-  lazy val myfeedDao = Project("myfeed_dao", file("myfeed_dao"), settings = sharedSetting).settings(
+  lazy val dao = Project("dao", file("dao"), settings = sharedSetting).settings(
     libraryDependencies ++= testDependencies
-  ).dependsOn(myfeedCore, myfeedModel)
+  ).dependsOn(core, model)
 
 
-  lazy val myfeedLogger = Project("myfeed_logger", file("myfeed_logger"), settings = sharedSetting).settings(
+  lazy val logger = Project("logger", file("logger"), settings = sharedSetting).settings(
     libraryDependencies ++= testDependencies
-  ).dependsOn(myfeedCore, myfeedDao)
+  ).dependsOn(core, dao)
 
-  lazy val myfeedTopologyCrawl = Project("myfeed_topology_crawl", file("myfeed_topology_crawl"), settings = sharedSetting ++ assemblySettings).settings(
-    jarName in assembly := "myfeed_topology_crawl.jar",
+  lazy val crawler = Project("crawler", file("crawler"), settings = sharedSetting ++ assemblySettings).settings(
+    jarName in assembly := "crawler.jar",
     libraryDependencies ++= crawlerTopologyDependencies
   ).dependsOn(
-    myfeedCore, myfeedDao, myfeedLogger, scalaStorm, urlBuilder
+    core, dao, logger, scalaStorm, urlBuilder
   )
 
   lazy val scalaStorm = Project("scala_storm", file("scala_storm"), settings = sharedSetting).settings(
@@ -70,7 +70,7 @@ object MyFeedBuild extends Build {
     libraryDependencies ++= testDependencies
   }
 
-  lazy val myfeedWeb = Project("myfeed_web", file("myfeed_web"), settings = sharedSetting ++ ScalatraPlugin.scalatraWithJRebel ++ scalateSettings ++ Seq(
+  lazy val web = Project("web", file("web"), settings = sharedSetting ++ ScalatraPlugin.scalatraWithJRebel ++ scalateSettings ++ Seq(
     scalateTemplateConfig in Compile <<= (sourceDirectory in Compile) {
       base =>
         Seq(
@@ -84,8 +84,8 @@ object MyFeedBuild extends Build {
           )
         )
     },
-    libraryDependencies ++= webDependencies ++ modelDependencies
-  ))
+    libraryDependencies ++= webDependencies
+  )).dependsOn(model)
 
   lazy val coreDependencies = Seq(
     "org.slf4j" % "slf4j-simple" % "1.6.6",
@@ -143,7 +143,6 @@ object MyFeedBuild extends Build {
     "org.scalatra" %% "scalatra-scalate" % ScalatraVersion,
     "org.scalatra" %% "scalatra-auth" % ScalatraVersion,
     "org.scalatra" %% "scalatra-json" % ScalatraVersion,
-    "org.scalatra" %% "scalatra-swagger"  % ScalatraVersion,
     "org.scalatra" %% "scalatra-specs2" % ScalatraVersion % "test",
     "org.json4s" %% "json4s-native" % "3.2.4",
     "ro.isdc.wro4j" % "wro4j-core" % "1.6.3",
