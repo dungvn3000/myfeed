@@ -3,18 +3,22 @@ import Keys._
 import Project._
 import sbtassembly.Plugin._
 import AssemblyKeys._
+import org.scalatra.sbt._
+import com.mojolly.scalate.ScalatePlugin._
+import ScalateKeys._
 
 object MyFeedBuild extends Build {
 
-  val appOrganization = "vn.myfeed"
-  val appName = "myfeed"
-  val appVersion = "0.1.0-SNAPSHOT"
-  val appScalaVersion = "2.10.0"
+  val Organization = "vn.myfeed"
+  val Name = "myfeed"
+  val Version = "0.1.0-SNAPSHOT"
+  val ScalaVersion = "2.10.0"
+  val ScalatraVersion = "2.2.1"
 
   lazy val sharedSetting = defaultSettings ++ Seq(
-    version := appVersion,
-    organization := appOrganization,
-    scalaVersion := appScalaVersion,
+    version := Version,
+    organization := Organization,
+    scalaVersion := ScalaVersion,
     resolvers ++= Seq(
       "twitter4j" at "http://twitter4j.org/maven2",
       "clojars.org" at "http://clojars.org/repo",
@@ -28,8 +32,8 @@ object MyFeedBuild extends Build {
     )
   )
 
-  lazy val myfeed = Project(appName, file("."), settings = sharedSetting).aggregate(
-    core, model, logger, scalaStorm, urlBuilder, crawler, dao
+  lazy val myfeed = Project(Name, file("."), settings = sharedSetting).aggregate(
+    core, model, logger, scalaStorm, urlBuilder, crawler, dao, web
   )
 
   lazy val core = Project("core", file("core"), settings = sharedSetting).settings(
@@ -38,7 +42,7 @@ object MyFeedBuild extends Build {
 
   lazy val model = Project("model", file("model"), settings = sharedSetting).settings(
     libraryDependencies ++= modelDependencies ++ testDependencies
-  )
+  ).dependsOn(core)
 
   lazy val dao = Project("dao", file("dao"), settings = sharedSetting).settings(
     libraryDependencies ++= testDependencies
@@ -64,6 +68,23 @@ object MyFeedBuild extends Build {
   lazy val urlBuilder = Project("url_builder", file("url_builder"), settings = sharedSetting).settings {
     libraryDependencies ++= testDependencies
   }
+
+  lazy val web = Project("web", file("web"), settings = sharedSetting ++ ScalatraPlugin.scalatraWithJRebel ++ scalateSettings ++ Seq(
+    scalateTemplateConfig in Compile <<= (sourceDirectory in Compile) {
+      base =>
+        Seq(
+          TemplateConfig(
+            base / "webapp" / "templates",
+            Seq.empty, /* default imports should be added here */
+            Seq(
+              Binding("context", "_root_.org.scalatra.scalate.ScalatraRenderContext", importMembers = true, isImplicit = true)
+            ), /* add extra bindings here */
+            Some("templates")
+          )
+        )
+    },
+    libraryDependencies ++= webDependencies
+  )).dependsOn(model)
 
   lazy val coreDependencies = Seq(
     "org.slf4j" % "slf4j-simple" % "1.6.6",
@@ -114,5 +135,19 @@ object MyFeedBuild extends Build {
 
   lazy val rabbitMqDependencies = Seq(
     "com.rabbitmq" % "amqp-client" % "2.8.7"
+  )
+
+  lazy val webDependencies = Seq(
+    "org.scalatra" %% "scalatra" % ScalatraVersion,
+    "org.scalatra" %% "scalatra-scalate" % ScalatraVersion,
+    "org.scalatra" %% "scalatra-auth" % ScalatraVersion,
+    "org.scalatra" %% "scalatra-json" % ScalatraVersion,
+    "org.scalatra" %% "scalatra-specs2" % ScalatraVersion % "test",
+    "org.json4s" %% "json4s-native" % "3.2.4",
+    "ro.isdc.wro4j" % "wro4j-core" % "1.6.3",
+    "ro.isdc.wro4j" % "wro4j-extensions" % "1.6.3",
+    "ch.qos.logback" % "logback-classic" % "1.0.6" % "runtime",
+    "org.eclipse.jetty" % "jetty-webapp" % "8.1.8.v20121106" % "container",
+    "org.eclipse.jetty.orbit" % "javax.servlet" % "3.0.0.v201112011016" % "container;provided;test" artifacts (Artifact("javax.servlet", "jar", "jar"))
   )
 }
