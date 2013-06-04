@@ -3,21 +3,18 @@ import Keys._
 import Project._
 import sbtassembly.Plugin._
 import AssemblyKeys._
-import org.scalatra.sbt._
-import com.mojolly.scalate.ScalatePlugin._
-import ScalateKeys._
 
 object MyFeedBuild extends Build {
 
-  val Organization = "vn.myfeed"
-  val Name = "myfeed"
-  val Version = "0.1.0-SNAPSHOT"
-  val ScalaVersion = "2.10.0"
+  val appOrganization = "vn.myfeed"
+  val appName = "myfeed"
+  val appVersion = "0.1.0-SNAPSHOT"
+  val appScalaVersion = "2.10.0"
 
   lazy val sharedSetting = defaultSettings ++ Seq(
-    version := Version,
-    organization := Organization,
-    scalaVersion := ScalaVersion,
+    version := appVersion,
+    organization := appOrganization,
+    scalaVersion := appScalaVersion,
     resolvers ++= Seq(
       "twitter4j" at "http://twitter4j.org/maven2",
       "clojars.org" at "http://clojars.org/repo",
@@ -31,7 +28,7 @@ object MyFeedBuild extends Build {
     )
   )
 
-  lazy val myfeed = Project(Name, file("."), settings = sharedSetting).aggregate(
+  lazy val myfeed = Project(appName, file("."), settings = sharedSetting).aggregate(
     core, model, logger, scalaStorm, urlBuilder, crawler, dao
   )
 
@@ -41,7 +38,7 @@ object MyFeedBuild extends Build {
 
   lazy val model = Project("model", file("model"), settings = sharedSetting).settings(
     libraryDependencies ++= modelDependencies ++ testDependencies
-  ).dependsOn(core)
+  )
 
   lazy val dao = Project("dao", file("dao"), settings = sharedSetting).settings(
     libraryDependencies ++= testDependencies
