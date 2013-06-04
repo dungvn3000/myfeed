@@ -22,9 +22,3 @@ case class Feed(
                  url: String,
                  topic: Option[String] = None
                  ) extends BaseModel(_id)
-
-object Feed extends SalatDAO[Feed, ObjectId](mongo("feed")) {
-
-  def all = find(MongoDBObject.empty).toList
-
-}
