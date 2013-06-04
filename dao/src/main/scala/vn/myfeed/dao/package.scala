@@ -1,17 +1,17 @@
 package vn.myfeed
 
 import com.mongodb.casbah.{MongoURI, MongoConnection}
-import vn.myfeed.core.conf.AppConfig
+import core.conf.AppConfig
 import com.mongodb.casbah.commons.conversions.scala.RegisterJodaTimeConversionHelpers
 
 /**
  * The Class package.
  *
  * @author Nguyen Duc Dung
- * @since 6/4/13 5:37 AM
+ * @since 11/4/12 1:19 PM
  *
  */
-package object model {
+package object dao {
 
   import com.novus.salat.global._
 

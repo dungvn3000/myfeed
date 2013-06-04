@@ -7,8 +7,8 @@ import vn.myfeed.crawl.topology.downloader.Downloader
 import vn.myfeed.crawl.topology.factory.DownloadFactory
 import org.apache.commons.lang.StringUtils
 import org.apache.commons.validator.routines.UrlValidator
+import vn.myfeed.dao.NewsDao
 import ch.sentric.URL
-import vn.myfeed.model.News
 
 /**
  * The Class DownloadBolt.
@@ -37,7 +37,7 @@ class DownloadBolt extends StormBolt(outputFields = List("feedId", "event")) wit
         if (urlValidator.isValid(url)) {
           try {
             val normalizationUrl = new URL(url)
-            if (News.findOneById(normalizationUrl.getNormalizedUrl).isEmpty) {
+            if (NewsDao.findOneById(normalizationUrl.getNormalizedUrl).isEmpty) {
               downloader.download(url).map(result => {
                 tuple.emit(feedId, DownloadDone(feed, item, result))
               })

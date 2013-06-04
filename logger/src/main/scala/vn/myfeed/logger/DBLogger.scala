@@ -1,5 +1,6 @@
 package vn.myfeed.logger
 
+import vn.myfeed.dao.LoggingDao
 import vn.myfeed.model.{LogCategory, LogType, Logging}
 
 /**
@@ -14,7 +15,7 @@ trait DBLogger {
   val clazz = getClass
 
   def storeError(msg: String, category: LogCategory.Value) {
-    Logging.save(Logging(
+    LoggingDao.save(Logging(
       message = msg,
       category = category.toString,
       className = clazz.getName
@@ -22,7 +23,7 @@ trait DBLogger {
   }
 
   def storeError(msg: String, url: String, category: LogCategory.Value) {
-    Logging.save(Logging(
+    LoggingDao.save(Logging(
       message = msg,
       className = clazz.getName,
       category = category.toString,
@@ -31,7 +32,7 @@ trait DBLogger {
   }
 
   def storeError(msg: String, url: String, exception: Throwable, category: LogCategory.Value) {
-    Logging.save(Logging(
+    LoggingDao.save(Logging(
       message = msg,
       className = clazz.getName,
       category = category.toString,
@@ -42,7 +43,7 @@ trait DBLogger {
   }
 
   def storeError(msg: String, exception: Throwable, category: LogCategory.Value) {
-    Logging.save(Logging(
+    LoggingDao.save(Logging(
       message = msg,
       className = clazz.getName,
       category = category.toString,
@@ -52,7 +53,7 @@ trait DBLogger {
   }
 
   def storeWarn(msg: String, category: LogCategory.Value) {
-    Logging.save(Logging(
+    LoggingDao.save(Logging(
       message = msg,
       className = clazz.getName,
       category = category.toString,
