@@ -1,0 +1,24 @@
+- attributes("layout") = ""
+
+.modal-header
+    h3 = messages("label.feedAdd")
+.modal-body
+    form.form-horizontal
+        div(class= "control-group {{getClass('name')}}")
+            label.control-label(for='name') Name
+            .controls
+                input#name.input-xlarge(type='text' placeholder='Name' ng-model='entry.name')
+                span.help-inline {{getMsg("name")}}
+        div(class= "control-group {{getClass('url')}}")
+            label.control-label(for='url') Url
+            .controls
+                input#url.input-xlarge(type='text' placeholder='Url' ng-model='entry.url')
+                span.help-inline {{getMsg("url")}}
+        div(class= "control-group {{getClass('topic')}}")
+            label.control-label(for='topic') Topic
+            .controls
+                input#topic.input-xlarge(type='text' placeholder='Topic' ng-model='entry.topic')
+                span.help-inline {{getMsg("topic")}}
+.modal-footer
+    button.btn.btn-primary(ng-click='save()') Save
+    button.btn(ng-click='close()') Cancel

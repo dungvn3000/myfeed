@@ -14,6 +14,9 @@ class Feeds extends BaseController {
   get("/partials/:view") {
     contentType="text/html"
     val viewName = params.getOrElse("view", halt())
+
+    println(messages("label.feedAdd"))
+
     jade(s"/feed/admin.${viewName}")
   }
 

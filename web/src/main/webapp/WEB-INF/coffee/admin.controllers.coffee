@@ -16,7 +16,7 @@ module.controller 'ListController', ($scope, $state, $dialog, Entry) ->
       keyboard: true
       dialogFade: true
       backdropClick: true
-      templateUrl: 'admin/feed/partials/detail'
+      templateUrl: '/admin/feed/partials/detail'
       controller: 'DetailController'
       id: id
       reload: $scope.reload

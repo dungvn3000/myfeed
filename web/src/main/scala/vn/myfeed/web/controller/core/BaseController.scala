@@ -13,4 +13,6 @@ import vn.myfeed.web.auth.AuthenticationSupport
  */
 trait BaseController extends ScalatraServlet with ScalateSupport with AuthenticationSupport with ScalateI18nSupport {
 
+
+
 }
