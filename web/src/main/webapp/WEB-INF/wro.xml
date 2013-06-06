@@ -3,8 +3,12 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.isdc.ro/wro wro.xsd">
 
+    <group name="styles">
+        <css>/css/*.css</css>
+    </group>
+
     <group name="scripts">
-        <js>/coffee/*.coffee</js>
+        <js>/WEB-INF/coffee/*.coffee</js>
     </group>
 
 </groups>

@@ -69,7 +69,7 @@ object MyFeedBuild extends Build {
       base =>
         Seq(
           TemplateConfig(
-            base / "webapp" / "templates",
+            base / "webapp" / "WEB-INF" / "templates",
             Seq.empty, /* default imports should be added here */
             Seq(
               Binding("context", "_root_.org.scalatra.scalate.ScalatraRenderContext", importMembers = true, isImplicit = true)

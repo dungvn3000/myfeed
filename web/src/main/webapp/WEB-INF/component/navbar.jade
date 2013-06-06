@@ -1,0 +1,26 @@
+.navbar-inner
+    .container-fluid
+        .nav-collapse
+            .btn.btn-navbar(data-target=".nav-collapse" data-toggle="collapse" type="button")
+                span.icon-bar
+                span.icon-bar
+                span.icon-bar
+
+        ul.nav(style = "margin-right: 2px")
+            li
+                a.brand(href="/")
+                    img(src="favicon.png" width="20px" style="height: 20px !important; margin-top: -3px")
+                    = "MyFeed"
+
+
+        ul.nav.pull-right
+            li.dropdown.pull-right
+                a.dropdown-toggle(href="#" data-toggle="dropdown")
+                    b= "dungvn3000"
+                    b.caret
+            ul.dropdown-menu
+                li
+                    a= "Admin"
+                li.divider
+                li
+                    a= "Logout"

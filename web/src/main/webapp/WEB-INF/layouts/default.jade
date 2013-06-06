@@ -1,0 +1,17 @@
+-@ val body: String
+
+!!!5
+html(ng-app="myFeed")
+    head
+        title= "MyFeed"
+        meta(charset="UTF-8")
+        meta(name="viewport" content="width=device-width" initial-scale="1.0")
+        script(type= "text/javascript" src= "wro/scripts.js")
+        link(rel= "stylesheet" media="screen" href= "wro/styles.css")
+
+    body
+        #topmenu.navbar.navbar-fixed-top
+            != render("/component/navbar.jade")
+        .container-fluid
+            .row-fluid
+                != body
