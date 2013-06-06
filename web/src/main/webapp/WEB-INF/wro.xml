@@ -7,7 +7,17 @@
         <css>/css/*.css</css>
     </group>
 
+    <group name="libs">
+        <js minimize="false">/js/lib/jquery/*.js</js>
+        <js minimize="false">/js/lib/bootstrap/*.js</js>
+        <js minimize="false">/js/lib/nicescoller/*.js</js>
+        <js minimize="false">/js/lib/angular/*.js</js>
+        <js minimize="false">/js/lib/angularui/*.js</js>
+        <js minimize="false">/js/lib/*.js</js>
+    </group>
+
     <group name="scripts">
+        <group-ref>libs</group-ref>
         <js>/WEB-INF/coffee/*.coffee</js>
     </group>
 
