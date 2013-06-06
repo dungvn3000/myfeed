@@ -6,29 +6,27 @@
     <group name="styles">
         <css>/css/bootstrap.min.css</css>
         <css>/css/bootstrap-responsive.min.css</css>
-        <css>/css/home.css</css>
-        <css>/css/login.css</css>
-        <css>/css/main.css</css>
+        <css>/css/default.*.css</css>
     </group>
 
     <group name="admin.styles">
         <css>/css/bootstrap.min.css</css>
-        <css>/css/admin.main.css</css>
-        <css>/css/admin.table.css</css>
+        <css>/css/admin.*.css</css>
     </group>
 
     <group name="libs">
         <js minimize="false">/js/lib/jquery/*.js</js>
         <js minimize="false">/js/lib/bootstrap/*.js</js>
         <js minimize="false">/js/lib/nicescoller/*.js</js>
-        <js minimize="false">/js/lib/angular/*.js</js>
+        <js minimize="false">/js/lib/angular/angular.min.js</js>
+        <js minimize="false">/js/lib/angular/angular-*.js</js>
         <js minimize="false">/js/lib/angularui/*.js</js>
         <js minimize="false">/js/lib/*.js</js>
     </group>
 
     <group name="scripts">
         <group-ref>libs</group-ref>
-        <js>/WEB-INF/coffee/*.coffee</js>
+        <js>/WEB-INF/coffee/default.*.coffee</js>
     </group>
 
     <group name="admin.scripts">
