@@ -6,7 +6,6 @@ html(ng-app="myFeed")
         title= "MyFeed"
         meta(charset="UTF-8")
         meta(name="viewport" content="width=device-width" initial-scale="1.0")
-        script(type= "text/javascript" src= "wro/scripts.js")
         link(rel= "stylesheet" media="screen" href= "wro/styles.css")
 
     body
@@ -15,3 +14,6 @@ html(ng-app="myFeed")
         .container-fluid
             .row-fluid
                 != body
+
+    //make the page load faster
+    script(type= "text/javascript" src= "wro/scripts.js")

@@ -1,11 +1,8 @@
 package vn.myfeed.web.controller
 
-import vn.myfeed.web.auth.AuthenticationSupport
-import org.scalatra.ScalatraServlet
-import org.scalatra.scalate.ScalateSupport
+import vn.myfeed.web.controller.core.BaseController
 
-class Home extends ScalatraServlet with ScalateSupport with AuthenticationSupport {
-
+class Home extends BaseController {
 
   get("/") {
     contentType="text/html"

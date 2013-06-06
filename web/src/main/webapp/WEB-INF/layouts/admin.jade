@@ -3,9 +3,8 @@
 !!!5
 html(ng-app="myFeed.admin")
     head
-        title= "MyFeed"
+        title= messages("application.title")
         meta(charset="UTF-8")
-        script(type= "text/javascript" src= "wro/admin.scripts.js")
         link(rel= "stylesheet" media="screen" href= "wro/admin.styles.css")
     body
         #topmenu.navbar.navbar-fixed-top.navbar-inverse
@@ -17,4 +16,6 @@ html(ng-app="myFeed.admin")
         hr
         footer
             .container
-                p.muted.credit(style="text-align:center") = "© myfeed 2013"
+                p.muted.credit(style="text-align:center") = s"© ${messages("application.url")} 2013"
+    //make the page load faster
+    script(type= "text/javascript" src= "wro/admin.scripts.js")
