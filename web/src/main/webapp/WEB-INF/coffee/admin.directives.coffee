@@ -1,1 +1,0 @@
-module = angular.module('myFeed.admin.directives', [])

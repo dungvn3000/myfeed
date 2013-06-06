@@ -19,11 +19,3 @@ case class User(
                  email: String,
                  role: String
                  ) extends BaseModel(_id)
-
-object User extends SalatDAO[User, ObjectId](mongo("user")) {
-
-  def all = find(MongoDBObject.empty).toList
-
-  def findByUsername(username: String) = findOne(MongoDBObject("username" -> username))
-
-}

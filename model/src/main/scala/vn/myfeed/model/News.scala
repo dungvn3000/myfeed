@@ -39,33 +39,3 @@ case class News(
 
   override def hashCode() = url.hashCode
 }
-
-object News extends SalatDAO[News, String](mongo("news")) {
-
-  def findByUrl(url: String) = findOne(MongoDBObject("url" -> url))
-
-  def checkAndSave(news: News) = {
-    val result = findOne(MongoDBObject(
-      "$or" -> Array(
-        MongoDBObject("url" -> news.url),
-        MongoDBObject("title" -> news.title)
-      )
-    ))
-
-    if (result.isEmpty) {
-      save(news)
-      Some(news)
-    } else None
-  }
-
-  def getAfter(start: DateTime, feedIds: List[ObjectId]) = find(
-    MongoDBObject(
-      "createdDate" -> MongoDBObject("$gt" -> start),
-      "feedId" -> MongoDBObject("$in" -> feedIds)
-    )
-  ).toList
-
-
-  def getAfter(start: DateTime) = find(MongoDBObject("indexDate" -> MongoDBObject("$gt" -> start))).toList
-
-}
