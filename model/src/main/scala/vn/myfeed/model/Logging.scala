@@ -23,6 +23,10 @@ case class Logging(
                     createDate: DateTime = DateTime.now()
                     ) extends BaseModel(_id)
 
+object Logging extends SalatDAO[Logging, ObjectId](mongo("logging")) {
+
+}
+
 object LogCategory extends Enumeration("crawling", "system") {
   type LogCategory = Value
   val Crawling, System = Value

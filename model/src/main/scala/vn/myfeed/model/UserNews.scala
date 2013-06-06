@@ -23,3 +23,29 @@ case class UserNews(
                      clicked: Boolean = false,
                      createdDate: DateTime = DateTime.now
                      ) extends BaseModel(_id)
+
+object UserNews extends SalatDAO[UserNews, ObjectId](mongo("userNews")) {
+
+  def getUserNews(userId: ObjectId) = find(MongoDBObject(
+    "userId" -> userId
+  )).toList
+
+  def findByNews(newsId: String, userId: ObjectId) = findOne(MongoDBObject(
+    "newsId" -> newsId,
+    "userId" -> userId
+  ))
+
+  def getUserClicks(userId: ObjectId) = {
+    val newsId = find(MongoDBObject(
+      "userId" -> userId,
+      "clicked" -> true
+    )).toList.map(_.newsId)
+
+    val news = News.find(MongoDBObject(
+      "_id" -> MongoDBObject("$in" -> newsId)
+    )).toList
+
+    news
+  }
+
+}
