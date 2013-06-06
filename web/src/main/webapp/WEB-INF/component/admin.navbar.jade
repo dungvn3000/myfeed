@@ -1,15 +1,13 @@
 .navbar-inner
-    .container-fluid
-        button.btn.btn-navbar(data-target=".nav-collapse" data-toggle="collapse" type="button")
-            span.icon-bar
-            span.icon-bar
-            span.icon-bar
-
-        ul.nav(style = "margin-right: 2px")
+    .container
+        a.brand(href="/") = "MyFeed"
+        ul.nav
             li
-                a.brand(href="/")
-                    img(src="favicon.ico" width="20px" style="height: 20px !important; margin-top: -3px")
-                    = "MyFeed"
+                a = "Feeds"
+            li
+                a = "Users"
+            li
+                a = "Logs"
 
         ul.nav.pull-right
             li.dropdown.pull-right
@@ -18,7 +16,6 @@
                     b.caret
                 ul.dropdown-menu(role="menu")
                     li
-                        a(href="/admin")= "Admin"
                         a(href="/profile")= "Profile"
                     li.divider
                     li

@@ -4,7 +4,17 @@
         xsi:schemaLocation="http://www.isdc.ro/wro wro.xsd">
 
     <group name="styles">
-        <css>/css/*.css</css>
+        <css>/css/bootstrap.min.css</css>
+        <css>/css/bootstrap-responsive.min.css</css>
+        <css>/css/home.css</css>
+        <css>/css/login.css</css>
+        <css>/css/main.css</css>
+    </group>
+
+    <group name="admin.styles">
+        <css>/css/bootstrap.min.css</css>
+        <css>/css/admin.main.css</css>
+        <css>/css/admin.table.css</css>
     </group>
 
     <group name="libs">
@@ -19,6 +29,11 @@
     <group name="scripts">
         <group-ref>libs</group-ref>
         <js>/WEB-INF/coffee/*.coffee</js>
+    </group>
+
+    <group name="admin.scripts">
+        <group-ref>libs</group-ref>
+        <js>/WEB-INF/coffee/admin.*.coffee</js>
     </group>
 
 </groups>

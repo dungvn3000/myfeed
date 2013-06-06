@@ -1,8 +1,20 @@
 -@ val body: String
 
 !!!5
-html
+html(ng-app="MyFeed.Admin")
     head
-        title = "dung ne"
+        title= "MyFeed"
+        meta(charset="UTF-8")
+        script(type= "text/javascript" src= "wro/admin.scripts.js")
+        link(rel= "stylesheet" media="screen" href= "wro/admin.styles.css")
     body
-        != body
+        #topmenu.navbar.navbar-fixed-top.navbar-inverse
+            != render("/component/admin.navbar.jade")
+        .container
+            .row-fluid
+                != body
+
+        hr
+        footer
+            .container
+                p.muted.credit(style="text-align:center") = "© myfeed 2013"
