@@ -31,14 +31,17 @@ class ParserBolt extends StormBolt(outputFields = List("feedId", "event")) {
         try {
           val article = parser.parse(result)
           val url = new URL(result.url)
-          val title = if(StringUtils.isNotBlank(item.getTitle)) item.getTitle else article.title
-          if(StringUtils.isNotBlank(title)) {
+          val title = if (StringUtils.isNotBlank(item.getTitle)) item.getTitle else article.title
+          if (StringUtils.isNotBlank(title)) {
+            val extractor = parser.extract(item)
             val news = News(
               _id = url.getNormalizedUrl,
               url = result.url,
               title = title,
-              description = Some(item.getDescription),
-              text = Some(article.text),
+              description = extractor.text,
+              featureImage = extractor.images.headOption,
+              html = if (StringUtils.isNotBlank(article.contentHtml)) Some(article.contentHtml) else None,
+              text = if (StringUtils.isNotBlank(article.text)) Some(article.text) else None,
               feedId = feedId
             )
             tuple.emit(feedId, ParseDone(feed, news))

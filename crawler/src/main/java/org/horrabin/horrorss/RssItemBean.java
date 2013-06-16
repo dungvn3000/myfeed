@@ -25,7 +25,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vn.horrabin.horrorss;
+package org.horrabin.horrorss;
 
 import java.io.Serializable;
 import java.util.Date;

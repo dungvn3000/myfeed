@@ -3,9 +3,6 @@ import Keys._
 import Project._
 import sbtassembly.Plugin._
 import AssemblyKeys._
-import org.scalatra.sbt._
-import com.mojolly.scalate.ScalatePlugin._
-import ScalateKeys._
 
 object MyFeedBuild extends Build {
 
@@ -100,7 +97,7 @@ object MyFeedBuild extends Build {
     "org.apache.httpcomponents" % "httpclient" % "4.2.5",
     "de.thischwa.jii" % "java-image-info" % "0.5",
     "org.scalanlp" %% "breeze-process" % "0.3",
-    "com.github.sonic" %% "sonic_parser" % "0.0.1",
+    "com.github" %% "sonic_parser" % "0.0.1",
     "ch.sentric" % "url-normalization" % "1.0.0"
   ) ++ stormDependencies ++ testDependencies
 

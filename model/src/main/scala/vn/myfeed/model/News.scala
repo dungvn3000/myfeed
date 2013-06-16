@@ -5,11 +5,7 @@
 package vn.myfeed.model
 
 import org.joda.time.DateTime
-import com.novus.salat.dao.SalatDAO
-import scala.Array
-import com.mongodb.casbah.commons.MongoDBObject
 import com.mongodb.casbah.Imports._
-import scala.Some
 
 /**
  * The Class Link.
@@ -26,8 +22,10 @@ case class News(
                  url: String,
                  //Metadata
                  title: String,
-                 description: Option[String] = None,
+                 description: String,
+                 featureImage: Option[String] = None,
                  text: Option[String] = None,
+                 html: Option[String] = None,
                  score: Double = 0d,
 
                  createdDate: DateTime = DateTime.now()

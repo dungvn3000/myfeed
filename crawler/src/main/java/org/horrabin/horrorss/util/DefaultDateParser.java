@@ -24,10 +24,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package vn.horrabin.horrorss.util;
+package org.horrabin.horrorss.util;
 
 import org.horrabin.horrorss.RssParser;
-import org.horrabin.horrorss.util.DateParser;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
