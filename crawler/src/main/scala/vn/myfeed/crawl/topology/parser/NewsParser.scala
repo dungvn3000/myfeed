@@ -19,10 +19,14 @@ class NewsParser {
 
   val articleParser = new ArticleParser
 
-  def parse(result: DownloadResult) = {
+  def parse(result: DownloadResult, entry: SyndEntry) = {
     val input = new ByteArrayInputStream(result.content)
     val doc = Jsoup.parse(input, null, result.url)
-    articleParser.parse(doc)
+    if(StringUtils.isNotBlank(entry.getTitle)) {
+      articleParser.parse(doc, entry.getTitle)
+    } else {
+      articleParser.parse(doc)
+    }
   }
 
   def extract(item: SyndEntry): (Option[String], Option[String]) = {

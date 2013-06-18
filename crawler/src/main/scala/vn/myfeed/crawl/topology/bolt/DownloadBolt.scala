@@ -32,14 +32,14 @@ class DownloadBolt extends StormBolt(outputFields = List("feedId", "event")) wit
 
   execute {
     implicit tuple => tuple matchSeq {
-      case Seq(feedId, FetchDone(feed, item)) => {
-        val url = StringUtils.trimToEmpty(item.getLink)
+      case Seq(feedId, FetchDone(feed, entry)) => {
+        val url = StringUtils.trimToEmpty(entry.getLink)
         if (urlValidator.isValid(url)) {
           try {
             val normalizationUrl = new URL(url)
             if (NewsDao.findOneById(normalizationUrl.getNormalizedUrl).isEmpty) {
               downloader.download(url).map(result => {
-                tuple.emit(feedId, DownloadDone(feed, item, result))
+                tuple.emit(feedId, DownloadDone(feed, entry, result))
               })
             }
           } catch {

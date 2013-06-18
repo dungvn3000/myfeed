@@ -35,8 +35,8 @@ class FetcherBolt extends StormBolt(outputFields = List("feedId", "event")) with
         try {
           downloader.download(feed.url).map(result => {
             val rssFeed = parser.parse(result)
-            rssFeed.getEntries.foreach(item => {
-              tuple.emit(feed._id, FetchDone(feed, item.asInstanceOf[SyndEntry]))
+            rssFeed.getEntries.foreach(entry => {
+              tuple.emit(feed._id, FetchDone(feed, entry.asInstanceOf[SyndEntry]))
             })
           })
           tuple.ack()

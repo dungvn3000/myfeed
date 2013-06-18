@@ -27,13 +27,13 @@ class ParserBolt extends StormBolt(outputFields = List("feedId", "event")) {
 
   execute {
     implicit tuple => tuple matchSeq {
-      case Seq(feedId: ObjectId, DownloadDone(feed, item, result)) => {
+      case Seq(feedId: ObjectId, DownloadDone(feed, entry, result)) => {
         try {
-          val article = parser.parse(result)
+          val article = parser.parse(result, entry)
           val url = new URL(result.url)
-          val title = if (StringUtils.isNotBlank(item.getTitle)) item.getTitle else article.title
+          val title = if (StringUtils.isNotBlank(entry.getTitle)) entry.getTitle else article.title
           if (StringUtils.isNotBlank(title)) {
-            val extractor = parser.extract(item)
+            val extractor = parser.extract(entry)
             val news = News(
               _id = url.getNormalizedUrl,
               url = result.url,

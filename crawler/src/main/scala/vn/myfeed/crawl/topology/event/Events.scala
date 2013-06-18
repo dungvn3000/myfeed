@@ -15,9 +15,9 @@ sealed trait Event extends Serializable
 
 case class Start(feed: Feed) extends Event
 
-case class FetchDone(feed: Feed, item: SyndEntry) extends Event
+case class FetchDone(feed: Feed, entry: SyndEntry) extends Event
 
-case class DownloadDone(feed: Feed, item: SyndEntry, result: DownloadResult) extends Event
+case class DownloadDone(feed: Feed, entry: SyndEntry, result: DownloadResult) extends Event
 
 case class ParseDone(feed: Feed, news: News) extends Event
 
