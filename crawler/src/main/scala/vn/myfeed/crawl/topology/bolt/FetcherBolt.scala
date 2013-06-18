@@ -7,6 +7,7 @@ import vn.myfeed.crawl.topology.downloader.Downloader
 import vn.myfeed.crawl.topology.factory.{ParserFactory, DownloadFactory}
 import vn.myfeed.crawl.topology.parser.RssParser
 import collection.JavaConversions._
+import com.sun.syndication.feed.synd.SyndEntry
 
 /**
  * This bolt is simply download a url and emit it to a parser.
@@ -34,8 +35,8 @@ class FetcherBolt extends StormBolt(outputFields = List("feedId", "event")) with
         try {
           downloader.download(feed.url).map(result => {
             val rssFeed = parser.parse(result)
-            rssFeed.getItems.foreach(item => {
-              tuple.emit(feed._id, FetchDone(feed, item))
+            rssFeed.getEntries.foreach(item => {
+              tuple.emit(feed._id, FetchDone(feed, item.asInstanceOf[SyndEntry]))
             })
           })
           tuple.ack()

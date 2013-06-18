@@ -4,7 +4,9 @@ import com.github.sonic.parser.{HtmlExtractor, ArticleParser}
 import java.io.ByteArrayInputStream
 import org.jsoup.Jsoup
 import vn.myfeed.crawl.topology.downloader.DownloadResult
-import org.horrabin.horrorss.RssItemBean
+import org.apache.commons.lang3.StringUtils
+import com.sun.syndication.feed.synd.{SyndContent, SyndEntry}
+import scala.collection.JavaConversions._
 
 /**
  * The this class using two parser LinksParse and ArticleParser.
@@ -17,17 +19,29 @@ class NewsParser {
 
   val articleParser = new ArticleParser
 
-  val htmlExtractor = new HtmlExtractor
-
   def parse(result: DownloadResult) = {
     val input = new ByteArrayInputStream(result.content)
     val doc = Jsoup.parse(input, null, result.url)
     articleParser.parse(doc)
   }
 
-  def extract(item: RssItemBean) = {
-    val doc = Jsoup.parse(item.getDescription, item.getLink)
-    htmlExtractor.extract(doc)
-    htmlExtractor
+  def extract(item: SyndEntry): (Option[String], Option[String]) = {
+    var html = ""
+    if (item.getDescription != null
+      && StringUtils.isNotBlank(item.getDescription.getValue)) {
+      html = item.getDescription.getValue
+    } else {
+      item.getContents.foreach(content => {
+        html += content.asInstanceOf[SyndContent].getValue
+      })
+    }
+    if (StringUtils.isNotBlank(html)) {
+      val htmlExtractor = new HtmlExtractor
+      val doc = Jsoup.parse(html, item.getLink)
+      htmlExtractor.extract(doc)
+      (Some(htmlExtractor.text), Some(html))
+    } else {
+      (None, None)
+    }
   }
 }

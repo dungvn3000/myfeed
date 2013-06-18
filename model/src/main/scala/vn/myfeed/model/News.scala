@@ -23,7 +23,8 @@ case class News(
                  //Metadata
                  title: String,
                  description: String,
-                 featureImage: Option[String] = None,
+                 //This form rss.
+                 descriptionHtml: String,
                  text: Option[String] = None,
                  html: Option[String] = None,
                  score: Double = 0d,

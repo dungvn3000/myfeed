@@ -2,7 +2,7 @@ package vn.myfeed.crawl.topology.event
 
 import vn.myfeed.model.{News, Feed}
 import vn.myfeed.crawl.topology.downloader.DownloadResult
-import org.horrabin.horrorss.RssItemBean
+import com.sun.syndication.feed.synd.SyndEntry
 
 /**
  * The Class Event.
@@ -15,9 +15,9 @@ sealed trait Event extends Serializable
 
 case class Start(feed: Feed) extends Event
 
-case class FetchDone(feed: Feed, item: RssItemBean) extends Event
+case class FetchDone(feed: Feed, item: SyndEntry) extends Event
 
-case class DownloadDone(feed: Feed, item: RssItemBean, result: DownloadResult) extends Event
+case class DownloadDone(feed: Feed, item: SyndEntry, result: DownloadResult) extends Event
 
 case class ParseDone(feed: Feed, news: News) extends Event
 

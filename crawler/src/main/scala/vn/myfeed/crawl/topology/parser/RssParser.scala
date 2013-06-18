@@ -3,7 +3,8 @@ package vn.myfeed.crawl.topology.parser
 import grizzled.slf4j.Logging
 import java.io.ByteArrayInputStream
 import vn.myfeed.crawl.topology.downloader.DownloadResult
-import org.horrabin.horrorss.RssFeed
+import com.sun.syndication.io.{XmlReader, SyndFeedInput}
+import com.sun.syndication.feed.synd.SyndFeed
 
 /**
  * The Class RssParser.
@@ -14,10 +15,10 @@ import org.horrabin.horrorss.RssFeed
  */
 class RssParser extends Logging {
 
-  def parse(result: DownloadResult): RssFeed = {
-    val horrorssParser = new org.horrabin.horrorss.RssParser
+  def parse(result: DownloadResult): SyndFeed = {
     val input = new ByteArrayInputStream(result.content)
-    val feed = horrorssParser.load(input)
+    val feedInput = new SyndFeedInput
+    val feed = feedInput.build(new XmlReader(input))
     input.close()
     feed
   }
