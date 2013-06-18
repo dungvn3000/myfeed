@@ -21,8 +21,8 @@ class NewsParser {
 
   def parse(result: DownloadResult, entry: SyndEntry) = {
     val input = new ByteArrayInputStream(result.content)
-    val doc = Jsoup.parse(input, null, result.url)
-    if(StringUtils.isNotBlank(entry.getTitle)) {
+    val doc = Jsoup.parse(input, null, result.redirectUrl.getOrElse(result.url))
+    if (StringUtils.isNotBlank(entry.getTitle)) {
       articleParser.parse(doc, entry.getTitle)
     } else {
       articleParser.parse(doc)

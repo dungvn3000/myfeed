@@ -18,9 +18,10 @@ class ResponseInterceptor extends HttpResponseInterceptor {
     if (contentEncoding != null) {
       val codecs = contentEncoding.getElements
       for (codec <- codecs) {
-        if ("gzip".equalsIgnoreCase(codec.getName)) {}
-        response.setEntity(new GzipDecompressingEntity(response.getEntity))
-        return
+        if ("gzip".equalsIgnoreCase(codec.getName)) {
+          response.setEntity(new GzipDecompressingEntity(response.getEntity))
+          return
+        }
       }
     }
   }

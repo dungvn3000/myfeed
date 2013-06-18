@@ -8,4 +8,4 @@ package vn.myfeed.crawl.topology.downloader
  * @since 5/7/13 10:39 PM
  *
  */
-case class DownloadResult(url: String, content: Array[Byte])
+case class DownloadResult(url: String, redirectUrl: Option[String], content: Array[Byte])
