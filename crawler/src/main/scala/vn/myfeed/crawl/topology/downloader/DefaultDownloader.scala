@@ -11,7 +11,6 @@ import org.apache.http.client.methods.HttpGet
 import org.apache.http.HttpStatus
 import org.apache.http.util.EntityUtils
 import vn.myfeed.crawl.topology.downloader.handler.StrictlyRedirectStrategy
-import org.apache.commons.lang3.StringUtils
 
 /**
  * The Class DefaultDownload.
@@ -30,9 +29,9 @@ class DefaultDownloader(httpClient: HttpClient = new DefaultHttpClient) extends 
     if (response.getStatusLine.getStatusCode == HttpStatus.SC_OK) {
       var redirectUrl: Option[String] = None
       val handler = httpClient.asInstanceOf[DefaultHttpClient].getRedirectStrategy.asInstanceOf[StrictlyRedirectStrategy]
-      if (handler != null && StringUtils.isNotBlank(handler.lastRedirectedUri)) {
-        redirectUrl = Some(handler.lastRedirectedUri)
-        handler.lastRedirectedUri = ""
+      if (handler != null) {
+        redirectUrl = handler.lastRedirectedUri
+        handler.lastRedirectedUri = None
       }
 
       val entity = response.getEntity

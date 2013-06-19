@@ -2,6 +2,7 @@ package vn.myfeed.crawl.topology.downloader.handler
 
 import org.apache.http.impl.client.DefaultRedirectStrategy
 import gumi.builders.UrlBuilder
+import org.apache.commons.validator.routines.UrlValidator
 
 /**
  * The Class StrictlyRedirectStrategy.
@@ -12,12 +13,17 @@ import gumi.builders.UrlBuilder
  */
 class StrictlyRedirectStrategy extends DefaultRedirectStrategy {
 
-  var lastRedirectedUri = ""
+  val urlValidator = new UrlValidator
+  var lastRedirectedUri: Option[String] = None
 
   override def createLocationURI(location: String) = {
     val newLocation = UrlBuilder.fromString(location).toString
-    lastRedirectedUri = newLocation
-    super.createLocationURI(newLocation)
+    if(urlValidator.isValid(newLocation)) {
+      lastRedirectedUri = Some(newLocation)
+      super.createLocationURI(newLocation)
+    } else {
+      super.createLocationURI(location)
+    }
   }
 
 }

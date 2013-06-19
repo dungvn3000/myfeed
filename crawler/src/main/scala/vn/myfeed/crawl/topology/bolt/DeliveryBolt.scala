@@ -57,7 +57,9 @@ class DeliveryBolt extends StormBolt(outputFields = List("userId", "event")) wit
             newsId = news._id,
             feedId = news.feedId,
             score = bestScore,
-            recommend = recommend
+            recommend = recommend,
+            //copy date from for sorting
+            createdDate = news.createdDate
           )
 
           UserNewsDao.save(userNews)

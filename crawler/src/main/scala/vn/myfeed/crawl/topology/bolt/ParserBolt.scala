@@ -8,6 +8,7 @@ import org.bson.types.ObjectId
 import vn.myfeed.model.News
 import ch.sentric.URL
 import org.apache.commons.lang3.StringUtils
+import org.joda.time.DateTime
 
 /**
  * This bolt will parse a web page.
@@ -34,6 +35,10 @@ class ParserBolt extends StormBolt(outputFields = List("feedId", "event")) {
           val title = if (StringUtils.isNotBlank(entry.getTitle)) entry.getTitle else article.title
           if (StringUtils.isNotBlank(title)) {
             val extractor = parser.extract(entry)
+            var pubDate: Option[DateTime] = None
+            if (entry.getPublishedDate != null) {
+              pubDate = Some(new DateTime(entry.getPublishedDate))
+            }
             val news = News(
               _id = url.getNormalizedUrl,
               url = result.url,
@@ -42,7 +47,8 @@ class ParserBolt extends StormBolt(outputFields = List("feedId", "event")) {
               descriptionHtml = extractor._2.getOrElse(""),
               html = if (StringUtils.isNotBlank(article.contentHtml)) Some(article.contentHtml) else None,
               text = if (StringUtils.isNotBlank(article.text)) Some(article.text) else None,
-              feedId = feedId
+              feedId = feedId,
+              createdDate = pubDate.getOrElse(DateTime.now())
             )
             tuple.emit(feedId, ParseDone(feed, news))
           }
